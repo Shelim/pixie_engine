@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pixie>
+	<lang>
+		<name>Base module</name>
+		<author>Official</author>
+		<contact>http://games.kosek.com</contact>
+		<description>Official base game module</description>
+	</lang>
+</pixie>

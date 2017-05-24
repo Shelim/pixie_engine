@@ -1,0 +1,241 @@
+<project name="common" basedir="../..">
+
+<!-- Loading manifests... -->
+	
+	<xmlproperty file="${build_app_path}manifest/${platform_name}/manifest_${build_configuration}.xml" />
+	<xmlproperty file="${build_app_path}manifest/${platform_name}/manifest.xml" />
+	<xmlproperty file="${build_app_path}manifest/common/manifest_${build_configuration}.xml" />
+	<xmlproperty file="${build_app_path}manifest/common/manifest.xml" />
+	<xmlproperty file="${build_app_path}changelog/version.xml" />
+	
+<!-- Designating default platform fullname -->
+	
+	<property name="platform_fullname" value="${platform_name} - ${platform_ver} - ${build_configuration}" />
+	
+<!-- These generate dir name for project -->
+
+	<property name="platform_base_dir" value="${platform_name}_${platform_ver}" />
+	
+	<condition property="platform_dir_configuration_1" value="_debug" else="">
+		<and>
+			<equals arg1="${build_configuration}" arg2="debug" />
+			<isfalse value="${is_ready_build}" />
+		</and>
+	</condition>
+	<condition property="platform_dir_configuration_2" value="_debug_hybrid" else="">
+		<and>
+			<equals arg1="${build_configuration}" arg2="debug" />
+			<istrue value="${is_ready_build}" />
+		</and>
+	</condition>
+	<condition property="platform_dir_configuration_3" value="_final" else="">
+		<and>
+			<equals arg1="${build_configuration}" arg2="release" />
+			<istrue value="${is_ready_build}" />
+		</and>
+	</condition>
+	<condition property="platform_dir_configuration_4" value="_hybrid" else="">
+		<and>
+			<equals arg1="${build_configuration}" arg2="release" />
+			<isfalse value="${is_ready_build}" />
+		</and>
+	</condition>
+	<condition property="platform_dir_portable" value="_portable" else="">
+		<istrue value="${is_portable_build}" />
+	</condition>
+	<condition property="platform_dir_deploy" value="_deploy" else="">
+		<istrue value="${is_deploy_build}" />
+	</condition>
+	
+	<condition property="platform_dir" value="${platform_base_dir}_test" else="${platform_base_dir}${platform_dir_configuration_1}${platform_dir_configuration_2}${platform_dir_configuration_3}${platform_dir_configuration_4}${platform_dir_portable}${platform_dir_deploy}">
+		<equals arg1="${output_unix_name}" arg2="test"/> 
+	</condition>
+	
+	
+<!-- Apply above dir name into paths -->
+
+	<property name="build_path" value="${build_app_path}/_build/${platform_dir}_${output_unix_name}/" />
+	<property name="build_common_path" value="${build_app_path}/_build/${platform_dir}_common/" />
+	<property name="output_path" value="${build_app_path}/output/${platform_dir}/" />
+	<property name="deploy_output_path" value="${build_app_path}/output/${platform_dir}_ready/" />
+	<property name="build_installer_path" value="${build_app_path}/_build/${platform_dir}_installer/" />
+	<property name="autogen_path_relative" value="${platform_base_dir}/${output_unix_name}/" />
+	<property name="autogen_path" value="${build_app_path}src/autogen/${autogen_path_relative}" />
+	
+	<condition property="autogen_hpp_path" value="${autogen_path}/autogen_${build_configuration}_portable.hpp" else="${autogen_path}/autogen_${build_configuration}.hpp">
+		<istrue value="${is_portable_build}"/> 
+	</condition>
+	
+<!-- This is perfectly safe to do here, because only prebuild will change this variable -->
+	<property file="${build_common_path}/build_number.ant" />
+	
+<!-- Apply above build number into ready dir -->
+
+	<property name="ready_path" value="${build_app_path}/ready/build_${build.number}${platform_dir_portable}/" />
+	<property name="ready_path_binary" value="${ready_path}/bin/" />
+	
+<!-- Generate even more paths (this time for upload) -->
+
+	<property name="upload_base_path" value="${build_app_path}/upload/" />
+	<condition property="upload_base_dir" value="${platform_base_dir}${platform_dir_portable}_debug/" else="${platform_base_dir}${platform_dir_portable}/">
+		<equals arg1="${build_configuration}" arg2="debug" />
+	</condition>
+	
+	<property name="upload_deploy_path" value="${upload_base_path}${manifest.deploy_upload_path}${upload_base_dir}" />
+	<property name="upload_updater_path" value="${upload_base_path}${manifest.updater_upload_path}${upload_base_dir}" />
+	
+	<property name="upload_updater_manifest" value="${upload_updater_path}updater_manifest.xml" />
+	<property name="url_updater_manifest" value="${manifest.updater_url}${manifest.updater_upload_path}${upload_base_dir}updater_manifest.xml" />
+	
+	<property name="upload_updater_changelog" value="${upload_updater_path}${upload_base_dir}changelog.xml" />
+	<property name="url_updater_changelog" value="${manifest.updater_url}${upload_base_dir}changelog.xml" />
+	
+<!-- End of initalization -->
+		
+<!-- Increment and store new build version (storing in build_path is because we may run concurrent builds...) -->
+	<target name="increment_build_number">
+		<buildnumber file="${build_app_path}changelog/build_number.ant" />
+		<copy file="${build_app_path}changelog/build_number.ant" tofile="${build_common_path}/build_number.ant" />
+	</target>
+	
+<!-- Clean output directory for given build -->
+	<target name="clean_output">
+		<mkdir dir="${output_path}"/>
+		<mkdir dir="${build_path}"/>
+		<delete includeemptydirs="true">
+			<fileset dir="${output_path}" includes="**/*" />
+		</delete>
+		<mkdir dir="${output_path}"/>
+	</target>
+	
+<!-- Clean _build directory for given build -->
+	<target name="clean_build">
+		<mkdir dir="${build_path}"/>
+		<delete includeemptydirs="true">
+			<fileset dir="${build_path}" includes="**/*" />
+		</delete>
+		<mkdir dir="${build_path}"/>
+		<mkdir dir="${build_path}bin"/>
+		<mkdir dir="${build_path}obj"/>
+	</target>
+	
+<!-- Clean upload directory for given build -->
+	<target name="clean_upload">
+	
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${upload_deploy_path}" includes="**/*" />
+		</delete>
+		
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${upload_updater_path}" includes="**/*" />
+		</delete>
+		
+	</target>
+	
+<!-- Copy content to target directory -->
+	<target name="content_base">
+		<copy todir="${content_base.output_path}" preservelastmodified="true" overwrite="true" force="true" includeEmptyDirs="true">
+			<fileset dir="content" />
+			<fileset dir="${build_app_path}content" />
+		</copy>
+	</target>
+	
+<!-- Replaces tags inside given file (platform may include more of them!) -->
+	<target name="replace_variables_common">
+	
+		<condition property="is_debug_build_num" value="1" else="0">
+			<equals arg1="${build_configuration}" arg2="debug"/> 
+		</condition>
+		<condition property="is_portable_build_num" value="1" else="0">
+			<istrue value="${is_portable_build}"/> 
+		</condition>
+		<condition property="is_deploy_build_num" value="1" else="0">
+			<istrue value="${is_deploy_build}"/> 
+		</condition>
+		<condition property="is_ready_build_num" value="1" else="0">
+			<istrue value="${is_ready_build}"/> 
+		</condition>
+	
+		<replace file="${replace_variables.file}" token="$OUTPUT_TYPE$" value="${output_unix_name}" />
+		<replace file="${replace_variables.file}" token="$IS_DEBUG_BUILD$" value="${is_debug_build_num}" />
+		<replace file="${replace_variables.file}" token="$IS_PORTABLE_BUILD$" value="${is_portable_build_num}" />
+		<replace file="${replace_variables.file}" token="$IS_DEPLOY_BUILD$" value="${is_deploy_build_num}" />
+		<replace file="${replace_variables.file}" token="$IS_READY_BUILD$" value="${is_ready_build_num}" />
+		<replace file="${replace_variables.file}" token="$AUTOGEN_PATH_RELATIVE$" value="${autogen_path_relative}" />
+		
+		<replace file="${replace_variables.file}" token="$VERSION_MAJOR$" value="${version.major}" />
+		<replace file="${replace_variables.file}" token="$VERSION_MINOR$" value="${version.minor}" />
+		<replace file="${replace_variables.file}" token="$VERSION_REVISION$" value="${version.revision}" />
+		<replace file="${replace_variables.file}" token="$VERSION_BUILD$" value="${build.number}" />
+		
+		<replace file="${replace_variables.file}" token="$PLATFORM_FULLNAME$" value="${platform_fullname}" />
+		
+		<replace file="${replace_variables.file}" token="$GAME_FILENAME$" value="${manifest.game_filename}" />
+		<replace file="${replace_variables.file}" token="$EDITOR_FILENAME$" value="${manifest.editor_filename}" />
+		<replace file="${replace_variables.file}" token="$LAUNCHER_FILENAME$" value="${manifest.launcher_filename}" />
+		<replace file="${replace_variables.file}" token="$INSTALLER_FILENAME$" value="${manifest.installer_filename}" />
+		<replace file="${replace_variables.file}" token="$PORTABLEs_FILENAME$" value="${manifest.portable_filename}" />
+		
+		<replace file="${replace_variables.file}" token="$GAME_NAME$" value="${manifest.game_name}" />
+		<replace file="${replace_variables.file}" token="$EDITOR_NAME$" value="${manifest.editor_name}" />
+		<replace file="${replace_variables.file}" token="$LAUNCHER_NAME$" value="${manifest.launcher_name}" />
+		<replace file="${replace_variables.file}" token="$UNIX_NAME$" value="${app_unix_name}" />
+		
+		<replace file="${replace_variables.file}" token="$WEBSITE_URL$" value="${manifest.website_url}" />
+		<replace file="${replace_variables.file}" token="$SUPPORT_PAGE_URL$" value="${manifest.support_page_url}" />
+		<replace file="${replace_variables.file}" token="$DOWNLOAD_URL$" value="${url_updater_binary}" />
+		<replace file="${replace_variables.file}" token="$CHANGELOG_URL$" value="${url_updater_changelog}" />
+		<replace file="${replace_variables.file}" token="$UPDATER_MANIFEST_URL$" value="${url_updater_manifest}" />
+
+		<!-- ToDo: replace variable '$CHANGELOG_TEXT$' with plaintext changelog! -->
+	</target>
+	
+<!-- Autogen header for compilation -->
+	<target name="autogen_common">
+		<mkdir dir="${autogen_path}" />
+		
+		<copy file="build/common/autogen_base.hpp" tofile="${autogen_hpp_path}" preservelastmodified="true" overwrite="true" />
+		<antcall target="replace_variables">
+			<param name="replace_variables.file" value="${autogen_hpp_path}" />
+		</antcall>
+	</target>
+		
+<!-- Helper target for below; Build upload directory if we're deploying... -->
+	<target name="check_if_build_upload">
+		<condition property="can_build_upload">
+			<istrue value="${is_deploy_build}" />
+		</condition>
+	</target>
+		
+<!-- Build upload directory... -->
+	<target name="build_upload" depends="check_if_build_upload" if="can_build_upload">
+		
+		<copy file="${deploy_output_path}${deploy_filename}" tofile="${upload_updater_binary}" preservelastmodified="true" overwrite="true" />
+		<copy file="build/common/updater_manifest.xml" tofile="${upload_updater_manifest}" preservelastmodified="true" overwrite="true" />
+		
+		<antcall target="replace_variables">
+			<param name="replace_variables.file" value="${upload_updater_manifest}" />
+		</antcall>
+		
+		<!-- ToDo: create changelog.xml and store it there for upload: '${upload_updater_changelog}' -->
+		
+	</target>
+		
+<!-- Helper target for below; Build ready directory if we're building final... -->
+	<target name="check_if_build_ready">
+		<condition property="can_build_ready">
+			<istrue value="${is_ready_build}" />
+		</condition>
+	</target>
+		
+<!-- Build ready directory... -->
+	<target name="build_ready" depends="check_if_build_ready" if="can_build_ready">
+	
+		<mkdir dir="${ready_path}" />
+		<mkdir dir="${ready_path_binary}" />
+		
+		<copy file="${deploy_output_path}${deploy_filename}" tofile="${ready_path_binary}${deploy_filename}" preservelastmodified="true" overwrite="true" />
+		
+	</target>
+	
+</project>

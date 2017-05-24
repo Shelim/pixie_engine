@@ -1,0 +1,312 @@
+<project name="game" basedir="../..">
+
+<!-- These are provided by target solution -->
+
+	<!-- values: debug/release -->
+	<property name="build_configuration" value="debug" />
+	<!-- Mark sources for being portable? (All data will be stored inside exe directory) -->
+	<property name="is_portable_build" value="false" />
+	<!-- Create installer or zip file (depending on previous option)? -->
+	<property name="is_deploy_build" value="false" />
+	<!-- Move build to project/ready with distinctive name. Use for releases (even if for testers!) -->
+	<!-- Note: setting this to true will also store .pdb's inside project/ready -->
+	<property name="is_ready_build" value="false" />
+	<!-- sample values: game/editor/launcher/dll/test/etc. -->
+	<property name="output_unix_name" value="game" />
+	<!-- unix name of the application -->
+	<property name="app_unix_name" value="empty" />
+
+<!-- These are hardcoded for Windows -->
+	
+	<property name="platform_name" value="windows" />
+	<property name="platform_ver" value="x86" />
+	
+<!-- Path to app build root -->
+	<property name="build_app_path" value="../${app_unix_name}/" />
+	
+<!-- Some more Windows replace_variables -->
+	<property name="resources_name_base" value="${output_unix_name}" />
+	<property name="resources_filename_rc" value="resources_${resources_name_base}.hpp" />
+	<property name="resources_filename_icon" value="icon_${resources_name_base}.ico" />
+	<condition property="binary_filename_raw" value="_pixie.dll" else="_${output_unix_name}.exe">
+		<equals arg1="${output_unix_name}" arg2="dll"/> 
+	</condition>
+	<condition property="pdb_filename_raw" value="_pixie.pdb" else="_${output_unix_name}.pdb">
+		<equals arg1="${output_unix_name}" arg2="dll"/> 
+	</condition>
+	<property name="download_installer_filename" value="${app_unix_name}_installer.exe" />
+	<property name="download_portable_filename" value="${app_unix_name}_portable.zip" />
+	
+<!-- Include common script -->
+	
+	<import file="../common/ant.xml"/>
+	
+<!-- Even more Windows replace_variables! -->
+	
+	<condition property="deploy_filename" value="${manifest.portable_filename}" else="${manifest.installer_filename}">
+		<istrue value="${is_portable_build}"/> 
+	</condition>
+	<condition property="download_filename" value="${download_portable_filename}" else="${download_installer_filename}">
+		<istrue value="${is_portable_build}"/> 
+	</condition>
+	
+	<property name="upload_updater_binary" value="${upload_deploy_path}${download_filename}" />
+	<property name="url_updater_binary" value="${manifest.download_url}${upload_base_dir}${download_filename}" />
+	
+	<property name="resources_rc_path_raw" value="build/${platform_name}/${resources_filename_rc}" />
+	<property name="resources_icon_path_raw" value="${build_app_path}manifest/${platform_name}/${resources_filename_icon}" />
+	
+	<condition property="resources_rc_path" value="${autogen_path}/resources_${build_configuration}_portable.hpp" else="${autogen_path}/resources_${build_configuration}.hpp">
+		<istrue value="${is_portable_build}"/> 
+	</condition>
+	
+	<property name="resources_icon_path" value="${autogen_path}/${resources_filename_icon}" />
+	<property name="ready_path_pdb_base" value="${ready_path}/pdb/" />
+	<property name="ready_path_pdb" value="${ready_path_pdb_base}${platform_dir}_${output_unix_name}/bin/" />
+	<property name="full_srcpath_pdb" location="${build_app_path}/_build/" />
+	
+<!-- End of initalization -->
+
+<!-- Replaces tags inside given file (some are included in common/ant) -->
+	<target name="replace_variables" depends="replace_variables_common">
+		<replace file="${replace_variables.file}" token="$WINDOWS_GAME_APP_DIR$" value="${manifest.game_app_dir}" />
+		<replace file="${replace_variables.file}" token="$DLL_FILENAME$" value="${manifest.dll_filename}" />
+		<replace file="${replace_variables.file}" token="$FULL_SRCPATH_PDB$" value="${full_srcpath_pdb}" />
+		
+		<replace file="${replace_variables.file}" token="$RESOURCES_COMPANY$" value="${manifest.resources_company}" />
+		<replace file="${replace_variables.file}" token="$RESOURCES_INTERNAL$" value="${manifest.resources_internal}" />
+		<replace file="${replace_variables.file}" token="$RESOURCES_COPYRIGHTS$" value="${manifest.resources_copyrights}" />
+		<replace file="${replace_variables.file}" token="$RESOURCES_PRODUCT$" value="${manifest.resources_product}" />
+		
+		<replace file="${replace_variables.file}" token="$INSTALL_SHORTCUT$" value="${manifest.install_shortcut}" />
+		<replace file="${replace_variables.file}" token="$INSTALL_REGISTRY$" value="${manifest.install_registry}" />
+		<replace file="${replace_variables.file}" token="$INSTALL_DIR$" value="${manifest.install_dir}" />
+		
+		<replace file="${replace_variables.file}" token="$GAME_COMMAND$" value="${manifest.game_filename}" />
+		<replace file="${replace_variables.file}" token="$EDITOR_COMMAND$" value="${manifest.editor_filename}" />
+		<replace file="${replace_variables.file}" token="$LAUNCHER_COMMAND$" value="${manifest.launcher_filename}" />
+		
+	</target>
+	
+<!-- Generate dynamic sources (src/autogen)! -->
+	<target name="autogen" depends="autogen_common">		
+		<copy file="${resources_rc_path_raw}" tofile="${resources_rc_path}" preservelastmodified="true" overwrite="true" />
+		<copy file="${resources_icon_path_raw}" tofile="${resources_icon_path}" preservelastmodified="true" overwrite="true" failonerror="false" />
+		<antcall target="replace_variables">
+			<param name="replace_variables.file" value="${resources_rc_path}" />
+		</antcall>
+	</target>
+	
+<!-- Helper target for below; Pack executable only if we're not building debug nor dll -->
+	<target name="check_if_can_pack_executable">
+		<condition property="can_pack_executable">
+			<and>
+				<not>
+					<equals arg1="${build_configuration}" arg2="debug" />
+				</not>
+				<not>
+					<equals arg1="${output_unix_name}" arg2="dll" />
+				</not>
+			</and>
+		</condition>
+	</target>
+	
+<!-- Pack executable with UPX, greatly reducing its size -->
+	<target name="pack_executable" depends="check_if_can_pack_executable" if="can_pack_executable">		
+		<macrodef name="set_filename">
+		  <attribute name="out"/>
+		  <sequential>
+			<property name="filename" value="${manifest.@{out}_filename}" />
+		  </sequential>
+		</macrodef>
+		<set_filename out="${output_unix_name}"/>
+		
+		<exec executable="${basedir}/depedency/upxw/${platform_name}/upx.exe" failonerror="true">
+			<arg value="--ultra-brute"/>
+			<arg value="${basedir}/${output_path}${filename}"/>
+		</exec>
+	</target>
+	
+<!-- Helper target for below; Move PDBs to ready diretory only in ready build -->
+	<target name="check_if_can_build_ready_pdb">
+		<condition property="can_build_ready_pdb">
+			<istrue value="${is_ready_build}" />
+		</condition>
+	</target>
+	
+<!-- Move PDBs to ready diretory -->
+	<target name="build_ready_pdb" depends="check_if_can_build_ready_pdb" if="can_build_ready_pdb">		
+		
+		<!--
+		<mkdir dir="${ready_path_pdb}" />
+		<copy file="${build_path}bin/${pdb_filename_raw}" tofile="${ready_path_pdb}${pdb_filename_raw}" preservelastmodified="true" overwrite="true" />
+		-->
+		
+		<mkdir dir="${ready_path}pdb" />
+		<copy file="${build_path}bin/${pdb_filename_raw}" tofile="${ready_path}pdb/${pdb_filename_raw}" preservelastmodified="true" overwrite="true" />
+		
+		<copy file="build/windows/pdb_instruction.txt" tofile="${ready_path}pdb_instruction.txt" preservelastmodified="true" overwrite="true" />
+		
+		<antcall target="replace_variables">
+			<param name="replace_variables.file" value="${ready_path}pdb_instruction.txt" />
+		</antcall>
+	</target>
+	
+<!-- Self explaining :-) -->
+	<target name="copy_executable_to_output">
+		<property name="manifest.test_filename" value="test.exe" />
+				
+		<macrodef name="set_filename">
+		  <attribute name="out"/>
+		  <sequential>
+			<property name="filename" value="${manifest.@{out}_filename}" />
+		  </sequential>
+		</macrodef>
+		<set_filename out="${output_unix_name}"/>
+
+		<copy file="${build_path}bin/${binary_filename_raw}" tofile="${output_path}${filename}" preservelastmodified="true" overwrite="true" />
+	</target>
+	
+<!-- Helper target for below; Build installer only if we're deploy non-portable -->
+	<target name="check_if_deploy_installer">
+		<condition property="is_deploy_installer">
+			<and>
+				<istrue value="${is_deploy_build}" />
+				<isfalse value="${is_portable_build}" />
+			</and>
+		</condition>
+	</target>
+	
+<!-- Create Windows installer file -->
+	<target name="build_installer" depends="check_if_deploy_installer" if="is_deploy_installer">
+	
+		<mkdir dir="${build_installer_path}"/>
+		<delete includeemptydirs="true">
+			<fileset dir="${build_installer_path}" includes="**/*" />
+		</delete>	
+		<mkdir dir="${build_installer_path}"/>
+		<copy todir="${build_installer_path}" preservelastmodified="true" overwrite="true">
+			<fileset dir="${build_app_path}manifest/${platform_name}/"/>
+		</copy>
+		
+		<copy file="build/${platform_name}/installer.nsi" tofile="${build_installer_path}/installer.nsi" preservelastmodified="true" overwrite="true" />
+		
+		<local name="replace_variables.file" />
+		<property name="replace_variables.file" value="${build_installer_path}/installer.nsi" />
+		<replace file="${replace_variables.file}" token="$PATH_TO_FILES$" value="${basedir}/${output_path}"/>
+		
+		<antcall target="replace_variables">
+			<param name="replace_variables.file" value="${build_installer_path}/installer.nsi" />
+		</antcall>
+		
+		<exec executable="${basedir}/depedency/nsis/makensis.exe" failonerror="true">
+			<arg value="${build_installer_path}/installer.nsi"/>
+		</exec>
+				
+		<mkdir dir="${deploy_output_path}" />
+		<copy file="${build_installer_path}${deploy_filename}" tofile="${deploy_output_path}${deploy_filename}" preservelastmodified="true" overwrite="true" />
+		
+	</target>
+	
+<!-- Helper target for below; Pack executables into zip only if we're deploy portable -->
+	<target name="check_if_deploy_portable">
+		<condition property="is_deploy_portable">
+			<and>
+				<istrue value="${is_deploy_build}" />
+				<istrue value="${is_portable_build}" />
+			</and>
+		</condition>
+	</target>
+	
+<!-- Pack executables into zip -->
+	<target name="build_portable" depends="check_if_deploy_portable" if="is_deploy_portable">
+				
+		<mkdir dir="${deploy_output_path}" />
+		<zip destfile="${deploy_output_path}${deploy_filename}" basedir="${output_path}" />
+		
+	</target>
+	
+<!-- Copy binaries into desginated directory -->	
+	<target name="binary_base">		
+		<condition property="wxwidgets_version" value="debug" else="release">
+			<equals arg1="${build_configuration}" arg2="debug" />
+		</condition>
+		
+		<condition property="librocket_version" value="debug" else="release">
+			<equals arg1="${build_configuration}" arg2="debug" />
+		</condition>
+		
+		<copy todir="${binary.output_path}/plugins" preservelastmodified="true" overwrite="true">
+			<fileset dir="depedency/libvlc/lib/${platform_name}_${platform_ver}/plugins" />
+		</copy>
+		<copy todir="${binary.output_path}/" preservelastmodified="true" overwrite="true">
+			<filelist dir="depedency/anttweakbar/lib/${platform_name}_${platform_ver}">
+				<file name="anttweakbar.dll" />
+			</filelist>
+			<fileset dir="depedency/cg/lib/${platform_name}_${platform_ver}">
+				<include name="*.dll" />
+			</fileset>
+			<filelist dir="depedency/librocket/lib/${platform_name}_${platform_ver}">
+				<file name="freetype6.dll" />
+			</filelist>
+			<fileset dir="depedency/librocket/lib/${platform_name}_${platform_ver}/${librocket_version}">
+				<include name="*.dll" />
+			</fileset>
+			<filelist dir="depedency/openal_soft/lib/${platform_name}_${platform_ver}">
+				<file name="libogg.dll" />
+				<file name="libvorbis.dll" />
+				<file name="libvorbisfile.dll" />
+				<file name="OpenAL32.dll" />
+			</filelist>
+			<fileset dir="depedency/wxwidgets/lib/${platform_name}_${platform_ver}/${wxwidgets_version}">
+				<include name="*.dll" />
+			</fileset>
+			<filelist dir="depedency/libvlc/lib/${platform_name}_${platform_ver}">
+				<file name="libvlc.dll" />
+				<file name="libvlccore.dll" />
+			</filelist>
+			<filelist dir="depedency/sdl/lib/${platform_name}_${platform_ver}">
+				<file name="SDL2.dll" />
+			</filelist>
+			<filelist dir="depedency/sdl_net/lib/${platform_name}_${platform_ver}">
+				<file name="SDL2_net.dll" />
+			</filelist>
+		</copy>
+	</target>
+	
+<!-- Helper target for below; Build content debug well... if we're in debug! -->
+	<target name="check_if_content_debug">
+		<condition property="is_content_debug">
+			<equals arg1="${build_configuration}" arg2="debug" />
+		</condition>
+	</target>
+	
+<!-- Copy content debug into _build. This is for the VS debugger, so it can find content files on default settings -->	
+	<target name="content_debug" depends="check_if_content_debug" if="is_content_debug">
+		<antcall target="binary_base">
+			<param name="binary.output_path" value="${build_path}/bin"/>
+		</antcall>
+		<antcall target="content_base">
+			<param name="content_base.output_path" value="${build_path}/bin"/>
+		</antcall>
+	</target>
+	
+<!-- Copy content into target dir -->	
+	<target name="content">
+		<antcall target="binary_base">
+			<param name="binary.output_path" value="${output_path}"/>
+		</antcall>
+		<antcall target="content_base">
+			<param name="content_base.output_path" value="${output_path}"/>
+		</antcall>
+	</target>
+
+	<target name="prebuild_all" depends="increment_build_number, clean_output, clean_upload" />
+	
+	<target name="prebuild" depends="autogen" />
+	
+	<target name="postbuild" depends="copy_executable_to_output, pack_executable, build_ready_pdb" />
+	
+	<target name="postbuild_all" depends="content, content_debug, build_installer, build_portable, build_upload, build_ready" />
+	
+</project>

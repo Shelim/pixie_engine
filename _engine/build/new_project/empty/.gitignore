@@ -1,0 +1,10 @@
+/_build
+/output
+/project
+/upload
+!/project/visual_studio_2015/game.sln
+!/project/visual_studio_2015/*.vcxproj
+!/project/visual_studio_2015/*.vcxproj.filters
+!/project/visual_studio_2015/*.vcxproj.user
+/private
+!/private/readme.txt

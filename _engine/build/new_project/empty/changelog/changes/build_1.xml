@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<changelog>
+	<build>1</build>
+	<important>
+		<motd>
+			<!-- Write Message of the Day here! -->
+			The initial version of $EMPTY_GAME_NAME$
+		</motd>
+		<info>
+			<!-- <item>saves_are_broken</item> -->
+			<!-- <item>restart_is_required_windows_x86</item> -->
+		</info>
+	</important>
+	<changes>
+		<!--
+		Possible values: 
+			o critical
+				For fixing critical things (like security vulnerability)
+			o new
+				For things that are new in this version
+			o update
+				For things that are updated in this version
+			o removed
+				For things that are removed in this version
+			o bugfix
+				For fixed bugs
+		-->
+		<new>Initial version</new>
+	</changes>
+</changelog>

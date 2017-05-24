@@ -1,0 +1,48 @@
+<project name="depedency" basedir="../..">
+	
+<!-- These are provided by bat script -->
+
+	<property name="ftp_server" value="unknown" />
+	<property name="ftp_login" value="unknown" />
+	<property name="ftp_password" value="unknown" />
+	
+<!-- These point to target dir for upload -->
+	
+	<property name="ftp_port" value="21" />
+	<property name="ftp_remote_directory" value="pixie_engine" />
+	
+<!-- Some standard settings... -->
+	
+	<property name="build_path" value="_build/depedency/" />
+	<property name="depedency_path" value="depedency/" />
+	<property name="zip_filename" value="depedencies.zip" />
+	
+<!-- Include FTP class -->
+	
+	<taskdef name="ftp" classname="org.apache.tools.ant.taskdefs.optional.net.FTP">
+	  <classpath>
+		<pathelement location="${basedir}/depedency/apache_ant/lib/commons-net-2.0.jar"/>
+		<pathelement location="${basedir}/depedency/apache_ant/lib/ant-commons-net-1.9.3.jar"/>
+	  </classpath>
+	</taskdef>
+	
+<!-- Let's do this! -->
+	
+	<target name="pack_and_upload">
+	
+		<mkdir dir="${build_path}"/>
+		<delete includeemptydirs="true">
+			<fileset dir="${build_path}" includes="**/*" />
+		</delete>
+		<mkdir dir="${build_path}"/>
+		
+		<zip destfile="${build_path}/${zip_filename}" basedir="${depedency_path}" update="true" compress="true" whenempty="create" comment="Unpack this to '_engine/depedency'" level="7" />
+		
+		 <ftp server="${ftp_server}" port="${ftp_port}" remotedir="${ftp_remote_directory}" userid="${ftp_login}"  password="${ftp_password}" passive="yes"  depends="no"  binary="yes"  action="send">
+			<fileset dir="${build_path}">
+			  <include name="${zip_filename}"/>
+			</fileset>
+		  </ftp>
+	</target>
+	
+</project>

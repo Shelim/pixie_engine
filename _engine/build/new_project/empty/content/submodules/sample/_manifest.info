@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pixie>
+	<submodule>
+		<requires>
+			<modules>
+				<module>base</module>
+			</modules>
+			<submodules />
+		</requires>
+		<forbids>
+			<any_module_but_required>false</any_module_but_required>
+			<any_submodule_but_required>false</any_submodule_but_required>
+			<modules />
+			<submodules/>
+		</forbids>
+	</submodule>
+</pixie>
+

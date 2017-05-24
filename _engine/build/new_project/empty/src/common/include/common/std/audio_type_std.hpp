@@ -1,0 +1,12 @@
+#ifndef GAME_AUDIO_TYPE_STD
+#define GAME_AUDIO_TYPE_STD(...)
+#endif
+
+GAME_AUDIO_TYPE_STD(sounds)
+GAME_AUDIO_TYPE_STD(music)
+GAME_AUDIO_TYPE_STD(movies)
+GAME_AUDIO_TYPE_STD(voices)
+
+
+
+#undef GAME_AUDIO_TYPE_STD

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pixie>
+	<module>
+		<includes>
+		
+		</includes>
+		<submodules>
+			<from_included_modules>allow</from_included_modules>
+			<type>allow_any_not_listed_below</type>
+		</submodules>
+	</module>
+</pixie>
+

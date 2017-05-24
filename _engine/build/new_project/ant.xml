@@ -1,0 +1,18 @@
+<project name="new project" basedir="../..">
+	
+	<property name="unix" value="game" />
+	<property name="full" value="Sample game" />
+	
+	<target name="new_project">
+		<copy todir="../${unix}" includeEmptyDirs="true"> 
+			<fileset dir="build/new_project/empty" defaultexcludes="no" /> 
+		</copy>
+		<replace token="$EMPTY_GAME_UNIX_NAME$" value="${unix}">
+			<fileset dir="../${unix}" /> 
+		</replace>
+		<replace token="$EMPTY_GAME_NAME$" value="${full}">
+			<fileset dir="../${unix}" /> 
+		</replace>
+	</target>
+	
+</project>

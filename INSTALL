@@ -1,0 +1,11 @@
+Currently only WINDOWS is supported for developing.
+
+BEFORE DOING ANYTHINGE ELSE:
+	Use download_dependencies.bat to download all depedencies.
+	You will need to call this ONLY ONCE after project's checkout
+
+Then:
+	- Use open_documentation.bat to read docs, or
+	- Jump into developing by calling new_project.bat
+	
+All scripts are interactive and can be run directly from Windows Explorer.

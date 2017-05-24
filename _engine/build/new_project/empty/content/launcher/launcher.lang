@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pixie>
+	<lang>
+		<EmptyLang>n/a</EmptyLang>
+	
+		<LauncherTitle>Launcher</LauncherTitle>
+		<LauncherButtonStartGame>Start Game</LauncherButtonStartGame>
+		<LauncherButtonMods>Mods</LauncherButtonMods>
+		<LauncherButtonEditor>Editor</LauncherButtonEditor>
+		<LauncherButtonConfigure>Configuration</LauncherButtonConfigure>
+		<LauncherButtonUpdates>Check for updates</LauncherButtonUpdates>
+		<LauncherButtonWebsite>Website</LauncherButtonWebsite>
+		<LauncherButtonSupport>Support</LauncherButtonSupport>
+		<LauncherButtonExit>Exit</LauncherButtonExit>
+		
+		<ConfigurerTitle>Configurer</ConfigurerTitle>
+		<ConfigurerSave>Save and close</ConfigurerSave>
+		<ConfigurerTabSystem>System</ConfigurerTabSystem>
+		<ConfigurerTabGame>Game</ConfigurerTabGame>
+		<ConfigurerTabMods>Mods</ConfigurerTabMods>
+		<ConfigurerTabGraphics>Graphics</ConfigurerTabGraphics>
+		<ConfigurerTabInput>Input</ConfigurerTabInput>
+		<ConfigurerTabSound>Sound</ConfigurerTabSound>
+		<ConfigurerTabNetwork>Network</ConfigurerTabNetwork>
+		<ConfigurerTabDebug>Debug</ConfigurerTabDebug>
+		
+		<ConfigurerSystemGroupLanguage>Language options</ConfigurerSystemGroupLanguage>
+		<ConfigurerSystemLanguage>Language:</ConfigurerSystemLanguage>
+		<ConfigurerSystemLanguageAuthor>Author:</ConfigurerSystemLanguageAuthor>
+		<ConfigurerSystemLanguageDescription>Description:</ConfigurerSystemLanguageDescription>
+		
+		<ConfigurerModsGroupMain>Main module</ConfigurerModsGroupMain>
+		<ConfigurerModsMainAuthor>Author:</ConfigurerModsMainAuthor>
+		<ConfigurerModsMainDescription>Description:</ConfigurerModsMainDescription>
+		<ConfigurerModsGroupSub>Submodules</ConfigurerModsGroupSub>
+		<ConfigurerModsSub>#1# - #2# (by #3#)</ConfigurerModsSub>
+		<ConfigurerModsGroupProblems>Problems</ConfigurerModsGroupProblems>
+		<ConfigurerModsMainProblemMissingMod>"%s" (Requested by %s) - Missing module!</ConfigurerModsMainProblemMissingMod>
+		
+		<ConfigurerGraphicsGroupRenderer>Renderer engine</ConfigurerGraphicsGroupRenderer>
+		<ConfigurerGraphicsRenderer>Renderer:</ConfigurerGraphicsRenderer>
+		<ConfigurerGraphicsRendererSDL2_OpenGL>SDL2 (OpenGL)</ConfigurerGraphicsRendererSDL2_OpenGL>
+		<ConfigurerGraphicsRendererDirectX9>DirectX 9.0c (Windows)</ConfigurerGraphicsRendererDirectX9>
+		<ConfigurerGraphicsGroupWindow>Windowed options</ConfigurerGraphicsGroupWindow>
+		<ConfigurerGraphicsWindowSize>Window size:</ConfigurerGraphicsWindowSize>
+		<ConfigurerGraphicsWindowed>Is windowed</ConfigurerGraphicsWindowed>
+		<ConfigurerGraphicsResizableWindowed>Is resizable (windowed)</ConfigurerGraphicsResizableWindowed>
+		<ConfigurerGraphicsGroupFullscreen>Fullscreen options</ConfigurerGraphicsGroupFullscreen>
+		<ConfigurerGraphicsFullscreenNative>Use native resolution in fullscreen mode</ConfigurerGraphicsFullscreenNative>
+		<ConfigurerGraphicsFullscreenForce>Force fullscreen size:</ConfigurerGraphicsFullscreenForce>
+		<ConfigurerGraphicsFullscreenVSync>Force V-Sync</ConfigurerGraphicsFullscreenVSync>
+		<ConfigurerGraphicsGroupRenderer>Renderer options</ConfigurerGraphicsGroupRenderer>
+		<ConfigurerGraphicsRendererMovie>Movie buffer size:</ConfigurerGraphicsRendererMovie>
+		
+		<ConfigurerSoundGroupAudio>Audio engine options</ConfigurerSoundGroupAudio>
+		<ConfigurerSoundAudioEngine>Audio engine:</ConfigurerSoundAudioEngine>
+		<ConfigurerSoundGroupVolume>Volume options</ConfigurerSoundGroupVolume>
+		<ConfigurerSoundVolumeMaster>Volume master:</ConfigurerSoundVolumeMaster>
+		<ConfigurerSoundVolumeMusic>Volume (music):</ConfigurerSoundVolumeMusic>
+		<ConfigurerSoundVolumeSounds>Volume (sounds):</ConfigurerSoundVolumeSounds>
+		<ConfigurerSoundVolumeMovies>Volume (movies):</ConfigurerSoundVolumeMovies>
+		<ConfigurerSoundVolumeVoices>Volume (voices):</ConfigurerSoundVolumeVoices>
+		
+		<ConfigurerDebugGroupConsoles>Debug consoles options</ConfigurerDebugGroupConsoles>
+		<ConfigurerDebugHasAntTweakBar>Has ant tweak bar enabled</ConfigurerDebugHasAntTweakBar>
+		<ConfigurerDebugHasInterfaceDebugger>Has interface debugger enabled (press in game Shift + ~)</ConfigurerDebugHasInterfaceDebugger>
+		<ConfigurerDebuHasStdConsole>Has standard console (remember to run in windowed mode!)</ConfigurerDebuHasStdConsole>
+		<ConfigurerDebugGroupAssets>Debug assets options</ConfigurerDebugGroupAssets>
+		<ConfigurerDebugLiveReloadAssets>Live assets reload (may impact performance!)</ConfigurerDebugLiveReloadAssets>
+	</lang>
+</pixie>

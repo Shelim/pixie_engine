@@ -1,0 +1,5 @@
+Move contents of directory pdb to:
+
+$FULL_SRCPATH_PDB$
+
+This will allow you to debug build $VERSION_BUILD$

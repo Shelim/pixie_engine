@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<manifest>
+	<game_filename>$EMPTY_GAME_NAME$.exe</game_filename>
+	<editor_filename>Editor.exe</editor_filename>
+	<launcher_filename>_Launcher.exe</launcher_filename>
+	<dll_filename>Pixie.dll</dll_filename>
+	<installer_filename>$EMPTY_GAME_NAME$ (installer).exe</installer_filename>
+	<portable_filename>$EMPTY_GAME_NAME$ (portable).zip</portable_filename>
+	<resources_company>Kosek.com</resources_company>
+	<resources_internal>$EMPTY_GAME_UNIX_NAME$</resources_internal>
+	<resources_copyrights>Copyright 2016 - 2017 (c) by Kosek.com</resources_copyrights>
+	<resources_product>$EMPTY_GAME_NAME$</resources_product>
+	<install_dir>$EMPTY_GAME_NAME$</install_dir>
+	<install_shortcut>$EMPTY_GAME_NAME$.lnk</install_shortcut>
+	<install_registry>$EMPTY_GAME_NAME$</install_registry>
+	<game_app_dir>$EMPTY_GAME_NAME$</game_app_dir>
+	
+</manifest>

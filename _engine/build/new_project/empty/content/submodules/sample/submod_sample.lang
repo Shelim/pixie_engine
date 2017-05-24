@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pixie>
+	<lang>
+		<name>Sample submodule</name>
+		<author>Official</author>
+		<contact>http://games.kosek.com</contact>
+		<description>This is a sample submodule</description>
+	</lang>
+</pixie>
