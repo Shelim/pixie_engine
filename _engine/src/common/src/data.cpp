@@ -101,6 +101,204 @@ engine::data::database_changes_t engine::data::database_state_t::calculate_chang
 	return ret;
 }
 
+engine::data::item_content_base_t::result_t engine::data::item_t::reload_sync(std::unique_ptr<input_t> input, database_items_t * database_items, bool force)
+{
+	auto database = database_items->get_database().get();
+
+	item_content_base_t::result_t ret = item_content_base_t::result_t::success;
+
+	if ((ret = content->reload_init(std::move(input), database, force)) != item_content_base_t::result_t::success)
+		return ret;
+	if ((ret = content->reload_async(database_items)) != item_content_base_t::result_t::success)
+		return ret;
+	if ((ret = content->reload_end(database)) != item_content_base_t::result_t::success)
+		return ret;
+
+	return item_content_base_t::result_t::success;
+}
+
+engine::data::item_content_base_t::result_t engine::data::item_t::reload_async_init(std::unique_ptr<input_t> input, database_items_t * database_items, bool force)
+{
+	auto database = database_items->get_database().get();
+	auto policy = content->get_reload_policy();
+
+	if (policy == item_content_base_t::policy_io_t::implicit_async_copy || policy == item_content_base_t::policy_io_t::explicit_async_copy)
+		content_load = std::move(create_content_func(get_path(), this));
+
+	return get_content_load()->reload_init(std::move(input), database, force);
+}
+
+engine::data::item_content_base_t::result_t engine::data::item_t::reload_async(database_items_t * database_items)
+{
+	return get_content_load()->reload_async(database_items);
+}
+
+engine::data::item_content_base_t::result_t engine::data::item_t::reload_async_end(database_items_t * database_items)
+{
+	auto database = database_items->get_database().get();
+	auto policy = content->get_reload_policy();
+
+	item_content_base_t::result_t ret = item_content_base_t::result_t::success;
+
+	if ((ret = get_content_load()->reload_end(database)) != item_content_base_t::result_t::success)
+		return ret;
+
+	if (policy == item_content_base_t::policy_io_t::implicit_async_copy || policy == item_content_base_t::policy_io_t::explicit_async_copy)
+		std::swap(content, content_load);
+
+	return item_content_base_t::result_t::success;
+}
+
+void engine::data::database_items_t::reload(std::shared_ptr<item_t> item, mode_reload_t mode)
+{
+	auto policy = item->get_base()->get_reload_policy();
+	std::thread::id calling_thread_id = std::this_thread::get_id();
+	item_content_base_t::result_t result;
+
+	if (mode == mode_reload_t::deffered)
+	{
+		items_deffered.push(item);
+	}
+	else if (mode == mode_reload_t::force_sync || mode == mode_reload_t::force_sync_now || policy == item_content_base_t::policy_io_t::implicit_sync || policy == item_content_base_t::policy_io_t::explicit_sync)
+	{
+		if (mode == mode_reload_t::force_sync_now || calling_thread_id == main_thread_id)
+		{
+			result = item->reload_sync(database->get_input(item->get_path()), this, (mode == mode_reload_t::force_sync_now));
+			if (result == item_content_base_t::result_t::already_started)
+			{
+				items_reload_next.push(item);
+			}
+		}
+		else
+		{
+			items_to_reload.enqueue_to_sync(item);
+		}
+	}
+	else
+	{
+		if (calling_thread_id != main_thread_id)
+		{
+			items_to_reload.enqueue_to_init(item);
+		}
+		else
+		{
+			result = item->reload_async_init(database->get_input(item->get_path()), this);
+			if (result == item_content_base_t::result_t::already_started)
+				items_reload_next.push(item);
+			else if(result == item_content_base_t::result_t::success)
+				items_to_reload.enqueue_to_async(item);
+		}
+	}
+}
+
+void engine::data::database_items_t::init_update()
+{
+	item_content_base_t::result_t result;
+
+	if (!items_deffered.is_empty()) // one per frame!!!
+	{
+		auto item = items_deffered.pop();
+		reload(item);
+	}
+
+	auto & changes = database->get_changes();
+
+	for (auto & change : changes)
+	{
+		auto iter = items.find(change.get_path());
+		std::shared_ptr<item_t> item;
+
+		if (iter != items.end() && (item = std::static_pointer_cast<item_t>(iter->second.lock())))
+		{
+			auto policy = item->content->get_reload_policy();
+			if (policy == item_content_base_t::policy_io_t::implicit_sync ||
+				policy == item_content_base_t::policy_io_t::implicit_async ||
+				policy == item_content_base_t::policy_io_t::implicit_async_copy)
+			{
+				auto type = change.get_type();
+
+				if (type == database_change_t::added  || type == database_change_t::updated)
+				{
+					reload(item);
+				}
+				else if (type == database_change_t::deleted)
+				{
+					item->destroy();
+				}
+			}
+		}
+	}
+
+	while (!items_reload_next.is_empty())
+	{
+		auto & item = items_reload_next.pop();
+		if (!item->is_reloading())
+		{
+			reload(item);
+		}
+		else
+		{
+			items_reload_next.push(item);
+			break;
+		}
+	}
+
+	for (;;)
+	{
+		std::shared_ptr<item_t> next_item = items_to_reload.get_item_to_sync();
+
+		if (next_item)
+		{
+			result = next_item->reload_sync(database->get_input(next_item->get_path()), this);
+			if(result == item_content_base_t::result_t::already_started)
+				items_reload_next.push(next_item);
+		}
+		else
+			break;
+	}
+
+	for (;;)
+	{
+		std::shared_ptr<item_t> next_item = items_to_reload.get_item_to_end();
+
+		if (next_item)
+			next_item->reload_async_end(this);
+		else
+			break;
+	}
+
+	for (;;)
+	{
+		std::shared_ptr<item_t> next_item = items_to_reload.get_item_to_init();
+
+		if (next_item)
+		{
+			result = next_item->reload_async_init(database->get_input(next_item->get_path()), this);
+			if (result == item_content_base_t::result_t::already_started)
+			{
+				items_reload_next.push(next_item);
+			}
+			else if(result == item_content_base_t::result_t::success)
+				items_to_reload.enqueue_to_async(next_item);
+		}
+		else
+			break;
+	}
+}
+
+bool engine::data::item_t::is_reloading()
+{
+	if (content->is_io_pending()) return true;
+
+	auto policy = content->get_reload_policy();
+	if (policy == item_content_base_t::policy_io_t::implicit_async_copy || policy == item_content_base_t::policy_io_t::explicit_async_copy)
+	{
+		if (content_load)
+			return content_load->is_io_pending();
+	}
+	return false;
+}
+
 /*
 
 #include "common/data/provider_asset.hpp"

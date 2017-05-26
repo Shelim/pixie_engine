@@ -6,6 +6,7 @@
 #include "common/injector.hpp"
 #include "common/config.hpp"
 #include "common/data/database.hpp"
+#include "common/data/item_content.hpp"
 #include "common/logger_container.hpp"
 #include "common/manifest_app.hpp"
 #include "common/data/database_items.hpp"
@@ -35,7 +36,42 @@
 #include <thread>
 #include <chrono>
 
+class item_content_text_t final : public engine::data::item_content_base_t
+{
 
+public:
+
+	item_content_text_t(engine::data::item_t * item) : item_content_base_t(item, policy_io_t::implicit_async, policy_io_t::implicit_sync)
+	{
+
+	}
+
+	engine::ustring_t get_data()
+	{
+		return data;
+	}
+
+private:
+
+	item_content_text_t * clone() const final
+	{
+		return new item_content_text_t(*this);
+	}
+
+	void destroy_local() final
+	{
+		data = _U("");
+	}
+
+	bool reload_async_local(engine::data::input_t * input, engine::data::database_items_t * items) final
+	{
+		data = input->read_ustring();
+		return true;
+	}
+
+	engine::ustring_t data;
+
+};
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -101,6 +137,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	int32_t i = 0;
 
+	std::shared_ptr<engine::data::item_t> item = database_items->get_item<item_content_text_t>(engine::virtual_path_t(_U("base/_manifest.info"), engine::virtual_path_t::type_t::modules));
+	std::shared_ptr<engine::data::item_t> item2 = database_items->get_item<item_content_text_t>(engine::virtual_path_t(_U("base/_manifest.info"), engine::virtual_path_t::type_t::modules));
+
 	for (;;)
 	{
 		database_data->init_update();
@@ -110,6 +149,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		config_container->init_update();
 		logger_container->update();
+
+//		logger->p_msg(item->get<item_content_text_t>()->get_data());
 
 		++i;
 //		logger->p_msg(_U("Test of huge outputs: #1#!"), i);

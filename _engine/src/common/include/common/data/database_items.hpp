@@ -39,6 +39,11 @@ namespace engine
 				init_update();
 			}
 
+			std::shared_ptr<database_t> get_database()
+			{
+				return database;
+			}
+
 			enum class mode_reload_t
 			{
 				use_item_policy,
@@ -62,14 +67,11 @@ namespace engine
 				// ToDo
 			}
 
-			void reload(std::shared_ptr<item_t> item)
-			{
-				// ToDo
-			}
+			void reload(std::shared_ptr<item_t> item, mode_reload_t force_sync = mode_reload_t::use_item_policy);
 
 			void revert(std::shared_ptr<item_t> item)
 			{
-				// ToDo
+				reload(item); // ???
 			}
 
 			std::shared_ptr<item_t> deatach(std::shared_ptr<item_t> item)
@@ -79,45 +81,23 @@ namespace engine
 
 			template<class T> std::shared_ptr<item_t> get_item(const virtual_path_t & path, mode_reload_t mode = mode_reload_t::use_item_policy)
 			{
-				// ToDo
 				std::thread::id calling_thread_id = std::this_thread::get_id();
 
 				std::shared_ptr<item_t> ret;
 
 				auto iter = items.find(path);
-				if (iter != items.end() && (ret = iter->second.lock()) != nullptr)
+				if (iter != items.end() && (ret = std::static_pointer_cast<item_t>(iter->second.lock())))
 				{
 					return ret;
 				}
 
 				ret = item_t::create_item<T>(path);
+				items[path] = ret;
 				auto policy = ret->get_base()->get_reload_policy();
 				if (policy == item_content_base_t::policy_io_t::forbidden)
 					return ret;
 
-				if (mode == mode_reload_t::deffered)
-				{
-					items_deffered.push(ret);
-				}
-				else if (mode == mode_reload_t::force_sync || mode == mode_reload_t::force_sync_now || policy == item_content_base_t::policy_io_t::implicit_sync || policy == item_content_base_t::policy_io_t::explicit_sync)
-				{
-					if (calling_thread_id != main_thread_id && mode != mode_reload_t::force_sync_now)
-					{
-						items_to_reload.enqueue_to_sync(ret);
-					}
-					else
-					{
-						ret->
-					}
-				}
-				else
-				{
-					if (calling_thread_id != main_thread_id)
-					{
-						items_to_reload.enqueue_to_sync(ret);
-					}
-				}
-
+				reload(ret);
 
 				return ret;
 			}
@@ -131,16 +111,27 @@ namespace engine
 			{
 				return items_deffered.size();
 			}
-			void init_update()
-			{
-				// ToDo
-			}
+
+			void init_update();
 
 		private:
 
 			void update_async()
 			{
-				// ToDo
+				for(;;)
+				{
+					item_content_base_t::result_t result;
+					std::shared_ptr<item_t> next_item = items_to_reload.get_item_to_async();
+
+					if (next_item)
+					{
+						result = next_item->reload_async(this);
+						if(result == item_content_base_t::result_t::success)
+							items_to_reload.enqueue_to_end(next_item);
+					}
+					else
+						break;
+				};
 			}
 
 			void update_items()
@@ -225,6 +216,7 @@ namespace engine
 			items_progress_t items_to_reload;
 
 			queue_t<std::shared_ptr<item_t> > items_deffered;
+			queue_t<std::shared_ptr<item_t> > items_reload_next;
 
 			std::map<virtual_path_t, std::weak_ptr<item_base_t> > items;
 

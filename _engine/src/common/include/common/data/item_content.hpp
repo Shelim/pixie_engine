@@ -8,6 +8,14 @@
 #include "common/data/input.hpp"
 #include "common/data/output.hpp"
 #include <bitset>
+#include <map>
+#include <vector>
+#include <string>
+#include <unordered_set>
+#include <thread>
+#include <memory>
+#include <queue>
+#include <mutex>
 
 namespace engine
 {
@@ -32,23 +40,32 @@ namespace engine
 				explicit_async_copy
 			};
 
+			enum class result_t
+			{
+				success,
+				already_started,
+				error
+			};
+
 			virtual ~item_content_base_t()
 			{
 
 			}
 
-			policy_io_t get_reload_policy()
+			policy_io_t get_reload_policy() const
 			{
 				return reload_policy;
 			}
 
-			policy_io_t get_resave_policy()
+			policy_io_t get_resave_policy() const
 			{
 				return resave_policy;
 			}
 
 			void destroy()
 			{
+				std::lock_guard<std::recursive_mutex> guard(mutex_io_operation);
+
 				if(!is_flag(flag_t::destroyed))
 					destroy_local();
 
@@ -82,10 +99,20 @@ namespace engine
 			item_content_base_t(item_t * owner, policy_io_t reload_policy = policy_io_t::implicit_async, policy_io_t resave_policy = policy_io_t::explicit_async) :
 				owner(owner), reload_policy(reload_policy), resave_policy(resave_policy)
 			{
-				destroy();
+
+			}
+
+			item_content_base_t(const item_content_base_t & other) : owner(other.owner), reload_policy(other.reload_policy), resave_policy(other.resave_policy)
+			{
+
 			}
 
 			void set_dirty();
+
+			void wait_till_io_done()
+			{
+				std::lock_guard<std::recursive_mutex> guard(mutex_io_operation);
+			}
 
 		private:
 
@@ -96,63 +123,78 @@ namespace engine
 				return owner;
 			}
 
-			bool reload_init(std::unique_ptr<input_t> input, database_t * database)
+			result_t reload_init(std::unique_ptr<input_t> input, database_t * database, bool force = false)
 			{
+				if (force)
+				{
+					mutex_io_operation.lock();
+				}
+				else
+				{
+					if (!mutex_io_operation.try_lock())
+						return result_t::already_started;
+				}
+
 				this->input = std::move(input);
 
 				if (!reload_init_local(get_input(), database))
 				{
 					destroy();
 					this->input.reset();
-					return false;
+					mutex_io_operation.unlock();
+					return result_t::error;
 				}
-				return true;
+				return result_t::success;
 			}
 
-			bool reload_async(database_items_t * items)
+			result_t reload_async(database_items_t * items)
 			{
+				
 				if (!reload_async_local(get_input(), items))
 				{
 					destroy();
 					this->input.reset();
-					return false;
+					mutex_io_operation.unlock();
+					return result_t::error;
 				}
-				return true;
+				return result_t::success;
 			}
 
-			bool reload_end(database_t * database)
+			result_t reload_end(database_t * database)
 			{
 				if (reload_end_local(get_input(), database))
 					set_flag(flag_t::destroyed, false);
 				else
 				{
 					destroy();
-					return false;
+					mutex_io_operation.unlock();
+					return result_t::error;
 				}
 
 				this->input.reset();
-				return true;
+				mutex_io_operation.unlock();
+				return result_t::success;
 			}
 
-			bool resave_init(std::unique_ptr<output_t> output, database_t * database)
+			result_t resave_init(std::unique_ptr<output_t> output, database_t * database)
 			{
 				this->output = std::move(output);
 
-				return resave_init_local(get_output(), database);
+				return resave_init_local(get_output(), database) ? result_t::success : result_t::error;
 			}
 
-			bool resave_async(database_items_t * items)
+			result_t resave_async(database_items_t * items)
 			{
-				return resave_async_local(get_output(), items);
+				return resave_async_local(get_output(), items) ? result_t::success : result_t::error;
 			}
 
-			bool resave_end(database_t * database)
+			result_t resave_end(database_t * database)
 			{
 				bool ret = resave_end_local(get_output(), database);
 
 				this->output.reset();
 
-				return ret;
+				return ret ? result_t::success : result_t::error;
 			}
 
 			input_t * get_input()
@@ -168,6 +210,8 @@ namespace engine
 			item_t * owner;
 			policy_io_t reload_policy;
 			policy_io_t resave_policy;
+
+			std::recursive_mutex mutex_io_operation;
 
 			enum class flag_t
 			{
