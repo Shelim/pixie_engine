@@ -5,11 +5,15 @@
 #include "common/virtual_path.hpp"
 #include "common/queue.hpp"
 #include "common/data/item.hpp"
+#include "common/data/database.hpp"
 #include <map>
 #include <vector>
 #include <string>
 #include <unordered_set>
 #include <thread>
+#include <memory>
+#include <queue>
+#include <mutex>
 
 namespace engine
 {
@@ -20,15 +24,26 @@ namespace engine
 
 		public:
 
-			database_items_t()
+			database_items_t(std::shared_ptr<logger_t> logger, std::shared_ptr<database_t> database) : logger(logger), database(database)
 			{
 				main_thread_id = std::this_thread::get_id();
+
+				end_update_data = false;
+				update_items_thread = std::thread([this] { update_items(); });
+			}
+
+			~database_items_t()
+			{
+				end_update_data = true;
+				update_items_thread.join();
+				init_update();
 			}
 
 			enum class mode_reload_t
 			{
 				use_item_policy,
 				force_sync,
+				force_sync_now, // reload in the same thread, even if calling object is not from main thread
 				deffered
 			};
 
@@ -77,23 +92,30 @@ namespace engine
 
 				ret = item_t::create_item<T>(path);
 				auto policy = ret->get_base()->get_reload_policy();
-				if (policy == item_content_base_t::policy_reload_t::forbidden)
+				if (policy == item_content_base_t::policy_io_t::forbidden)
 					return ret;
 
 				if (mode == mode_reload_t::deffered)
 				{
 					items_deffered.push(ret);
 				}
-				else if (mode == mode_reload_t::force_sync || policy == item_content_base_t::policy_reload_t::sync)
+				else if (mode == mode_reload_t::force_sync || mode == mode_reload_t::force_sync_now || policy == item_content_base_t::policy_io_t::implicit_sync || policy == item_content_base_t::policy_io_t::explicit_sync)
 				{
-					if (calling_thread_id != main_thread_id)
+					if (calling_thread_id != main_thread_id && mode != mode_reload_t::force_sync_now)
 					{
-
+						items_to_reload.enqueue_to_sync(ret);
+					}
+					else
+					{
+						ret->
 					}
 				}
 				else
 				{
-
+					if (calling_thread_id != main_thread_id)
+					{
+						items_to_reload.enqueue_to_sync(ret);
+					}
 				}
 
 
@@ -109,18 +131,29 @@ namespace engine
 			{
 				return items_deffered.size();
 			}
-
-			friend class database_t;
-
-		private:
-
-			void update()
+			void init_update()
 			{
 				// ToDo
 			}
+
+		private:
+
 			void update_async()
 			{
 				// ToDo
+			}
+
+			void update_items()
+			{
+				logger->p_msg(_U("Starting data thread..."));
+				for (;;)
+				{
+					if (end_update_data) break;
+
+					update_async();
+					std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				}
+				logger->p_msg(_U("Data threaded completed!"));
 			}
 
 			std::thread::id main_thread_id;
@@ -151,6 +184,13 @@ namespace engine
 					return items_to_end.pop();
 				}
 
+				std::shared_ptr<item_t> get_item_to_sync()
+				{
+					if (items_to_sync.is_empty()) return nullptr;
+
+					return items_to_sync.pop();
+				}
+
 				void enqueue_to_init(std::shared_ptr<item_t> value)
 				{
 					items_to_init.push(value);
@@ -166,11 +206,18 @@ namespace engine
 					items_to_end.push(value);
 				}
 
+				void enqueue_to_sync(std::shared_ptr<item_t> value)
+				{
+					items_to_sync.push(value);
+				}
+
 			private:
 
 				queue_t<std::shared_ptr<item_t> > items_to_init;
 				queue_t<std::shared_ptr<item_t> > items_to_async;
 				queue_t<std::shared_ptr<item_t> > items_to_end;
+
+				queue_t<std::shared_ptr<item_t> > items_to_sync;
 
 			};
 
@@ -180,6 +227,12 @@ namespace engine
 			queue_t<std::shared_ptr<item_t> > items_deffered;
 
 			std::map<virtual_path_t, std::weak_ptr<item_base_t> > items;
+
+			std::shared_ptr<logger_t> logger;
+			std::shared_ptr<database_t> database;
+
+			bool end_update_data;
+			std::thread update_items_thread;
 		};
 	}
 

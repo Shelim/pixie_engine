@@ -8,6 +8,7 @@
 #include "common/data/database.hpp"
 #include "common/logger_container.hpp"
 #include "common/manifest_app.hpp"
+#include "common/data/database_items.hpp"
 //#include "common/module/database.hpp"
 #include "common/config_container.hpp"
 //#include "common/asset.hpp"
@@ -55,6 +56,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	auto logger = injector.create<std::shared_ptr<engine::logger_t>>();
 	auto config = injector.create<std::shared_ptr<engine::config_t>>();
 	auto database_data = injector.create<std::shared_ptr<engine::data::database_t>>();
+	auto database_items = injector.create<std::shared_ptr<engine::data::database_items_t>>();
 //	auto database_module = injector.create<std::shared_ptr<engine::module::database_t>>();
 	auto logger_container = injector.create<std::shared_ptr<engine::logger_container_t>>();
 	auto config_container = injector.create<std::shared_ptr<engine::config_container_t>>();
@@ -102,7 +104,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	for (;;)
 	{
 		database_data->init_update();
-
+		database_items->init_update();
 //		database_module->init_update();
 //		database_module->log_problems_since_last_update();
 

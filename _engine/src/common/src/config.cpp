@@ -4,6 +4,7 @@
 #include "common/manifest_app.hpp"
 #include "common/config_io/provider_base.hpp"
 #include "common/data/database.hpp"
+#include "common/data/database_items.hpp"
 #include <fstream>
 #include <istream>
 #include <ostream>

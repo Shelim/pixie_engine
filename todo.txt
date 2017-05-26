@@ -1,7 +1,3 @@
  - Build changelog
  - Update changelog
  - Remove comments from XML
- - Download dependecies script:
-	-> path
- - Upload dependecies script:
-	-> ftp + test

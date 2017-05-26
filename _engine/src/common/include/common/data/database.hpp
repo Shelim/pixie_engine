@@ -9,7 +9,11 @@
 #include "common/platform.hpp"
 #include "common/logger_container.hpp"
 #include "common/config.hpp"
-#include "common/data/database_items.hpp"
+#include <map>
+#include <vector>
+#include <string>
+#include <unordered_set>
+#include <thread>
 #include <memory>
 #include <queue>
 #include <mutex>
@@ -23,7 +27,7 @@ namespace engine
 
 		public:
 
-			database_t(std::shared_ptr<logger_t> logger, std::shared_ptr<platform_t> platform, std::shared_ptr<config_t> config, std::unique_ptr<database_items_t> database_items) : logger(logger), platform(platform), config(config), database_items(std::move(database_items)), requested_rescan(true)
+			database_t(std::shared_ptr<logger_t> logger, std::shared_ptr<platform_t> platform, std::shared_ptr<config_t> config) : logger(logger), platform(platform), config(config), requested_rescan(true)
 			{
 				auto task = logger->p_task_start(_U("Initializing database engine"));
 
@@ -37,18 +41,13 @@ namespace engine
 				logger->p_task_done(task);
 
 				end_scanning = false;
-				end_update_data = false;
 				check_filesystem_thread = std::thread([this] { check_filesystem(); });
-				update_items_thread = std::thread([this] { update_items(); });
 			}
 
 			~database_t()
 			{
-				end_update_data = true;
 				end_scanning = true;
-				update_items_thread.join();
 				check_filesystem_thread.join();
-				database_items->update();
 			}
 
 			const database_changes_t & get_changes() const
@@ -62,7 +61,6 @@ namespace engine
 				refresh_changes();
 				log_changes();
 				refresh_virtual_path_type_changes();
-				database_items->update();
 			}
 
 			std::unique_ptr<input_t> get_input(const virtual_path_t & filename)
@@ -99,11 +97,6 @@ namespace engine
 				return type_changes.find(type) != type_changes.end();
 			}
 
-			database_items_t * get_database_items()
-			{
-				return database_items.get();
-			}
-
 		private:
 
 			database_state_t * get_state()
@@ -136,24 +129,9 @@ namespace engine
 				}
 				logger->p_msg(_U("Finished monitoring filesystem for asset changes"));
 			}
-
-			void update_items()
-			{
-				logger->p_msg(_U("Starting data thread..."));
-				for (;;)
-				{
-					if (end_update_data) break;
-
-					database_items->update_async();
-					std::this_thread::sleep_for(std::chrono::milliseconds(10));
-				}
-				logger->p_msg(_U("Data threaded completed!"));
-			}
 			
 			std::thread check_filesystem_thread;
-			std::thread update_items_thread;
 			bool end_scanning;
-			bool end_update_data;
 
 			std::unique_ptr<scanners_t::collection_t> platform_get_scanners_collection();
 			bool requested_rescan;

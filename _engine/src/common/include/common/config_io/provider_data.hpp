@@ -6,6 +6,7 @@
 #include "common/config_io/provider_base.hpp"
 #include "common/execution_info.hpp"
 #include "common/data/database.hpp"
+#include "common/data/database_items.hpp"
 #include "common/xml_pixie_archive.hpp"
 #include <mutex>
 #include <thread>

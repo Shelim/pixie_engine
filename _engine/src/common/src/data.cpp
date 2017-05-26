@@ -1,4 +1,5 @@
 #include "common/data/database.hpp"
+#include "common/data/database_items.hpp"
 #include "common/data/item.hpp"
 #include "common/platform.hpp"
 

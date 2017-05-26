@@ -13,6 +13,7 @@
 #include "common/config.hpp"
 #include "common/data/output.hpp"
 #include "common/data/database.hpp"
+#include "common/data/database_items.hpp"
 #include "common/execution_info.hpp"
 
 uint64_t engine::logger_frame_notifier_t::get_frame() const
