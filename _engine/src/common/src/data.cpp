@@ -101,6 +101,18 @@ engine::data::database_changes_t engine::data::database_state_t::calculate_chang
 	return ret;
 }
 
+void engine::data::item_content_base_t::save_item(item_t & item)
+{
+
+}
+
+void engine::data::item_content_base_t::load_item(item_t & item)
+{
+	if (!is_reloading()) return;
+
+
+}
+
 engine::data::item_content_base_t::result_t engine::data::item_t::reload_sync(std::unique_ptr<input_t> input, database_items_t * database_items, bool force)
 {
 	auto database = database_items->get_database().get();
@@ -113,6 +125,8 @@ engine::data::item_content_base_t::result_t engine::data::item_t::reload_sync(st
 		return ret;
 	if ((ret = content->reload_end(database)) != item_content_base_t::result_t::success)
 		return ret;
+
+	clear_placeholder_flag();
 
 	return item_content_base_t::result_t::success;
 }
@@ -146,6 +160,8 @@ engine::data::item_content_base_t::result_t engine::data::item_t::reload_async_e
 	if (policy == item_content_base_t::policy_io_t::implicit_async_copy || policy == item_content_base_t::policy_io_t::explicit_async_copy)
 		std::swap(content, content_load);
 
+	clear_placeholder_flag();
+
 	return item_content_base_t::result_t::success;
 }
 
@@ -155,7 +171,11 @@ void engine::data::database_items_t::reload(std::shared_ptr<item_t> item, mode_r
 	std::thread::id calling_thread_id = std::this_thread::get_id();
 	item_content_base_t::result_t result;
 
-	if (mode == mode_reload_t::deffered)
+	if (policy == item_content_base_t::policy_io_t::forbidden)
+	{
+		return;
+	}
+	else if (mode == mode_reload_t::deffered)
 	{
 		items_deffered.push(item);
 	}

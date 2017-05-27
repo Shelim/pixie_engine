@@ -62,16 +62,6 @@ namespace engine
 				return resave_policy;
 			}
 
-			void destroy()
-			{
-				std::lock_guard<std::recursive_mutex> guard(mutex_io_operation);
-
-				if(!is_flag(flag_t::destroyed))
-					destroy_local();
-
-				set_flag(flag_t::destroyed, true);
-			}
-
 			bool is_reloading()
 			{
 				return get_input();
@@ -107,12 +97,25 @@ namespace engine
 
 			}
 
+			void destroy()
+			{
+				std::lock_guard<std::recursive_mutex> guard(mutex_io_operation);
+
+				if(!is_flag(flag_t::destroyed))
+					destroy_local();
+
+				set_flag(flag_t::destroyed, true);
+			}
+
 			void set_dirty();
 
 			void wait_till_io_done()
 			{
 				std::lock_guard<std::recursive_mutex> guard(mutex_io_operation);
 			}
+
+			void save_item(item_t & item);
+			void load_item(item_t & item);
 
 		private:
 

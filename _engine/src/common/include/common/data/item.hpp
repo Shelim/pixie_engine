@@ -32,6 +32,8 @@ namespace engine
 			enum class flag_t
 			{
 				is_dirty,
+				is_deatached,
+				is_placeholder, // not-deffered just loaded as part of other item_t; Reload self
 
 				count
 			};
@@ -46,6 +48,16 @@ namespace engine
 				return is_flag(flag_t::is_dirty);
 			}
 
+			bool is_deatached()
+			{
+				return is_flag(flag_t::is_deatached);
+			}
+
+			bool is_placeholder()
+			{
+				return is_flag(flag_t::is_placeholder);
+			}
+
 			const virtual_path_t & get_path() const
 			{
 				return path;
@@ -58,7 +70,13 @@ namespace engine
 
 			}
 
+			void clear_placeholder_flag()
+			{
+				set_flag(flag_t::is_placeholder, false);
+			}
+
 		private:
+			friend class database_items_t;
 
 			std::bitset<static_cast<std::size_t>(flag_t::count)> flags;
 
@@ -92,13 +110,9 @@ namespace engine
 			}
 
 			friend class database_items_t;
+			friend class item_content_base_t;
 
 		private:
-
-			item_t() : item_base_t(virtual_path_t()) // for cereal
-			{
-
-			}
 
 			typedef std::function<std::unique_ptr<item_content_base_t>(const virtual_path_t &, item_t *)> create_content_t;
 
@@ -111,16 +125,6 @@ namespace engine
 			void destroy()
 			{
 				content->destroy();
-			}
-
-			template<class archive_t> void save(archive_t & ar) const
-			{
-				ar(*get_content_save());
-			}
-
-			template<class archive_t> void load(archive_t & ar)
-			{
-				ar(*get_content_load());
 			}
 
 			template<class T> static std::unique_ptr<item_content_base_t> create_content(const virtual_path_t & path, item_t * owner)
@@ -142,6 +146,7 @@ namespace engine
 			item_content_base_t::result_t reload_async_init(std::unique_ptr<input_t> input, database_items_t * database_items, bool force = false);
 			item_content_base_t::result_t reload_async(database_items_t * database_items);
 			item_content_base_t::result_t reload_async_end(database_items_t * database_items);
+
 			bool is_reloading();
 
 			item_content_base_t * get_content_save()

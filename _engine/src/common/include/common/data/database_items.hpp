@@ -48,7 +48,7 @@ namespace engine
 			{
 				use_item_policy,
 				force_sync,
-				force_sync_now, // reload in the same thread, even if calling object is not from main thread
+				force_sync_now, // reload in the same thread, even if call comes not from main thread
 				deffered
 			};
 
@@ -67,11 +67,11 @@ namespace engine
 				// ToDo
 			}
 
-			void reload(std::shared_ptr<item_t> item, mode_reload_t force_sync = mode_reload_t::use_item_policy);
+			void reload(std::shared_ptr<item_t> item, mode_reload_t mode = mode_reload_t::use_item_policy);
 
 			void revert(std::shared_ptr<item_t> item)
 			{
-				reload(item); // ???
+				reload(item, mode_reload_t::force_sync);
 			}
 
 			std::shared_ptr<item_t> deatach(std::shared_ptr<item_t> item)
@@ -79,23 +79,34 @@ namespace engine
 				// ToDo
 			}
 
+			void reload_placeholders(mode_reload_t mode = mode_reload_t::use_item_policy)
+			{
+				std::lock_guard<std::recursive_mutex> guard(mutex_items);
+				for (auto & item : items)
+				{
+					auto it = item.second.lock();
+					if (it && it->is_placeholder())
+						reload(it, mode);
+				}
+			}
+
 			template<class T> std::shared_ptr<item_t> get_item(const virtual_path_t & path, mode_reload_t mode = mode_reload_t::use_item_policy)
 			{
 				std::thread::id calling_thread_id = std::this_thread::get_id();
 
 				std::shared_ptr<item_t> ret;
-
-				auto iter = items.find(path);
-				if (iter != items.end() && (ret = std::static_pointer_cast<item_t>(iter->second.lock())))
 				{
-					return ret;
-				}
+					std::lock_guard<std::recursive_mutex> guard(mutex_items);
+					auto iter = items.find(path);
+					if (iter != items.end() && (ret = std::static_pointer_cast<item_t>(iter->second.lock())))
+					{
+						return ret;
+					}
 
-				ret = item_t::create_item<T>(path);
-				items[path] = ret;
+					ret = item_t::create_item<T>(path);
+					items[path] = ret;
+				}
 				auto policy = ret->get_base()->get_reload_policy();
-				if (policy == item_content_base_t::policy_io_t::forbidden)
-					return ret;
 
 				reload(ret);
 
@@ -132,6 +143,8 @@ namespace engine
 					else
 						break;
 				};
+
+				reload_placeholders();
 			}
 
 			void update_items()
@@ -218,7 +231,8 @@ namespace engine
 			queue_t<std::shared_ptr<item_t> > items_deffered;
 			queue_t<std::shared_ptr<item_t> > items_reload_next;
 
-			std::map<virtual_path_t, std::weak_ptr<item_base_t> > items;
+			std::map<virtual_path_t, std::weak_ptr<item_t> > items;
+			std::recursive_mutex mutex_items;
 
 			std::shared_ptr<logger_t> logger;
 			std::shared_ptr<database_t> database;
