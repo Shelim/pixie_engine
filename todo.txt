@@ -10,4 +10,6 @@ Logger
 
 Config!!!
 
+Database thread synchronization is taking too much of time of main thread!
+
 Asset Manager!!!
