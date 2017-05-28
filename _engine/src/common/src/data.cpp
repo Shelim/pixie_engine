@@ -309,7 +309,7 @@ void engine::data::database_items_t::update_async()
 				else
 				{
 					iter->second->destroy();
-					iter++;
+					iter = items.erase(iter);
 				}
 			}
 			else
