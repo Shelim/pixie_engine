@@ -16,6 +16,19 @@
 #include "common/data/database_items.hpp"
 #include "common/execution_info.hpp"
 
+void engine::logger_output::provider_data_t::force_resave()
+{
+	if (is_enabled())
+	{
+		data_item->get()->wait_till_completion();
+
+#define GAME_LOGGER_VIRTUAL_PATH_STD(path) auto output = database_item->get_database()->get_output(virtual_path_t(path, virtual_path_t::type_t::log));
+#include "common/std/virtual_path_std.hpp"
+
+		data_item->resave(output.get());
+	}
+}
+
 uint64_t engine::logger_frame_notifier_t::get_frame() const
 {
 	return 0;

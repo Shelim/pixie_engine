@@ -7,7 +7,7 @@
 
 engine::data::item_base_t::~item_base_t()
 {
-	database_items->get_logger()->p_msg(_U("Unloaded '#1#' as no longer needed"), get_path());
+	database_items->get_logger()->p_msg(_U("Destroyed '#1#'"), get_path());
 }
 
 void engine::data::item_operation_t::execute_steps(step_t::caller_t caller)
@@ -175,6 +175,8 @@ engine::data::database_changes_t engine::data::database_state_t::calculate_chang
 
 	for (auto & iter_prev : previous.providers)
 	{
+		if (iter_prev.first.get_type() == virtual_path_t::type_t::log) continue;
+
 		auto iter_cur = current.providers.find(iter_prev.first);
 
 		bool deleted = (iter_cur == current.providers.end());
@@ -207,6 +209,8 @@ engine::data::database_changes_t engine::data::database_state_t::calculate_chang
 
 	for (auto & iter_cur : current.providers)
 	{
+		if (iter_cur.first.get_type() == virtual_path_t::type_t::log) continue;
+
 		auto iter_prev = previous.providers.find(iter_cur.first);
 
 		if (iter_prev == previous.providers.end())

@@ -68,7 +68,7 @@ namespace engine
 		{
 			return manifest_app;
 		}
-
+		
 	private:
 
 		std::unique_ptr<implementation_t> pimpl;

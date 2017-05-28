@@ -3,13 +3,6 @@ BuildSystem:
  - Update changelog
  - Remove comments from XML
  
-DataItems: 
- - Saving item_t
- - Saving item_t composing other item_t's to single file
- - Reloading item_t composing other item_t's from single file
-	- deatached mode
-	- normal mode (reload that item_t from asset_manager)
- - item_t collection
-	- deatach -> działa na wszystkie itemki w kolekcji
-	- deatached mode save
-	- deatached mode load
+Logger / Config!
+
+Asset Manager

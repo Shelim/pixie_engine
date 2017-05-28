@@ -32,7 +32,7 @@ namespace engine
 
 			~output_file_t()
 			{
-
+				stream.close();
 			}
 
 			uint32_t write(const uint8_t * buffer, uint32_t size) final

@@ -24,7 +24,6 @@
 #include <io.h>
 #include <fcntl.h>
 
-
 void engine::logger_output::provider_console_t::platform_open_console()
 {
 	AllocConsole();
@@ -50,6 +49,11 @@ void engine::logger_output::provider_console_t::platform_open_console()
 	platform->get_pimpl()->set_console_colors(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 
 	SetConsoleOutputCP(CP_UTF8);
+
+	HWND hwnd = GetConsoleWindow();
+	HMENU hmenu = GetSystemMenu(hwnd, FALSE);
+	EnableMenuItem(hmenu, SC_CLOSE, MF_GRAYED);
+
 	ustring_t game_name = ustring_t::from_utf8(manifest->game_name());
 
 	ustring_t app_data_str = _U(PIXIE_OUTPUT_TYPE_STR);

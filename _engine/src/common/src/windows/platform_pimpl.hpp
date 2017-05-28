@@ -231,7 +231,7 @@ public:
 
 		return path;
 	}
-	
+
 	static LONG CALLBACK unhandled_handler(EXCEPTION_POINTERS* e)
 	{
 		static int  CurrentlyInTheFaultHandler = 0;

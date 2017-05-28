@@ -104,11 +104,11 @@ namespace engine
 			}
 			std::chrono::seconds get_time() const
 			{
-				return time;
+				return time.time;
 			}
 			std::thread::id get_thread() const
 			{
-				return thread;
+				return thread.id;
 			}
 
 			void set_flag(flag_t flag, bool value)
@@ -128,6 +128,46 @@ namespace engine
 
 		private:
 
+			struct thread_id_t
+			{
+				thread_id_t(std::thread::id id) : id(id)
+				{
+
+				}
+				std::thread::id id;
+
+				template <class archive_t> std::string save_minimal(archive_t const &) const
+				{
+					std::stringstream ss;
+					ss << id;
+					return ss.str();
+				}
+
+				template <class archive_t> void load_minimal(archive_t const &, std::string const & value)
+				{
+					// Deliberately do nothing. We can't reasonably load thread id
+				}
+			};
+
+			struct time_t
+			{
+				time_t(std::chrono::seconds time) : time(time)
+				{
+
+				}
+				std::chrono::seconds time;
+
+				template <class archive_t> std::string save_minimal(archive_t const &) const
+				{
+					return engine::to_string(time).to_utf8();
+				}
+
+				template <class archive_t> void load_minimal(archive_t const &, std::string const & value)
+				{
+					time = engine::from_string<std::chrono::seconds>(engine::ustring_t::from_utf8(value.c_str()));
+				}
+			};
+
 			level_t level;
 			ustring_t message;
 			ustring_t function;
@@ -135,8 +175,8 @@ namespace engine
 			ustring_t file;
 			uint32_t line;
 			uint64_t frame;
-			std::chrono::seconds time;
-			std::thread::id thread;
+			time_t time;
+			thread_id_t thread;
 
 			template<class archive_t> void serialize(archive_t & ar)
 			{
@@ -237,7 +277,7 @@ namespace engine
 			friend class logger_t;
 
 			execution_info_t::vals_t info;
-			logger_t::items_t items;
+			items_t items;
 		};
 
 		void query_snapshot(snapshot_t * output)
@@ -301,28 +341,6 @@ namespace engine
 		else if (value == "warning") obj = logger_t::item_t::level_t::warning;
 		else if (value == "error") obj = logger_t::item_t::level_t::error;
 		else obj = logger_t::item_t::level_t::message;
-	}
-
-	template <class archive_t> std::string save_minimal(archive_t const &, std::thread::id const & obj)
-	{
-		std::stringstream ss;
-		ss << obj;
-		return ss.str();
-	}
-
-	template <class archive_t> void load_minimal(archive_t const &, std::thread::id & obj, std::string const & value)
-	{
-		// Deliberately do nothing. We can't reasonably load thread id
-	}
-
-	template <class archive_t> std::string save_minimal(archive_t const &, std::chrono::seconds const & obj)
-	{
-		return engine::to_string(obj).to_utf8();
-	}
-
-	template <class archive_t> void load_minimal(archive_t const &, std::chrono::seconds & obj, std::string const & value)
-	{
-		obj = engine::from_string<std::chrono::seconds>(engine::ustring_t::from_utf8(value.c_str()));
 	}
 }
 

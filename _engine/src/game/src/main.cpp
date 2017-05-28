@@ -174,7 +174,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	std::shared_ptr<engine::data::item_t<item_content_text_t>> item_deatached;
 
 	bool saved = false;
-
+	
 	for (;;)
 	{
 		if (!saved && !item2->is_operation_pending())
@@ -188,28 +188,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		database_data->init_update();
 		database_items->init_update();
-//		database_module->init_update();
-//		database_module->log_problems_since_last_update();
+		//		database_module->init_update();
+		//		database_module->log_problems_since_last_update();
 
 		config_container->init_update();
 		logger_container->update();
 
-//		logger->p_msg(item->get<item_content_text_t>()->get_data());
+		//		logger->p_msg(item->get<item_content_text_t>()->get_data());
 
 		++i;
-//		logger->p_msg(_U("Test of huge outputs: #1#!"), i);
+		logger->p_msg(_U("Test of huge outputs: #1#!"), i);
 		/*
 		if (i == 100)
-			database_module->get_database_manifest()->create_module(_U("HelloWorld"));
+		database_module->get_database_manifest()->create_module(_U("HelloWorld"));
 		*/
-		/*
-		logger->p_msg(_U("Test of huge outputs: #1#!"), i);
-		if (i == 1000)
+		
+		if (i == 100)
 		{
-			int * a = 0;
-			*a = 5;
-			break;
-		}*/
+		int * a = 0;
+		*a = 5;
+		break;
+		}
 
 		/*
 		logger->p_msg(_U("Test of huge outputs: #1#!"), i);
@@ -217,93 +216,93 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		if (i == 100) break;
 		*/
 
-//		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 50));
+		//		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 50));
 
 		/*
 		config->init_update();
 		if(config->updated(engine::config_t::item_t::engine_live_reload_assets))
-			monitor->change_running(config->get<bool>(engine::config_t::item_t::engine_live_reload_assets));
+		monitor->change_running(config->get<bool>(engine::config_t::item_t::engine_live_reload_assets));
 		monitor->init_update();
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 		if (is_first ||	monitor->is_changed())
 		{
-			logger->p_msg(_U("Updating resources..."));
+		logger->p_msg(_U("Updating resources..."));
 
-			is_first = false;
+		is_first = false;
 
-			engine::asset_changes changes = monitor->get_changes();
-			for (auto & iter : changes)
-			{
-				switch (iter.get_type())
-				{
-				case engine::asset_change::added: logger->p_msg(_U("Added #1#"), iter.get_path()); break;
-				case engine::asset_change::changed_directory: logger->p_msg(_U("Changed directory #1#"), iter.get_path()); break;
-				case engine::asset_change::deleted: logger->p_msg(_U("Deleted #1#"), iter.get_path()); break;
-				case engine::asset_change::updated: logger->p_msg(_U("Updated #1#"), iter.get_path()); break;
-				}
-			}
-
-			engine::module_problems_t problems = monitor->get_database_current()->get_problems_state();
-			if (!problems.empty())
-				logger->p_warn(_U("There are problems with CURRENT configuration:"));
-			for (auto & iter : problems)
-			{
-				switch (iter.get_type())
-				{
-				case engine::module_problem_t::module_manifest_corrupted: logger->p_err(_U("Module '#1#' has corrupted manifest and will be unavailable"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::module_does_not_exists: logger->p_err(_U("Module '#1#' required here: #2# is not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::module_requested_does_not_exists: logger->p_err(_U("Main module '#1#' set in config is not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::module_required_here: logger->p_err(_U("Module '#1#' is required here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::module_forbidden_here: logger->p_err(_U("... and forbidden here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::sub_module_manifest_corrupted: logger->p_err(_U("Sub module '#1#' has corrupted manifest and will be unavailable"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::sub_module_does_not_exists: logger->p_err(_U("Sub module '#1#' required here: #2# is not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::sub_module_requested_does_not_exists: logger->p_err(_U("Sub module '#1#' set in config is not not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::sub_module_required_here: logger->p_err(_U("Sub module '#1#' is required here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::sub_module_forbidden_here: logger->p_err(_U("... and forbidden here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::requires_module_not_enabled: logger->p_err(_U("#2# required module '#1#' which is not enabled"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::forbids_module_enabled: logger->p_err(_U("#2# forbids module '#1#' which is enabled"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::submodules_forbids_here: logger->p_err(_U("#2# forbids sub module '#1#' which is enabled"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::forbidden_by_module: logger->p_err(_U("#1# is forbidden by #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				}
-			}
-			problems = module_resolver->get_problems();
-			if (!problems.empty())
-				logger->p_warn(_U("There are problems with GLOBAL modules:"));
-			for (auto & iter : problems)
-			{
-				switch (iter.get_type())
-				{
-				case engine::module_problem_t::module_manifest_corrupted: logger->p_err(_U("Module '#1#' has corrupted manifest and will be unavailable"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::module_does_not_exists: logger->p_err(_U("Module '#1#' required here: #2# is not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::module_requested_does_not_exists: logger->p_err(_U("Main module '#1#' set in config is not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::module_required_here: logger->p_err(_U("Module '#1#' is required here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::module_forbidden_here: logger->p_err(_U("... and forbidden here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::sub_module_manifest_corrupted: logger->p_err(_U("Sub module '#1#' has corrupted manifest and will be unavailable"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::sub_module_does_not_exists: logger->p_err(_U("Sub module '#1#' required here: #2# is not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::sub_module_requested_does_not_exists: logger->p_err(_U("Sub module '#1#' set in config is not not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::sub_module_required_here: logger->p_err(_U("Sub module '#1#' is required here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::sub_module_forbidden_here: logger->p_err(_U("... and forbidden here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::requires_module_not_enabled: logger->p_err(_U("#2# required module '#1#' which is not enabled"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::forbids_module_enabled: logger->p_err(_U("#2# forbids module '#1#' which is enabled"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::submodules_forbids_here: logger->p_err(_U("#2# forbids sub module '#1#' which is enabled"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				case engine::module_problem_t::forbidden_by_module: logger->p_err(_U("#1# is forbidden by #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
-				}
-			}
-			engine::asset_problems problems2 = monitor->get_database_current()->get_problems();
-			if (!problems2.empty())
-				logger->p_warn(_U("There are problems within ASSET configuration:"));
-			for (auto & iter : problems2)
-			{
-				switch (iter.get_type())
-				{
-				case engine::asset_problem_t::type_t::no_base_item: logger->p_err(_U("Asset is missing base item: '#1#' (located in '#2#')"), iter.get_scanner1(), iter.get_path()); break;
-				case engine::asset_problem_t::type_t::double_definitions: logger->p_err(_U("Asset is defined multiply times: '#1#' and in '#2#'"), iter.get_scanner1(), iter.get_scanner2()); break;
-				case engine::asset_problem_t::type_t::defined_and_deleted: logger->p_err(_U("Asset is defined and deleted: '#1#' and in '#2#'"), iter.get_scanner1(), iter.get_scanner2()); break;
-				}
-
-			}
+		engine::asset_changes changes = monitor->get_changes();
+		for (auto & iter : changes)
+		{
+		switch (iter.get_type())
+		{
+		case engine::asset_change::added: logger->p_msg(_U("Added #1#"), iter.get_path()); break;
+		case engine::asset_change::changed_directory: logger->p_msg(_U("Changed directory #1#"), iter.get_path()); break;
+		case engine::asset_change::deleted: logger->p_msg(_U("Deleted #1#"), iter.get_path()); break;
+		case engine::asset_change::updated: logger->p_msg(_U("Updated #1#"), iter.get_path()); break;
 		}
-	*/
+		}
+
+		engine::module_problems_t problems = monitor->get_database_current()->get_problems_state();
+		if (!problems.empty())
+		logger->p_warn(_U("There are problems with CURRENT configuration:"));
+		for (auto & iter : problems)
+		{
+		switch (iter.get_type())
+		{
+		case engine::module_problem_t::module_manifest_corrupted: logger->p_err(_U("Module '#1#' has corrupted manifest and will be unavailable"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::module_does_not_exists: logger->p_err(_U("Module '#1#' required here: #2# is not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::module_requested_does_not_exists: logger->p_err(_U("Main module '#1#' set in config is not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::module_required_here: logger->p_err(_U("Module '#1#' is required here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::module_forbidden_here: logger->p_err(_U("... and forbidden here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::sub_module_manifest_corrupted: logger->p_err(_U("Sub module '#1#' has corrupted manifest and will be unavailable"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::sub_module_does_not_exists: logger->p_err(_U("Sub module '#1#' required here: #2# is not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::sub_module_requested_does_not_exists: logger->p_err(_U("Sub module '#1#' set in config is not not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::sub_module_required_here: logger->p_err(_U("Sub module '#1#' is required here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::sub_module_forbidden_here: logger->p_err(_U("... and forbidden here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::requires_module_not_enabled: logger->p_err(_U("#2# required module '#1#' which is not enabled"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::forbids_module_enabled: logger->p_err(_U("#2# forbids module '#1#' which is enabled"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::submodules_forbids_here: logger->p_err(_U("#2# forbids sub module '#1#' which is enabled"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::forbidden_by_module: logger->p_err(_U("#1# is forbidden by #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		}
+		}
+		problems = module_resolver->get_problems();
+		if (!problems.empty())
+		logger->p_warn(_U("There are problems with GLOBAL modules:"));
+		for (auto & iter : problems)
+		{
+		switch (iter.get_type())
+		{
+		case engine::module_problem_t::module_manifest_corrupted: logger->p_err(_U("Module '#1#' has corrupted manifest and will be unavailable"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::module_does_not_exists: logger->p_err(_U("Module '#1#' required here: #2# is not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::module_requested_does_not_exists: logger->p_err(_U("Main module '#1#' set in config is not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::module_required_here: logger->p_err(_U("Module '#1#' is required here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::module_forbidden_here: logger->p_err(_U("... and forbidden here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::sub_module_manifest_corrupted: logger->p_err(_U("Sub module '#1#' has corrupted manifest and will be unavailable"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::sub_module_does_not_exists: logger->p_err(_U("Sub module '#1#' required here: #2# is not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::sub_module_requested_does_not_exists: logger->p_err(_U("Sub module '#1#' set in config is not not available"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::sub_module_required_here: logger->p_err(_U("Sub module '#1#' is required here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::sub_module_forbidden_here: logger->p_err(_U("... and forbidden here: #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::requires_module_not_enabled: logger->p_err(_U("#2# required module '#1#' which is not enabled"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::forbids_module_enabled: logger->p_err(_U("#2# forbids module '#1#' which is enabled"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::submodules_forbids_here: logger->p_err(_U("#2# forbids sub module '#1#' which is enabled"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		case engine::module_problem_t::forbidden_by_module: logger->p_err(_U("#1# is forbidden by #2#"), iter.get_target_name(), iter.get_mod_callstack_ustring()); break;
+		}
+		}
+		engine::asset_problems problems2 = monitor->get_database_current()->get_problems();
+		if (!problems2.empty())
+		logger->p_warn(_U("There are problems within ASSET configuration:"));
+		for (auto & iter : problems2)
+		{
+		switch (iter.get_type())
+		{
+		case engine::asset_problem_t::type_t::no_base_item: logger->p_err(_U("Asset is missing base item: '#1#' (located in '#2#')"), iter.get_scanner1(), iter.get_path()); break;
+		case engine::asset_problem_t::type_t::double_definitions: logger->p_err(_U("Asset is defined multiply times: '#1#' and in '#2#'"), iter.get_scanner1(), iter.get_scanner2()); break;
+		case engine::asset_problem_t::type_t::defined_and_deleted: logger->p_err(_U("Asset is defined and deleted: '#1#' and in '#2#'"), iter.get_scanner1(), iter.get_scanner2()); break;
+		}
+
+		}
+		}
+		*/
 	}
 
 //	engine::module_resolver resolv(config, platform);

@@ -11,7 +11,7 @@
 #endif
 
 GAME_LOGGER_OUTPUT_STD(console, true, true)
-GAME_LOGGER_OUTPUT_STD(data, false, false)
+GAME_LOGGER_OUTPUT_STD(data, true, true)
 
 EDITOR_LOGGER_OUTPUT_STD(console, false, true)
 EDITOR_LOGGER_OUTPUT_STD(data, true, true)
