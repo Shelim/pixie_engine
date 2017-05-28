@@ -5,6 +5,11 @@
 #include "common/data/input.hpp"
 #include "common/data/item_operation.hpp"
 
+engine::data::item_base_t::~item_base_t()
+{
+	database_items->get_logger()->p_msg(_U("Unloaded '#1#' as no longer needed"), get_path());
+}
+
 void engine::data::item_operation_t::execute_steps(step_t::caller_t caller)
 {
 	while (execute_step(caller))

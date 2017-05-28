@@ -115,10 +115,10 @@ namespace engine
 				}
 				return false;
 			}
-			
-		private:
 
 			static std::unique_ptr<output_t> platform_create_new(virtual_path_t path);
+			
+		private:
 
 			virtual_path_t virtual_path;
 

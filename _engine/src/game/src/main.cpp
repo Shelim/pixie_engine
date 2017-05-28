@@ -171,14 +171,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	std::shared_ptr<engine::data::item_t<item_content_text_t>> item = database_items->get_item<item_content_text_t>(engine::virtual_path_t(_U("base/_manifest.info"), engine::virtual_path_t::type_t::modules));
 	std::shared_ptr<engine::data::item_t<item_content_text_t>> item2 = database_items->get_item<item_content_text_t>(engine::virtual_path_t(_U("base/_manifest.info"), engine::virtual_path_t::type_t::modules));
 	
+	std::shared_ptr<engine::data::item_t<item_content_text_t>> item_deatached;
+
 	bool saved = false;
 
 	for (;;)
 	{
-		if (!item2->is_operation_pending() && !saved)
+		if (!saved && !item2->is_operation_pending())
 		{
+			item_deatached = database_items->deatach<item_content_text_t>(item2);
 			saved = true;
-			item2->get()->mark_for_save();
+			item2 = database_items->save_copy_as<item_content_text_t>(item, engine::virtual_path_t(_U("base/test.info"), engine::virtual_path_t::type_t::modules));
+			item2 = nullptr;
+			item = nullptr;
 		}
 
 		database_data->init_update();

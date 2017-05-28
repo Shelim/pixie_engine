@@ -142,6 +142,11 @@ namespace engine
 				return (current_step >= steps.size());
 			}
 
+			std::shared_ptr<logger_t> get_logger()
+			{
+				return logger;
+			}
+
 		private:
 
 			void init();

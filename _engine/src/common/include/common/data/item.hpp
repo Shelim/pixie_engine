@@ -26,10 +26,7 @@ namespace engine
 			
 		public:
 
-			virtual ~item_base_t()
-			{
-
-			}
+			virtual ~item_base_t();
 
 			enum class flag_t
 			{
@@ -67,6 +64,12 @@ namespace engine
 			void mark_as_do_not_auto_reload()
 			{
 				set_flag(flag_t::do_not_auto_reload, true);
+			}
+
+			void mark_as_do_not_auto_manage()
+			{
+				set_flag(flag_t::do_not_auto_reload, true);
+				set_flag(flag_t::auto_resave, false);
 			}
 
 			bool auto_resave()

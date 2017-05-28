@@ -50,6 +50,7 @@ namespace engine
 			{
 				{
 					std::lock_guard<std::recursive_mutex> guard(mutex_items);
+					logger->p_msg(_U("Saving '#1#' as '#2#'..."), item->get_path(), path);
 					auto iter = items.find(item->get_path());
 					if (iter != items.end())
 					{
@@ -68,7 +69,7 @@ namespace engine
 				save(item);
 			}
 
-			std::shared_ptr<item_generic_t> save_copy_as(std::shared_ptr<item_generic_t> item, const virtual_path_t & path)
+			std::shared_ptr<item_generic_t> save_copy_as_generic(std::shared_ptr<item_generic_t> item, const virtual_path_t & path)
 			{
 				std::shared_ptr<item_generic_t> clone = std::shared_ptr<item_generic_t>(item->clone(path));
 				save(clone);
@@ -76,15 +77,23 @@ namespace engine
 				std::shared_ptr<item_generic_t> ret;
 				{
 					std::lock_guard<std::recursive_mutex> guard(mutex_items);
+					logger->p_msg(_U("Cloning '#1#' as '#2#'..."), item->get_path(), path);
 					auto iter = items.find(path);
 					if (iter != items.end() && (ret = std::static_pointer_cast<item_generic_t>(iter->second.lock())))
 					{
 						reload(ret);
 						return ret;
 					}
+					items[path] = clone;
 				}
 
+
 				return clone;
+			}
+
+			template<class T> std::shared_ptr<item_t<T> > save_copy_as(std::shared_ptr<item_generic_t> item, const virtual_path_t & path)
+			{
+				return std::static_pointer_cast<item_t<T>> (save_copy_as_generic(item, path));
 			}
 
 			void reload(std::shared_ptr<item_generic_t> item);
@@ -94,11 +103,18 @@ namespace engine
 				reload(item);
 			}
 
-			std::shared_ptr<item_generic_t> deatach(std::shared_ptr<item_generic_t> item)
+			std::shared_ptr<item_generic_t> deatach_generic(std::shared_ptr<item_generic_t> item)
 			{
 				if (item->is_deatached()) return item;
 
+				logger->p_msg(_U("Detaching '#1#'..."), item->get_path());
+
 				return std::shared_ptr<item_generic_t>(item->deatach());
+			}
+
+			template<class T> std::shared_ptr<item_t<T> > deatach(std::shared_ptr<item_generic_t> item)
+			{
+				return std::static_pointer_cast<item_t<T>> (deatach_generic(item));
 			}
 
 			template<class T> std::shared_ptr<item_t<T> > get_item(const virtual_path_t & path)
@@ -133,6 +149,11 @@ namespace engine
 			void init_update();
 		
 			friend class item_generic_t;
+
+			std::shared_ptr<logger_t> get_logger()
+			{
+				return logger;
+			}
 
 		private:
 

@@ -80,7 +80,7 @@ namespace engine
 
 				provider_t * provider = get_state()->get_provider(filename);
 				if (!provider)
-					return std::move(std::make_unique<output_void_t>(filename));
+					return std::move(provider_t::platform_create_new(filename));
 
 				return std::move(provider->construct_output());
 			}
