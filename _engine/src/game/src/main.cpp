@@ -195,12 +195,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		logger_container->update();
 
 		//		logger->p_msg(item->get<item_content_text_t>()->get_data());
-
+		
 		++i;
 		logger->p_msg(_U("Test of huge outputs: #1#!"), i);
 
 		if (i == 10000)
 			break;
+		
 		/*
 		if (i == 100)
 		database_module->get_database_manifest()->create_module(_U("HelloWorld"));
@@ -338,7 +339,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	}
 	*/
 
-	logger->completed_execution();
+	logger->p_msg(_U("Completed main thread!"));
 	ReleaseMutex(handle);
 	CloseHandle(handle);
 

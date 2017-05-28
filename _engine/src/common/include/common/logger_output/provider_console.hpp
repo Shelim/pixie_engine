@@ -16,7 +16,7 @@ namespace engine
 
 		public:
 
-			provider_console_t(std::shared_ptr<platform_t> platform, std::shared_ptr<manifest_app_t> manifest, std::shared_ptr<logger_t> logger) :  provider_base_t(logger), platform(platform), manifest(manifest), is_console_opened(false)
+			provider_console_t(std::shared_ptr<platform_t> platform, std::shared_ptr<manifest_app_t> manifest, std::shared_ptr<logger_t> logger, std::shared_ptr<environment_info_t> environment_info) :  provider_base_t(logger), platform(platform), manifest(manifest), environment_info(environment_info), is_console_opened(false)
 			{
 
 			}
@@ -70,6 +70,7 @@ namespace engine
 
 			std::shared_ptr<platform_t> platform;
 			std::shared_ptr<manifest_app_t> manifest;
+			std::shared_ptr<environment_info_t> environment_info;
 
 			void platform_open_console();
 			void platform_close_console();

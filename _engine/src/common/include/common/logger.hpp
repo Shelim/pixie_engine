@@ -17,7 +17,7 @@
 #include <pugixml.hpp>
 #include "common/ustring.hpp"
 #include "common/platform.hpp"
-#include "common/execution_info.hpp"
+#include "common/environment_info.hpp"
 #include <cereal/cereal.hpp>
 #include <cereal/access.hpp>
 #include <vlc/vlc.h>
@@ -71,26 +71,7 @@ namespace engine
 
 			friend class cereal::access;
 
-			static ustring_t level_to_prompt(level_t level)
-			{
-				if (level == level_t::task)
-					return _U("...");
-				if (level == level_t::task_failed)
-					return _U("..!");
-				if (level == level_t::task_done)
-					return _U("..>");
-				if (level == level_t::message)
-					return _U("-->");
-				if (level == level_t::warning)
-					return _U("-!- ");
-				if (level == level_t::error)
-					return _U("!!!");
-			}
-
-			item_t() : level(level_t::error), time(std::chrono::seconds()), thread(std::thread::id())
-			{
-
-			}
+			item_t() = default;
 
 			item_t(level_t level, const ustring_t & message, const ustring_t & function, bool raport, bool cease_execution, const ustring_t & file, uint32_t line, uint64_t frame, std::chrono::seconds time, std::thread::id thread) :
 				level(level), message(message), function(function), file(file), line(line), frame(frame), time(time), thread(thread)
@@ -125,11 +106,11 @@ namespace engine
 			}
 			std::chrono::seconds get_time() const
 			{
-				return time.time;
+				return time;
 			}
 			std::thread::id get_thread() const
 			{
-				return thread.id;
+				return thread;
 			}
 
 			void set_flag(flag_t flag, bool value)
@@ -149,44 +130,6 @@ namespace engine
 
 		private:
 
-			struct thread_id_t
-			{
-				thread_id_t(std::thread::id id) : id(id)
-				{
-
-				}
-				std::thread::id id;
-
-				template <class archive_t> std::string save_minimal(archive_t const &) const
-				{
-					return engine::to_string(id).to_utf8();
-				}
-
-				template <class archive_t> void load_minimal(archive_t const &, std::string const & value)
-				{
-					// Deliberately do nothing. We can't reasonably load thread id
-				}
-			};
-
-			struct time_t
-			{
-				time_t(std::chrono::seconds time) : time(time)
-				{
-
-				}
-				std::chrono::seconds time;
-
-				template <class archive_t> std::string save_minimal(archive_t const &) const
-				{
-					return engine::to_string(time).to_utf8();
-				}
-
-				template <class archive_t> void load_minimal(archive_t const &, std::string const & value)
-				{
-					time = engine::from_string<std::chrono::seconds>(engine::ustring_t::from_utf8(value.c_str()));
-				}
-			};
-
 			level_t level;
 			ustring_t message;
 			ustring_t function;
@@ -194,13 +137,9 @@ namespace engine
 			ustring_t file;
 			uint32_t line;
 			uint64_t frame;
-			time_t time;
-			thread_id_t thread;
+			std::chrono::seconds time;
+			std::thread::id thread;
 
-			template<class archive_t> void serialize(archive_t & ar)
-			{
-				ar(CEREAL_NVP(level), CEREAL_NVP(message), CEREAL_NVP(function), CEREAL_NVP(file), CEREAL_NVP(line), CEREAL_NVP(frame), CEREAL_NVP(time), CEREAL_NVP(thread));
-			}
 		};
 
 		void reset_raports()
@@ -254,7 +193,7 @@ namespace engine
 			return item_id;
 		}
 
-		logger_t(std::shared_ptr<engine::platform_t> platform, std::shared_ptr<engine::execution_info_t> execution_info, std::unique_ptr<engine::logger_frame_notifier_t> frame_notifier);
+		logger_t(std::shared_ptr<engine::platform_t> platform, std::shared_ptr<environment_info_t> environment_info, std::unique_ptr<engine::logger_frame_notifier_t> frame_notifier);
 		~logger_t();
 
 		logger_t(logger_t const&) = delete;
@@ -264,48 +203,6 @@ namespace engine
 		friend class platform_t;
 
 		friend class cereal::access;
-
-		void set_execution_info(engine::execution_info_t::key_t key, ustring_t value, engine::execution_info_t::item_t::status_t status)
-		{
-			std::lock_guard<std::recursive_mutex> guard(mutex);
-			execution_info->set_info(key, value, status);
-			item_changed(-1);
-		}
-
-		void set_execution_info(engine::execution_info_t::key_t key, ustring_t value)
-		{
-			std::lock_guard<std::recursive_mutex> guard(mutex);
-			execution_info->set_info(key, value);
-			item_changed(-1);
-		}
-
-		void completed_execution();
-
-		class snapshot_t
-		{
-
-		public:
-
-			template<class archive_t> void serialize(archive_t & ar)
-			{
-				ar(cereal::make_nvp("execution_info", info), CEREAL_NVP(items));
-			}
-
-		private:
-
-			friend class logger_t;
-
-			execution_info_t::vals_t info;
-			items_t items;
-		};
-
-		void query_snapshot(snapshot_t * output)
-		{
-			std::lock_guard<std::recursive_mutex> guard(mutex);
-
-			output->info = execution_info->get_val_for_save();
-			output->items = items;
-		}
 
 		const items_t & get_items()
 		{
@@ -323,11 +220,11 @@ namespace engine
 
 		std::weak_ptr<engine::logger_output::providers_t> output_providers;
 		
+		std::shared_ptr<environment_info_t> environment_info;
+
 		std::shared_ptr<engine::platform_t> platform;
 		std::unique_ptr<engine::logger_frame_notifier_t> frame_notifier;
 		items_t items;
-
-		std::shared_ptr<engine::execution_info_t> execution_info;
 
 		void platform_fatal();
 
@@ -336,31 +233,6 @@ namespace engine
 		mutable std::recursive_mutex mutex;
 
 	};
-
-	template <class archive_t> std::string save_minimal(archive_t const &, logger_t::item_t::level_t const & obj)
-	{
-		switch (obj)
-		{
-		case logger_t::item_t::level_t::task: return "task_interrupted";
-		case logger_t::item_t::level_t::task_done: return "task_done";
-		case logger_t::item_t::level_t::task_failed: return "task_failed";
-		case logger_t::item_t::level_t::message: return "message";
-		case logger_t::item_t::level_t::warning: return "warning";
-		case logger_t::item_t::level_t::error: return "error";
-		}
-		return "message";
-	}
-
-	template <class archive_t> void load_minimal(archive_t const &, logger_t::item_t::level_t & obj, std::string const & value)
-	{
-		if (value == "task_interrupted") obj = logger_t::item_t::level_t::task;
-		else if (value == "task_done") obj = logger_t::item_t::level_t::task_done;
-		else if (value == "task_failed") obj = logger_t::item_t::level_t::task_failed;
-		else if (value == "message") obj = logger_t::item_t::level_t::message;
-		else if (value == "warning") obj = logger_t::item_t::level_t::warning;
-		else if (value == "error") obj = logger_t::item_t::level_t::error;
-		else obj = logger_t::item_t::level_t::message;
-	}
 }
 
 #define p_msg(...) log(engine::logger_t::item_t::level_t::message, false, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), __VA_ARGS__)

@@ -3,6 +3,7 @@
 #if PIXIE_WINDOWS
 
 #include "common/logger_container.hpp"
+#include "common/environment_info.hpp"
 #include "platform_pimpl.hpp"
 
 #include <clocale>
@@ -50,6 +51,11 @@ void engine::logger_output::provider_console_t::platform_open_console()
 
 	SetConsoleOutputCP(CP_UTF8);
 
+	DWORD mode;
+	GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &mode);
+	mode = (mode & (~ENABLE_PROCESSED_INPUT));
+	SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
+
 	HWND hwnd = GetConsoleWindow();
 	HMENU hmenu = GetSystemMenu(hwnd, FALSE);
 	EnableMenuItem(hmenu, SC_CLOSE, MF_GRAYED);
@@ -66,6 +72,20 @@ void engine::logger_output::provider_console_t::platform_open_console()
 
 	std::wstring game_name_w = game_name.to_wide();
 	SetConsoleTitleW(game_name_w.c_str());
+
+	platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE);
+	printf("########################\n");
+	printf("### "); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE | FOREGROUND_INTENSITY); printf("ENVIRONMENT INFO"); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE); printf(" ###\n");
+	printf("########################\n\n\n");
+
+#define GAME_ENVIRONMENT_INFO_STD(name, lang) { platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE); printf("> "); const environment_info_t::item_t & info = environment_info->get(environment_info_t::key_t::name); printf(info.get_key().get_cstring()); printf(": "); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE | FOREGROUND_INTENSITY); printf(info.get().get_cstring()); printf("\n"); }
+#include "common/std/environment_info_std.hpp"
+
+	platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE);
+	printf("\n\n");
+	printf("########################\n");
+	printf("###     "); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE | FOREGROUND_INTENSITY); printf("FULL LOG");platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE);  printf("     ###\n");
+	printf("########################\n\n\n");
 
 	std::size_t size = get_logger()->get_items().size();
 	for(std::size_t i = 0 ; i < size; i++)

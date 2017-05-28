@@ -278,8 +278,6 @@ public:
 			filesystem::path path = impl->make_minidump(e);
 			ustring_t upath = ustring_t::from_wide(path.wstring().c_str());
 			ustring_t ufile = ustring_t::from_wide(path.filename().wstring().c_str());
-			if (impl->logger)
-				impl->logger->set_execution_info(engine::execution_info_t::key_t::crash_dump, ufile, engine::execution_info_t::item_t::status_t::bad);
 
 			engine::ustring_t cmd = engine::format_utf8(u8"explorer /n,/select,\"#1#\"", upath);
 

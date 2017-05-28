@@ -4,7 +4,7 @@
 
 #include "common/logger.hpp"
 #include "common/logger_output/provider_base.hpp"
-#include "common/execution_info.hpp"
+#include "common/environment_info.hpp"
 #include "common/data/database.hpp"
 #include "common/data/item.hpp"
 #include "common/data/output.hpp"
@@ -32,7 +32,7 @@ namespace engine
 
 		public:
 
-			provider_data_t(std::shared_ptr<engine::data::database_t> database, std::shared_ptr<logger_t> logger);
+			provider_data_t(std::shared_ptr<engine::data::database_t> database, std::shared_ptr<logger_t> logger, std::shared_ptr<environment_info_t> environment_info);
 
 			~provider_data_t()
 			{
@@ -45,14 +45,13 @@ namespace engine
 			{
 
 			}
-			
 
-		private:
-
-			void on_item_append_local(const logger_t::item_t & item) final
+			void on_item_append(const logger_t::item_t & item) final
 			{
 				items.push(item);
 			}
+
+		private:
 
 			bool save_items_completed;
 
@@ -75,7 +74,7 @@ namespace engine
 					else if (item.get_level() == logger_t::item_t::level_t::task_failed)
 						subscript = _U("... FAILED!!!");
 
-					ustring_t str = logger_t::item_t::level_to_prompt(item.get_level());
+					ustring_t str = level_to_prompt(item.get_level());
 
 					padd(str, 5);
 					str.append(item.get_message());
@@ -100,6 +99,22 @@ namespace engine
 					output->write_ustring(str);
 					output->force_flush();
 				}
+			}
+
+			ustring_t level_to_prompt(logger_t::item_t::level_t level)
+			{
+				if (level == logger_t::item_t::level_t::task)
+					return _U("...");
+				if (level == logger_t::item_t::level_t::task_failed)
+					return _U("..!");
+				if (level == logger_t::item_t::level_t::task_done)
+					return _U("..>");
+				if (level == logger_t::item_t::level_t::message)
+					return _U("-->");
+				if (level == logger_t::item_t::level_t::warning)
+					return _U("-!- ");
+				if (level == logger_t::item_t::level_t::error)
+					return _U("!!!");
 			}
 
 			void padd(ustring_t & str, std::size_t pos)

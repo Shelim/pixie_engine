@@ -6201,12 +6201,6 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\manifest_app.hpp">
       <Filter>engine\common\include\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\std\execution_info_std.hpp">
-      <Filter>engine\common\include\common\std</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\execution_info.hpp">
-      <Filter>engine\common\include\common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\_engine\src\common\include\common\std\virtual_path_std.hpp">
       <Filter>engine\common\include\common\std</Filter>
     </ClInclude>
@@ -6342,6 +6336,12 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_data.hpp">
       <Filter>engine\common\include\common\logger_output</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\environment_info.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\std\environment_info_std.hpp">
+      <Filter>engine\common\include\common\std</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\_engine\depedency\glew-1.10.0\src\glew.c">
@@ -6377,9 +6377,6 @@
     <ClCompile Include="..\..\..\_engine\src\common\src\modules.cpp">
       <Filter>engine\common\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\_engine\src\common\src\execution_info.cpp">
-      <Filter>engine\common\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\_engine\src\common\src\data.cpp">
       <Filter>engine\common\src</Filter>
     </ClCompile>
@@ -6391,6 +6388,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\autogen\autogen.cpp">
       <Filter>src\autogen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\_engine\src\common\src\environment_info.cpp">
+      <Filter>engine\common\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
