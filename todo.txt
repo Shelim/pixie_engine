@@ -4,7 +4,9 @@ BuildSystem:
  - Remove comments from XML
  
 Logger
- - Raw -> resave po każdej linii!
+ - Provider enabling/disabling should NOT be configurable
+ - Opening console window should.
+ - Standardize logger output (double code?)
 
 Config!!!
 

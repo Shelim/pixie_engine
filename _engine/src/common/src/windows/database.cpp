@@ -71,7 +71,7 @@ std::unique_ptr<engine::data::output_t> engine::data::provider_t::platform_creat
 	std::filesystem::path path_output = engine::platform_t::implementation_t::get_static()->get_save_path(path.get_type());
 	path_output /= path.get_path().get_cstring();
 
-	if(path.get_type() == engine::virtual_path_t::type_t::log && path_output.extension() == ".log")
+	if(path.get_type() == engine::virtual_path_t::type_t::log)
 		return std::make_unique<engine::data::output_file_t>(path, path_output);
 	else
 		return std::make_unique<engine::data::output_file_safe_t>(path, path_output);
