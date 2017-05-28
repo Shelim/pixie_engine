@@ -60,8 +60,7 @@ namespace engine
 					iter = items.find(path);
 					if (iter != items.end())
 					{
-						auto ptr = iter->second.lock();
-						ptr->destroy();
+						iter->second->destroy();
 					}
 					items[path] = item;
 				}
@@ -79,10 +78,10 @@ namespace engine
 					std::lock_guard<std::recursive_mutex> guard(mutex_items);
 					logger->p_msg(_U("Cloning '#1#' as '#2#'..."), item->get_path(), path);
 					auto iter = items.find(path);
-					if (iter != items.end() && (ret = std::static_pointer_cast<item_generic_t>(iter->second.lock())))
+					if (iter != items.end())
 					{
-						reload(ret);
-						return ret;
+						reload(iter->second);
+						return iter->second;
 					}
 					items[path] = clone;
 				}
@@ -125,9 +124,9 @@ namespace engine
 				{
 					std::lock_guard<std::recursive_mutex> guard(mutex_items);
 					auto iter = items.find(path);
-					if (iter != items.end() && (ret = std::static_pointer_cast<item_t<T> >(iter->second.lock())))
+					if (iter != items.end())
 					{
-						return ret;
+						return std::static_pointer_cast<item_t<T> > (iter->second);
 					}
 
 					ret = item_t<T>::create_item(this, path);
@@ -178,7 +177,7 @@ namespace engine
 			
 			queue_t<std::shared_ptr<item_generic_t> > items_reload_next;
 
-			std::map<virtual_path_t, std::weak_ptr<item_generic_t> > items;
+			std::map<virtual_path_t, std::shared_ptr<item_generic_t> > items;
 			std::recursive_mutex mutex_items;
 
 			std::shared_ptr<logger_t> logger;

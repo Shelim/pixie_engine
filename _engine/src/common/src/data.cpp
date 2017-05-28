@@ -256,11 +256,9 @@ void engine::data::database_items_t::perform_destroy(const virtual_path_t & path
 	std::lock_guard<std::recursive_mutex> guard(mutex_items);
 	auto iter = items.find(path);
 
-	std::shared_ptr<item_generic_t > item;
-
-	if (iter != items.end() && (item = std::static_pointer_cast<item_generic_t >(iter->second.lock())))
+	if (iter != items.end())
 	{
-		create_operation(item, item_operation_t::free_t(), !item->do_not_log_operations());
+		create_operation(iter->second, item_operation_t::free_t(), !iter->second->do_not_log_operations());
 		execute_operations(item_operation_t::step_t::caller_t::sync);
 	}
 }
@@ -286,14 +284,36 @@ void engine::data::database_items_t::update_async()
 		std::lock_guard<std::recursive_mutex> guard(operations_mutex);
 		for (auto & it : items)
 		{
-			auto item = it.second.lock();
-			if (item && !item->is_operation_pending())
+			if (!it.second->is_operation_pending())
 			{
-				if (item->is_requested_load())
-					create_operation(item, database->get_input(item->get_path()), !item->do_not_log_operations());
-				else if (item->is_requested_save())
-					create_operation(item, database->get_output(item->get_path()), !item->do_not_log_operations());
+				if (it.second->is_requested_load())
+					create_operation(it.second, database->get_input(it.second->get_path()), !it.second->do_not_log_operations());
+				else if (it.second->is_requested_save())
+					create_operation(it.second, database->get_output(it.second->get_path()), !it.second->do_not_log_operations());
 			}
+		}
+
+		for (auto iter = items.begin(); iter != items.end(); )
+		{
+			if (iter->second.use_count() == 1)
+			{
+				if (iter->second->is_destroyed())
+				{
+					if (!iter->second->is_operation_pending())
+					{
+						iter = items.erase(iter);
+					}
+					else
+						iter++;
+				}
+				else
+				{
+					iter->second->destroy();
+					iter++;
+				}
+			}
+			else
+				iter++;
 		}
 
 		clear_completed_operations();
@@ -308,21 +328,20 @@ void engine::data::database_items_t::init_update()
 	for (auto & change : changes)
 	{
 		auto iter = items.find(change.get_path());
-		std::shared_ptr<item_generic_t> item;
 
-		if (iter != items.end() && (item = std::static_pointer_cast<item_generic_t>(iter->second.lock())))
+		if (iter != items.end())
 		{
-			if (!item->is_deatached() && !item->do_not_auto_reload())
+			if (!iter->second->is_deatached() && !iter->second->do_not_auto_reload())
 			{
 				auto type = change.get_type();
 
 				if (type == database_change_t::added || type == database_change_t::updated)
 				{
-					reload(item);
+					reload(iter->second);
 				}
 				else if (type == database_change_t::deleted)
 				{
-					item->destroy();
+					iter->second->destroy();
 				}
 			}
 		}
