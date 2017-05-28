@@ -4,7 +4,6 @@
 
 #include "common/logger_output/provider_console.hpp"
 #include "common/logger_output/provider_data.hpp"
-#include "common/logger_output/provider_raw.hpp"
 #include "common/config.hpp"
 
 #if PIXIE_OUTPUT_TYPE != PIXIE_OUTPUT_TYPE_game && PIXIE_OUTPUT_TYPE != PIXIE_OUTPUT_TYPE_editor && PIXIE_OUTPUT_TYPE != PIXIE_OUTPUT_TYPE_launcher && PIXIE_OUTPUT_TYPE != PIXIE_OUTPUT_TYPE_dll && PIXIE_OUTPUT_TYPE != PIXIE_OUTPUT_TYPE_test

@@ -1972,7 +1972,6 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_base.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_console.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_data.hpp" />
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_raw.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\manifest_app.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\modules.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\platform.hpp" />

@@ -199,7 +199,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		++i;
 		logger->p_msg(_U("Test of huge outputs: #1#!"), i);
 
-		if (i == 100)
+		if (i == 10000)
 			break;
 		/*
 		if (i == 100)

@@ -6306,9 +6306,6 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\config_io\provider_base.hpp">
       <Filter>engine\common\include\common\config_io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_data.hpp">
-      <Filter>engine\common\include\common\logger_output</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\_engine\src\common\include\common\config_io\provider_data.hpp">
       <Filter>engine\common\include\common\config_io</Filter>
     </ClInclude>
@@ -6342,11 +6339,11 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\item_operation.hpp">
       <Filter>engine\common\include\common\data</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_raw.hpp">
-      <Filter>engine\common\include\common\logger_output</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\output_file_safe.hpp">
       <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_data.hpp">
+      <Filter>engine\common\include\common\logger_output</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

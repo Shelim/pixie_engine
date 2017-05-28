@@ -44,7 +44,6 @@ engine::platform_t::platform_t(std::string arg0, std::shared_ptr<manifest_app_t>
 
 #if !PIXIE_IS_PORTABLE_BUILD
 
-	pimpl->copy_engine_dir(engine::virtual_path_t::type_t::log, "log");
 	pimpl->copy_engine_dir(engine::virtual_path_t::type_t::config, "config");
 	pimpl->copy_engine_dir(engine::virtual_path_t::type_t::keybinding, "keybinding");
 

@@ -17,29 +17,11 @@
 #include "common/execution_info.hpp"
 #include "common/logger_output/providers.hpp"
 
-void engine::logger_output::provider_data_t::force_resave()
-{
-	if (is_enabled())
-	{
-		data_item->get()->query_logger(get_logger().get(), true);
 
-		auto database = database_item.lock();
-
-		if (database)
-		{
-
-#define GAME_LOGGER_DATA_VIRTUAL_PATH_STD(path) auto output = database->get_database()->get_output(virtual_path_t(path, virtual_path_t::type_t::log));
-#include "common/std/virtual_path_std.hpp"
-
-			data_item->resave(output.get());
-		}
-	}
-}
-
-engine::logger_output::provider_raw_t::provider_raw_t(std::shared_ptr<engine::data::database_t> database, std::shared_ptr<logger_t> logger) : provider_base_t(logger), save_items_completed(false)
+engine::logger_output::provider_data_t::provider_data_t(std::shared_ptr<engine::data::database_t> database, std::shared_ptr<logger_t> logger) : provider_base_t(logger), save_items_completed(false)
 {
 
-#define GAME_LOGGER_RAW_VIRTUAL_PATH_STD(path) output = database->get_output(virtual_path_t(path, virtual_path_t::type_t::log));
+#define GAME_LOGGER_VIRTUAL_PATH_STD(path) output = database->get_output(virtual_path_t(path, virtual_path_t::type_t::log));
 #include "common/std/virtual_path_std.hpp"
 
 	save_items_thread = std::thread([this] { save_items(); });
