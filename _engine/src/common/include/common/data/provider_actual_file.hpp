@@ -41,8 +41,9 @@ namespace engine
 			std::unique_ptr<output_t> construct_output_local() final
 			{
 				if (read_only) return nullptr;
-				return std::make_unique<output_file_safe_t>(get_virtual_path(), physical_path);
+				return std::move(platform_construct_output_local());
 			}
+			std::unique_ptr<output_t> platform_construct_output_local();
 
 			std::filesystem::path physical_path;
 			bool read_only;

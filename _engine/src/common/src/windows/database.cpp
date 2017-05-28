@@ -77,5 +77,10 @@ std::unique_ptr<engine::data::output_t> engine::data::provider_t::platform_creat
 		return std::make_unique<engine::data::output_file_safe_t>(path, path_output);
 }
 
+std::unique_ptr<engine::data::output_t> engine::data::provider_actual_file_t::platform_construct_output_local()
+{
+	return std::make_unique<output_file_safe_t>(get_virtual_path(), physical_path);
+}
+
 
 #endif
