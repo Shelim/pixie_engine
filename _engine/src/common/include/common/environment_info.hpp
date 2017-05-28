@@ -80,7 +80,7 @@ namespace engine
 		std::shared_ptr<engine::platform_t> platform;
 		std::shared_ptr<engine::manifest_app_t> manifest_app;
 
-		void std_platform();
+		void generate_data();
 		vals_t vals;
 
 	};

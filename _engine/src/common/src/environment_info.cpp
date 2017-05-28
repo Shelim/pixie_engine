@@ -25,7 +25,7 @@ engine::environment_info_t::environment_info_t(std::shared_ptr<engine::platform_
 		ts = ts.substr(0, ts.len() - 1); // remove trailling newline
 	set_info(key_t::launched_time, ts);
 
-	std_platform();
+	generate_data();
 }
 
 engine::environment_info_t::~environment_info_t()
@@ -33,7 +33,7 @@ engine::environment_info_t::~environment_info_t()
 
 }
 
-void engine::environment_info_t::std_platform()
+void engine::environment_info_t::generate_data()
 {
 	set_info(key_t::game_name, ustring_t::from_utf8(manifest_app->game_name()));
 	ustring_t app_data_str = _U(PIXIE_OUTPUT_TYPE_STR);
