@@ -7,6 +7,7 @@
 #include "common/virtual_path.hpp"
 #include "common/data/input.hpp"
 #include "common/data/output.hpp"
+#include "common/data/item_operation.hpp"
 #include <bitset>
 #include <map>
 #include <vector>
@@ -29,246 +30,83 @@ namespace engine
 
 		public:
 
-			enum class policy_io_t
-			{
-				forbidden,
-				implicit_sync,
-				implicit_async,
-				implicit_async_copy,
-				explicit_sync,
-				explicit_async,
-				explicit_async_copy
-			};
-
-			enum class result_t
-			{
-				success,
-				already_started,
-				error
-			};
-
 			virtual ~item_content_base_t()
 			{
 
 			}
+			
+			virtual bool resave(output_t * output) = 0;
 
-			policy_io_t get_reload_policy() const
+			friend class item_generic_t;
+
+			bool is_destroyed();
+
+			struct destroyed_t
 			{
-				return reload_policy;
-			}
 
-			policy_io_t get_resave_policy() const
-			{
-				return resave_policy;
-			}
-
-			bool is_reloading()
-			{
-				return get_input();
-			}
-
-			bool is_resaving()
-			{
-				return get_output();
-			}
-
-			bool is_io_pending()
-			{
-				return is_reloading() || is_resaving();
-			}
-
-			bool is_destroyed()
-			{
-				return is_flag(flag_t::destroyed);
-			}
-
-			friend class item_t;
+			};
 
 		protected:
 
-			item_content_base_t(item_t * owner, policy_io_t reload_policy = policy_io_t::implicit_async, policy_io_t resave_policy = policy_io_t::explicit_async) :
-				owner(owner), reload_policy(reload_policy), resave_policy(resave_policy)
-			{
-
-			}
-
-			item_content_base_t(const item_content_base_t & other) : owner(other.owner), reload_policy(other.reload_policy), resave_policy(other.resave_policy)
-			{
-
-			}
-
-			void destroy()
-			{
-				std::lock_guard<std::recursive_mutex> guard(mutex_io_operation);
-
-				if(!is_flag(flag_t::destroyed))
-					destroy_local();
-
-				set_flag(flag_t::destroyed, true);
-			}
-
-			void set_dirty();
-
-			void wait_till_io_done()
-			{
-				std::lock_guard<std::recursive_mutex> guard(mutex_io_operation);
-			}
-
-			void save_item(item_t & item);
-			void load_item(item_t & item);
-
-		private:
-
 			virtual item_content_base_t * clone() const = 0;
 
-			item_t * get_owner()
+			item_content_base_t() : owner(nullptr)
+			{
+
+			}
+
+			item_content_base_t(item_generic_t * owner) : owner(owner)
+			{
+
+			}
+
+			item_content_base_t(const item_content_base_t & other) : owner(other.owner)
+			{
+
+			}
+
+			item_generic_t * get_owner()
 			{
 				return owner;
 			}
 
-			result_t reload_init(std::unique_ptr<input_t> input, database_t * database, bool force = false)
+			void set_dirty();
+
+		private:
+			
+			item_generic_t * owner;
+
+			virtual bool execute_operation(const item_operation_t::step_t & step, item_operation_t * operation)
 			{
-				if (force)
+				if (operation->get_type() == item_operation_t::type_t::save)
+					return execute_output_operation(step, operation);
+				else if (operation->get_type() == item_operation_t::type_t::load)
+					return execute_input_operation(step, operation);
+				else if (operation->get_type() == item_operation_t::type_t::free)
 				{
-					mutex_io_operation.lock();
+					execute_free_operation(step, operation);
+					return true;
 				}
-				else
-				{
-					if (!mutex_io_operation.try_lock())
-						return result_t::already_started;
-				}
-
-				this->input = std::move(input);
-
-				if (!reload_init_local(get_input(), database))
-				{
-					destroy();
-					this->input.reset();
-					mutex_io_operation.unlock();
-					return result_t::error;
-				}
-				return result_t::success;
+				return false;
 			}
 
-			result_t reload_async(database_items_t * items)
+			virtual bool is_sub_operation_pending()
 			{
-				
-				if (!reload_async_local(get_input(), items))
-				{
-					destroy();
-					this->input.reset();
-					mutex_io_operation.unlock();
-					return result_t::error;
-				}
-				return result_t::success;
+				return false;
 			}
 
-			result_t reload_end(database_t * database)
-			{
-				if (reload_end_local(get_input(), database))
-					set_flag(flag_t::destroyed, false);
-				else
-				{
-					destroy();
-					mutex_io_operation.unlock();
-					return result_t::error;
-				}
-
-				this->input.reset();
-				mutex_io_operation.unlock();
-				return result_t::success;
-			}
-
-			result_t resave_init(std::unique_ptr<output_t> output, database_t * database)
-			{
-				this->output = std::move(output);
-
-				return resave_init_local(get_output(), database) ? result_t::success : result_t::error;
-			}
-
-			result_t resave_async(database_items_t * items)
-			{
-				return resave_async_local(get_output(), items) ? result_t::success : result_t::error;
-			}
-
-			result_t resave_end(database_t * database)
-			{
-				bool ret = resave_end_local(get_output(), database);
-
-				this->output.reset();
-
-				return ret ? result_t::success : result_t::error;
-			}
-
-			input_t * get_input()
-			{
-				return input.get();
-			}
-
-			output_t * get_output()
-			{
-				return output.get();
-			}
-
-			item_t * owner;
-			policy_io_t reload_policy;
-			policy_io_t resave_policy;
-
-			std::recursive_mutex mutex_io_operation;
-
-			enum class flag_t
-			{
-				destroyed,
-
-				count
-			};
-
-			std::bitset < static_cast<std::size_t>(flag_t::count)> flags;
-
-			void set_flag(flag_t flag, bool value)
-			{
-				flags.set(static_cast<std::size_t>(flag), value);
-			}
-
-			bool is_flag(flag_t flag) const
-			{
-				return flags.test(static_cast<std::size_t>(flag));
-			}
-
-			std::unique_ptr<input_t> input;
-			std::unique_ptr<output_t> output;
-
-			virtual bool reload_init_local(input_t *, database_t * database)
+			virtual bool execute_input_operation(const item_operation_t::step_t & step, item_operation_t * operation)
 			{
 				return true;
 			}
-
-			virtual bool reload_async_local(input_t *, database_items_t * items)
+			virtual bool execute_output_operation(const item_operation_t::step_t & step, item_operation_t * operation)
 			{
 				return true;
 			}
-
-			virtual bool reload_end_local(input_t *, database_t * database)
+			virtual void execute_free_operation(const item_operation_t::step_t & step, item_operation_t * operation)
 			{
-				return true;
-			}
 
-			virtual bool resave_init_local(output_t *, database_t * database)
-			{
-				return true;
 			}
-
-			virtual bool resave_async_local(output_t *, database_items_t * items)
-			{
-				return true;
-			}
-
-			virtual bool resave_end_local(output_t *, database_t * database)
-			{
-				return true;
-			}
-
-			virtual void destroy_local() = 0;
 
 		};
 

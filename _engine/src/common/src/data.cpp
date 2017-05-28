@@ -2,10 +2,124 @@
 #include "common/data/database_items.hpp"
 #include "common/data/item.hpp"
 #include "common/platform.hpp"
+#include "common/data/input.hpp"
+#include "common/data/item_operation.hpp"
+
+void engine::data::item_operation_t::execute_steps(step_t::caller_t caller)
+{
+	while (execute_step(caller))
+	{
+		// deliberately do nothing!
+	}
+	if (is_completed())
+	{
+		std::lock_guard<std::recursive_mutex> guard(mutex_completed);
+		if (!is_flag(flag_t::has_completed_executed))
+		{
+			set_flag(flag_t::has_completed_executed, true);
+			if (result == result_t::error)
+				target->destroy();
+			else if (result == result_t::success && get_type() != type_t::free)
+				target->undestroy();
+		}
+	}
+}
+
+void engine::data::item_operation_t::init()
+{
+	if (target->set_operation_pending(this))
+	{
+		if (logger)
+		{
+			if(get_type() == type_t::load)
+				task = logger->p_task_start(_U("Reloading '#1#'"), target->get_path());
+			else if (get_type() == type_t::save)
+				task = logger->p_task_start(_U("Resaving '#1#'"), target->get_path());
+			else if (get_type() == type_t::free)
+				task = logger->p_task_start(_U("Freeing '#1#'"), target->get_path());
+		}
+
+		add_step(0, step_t::caller_t::sync);
+	}
+	else
+		result = result_t::already_started;
+}
+
+engine::data::item_operation_t::~item_operation_t()
+{
+	if (logger)
+	{
+		if (result == result_t::success)
+			logger->p_task_done(task);
+		else if(result != result_t::already_started)
+			logger->p_task_failed(task);
+	}
+
+	target->set_operation_pending(this, true);
+}
+
+bool engine::data::item_operation_t::execute_step(step_t::caller_t caller)
+{
+	if (current_step >= steps.size()) return false;
+
+	if (steps[current_step].get_caller() != caller) return false;
+
+	if (!target->execute_operation_pending(steps[current_step]))
+	{
+		result = result_t::error;
+		current_step = steps.size();
+		return false;
+	}
+	++current_step;
+
+	return true;
+}
+
+bool engine::data::item_generic_t::set_operation_pending(item_operation_t * operation, bool clear)
+{
+	std::lock_guard<std::mutex> guard(mutex_operation_pending);
+	if (operation_pending)
+	{
+		if (clear && operation_pending == operation)
+		{
+			operation_pending = nullptr;
+			return true;
+		}
+		return false;
+	}
+
+	if (operation->get_type() == engine::data::item_operation_t::type_t::save)
+		clear_requested_save();
+	else if (operation->get_type() == engine::data::item_operation_t::type_t::load)
+		clear_requested_load();
+
+	operation_pending = operation;
+	return true;
+}
+
+std::unique_ptr<engine::data::input_t> engine::data::input_t::spawn_partial(int32_t size)
+{
+	buffer_t buff;
+	buff.resize(size);
+	read(&buff[0], size);
+
+	return std::move(std::make_unique<input_partial_t>(path, std::move(buff)));
+}
 
 void engine::data::item_content_base_t::set_dirty()
 {
-	owner->set_dirty();
+	if(owner && owner->auto_resave())
+		owner->request_save();
+}
+
+bool engine::data::item_generic_t::execute_operation_pending(item_operation_t::step_t step)
+{
+	std::lock_guard<std::mutex> guard(mutex_operation_pending);
+	if (operation_pending)
+	{
+		return content->execute_operation(step, operation_pending);
+	}
+	return true;
 }
 
 void engine::data::database_t::refresh_virtual_path_type_changes()
@@ -101,143 +215,103 @@ engine::data::database_changes_t engine::data::database_state_t::calculate_chang
 	return ret;
 }
 
-void engine::data::item_content_base_t::save_item(item_t & item)
+bool engine::data::item_content_base_t::is_destroyed()
 {
-
+	return !owner || owner->is_destroyed();
 }
 
-void engine::data::item_content_base_t::load_item(item_t & item)
+void engine::data::item_generic_t::destroy_self(item_content_base_t * content)
 {
-	if (!is_reloading()) return;
-
-
+	this->content_destroyed = content;
+	get_database_items()->perform_destroy(get_path());
 }
 
-engine::data::item_content_base_t::result_t engine::data::item_t::reload_sync(std::unique_ptr<input_t> input, database_items_t * database_items, bool force)
+void engine::data::database_items_t::save(std::shared_ptr<item_generic_t> item)
 {
-	auto database = database_items->get_database().get();
-
-	item_content_base_t::result_t ret = item_content_base_t::result_t::success;
-
-	if ((ret = content->reload_init(std::move(input), database, force)) != item_content_base_t::result_t::success)
-		return ret;
-	if ((ret = content->reload_async(database_items)) != item_content_base_t::result_t::success)
-		return ret;
-	if ((ret = content->reload_end(database)) != item_content_base_t::result_t::success)
-		return ret;
-
-	clear_placeholder_flag();
-
-	return item_content_base_t::result_t::success;
-}
-
-engine::data::item_content_base_t::result_t engine::data::item_t::reload_async_init(std::unique_ptr<input_t> input, database_items_t * database_items, bool force)
-{
-	auto database = database_items->get_database().get();
-	auto policy = content->get_reload_policy();
-
-	if (policy == item_content_base_t::policy_io_t::implicit_async_copy || policy == item_content_base_t::policy_io_t::explicit_async_copy)
-		content_load = std::move(create_content_func(get_path(), this));
-
-	return get_content_load()->reload_init(std::move(input), database, force);
-}
-
-engine::data::item_content_base_t::result_t engine::data::item_t::reload_async(database_items_t * database_items)
-{
-	return get_content_load()->reload_async(database_items);
-}
-
-engine::data::item_content_base_t::result_t engine::data::item_t::reload_async_end(database_items_t * database_items)
-{
-	auto database = database_items->get_database().get();
-	auto policy = content->get_reload_policy();
-
-	item_content_base_t::result_t ret = item_content_base_t::result_t::success;
-
-	if ((ret = get_content_load()->reload_end(database)) != item_content_base_t::result_t::success)
-		return ret;
-
-	if (policy == item_content_base_t::policy_io_t::implicit_async_copy || policy == item_content_base_t::policy_io_t::explicit_async_copy)
-		std::swap(content, content_load);
-
-	clear_placeholder_flag();
-
-	return item_content_base_t::result_t::success;
-}
-
-void engine::data::database_items_t::reload(std::shared_ptr<item_t> item, mode_reload_t mode)
-{
-	auto policy = item->get_base()->get_reload_policy();
-	std::thread::id calling_thread_id = std::this_thread::get_id();
-	item_content_base_t::result_t result;
-
-	if (policy == item_content_base_t::policy_io_t::forbidden)
 	{
-		return;
+		std::lock_guard<std::recursive_mutex> guard(operations_mutex);
+		item->request_save();
+		create_operation(item, database->get_output(item->get_path()), !item->do_not_log_operations());
 	}
-	else if (mode == mode_reload_t::deffered)
+	execute_operations(item_operation_t::step_t::caller_t::sync);
+}
+
+void engine::data::database_items_t::reload(std::shared_ptr<item_generic_t> item)
+{
 	{
-		items_deffered.push(item);
+		std::lock_guard<std::recursive_mutex> guard(operations_mutex);
+		item->request_load();
+		create_operation(item, database->get_input(item->get_path()), !item->do_not_log_operations());
 	}
-	else if (mode == mode_reload_t::force_sync || mode == mode_reload_t::force_sync_now || policy == item_content_base_t::policy_io_t::implicit_sync || policy == item_content_base_t::policy_io_t::explicit_sync)
+	execute_operations(item_operation_t::step_t::caller_t::sync);
+}
+
+void engine::data::database_items_t::perform_destroy(const virtual_path_t & path)
+{
+	std::lock_guard<std::recursive_mutex> guard(mutex_items);
+	auto iter = items.find(path);
+
+	std::shared_ptr<item_generic_t > item;
+
+	if (iter != items.end() && (item = std::static_pointer_cast<item_generic_t >(iter->second.lock())))
 	{
-		if (mode == mode_reload_t::force_sync_now || calling_thread_id == main_thread_id)
+		create_operation(item, item_operation_t::free_t(), !item->do_not_log_operations());
+		execute_operations(item_operation_t::step_t::caller_t::sync);
+	}
+}
+
+template<class T> std::shared_ptr<engine::data::item_t<T> > engine::data::database_items_t::load_item_detached(std::unique_ptr<input_t> input)
+{
+	std::shared_ptr<item_t<T> > ret;
+	ret = item_t<T>::create_item(path);
+
+	{
+		std::lock_guard<std::recursive_mutex> guard(operations_mutex);
+		item->request_load();
+		create_operation(item, std::move(input), !item->do_not_log_operations());
+	}
+	execute_operations(item_operation_t::step_t::caller_t::sync);
+}
+
+void engine::data::database_items_t::update_async()
+{
+	execute_operations(item_operation_t::step_t::caller_t::async);
+
+	{
+		std::lock_guard<std::recursive_mutex> guard(operations_mutex);
+		for (auto & it : items)
 		{
-			result = item->reload_sync(database->get_input(item->get_path()), this, (mode == mode_reload_t::force_sync_now));
-			if (result == item_content_base_t::result_t::already_started)
+			auto item = it.second.lock();
+			if (item && !item->is_operation_pending())
 			{
-				items_reload_next.push(item);
+				if (item->is_requested_load())
+					create_operation(item, database->get_input(item->get_path()), !item->do_not_log_operations());
+				else if (item->is_requested_save())
+					create_operation(item, database->get_output(item->get_path()), !item->do_not_log_operations());
 			}
 		}
-		else
-		{
-			items_to_reload.enqueue_to_sync(item);
-		}
-	}
-	else
-	{
-		if (calling_thread_id != main_thread_id)
-		{
-			items_to_reload.enqueue_to_init(item);
-		}
-		else
-		{
-			result = item->reload_async_init(database->get_input(item->get_path()), this);
-			if (result == item_content_base_t::result_t::already_started)
-				items_reload_next.push(item);
-			else if(result == item_content_base_t::result_t::success)
-				items_to_reload.enqueue_to_async(item);
-		}
+
+		clear_completed_operations();
 	}
 }
+
 
 void engine::data::database_items_t::init_update()
 {
-	item_content_base_t::result_t result;
-
-	if (!items_deffered.is_empty()) // one per frame!!!
-	{
-		auto item = items_deffered.pop();
-		reload(item);
-	}
-
 	auto & changes = database->get_changes();
 
 	for (auto & change : changes)
 	{
 		auto iter = items.find(change.get_path());
-		std::shared_ptr<item_t> item;
+		std::shared_ptr<item_generic_t> item;
 
-		if (iter != items.end() && (item = std::static_pointer_cast<item_t>(iter->second.lock())))
+		if (iter != items.end() && (item = std::static_pointer_cast<item_generic_t>(iter->second.lock())))
 		{
-			auto policy = item->content->get_reload_policy();
-			if (policy == item_content_base_t::policy_io_t::implicit_sync ||
-				policy == item_content_base_t::policy_io_t::implicit_async ||
-				policy == item_content_base_t::policy_io_t::implicit_async_copy)
+			if (!item->is_deatached() && !item->do_not_auto_reload())
 			{
 				auto type = change.get_type();
 
-				if (type == database_change_t::added  || type == database_change_t::updated)
+				if (type == database_change_t::added || type == database_change_t::updated)
 				{
 					reload(item);
 				}
@@ -249,74 +323,8 @@ void engine::data::database_items_t::init_update()
 		}
 	}
 
-	while (!items_reload_next.is_empty())
-	{
-		auto & item = items_reload_next.pop();
-		if (!item->is_reloading())
-		{
-			reload(item);
-		}
-		else
-		{
-			items_reload_next.push(item);
-			break;
-		}
-	}
-
-	for (;;)
-	{
-		std::shared_ptr<item_t> next_item = items_to_reload.get_item_to_sync();
-
-		if (next_item)
-		{
-			result = next_item->reload_sync(database->get_input(next_item->get_path()), this);
-			if(result == item_content_base_t::result_t::already_started)
-				items_reload_next.push(next_item);
-		}
-		else
-			break;
-	}
-
-	for (;;)
-	{
-		std::shared_ptr<item_t> next_item = items_to_reload.get_item_to_end();
-
-		if (next_item)
-			next_item->reload_async_end(this);
-		else
-			break;
-	}
-
-	for (;;)
-	{
-		std::shared_ptr<item_t> next_item = items_to_reload.get_item_to_init();
-
-		if (next_item)
-		{
-			result = next_item->reload_async_init(database->get_input(next_item->get_path()), this);
-			if (result == item_content_base_t::result_t::already_started)
-			{
-				items_reload_next.push(next_item);
-			}
-			else if(result == item_content_base_t::result_t::success)
-				items_to_reload.enqueue_to_async(next_item);
-		}
-		else
-			break;
-	}
-}
-
-bool engine::data::item_t::is_reloading()
-{
-	if (content->is_io_pending()) return true;
-
-	auto policy = content->get_reload_policy();
-	if (policy == item_content_base_t::policy_io_t::implicit_async_copy || policy == item_content_base_t::policy_io_t::explicit_async_copy)
-	{
-		if (content_load)
-			return content_load->is_io_pending();
-	}
-	return false;
+	execute_operations(item_operation_t::step_t::caller_t::sync);
+	execute_operations(item_operation_t::step_t::caller_t::sync_force_main_thread);
 }
 
 /*

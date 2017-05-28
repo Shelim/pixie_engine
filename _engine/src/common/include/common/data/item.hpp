@@ -10,6 +10,7 @@
 #include "common/data/provider.hpp"
 #include "common/filesystem.hpp"
 #include "common/data/item_content.hpp"
+#include "common/data/item_operation.hpp"
 #include <bitset>
 #include <cereal/access.hpp>
 
@@ -18,6 +19,7 @@ namespace engine
 	namespace data
 	{
 		class database_t;
+		class item_operation_t;
 
 		class item_base_t
 		{
@@ -31,21 +33,82 @@ namespace engine
 
 			enum class flag_t
 			{
-				is_dirty,
+				is_requested_save,
+				is_requested_load,
 				is_deatached,
-				is_placeholder, // not-deffered just loaded as part of other item_t; Reload self
+				do_not_auto_reload,
+				auto_resave,
+				do_not_log_operations,
+				allow_changes_when_deleted,
 
 				count
 			};
 
-			void set_dirty()
+			void request_save()
 			{
-				set_flag(flag_t::is_dirty, true);
+				set_flag(flag_t::is_requested_save, true);
+			}
+
+			bool are_allowed_changes_when_deleted()
+			{
+				return is_flag(flag_t::allow_changes_when_deleted);
+			}
+
+			void allow_changes_when_deleted()
+			{
+				set_flag(flag_t::allow_changes_when_deleted, true);
+			}
+
+			bool do_not_auto_reload()
+			{
+				return is_flag(flag_t::do_not_auto_reload);
+			}
+
+			void mark_as_do_not_auto_reload()
+			{
+				set_flag(flag_t::do_not_auto_reload, true);
+			}
+
+			bool auto_resave()
+			{
+				return is_flag(flag_t::auto_resave);
+			}
+
+			void mark_as_auto_resave()
+			{
+				set_flag(flag_t::auto_resave, true);
+				set_flag(flag_t::do_not_auto_reload, true);
+			}
+
+			void mark_as_both_auto_resave_and_auto_reload()
+			{
+				set_flag(flag_t::auto_resave, true);
+				set_flag(flag_t::do_not_auto_reload, false);
+			}
+
+			bool do_not_log_operations()
+			{
+				return is_flag(flag_t::do_not_log_operations);
+			}
+
+			void mark_as_do_not_log_operations()
+			{
+				set_flag(flag_t::do_not_log_operations, true);
 			}
 			
-			bool is_dirty()
+			bool is_requested_save()
 			{
-				return is_flag(flag_t::is_dirty);
+				return is_flag(flag_t::is_requested_save);
+			}
+
+			void request_load()
+			{
+				set_flag(flag_t::is_requested_load, true);
+			}
+
+			bool is_requested_load()
+			{
+				return is_flag(flag_t::is_requested_load);
 			}
 
 			bool is_deatached()
@@ -53,26 +116,43 @@ namespace engine
 				return is_flag(flag_t::is_deatached);
 			}
 
-			bool is_placeholder()
-			{
-				return is_flag(flag_t::is_placeholder);
-			}
-
 			const virtual_path_t & get_path() const
 			{
 				return path;
 			}
 
+			virtual void resave(output_t * output) = 0;
+
+			database_items_t * get_database_items()
+			{
+				return database_items;
+			}
+
 		protected:
 
-			item_base_t(const virtual_path_t & path) : path(path)
+			item_base_t(database_items_t * database_items, const virtual_path_t & path) : path(path), database_items(database_items)
 			{
 
 			}
 
-			void clear_placeholder_flag()
+			void clear_requested_save()
 			{
-				set_flag(flag_t::is_placeholder, false);
+				set_flag(flag_t::is_requested_save, false);
+			}
+
+			void clear_requested_load()
+			{
+				set_flag(flag_t::is_requested_load, false);
+			}
+
+			void set_deatached_flag()
+			{
+				set_flag(flag_t::is_deatached, true);
+			}
+
+			void set_path(const virtual_path_t & path)
+			{
+				this->path = path;
 			}
 
 		private:
@@ -92,90 +172,161 @@ namespace engine
 
 			virtual_path_t path;
 
+			database_items_t * database_items;
+
 		};
 
-		class item_t final : public item_base_t
+		class item_generic_t : public item_base_t
 		{
 
 		public:
 
 			item_content_base_t * get_base()
 			{
+				if (content_destroyed && !are_allowed_changes_when_deleted()) return content_destroyed;
 				return content.get();
 			}
 
-			template<class T> T * get()
+			template<class T> T * get_content()
+			{
+				return static_cast<T*>(get_base());
+			}
+
+			virtual ~item_generic_t()
+			{
+
+			}
+
+			bool is_operation_pending()
+			{
+				return operation_pending || content->is_sub_operation_pending();
+			}
+
+			void resave(output_t * output) final
+			{
+				content->resave(output);
+			}
+
+			bool is_destroyed()
+			{
+				return content_destroyed;
+			}
+
+			virtual void destroy() = 0;
+
+			friend class database_items_t;
+			friend class item_content_base_t;
+			friend class item_operation_t;
+
+		protected:
+
+			typedef std::function<std::unique_ptr<item_content_base_t>(const virtual_path_t &, item_generic_t *)> create_content_t;
+
+			item_generic_t(database_items_t * database_items, const virtual_path_t & path, create_content_t create_content_func) :
+				item_base_t(database_items, path), create_content_func(create_content_func), operation_pending(nullptr), content_destroyed(nullptr)
+			{
+				content = std::move(create_content_func(path, this));
+			}
+
+			item_generic_t(const item_generic_t & other) : item_base_t(other), create_content_func(other.create_content_func), operation_pending(nullptr), content(other.content->clone())
+			{
+
+			}
+
+			template<class T> static std::unique_ptr<item_content_base_t> create_content(const virtual_path_t & path, item_generic_t * owner)
+			{
+				return std::move(std::make_unique<T>(owner));
+			}
+
+			create_content_t get_create_content_func()
+			{
+				return create_content_func;
+			}
+
+			void destroy_self(item_content_base_t * content);
+
+		private:
+
+			void undestroy()
+			{
+				this->content_destroyed = nullptr;
+			}
+
+			virtual item_generic_t * clone(const virtual_path_t & path) const = 0;
+
+			item_generic_t * deatach()
+			{
+				item_generic_t * ret = clone(get_path());
+				ret->set_deatached_flag();
+
+				return ret;
+			}
+
+			bool set_operation_pending(item_operation_t * operation, bool clear = false);
+
+			create_content_t create_content_func;
+			item_operation_t * operation_pending;
+
+			bool execute_operation_pending(item_operation_t::step_t step);
+
+			std::mutex mutex_operation_pending;
+
+			std::unique_ptr<item_content_base_t> content;
+			item_content_base_t * content_destroyed;
+		};
+
+		template<class T> class item_t final : public item_generic_t
+		{
+
+		public:
+
+			T * get()
 			{
 				return static_cast<T*>(get_base());
 			}
 
 			friend class database_items_t;
-			friend class item_content_base_t;
 
 		private:
 
-			typedef std::function<std::unique_ptr<item_content_base_t>(const virtual_path_t &, item_t *)> create_content_t;
-
-			item_t(const virtual_path_t & path, create_content_t create_content_func) :
-				item_base_t(path), create_content_func(create_content_func)
+			item_t<T> * clone(const virtual_path_t & path) const final
 			{
-				content = std::move(create_content_func(path, this));
+				return new item_t<T>(*this, path);
 			}
 
-			void destroy()
+			item_t(database_items_t * database_items, const virtual_path_t & path, create_content_t create_content_func) : item_generic_t(database_items, path, create_content_func)
 			{
-				content->destroy();
+
 			}
 
-			template<class T> static std::unique_ptr<item_content_base_t> create_content(const virtual_path_t & path, item_t * owner)
+			item_t(const item_t<T> & other, const virtual_path_t & path) : item_generic_t(other)
 			{
-				return std::move(std::make_unique<T>(owner));
+				set_path(path);
 			}
 
-			template<class T> static std::shared_ptr<item_t> create_item(const virtual_path_t & path)
+			static std::shared_ptr<item_t<T>> create_item(database_items_t * database_items, const virtual_path_t & path)
 			{
-				std::shared_ptr<item_t> ret = std::shared_ptr<item_t>(new item_t(path, create_content<T>));
+				std::shared_ptr<item_t<T>> ret = std::shared_ptr<item_t<T>>(new item_t<T>(database_items, path, create_content<T>));
 				ret->destroy();
 
 				return ret;
 			}
 
-			create_content_t create_content_func;
-
-			item_content_base_t::result_t reload_sync(std::unique_ptr<input_t> input, database_items_t * database_items, bool force = false);
-			item_content_base_t::result_t reload_async_init(std::unique_ptr<input_t> input, database_items_t * database_items, bool force = false);
-			item_content_base_t::result_t reload_async(database_items_t * database_items);
-			item_content_base_t::result_t reload_async_end(database_items_t * database_items);
-
-			bool is_reloading();
-
-			item_content_base_t * get_content_save()
+			void destroy() final
 			{
-				auto policy = content->get_resave_policy();
-
-				if (policy == item_content_base_t::policy_io_t::implicit_async_copy || policy == item_content_base_t::policy_io_t::explicit_async_copy)
+				if (!is_destroyed())
 				{
-					return content_save.get();
+					destroy_self(get_content_destroyed());
 				}
-
-				return content.get();
 			}
 
-			item_content_base_t * get_content_load()
+			T * get_content_destroyed()
 			{
-				auto policy = content->get_reload_policy();
+				static T ret = item_content_base_t::destroyed_t();
 
-				if (policy == item_content_base_t::policy_io_t::implicit_async_copy || policy == item_content_base_t::policy_io_t::explicit_async_copy)
-				{
-					return content_load.get();
-				}
-
-				return content.get();
+				return &ret;
 			}
 
-			std::unique_ptr<item_content_base_t> content;
-			std::unique_ptr<item_content_base_t> content_save;
-			std::unique_ptr<item_content_base_t> content_load;
 		};
 
 		class items_collection_t final : public item_base_t

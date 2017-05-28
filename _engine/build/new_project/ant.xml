@@ -7,6 +7,7 @@
 		<copy todir="../${unix}" includeEmptyDirs="true"> 
 			<fileset dir="build/new_project/empty" defaultexcludes="no" /> 
 		</copy>
+		<copy file="build/new_project/build_gitignore" tofile="../${unix}/.gitignore" />
 		<replace token="$EMPTY_GAME_UNIX_NAME$" value="${unix}">
 			<fileset dir="../${unix}" /> 
 		</replace>

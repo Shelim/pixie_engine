@@ -6,6 +6,8 @@
 #include "common/filesystem.hpp"
 #include "common/virtual_path.hpp"
 
+#include <algorithm>
+
 namespace engine
 {
 	namespace data
@@ -22,8 +24,7 @@ namespace engine
 			virtual bool is_eof() = 0;
 
 			virtual ~input_t() { }
-
-
+			
 			typedef std::vector<uint8_t> buffer_t;
 
 			ustring_t read_ustring()
@@ -70,6 +71,8 @@ namespace engine
 			input_t& operator=(input_t &&) = delete;
 			input_t& operator=(input_t const&) = delete;
 
+			std::unique_ptr<input_t> spawn_partial(int32_t size);
+
 		protected:
 
 			input_t(virtual_path_t path)
@@ -81,6 +84,45 @@ namespace engine
 
 			virtual_path_t path;
 
+		};
+
+		class input_partial_t final : public input_t
+		{
+
+		public:
+
+			input_partial_t(const virtual_path_t & virtual_path, const buffer_t && buffer) : input_t(virtual_path), buffer(std::move(buffer)), pos(0)
+			{
+
+			}
+
+			void skip(int32_t pos) final
+			{
+				this->pos = std::max(0, std::min(static_cast<int32_t>(buffer.size()), this->pos + pos));
+			}
+
+			void go_back(int32_t pos) final
+			{
+				this->pos = std::max(0, std::min(static_cast<int32_t>(buffer.size()), this->pos - pos));
+			}
+
+			uint32_t read(uint8_t * buffer, uint32_t size) final
+			{
+				uint32_t len = std::min(this->buffer.size(), this->pos + size) - this->pos;
+				memcpy(buffer, &this->buffer[this->pos], len);
+				return len;
+			}
+
+			bool is_eof() final
+			{
+				return pos >= buffer.size();
+			}
+
+
+		private:
+
+			int32_t pos;
+			buffer_t buffer;
 		};
 
 		class input_streambuf_t final : public std::streambuf

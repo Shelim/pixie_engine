@@ -20,7 +20,7 @@ namespace engine
 
 		public:
 
-			input_ustring_t(const virtual_path_t & virtual_path, const ustring_t & data) : input_t(virtual_path), data(data)
+			input_ustring_t(const virtual_path_t & virtual_path, const ustring_t & data) : input_t(virtual_path), data(data), pos(0)
 			{
 			}
 
@@ -40,7 +40,7 @@ namespace engine
 			uint32_t read(uint8_t * buffer, uint32_t size) final
 			{
 				uint32_t len = std::min(data.len(), this->pos + size) - this->pos;
-				memcpy(buffer, data.get_cstring() + this->pos, size);
+				memcpy(buffer, data.get_cstring() + this->pos, len);
 				return len;
 			}
 			bool is_eof() final

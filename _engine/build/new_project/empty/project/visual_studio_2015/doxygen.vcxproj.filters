@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="engine">
+      <UniqueIdentifier>{55d327f9-0dfe-4715-b377-6c41a06d7f67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\common">
+      <UniqueIdentifier>{20b3dfdf-8025-4d27-a49b-6289b149a7b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\common\include">
+      <UniqueIdentifier>{17c2ce5c-d96b-4898-aabd-a442ec06321e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\common\include\common">
+      <UniqueIdentifier>{0c09daa0-f82b-4e6d-8859-c4c074ebb04d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\common\include\common\std">
+      <UniqueIdentifier>{31ffc1a0-23f1-4854-bcd5-2e07396c8428}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{7a65ba59-b274-4e95-893e-c36fefe41db4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common">
+      <UniqueIdentifier>{5518dbd7-ebaa-4c2e-b35c-f51fa08bd03d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common\include">
+      <UniqueIdentifier>{70693b61-56cd-4061-9cc4-f384b68d59bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common\include\common">
+      <UniqueIdentifier>{1f8a0236-9ffd-418e-a9dd-0e419be8a53a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common\include\common\std">
+      <UniqueIdentifier>{b823896b-33aa-4b27-b8d5-3ad7c6611854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\game">
+      <UniqueIdentifier>{7214d90b-dc4b-40e9-8b0a-310038dd7be5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\game\include">
+      <UniqueIdentifier>{937e8edd-8c07-4eae-ab54-068f2f2bc1ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\game\include\game">
+      <UniqueIdentifier>{57755f28-5251-4546-8b38-bdd24d858897}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\common\include\common\data">
+      <UniqueIdentifier>{4c36b663-370b-450d-9abf-8a960363e527}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\common\include\common\language">
+      <UniqueIdentifier>{9d814456-fa2b-4143-b1a3-3f37680879c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\common\include\common\logger_output">
+      <UniqueIdentifier>{e36a83cd-34a9-441b-8183-8cb036d3c8e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\game">
+      <UniqueIdentifier>{5b077ebc-4b2b-4ec1-91c9-33a62ac8a1df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\game\include">
+      <UniqueIdentifier>{e67eb455-147b-47ed-8b7f-503263d3b26a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\game\include\game">
+      <UniqueIdentifier>{80c24116-c9ff-4cbd-917c-5c2437c86439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\common\include\common\asset">
+      <UniqueIdentifier>{13b0961a-8f86-4f98-a5d7-93c6ca260101}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\common\include\common\module">
+      <UniqueIdentifier>{eab4e568-2336-4352-bb34-bb42e785e313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\common\include\common\config_io">
+      <UniqueIdentifier>{089d53f8-89c4-418e-a1d8-b1953139034b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\platform.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\ustring.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\doxygen.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\xml_pixie_archive.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\injector.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\crc32.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\Std\config_std.hpp">
+      <Filter>engine\common\include\common\std</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\color.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\config.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\xml.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\filesystem.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\asset.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\include\common\std\config_game_std.hpp">
+      <Filter>src\common\include\common\std</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\include\common\std\language_type_std.hpp">
+      <Filter>src\common\include\common\std</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\include\common\std\audio_type_std.hpp">
+      <Filter>src\common\include\common\std</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\modules.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\std\problems_std.hpp">
+      <Filter>engine\common\include\common\std</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\manifest_app.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\std\execution_info_std.hpp">
+      <Filter>engine\common\include\common\std</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\execution_info.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\std\virtual_path_std.hpp">
+      <Filter>engine\common\include\common\std</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\virtual_path.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\input_file.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\input_ustring.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\input_void.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\output.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\output_file.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\output_void.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\scanner.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\database.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\input.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\language\base.hpp">
+      <Filter>engine\common\include\common\language</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\provider.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\scanner_directory.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\scanner_file.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\scanners.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\database_changes.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\std\logger_output_std.hpp">
+      <Filter>engine\common\include\common\std</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_base.hpp">
+      <Filter>engine\common\include\common\logger_output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_console.hpp">
+      <Filter>engine\common\include\common\logger_output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\providers.hpp">
+      <Filter>engine\common\include\common\logger_output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\std\compiler_output_types_std.hpp">
+      <Filter>engine\common\include\common\std</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_container.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\asset\item.hpp">
+      <Filter>engine\common\include\common\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\asset\collection.hpp">
+      <Filter>engine\common\include\common\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\asset\path.hpp">
+      <Filter>engine\common\include\common\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\asset\item_holder.hpp">
+      <Filter>engine\common\include\common\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\asset\database.hpp">
+      <Filter>engine\common\include\common\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\item.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\config_container.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\config_io\provider_base.hpp">
+      <Filter>engine\common\include\common\config_io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_data.hpp">
+      <Filter>engine\common\include\common\logger_output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\config_io\provider_data.hpp">
+      <Filter>engine\common\include\common\config_io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\provider_actual.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\provider_actual_file.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\database_state.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\item_content.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\factory.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\database_items.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\items_collection.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\queue.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\item_operation.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -41,14 +41,26 @@ class item_content_text_t final : public engine::data::item_content_base_t
 
 public:
 
-	item_content_text_t(engine::data::item_t * item) : item_content_base_t(item, policy_io_t::implicit_async, policy_io_t::implicit_sync)
+	item_content_text_t(engine::data::item_generic_t * item) : item_content_base_t(item)
 	{
+		item->allow_changes_when_deleted();
+		item->mark_as_both_auto_resave_and_auto_reload();
+	}
 
+	item_content_text_t(destroyed_t destroyed)
+	{
+		data = _U("");
 	}
 
 	engine::ustring_t get_data()
 	{
 		return data;
+	}
+
+	void mark_for_save()
+	{
+		data = _U("Sample");
+		set_dirty();
 	}
 
 private:
@@ -58,15 +70,34 @@ private:
 		return new item_content_text_t(*this);
 	}
 
-	void destroy_local() final
+	bool resave(engine::data::output_t * output) final
 	{
-		data = _U("");
+		output->write_ustring(data);
+		return true;
 	}
 
-	bool reload_async_local(engine::data::input_t * input, engine::data::database_items_t * items) final
+	bool execute_input_operation(const engine::data::item_operation_t::step_t & step, engine::data::item_operation_t * operation) final
 	{
-		data = input->read_ustring();
+		if (step.get_id() == 0)
+		{
+			operation->add_step('asyn', engine::data::item_operation_t::step_t::caller_t::async);
+		}
+		else if (step.get_id() == 'asyn')
+		{
+			data = operation->get_input()->read_ustring();
+		}
 		return true;
+	}
+
+	bool execute_output_operation(const engine::data::item_operation_t::step_t & step, engine::data::item_operation_t * operation) final
+	{
+		resave(operation->get_output());
+		return true;
+	}
+
+	void execute_free_operation(const engine::data::item_operation_t::step_t & step, engine::data::item_operation_t * operation)
+	{
+		data = _U("");
 	}
 
 	engine::ustring_t data;
@@ -137,11 +168,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	int32_t i = 0;
 
-	std::shared_ptr<engine::data::item_t> item = database_items->get_item<item_content_text_t>(engine::virtual_path_t(_U("base/_manifest.info"), engine::virtual_path_t::type_t::modules));
-	std::shared_ptr<engine::data::item_t> item2 = database_items->get_item<item_content_text_t>(engine::virtual_path_t(_U("base/_manifest.info"), engine::virtual_path_t::type_t::modules));
+	std::shared_ptr<engine::data::item_t<item_content_text_t>> item = database_items->get_item<item_content_text_t>(engine::virtual_path_t(_U("base/_manifest.info"), engine::virtual_path_t::type_t::modules));
+	std::shared_ptr<engine::data::item_t<item_content_text_t>> item2 = database_items->get_item<item_content_text_t>(engine::virtual_path_t(_U("base/_manifest.info"), engine::virtual_path_t::type_t::modules));
+	
+	bool saved = false;
 
 	for (;;)
 	{
+		if (!item2->is_operation_pending() && !saved)
+		{
+			saved = true;
+			item2->get()->mark_for_save();
+		}
+
 		database_data->init_update();
 		database_items->init_update();
 //		database_module->init_update();

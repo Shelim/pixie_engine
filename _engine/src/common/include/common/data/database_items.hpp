@@ -44,108 +44,101 @@ namespace engine
 				return database;
 			}
 
-			enum class mode_reload_t
-			{
-				use_item_policy,
-				force_sync,
-				force_sync_now, // reload in the same thread, even if call comes not from main thread
-				deffered
-			};
+			void save(std::shared_ptr<item_generic_t> item);
 
-			void save(std::shared_ptr<item_t> item)
+			void save_as(std::shared_ptr<item_generic_t> item, const virtual_path_t & path)
 			{
-				// ToDo
-			}
-
-			void save_as(std::shared_ptr<item_t> item, const virtual_path_t & path)
-			{
-				// ToDo
-			}
-
-			std::shared_ptr<item_t> save_copy_as(std::shared_ptr<item_t> item, const virtual_path_t & path)
-			{
-				// ToDo
-			}
-
-			void reload(std::shared_ptr<item_t> item, mode_reload_t mode = mode_reload_t::use_item_policy);
-
-			void revert(std::shared_ptr<item_t> item)
-			{
-				reload(item, mode_reload_t::force_sync);
-			}
-
-			std::shared_ptr<item_t> deatach(std::shared_ptr<item_t> item)
-			{
-				// ToDo
-			}
-
-			void reload_placeholders(mode_reload_t mode = mode_reload_t::use_item_policy)
-			{
-				std::lock_guard<std::recursive_mutex> guard(mutex_items);
-				for (auto & item : items)
 				{
-					auto it = item.second.lock();
-					if (it && it->is_placeholder())
-						reload(it, mode);
+					std::lock_guard<std::recursive_mutex> guard(mutex_items);
+					auto iter = items.find(item->get_path());
+					if (iter != items.end())
+					{
+						items.erase(iter);
+					}
+
+					iter = items.find(path);
+					if (iter != items.end())
+					{
+						auto ptr = iter->second.lock();
+						ptr->destroy();
+					}
+					items[path] = item;
 				}
+				item->path = path;
+				save(item);
 			}
 
-			template<class T> std::shared_ptr<item_t> get_item(const virtual_path_t & path, mode_reload_t mode = mode_reload_t::use_item_policy)
+			std::shared_ptr<item_generic_t> save_copy_as(std::shared_ptr<item_generic_t> item, const virtual_path_t & path)
 			{
-				std::thread::id calling_thread_id = std::this_thread::get_id();
+				std::shared_ptr<item_generic_t> clone = std::shared_ptr<item_generic_t>(item->clone(path));
+				save(clone);
 
-				std::shared_ptr<item_t> ret;
+				std::shared_ptr<item_generic_t> ret;
 				{
 					std::lock_guard<std::recursive_mutex> guard(mutex_items);
 					auto iter = items.find(path);
-					if (iter != items.end() && (ret = std::static_pointer_cast<item_t>(iter->second.lock())))
+					if (iter != items.end() && (ret = std::static_pointer_cast<item_generic_t>(iter->second.lock())))
+					{
+						reload(ret);
+						return ret;
+					}
+				}
+
+				return clone;
+			}
+
+			void reload(std::shared_ptr<item_generic_t> item);
+
+			void revert(std::shared_ptr<item_generic_t> item)
+			{
+				reload(item);
+			}
+
+			std::shared_ptr<item_generic_t> deatach(std::shared_ptr<item_generic_t> item)
+			{
+				if (item->is_deatached()) return item;
+
+				return std::shared_ptr<item_generic_t>(item->deatach());
+			}
+
+			template<class T> std::shared_ptr<item_t<T> > get_item(const virtual_path_t & path)
+			{
+				std::thread::id calling_thread_id = std::this_thread::get_id();
+
+				std::shared_ptr<item_t<T> > ret;
+				{
+					std::lock_guard<std::recursive_mutex> guard(mutex_items);
+					auto iter = items.find(path);
+					if (iter != items.end() && (ret = std::static_pointer_cast<item_t<T> >(iter->second.lock())))
 					{
 						return ret;
 					}
 
-					ret = item_t::create_item<T>(path);
+					ret = item_t<T>::create_item(this, path);
 					items[path] = ret;
 				}
-				auto policy = ret->get_base()->get_reload_policy();
 
-				reload(ret);
+				reload(std::static_pointer_cast<item_generic_t>(ret));
 
 				return ret;
 			}
+
+			template<class T> std::shared_ptr<item_t<T> > load_item_detached(std::unique_ptr<input_t> input);
 
 			template<class T> std::shared_ptr<items_collection_t > get_items_collection(const virtual_path_t & name)
 			{
 				// ToDo
 			}
 
-			auto deffered_left()
-			{
-				return items_deffered.size();
-			}
-
 			void init_update();
+		
+			friend class item_generic_t;
 
 		private:
 
-			void update_async()
-			{
-				for(;;)
-				{
-					item_content_base_t::result_t result;
-					std::shared_ptr<item_t> next_item = items_to_reload.get_item_to_async();
+			void perform_destroy(const virtual_path_t & path);
 
-					if (next_item)
-					{
-						result = next_item->reload_async(this);
-						if(result == item_content_base_t::result_t::success)
-							items_to_reload.enqueue_to_end(next_item);
-					}
-					else
-						break;
-				};
-
-				reload_placeholders();
-			}
+			void update_async();
 
 			void update_items()
 			{
@@ -161,84 +154,54 @@ namespace engine
 			}
 
 			std::thread::id main_thread_id;
+			
+			queue_t<std::shared_ptr<item_generic_t> > items_reload_next;
 
-			class items_progress_t
-			{
-
-			public:
-
-				std::shared_ptr<item_t> get_item_to_init()
-				{
-					if (items_to_init.is_empty()) return nullptr;
-					
-					return items_to_init.pop();
-				}
-
-				std::shared_ptr<item_t> get_item_to_async()
-				{
-					if (items_to_async.is_empty()) return nullptr;
-
-					return items_to_async.pop();
-				}
-
-				std::shared_ptr<item_t> get_item_to_end()
-				{
-					if (items_to_end.is_empty()) return nullptr;
-
-					return items_to_end.pop();
-				}
-
-				std::shared_ptr<item_t> get_item_to_sync()
-				{
-					if (items_to_sync.is_empty()) return nullptr;
-
-					return items_to_sync.pop();
-				}
-
-				void enqueue_to_init(std::shared_ptr<item_t> value)
-				{
-					items_to_init.push(value);
-				}
-
-				void enqueue_to_async(std::shared_ptr<item_t> value)
-				{
-					items_to_async.push(value);
-				}
-
-				void enqueue_to_end(std::shared_ptr<item_t> value)
-				{
-					items_to_end.push(value);
-				}
-
-				void enqueue_to_sync(std::shared_ptr<item_t> value)
-				{
-					items_to_sync.push(value);
-				}
-
-			private:
-
-				queue_t<std::shared_ptr<item_t> > items_to_init;
-				queue_t<std::shared_ptr<item_t> > items_to_async;
-				queue_t<std::shared_ptr<item_t> > items_to_end;
-
-				queue_t<std::shared_ptr<item_t> > items_to_sync;
-
-			};
-
-			items_progress_t items_to_resave;
-			items_progress_t items_to_reload;
-
-			queue_t<std::shared_ptr<item_t> > items_deffered;
-			queue_t<std::shared_ptr<item_t> > items_reload_next;
-
-			std::map<virtual_path_t, std::weak_ptr<item_t> > items;
+			std::map<virtual_path_t, std::weak_ptr<item_generic_t> > items;
 			std::recursive_mutex mutex_items;
 
 			std::shared_ptr<logger_t> logger;
 			std::shared_ptr<database_t> database;
 
+			std::vector<std::unique_ptr<item_operation_t> > operations;
+
+			void create_operation(std::shared_ptr<item_generic_t> item, std::unique_ptr<input_t> input, bool log)
+			{
+				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
+				operations.push_back(std::move(std::make_unique<item_operation_t>(item, std::move(input), log ? logger : nullptr)));
+			}
+			void create_operation(std::shared_ptr<item_generic_t> item, std::unique_ptr<output_t> output, bool log)
+			{
+				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
+				operations.push_back(std::move(std::make_unique<item_operation_t>(item, std::move(output), log ? logger : nullptr)));
+			}
+			void create_operation(std::shared_ptr<item_generic_t> item, item_operation_t::free_t free, bool log)
+			{
+				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
+				operations.push_back(std::move(std::make_unique<item_operation_t>(item, free, log ? logger : nullptr)));
+			}
+			void execute_operations(item_operation_t::step_t::caller_t caller)
+			{
+				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
+				for (std::size_t op = operations.size(); op--> 0;)
+				{
+					operations[op]->execute_steps(caller);
+				}
+			}
+			void clear_completed_operations()
+			{
+				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
+
+				for (std::size_t op = operations.size(); op-- > 0;)
+				{
+					if (operations[op]->is_completed())
+						operations.erase(operations.begin() + op);
+				}
+			}
+
 			bool end_update_data;
 			std::thread update_items_thread;
+			std::recursive_mutex operations_mutex;
 		};
 	}
 
