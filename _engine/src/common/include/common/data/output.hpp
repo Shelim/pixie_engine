@@ -29,6 +29,11 @@ namespace engine
 				return write(&buffer[0], buffer.size()) == buffer.size();
 			}
 
+			virtual void force_flush()
+			{
+
+			}
+
 			virtual ~output_t() { }
 
 

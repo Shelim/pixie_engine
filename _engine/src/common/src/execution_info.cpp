@@ -56,7 +56,8 @@ void engine::execution_info_t::std_platform()
 	set_info(key_t::game_version, format_utf8(u8"#1#.#2#.#3# (Build #4#)", manifest_app->version_major(), manifest_app->version_minor(), manifest_app->version_revision(), manifest_app->version_build()));
 	#endif
 
-	set_info(key_t::execution_completed, _U("False"), item_t::status_t::bad);
+#define GAME_LOGGER_RAW_VIRTUAL_PATH_STD(path) set_info(key_t::execution_completed, _U("False; Log may be incompleted! Check '" path "'..."), item_t::status_t::bad);
+#include "common/std/virtual_path_std.hpp"	
 	set_info(key_t::os_name, ustring_t::from_ascii(SDL_GetPlatform()));
 	set_info(key_t::os_ver, platform->get_platform_version());
 	set_info(key_t::cpu_cores, to_string(SDL_GetCPUCount()));

@@ -198,18 +198,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		++i;
 		logger->p_msg(_U("Test of huge outputs: #1#!"), i);
+
+		if (i == 100)
+			break;
 		/*
 		if (i == 100)
 		database_module->get_database_manifest()->create_module(_U("HelloWorld"));
 		*/
-		
+		/*
 		if (i == 100)
 		{
 		int * a = 0;
 		*a = 5;
 		break;
 		}
-
+		*/
 		/*
 		logger->p_msg(_U("Test of huge outputs: #1#!"), i);
 		++i;

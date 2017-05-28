@@ -54,7 +54,6 @@ std::unique_ptr<engine::data::scanners_t::collection_t > engine::data::database_
 	std::unique_ptr<engine::data::scanners_t::collection_t > ret = std::make_unique<engine::data::scanners_t::collection_t >();
 
 #define GAME_CONFIG_VIRTUAL_PATH_STD(config_path) add_file(ret.get(), platform.get(), _U(config_path), engine::virtual_path_t::type_t::config);
-#define GAME_LOGGER_VIRTUAL_PATH_STD(logger_path) add_file(ret.get(), platform.get(), _U(logger_path), engine::virtual_path_t::type_t::log);
 #define GAME_KEYBINDING_VIRTUAL_PATH_STD(keybinding_path) add_file(ret.get(), platform.get(), _U(keybinding_path), engine::virtual_path_t::type_t::keybinding);
 #include "common/std/virtual_path_std.hpp"
 
@@ -72,7 +71,10 @@ std::unique_ptr<engine::data::output_t> engine::data::provider_t::platform_creat
 	std::filesystem::path path_output = engine::platform_t::implementation_t::get_static()->get_save_path(path.get_type());
 	path_output /= path.get_path().get_cstring();
 
-	return std::make_unique<engine::data::output_file_t>(path, path_output);
+	if(path.get_type() == engine::virtual_path_t::type_t::log && path_output.extension() == ".log")
+		return std::make_unique<engine::data::output_file_t>(path, path_output);
+	else
+		return std::make_unique<engine::data::output_file_safe_t>(path, path_output);
 }
 
 

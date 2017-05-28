@@ -71,6 +71,27 @@ namespace engine
 
 			friend class cereal::access;
 
+			static ustring_t level_to_prompt(level_t level)
+			{
+				if (level == level_t::task)
+					return _U("...");
+				if (level == level_t::task_failed)
+					return _U("..!");
+				if (level == level_t::task_done)
+					return _U("..>");
+				if (level == level_t::message)
+					return _U("-->");
+				if (level == level_t::warning)
+					return _U("-!- ");
+				if (level == level_t::error)
+					return _U("!!!");
+			}
+
+			item_t() : level(level_t::error), time(std::chrono::seconds()), thread(std::thread::id())
+			{
+
+			}
+
 			item_t(level_t level, const ustring_t & message, const ustring_t & function, bool raport, bool cease_execution, const ustring_t & file, uint32_t line, uint64_t frame, std::chrono::seconds time, std::thread::id thread) :
 				level(level), message(message), function(function), file(file), line(line), frame(frame), time(time), thread(thread)
 			{
@@ -138,9 +159,7 @@ namespace engine
 
 				template <class archive_t> std::string save_minimal(archive_t const &) const
 				{
-					std::stringstream ss;
-					ss << id;
-					return ss.str();
+					return engine::to_string(id).to_utf8();
 				}
 
 				template <class archive_t> void load_minimal(archive_t const &, std::string const & value)

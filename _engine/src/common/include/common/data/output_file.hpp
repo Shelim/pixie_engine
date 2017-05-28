@@ -47,10 +47,16 @@ namespace engine
 
 				return pos2 - pos1;
 			}
+			
+			void force_flush() final
+			{
+				stream.flush();
+			}
 
 		private:
 
 			std::ofstream stream;
+
 			std::filesystem::path physical_path;
 		};
 	}

@@ -3,6 +3,9 @@ BuildSystem:
  - Update changelog
  - Remove comments from XML
  
-Logger / Config!
+Logger
+ - Raw -> resave po każdej linii!
 
-Asset Manager
+Config!!!
+
+Asset Manager!!!

@@ -63,6 +63,33 @@ namespace engine
 				refresh_virtual_path_type_changes();
 			}
 
+			void delete_item(const virtual_path_t & filename)
+			{
+				provider_t * provider = get_state()->get_provider(filename);
+				if (provider)
+					provider->delete_all();
+			}
+
+			void delete_item_newest(const virtual_path_t & filename)
+			{
+				provider_t * provider = get_state()->get_provider(filename);
+				if (provider)
+					provider->delete_newest();
+			}
+
+			void copy_item(const virtual_path_t & src, const virtual_path_t & dst)
+			{
+				input_t::buffer_t buffer;
+				{
+					std::unique_ptr<input_t> input = get_input(src);
+					buffer = input->read_buffer();;
+				}
+				{
+					std::unique_ptr<output_t> output = get_output(dst);
+					output->write_buffer(buffer);
+				}
+			}
+
 			std::unique_ptr<input_t> get_input(const virtual_path_t & filename)
 			{
 				std::lock_guard<std::recursive_mutex> guard(mutex_database_current);
@@ -163,8 +190,6 @@ namespace engine
 			std::shared_ptr<logger_t> logger;
 			std::shared_ptr<platform_t> platform;
 			std::shared_ptr<config_t> config;
-
-			std::unique_ptr<database_items_t> database_items;
 
 			database_changes_t changes;
 			types_t type_changes;

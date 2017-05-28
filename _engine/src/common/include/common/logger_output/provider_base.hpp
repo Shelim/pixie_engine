@@ -27,6 +27,12 @@ namespace engine
 					on_item_changed_local(item_changed);
 			}
 
+			void on_item_append(const logger_t::item_t & item)
+			{
+				if (is_enabled())
+					on_item_append_local(item);
+			}
+
 			virtual void force_resave()
 			{
 
@@ -72,6 +78,11 @@ namespace engine
 			bool enabled;
 
 			virtual void on_item_changed_local(const std::size_t item_changed)
+			{
+
+			}
+
+			virtual void on_item_append_local(const logger_t::item_t & item)
 			{
 
 			}

@@ -4,6 +4,7 @@
 
 #include "common/logger_output/provider_console.hpp"
 #include "common/logger_output/provider_data.hpp"
+#include "common/logger_output/provider_raw.hpp"
 #include "common/config.hpp"
 
 #if PIXIE_OUTPUT_TYPE != PIXIE_OUTPUT_TYPE_game && PIXIE_OUTPUT_TYPE != PIXIE_OUTPUT_TYPE_editor && PIXIE_OUTPUT_TYPE != PIXIE_OUTPUT_TYPE_launcher && PIXIE_OUTPUT_TYPE != PIXIE_OUTPUT_TYPE_dll && PIXIE_OUTPUT_TYPE != PIXIE_OUTPUT_TYPE_test
@@ -90,6 +91,19 @@ namespace engine
 #define EDITOR_LOGGER_OUTPUT_STD(logger_output_var, u1, u2)provider_##logger_output_var->on_item_changed(item_changed);
 #elif PIXIE_OUTPUT_TYPE == PIXIE_OUTPUT_TYPE_launcher
 #define LAUNCHER_LOGGER_OUTPUT_STD(logger_output_var, u1, u2)provider_##logger_output_var->on_item_changed(item_changed);
+#endif
+#include "common/std/logger_output_std.hpp"
+			}
+
+			void on_item_append(const logger_t::item_t & item)
+			{
+
+#if PIXIE_OUTPUT_TYPE == PIXIE_OUTPUT_TYPE_game
+#define GAME_LOGGER_OUTPUT_STD(logger_output_var, u1, u2)provider_##logger_output_var->on_item_append(item);
+#elif PIXIE_OUTPUT_TYPE == PIXIE_OUTPUT_TYPE_editor
+#define EDITOR_LOGGER_OUTPUT_STD(logger_output_var, u1, u2)provider_##logger_output_var->on_item_append(item);
+#elif PIXIE_OUTPUT_TYPE == PIXIE_OUTPUT_TYPE_launcher
+#define LAUNCHER_LOGGER_OUTPUT_STD(logger_output_var, u1, u2)provider_##logger_output_var->on_item_append(item);
 #endif
 #include "common/std/logger_output_std.hpp"
 			}

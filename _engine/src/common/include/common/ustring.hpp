@@ -9,6 +9,7 @@
 #include <cstring>
 #include <cstdarg>
 #include <cinttypes>
+#include <thread>
 #include <limits>
 #include <array>
 #include <chrono>
@@ -1473,6 +1474,13 @@ namespace engine
 	template<> inline ustring_t to_string<ustring_t>(const ustring_t & item)
 	{
 		return item;
+	}
+
+	template<> inline ustring_t to_string<std::thread::id>(const std::thread::id & id)
+	{
+		std::stringstream ss;
+		ss << id;
+		return ustring_t(ss.str());
 	}
 
 	//////////////////////////////////////////////////////////////////////////

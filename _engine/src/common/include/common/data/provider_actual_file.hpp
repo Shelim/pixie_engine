@@ -5,6 +5,7 @@
 #include "common/data/provider.hpp"
 #include "common/data/input_file.hpp"
 #include "common/data/output_file.hpp"
+#include "common/data/output_file_safe.hpp"
 
 namespace engine
 {
@@ -40,7 +41,7 @@ namespace engine
 			std::unique_ptr<output_t> construct_output_local() final
 			{
 				if (read_only) return nullptr;
-				return std::make_unique<output_file_t>(get_virtual_path(), physical_path);
+				return std::make_unique<output_file_safe_t>(get_virtual_path(), physical_path);
 			}
 
 			std::filesystem::path physical_path;

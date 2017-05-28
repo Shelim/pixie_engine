@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <manifest>
-	<game_name>$EMPTY_GAME_NAME$ DEBUG</game_name>
-	<editor_name>$EMPTY_GAME_NAME$ DEBUG (editor)</editor_name>
-	<launcher_name>$EMPTY_GAME_NAME$ DEBUG (launcher)</launcher_name>
+	<game_name>$EMPTY_GAME_NAME$ debug</game_name>
+	<editor_name>$EMPTY_GAME_NAME$ debug (editor)</editor_name>
+	<launcher_name>$EMPTY_GAME_NAME$ debug (launcher)</launcher_name>
 	<website_url>http://games.kosek.com</website_url>
 	<support_page_url>http://games.kosek.com/support.html</support_page_url>
 	<download_url>http://localhost:1989/content/games/$EMPTY_GAME_UNIX_NAME$/download/</download_url>

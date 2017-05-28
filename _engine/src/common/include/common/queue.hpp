@@ -3,11 +3,69 @@
 
 #include <queue>
 #include <mutex>
+#include <condition_variable>
 
 #pragma once
 
 namespace engine
 {
+
+	template <class T> class queue_async_t
+	{
+
+	public:
+
+		queue_async_t() : dead(false)
+		{
+			
+		}
+
+		void push(const T & t)
+		{
+			std::lock_guard<std::mutex> lock(mutex);
+			queue.push(t);
+			condition.notify_one();
+		}
+
+		void kill_queue()
+		{
+			dead = true;
+			condition.notify_one();
+		}
+
+
+		bool is_dead()
+		{
+			return dead;
+		}
+
+
+		T pop(void)
+		{
+			std::unique_lock<std::mutex> lock(mutex);
+			while (queue.empty())
+			{
+				condition.wait(lock);
+				if (dead)
+				{
+					return T();
+				}
+			}
+			if (dead)
+			{
+				return T();
+			}
+			T ret = queue.front();
+			queue.pop();
+			return ret;
+		}
+
+	private:
+		std::queue<T> queue;
+		bool dead;
+		mutable std::mutex mutex;
+		std::condition_variable condition;
+	};
 
 	template<class T> class queue_t final
 	{
@@ -38,7 +96,7 @@ namespace engine
 			return front;
 		}
 
-		void push(T & value)
+		void push(const T & value)
 		{
 			std::lock_guard<std::recursive_mutex> guard(mutex);
 
