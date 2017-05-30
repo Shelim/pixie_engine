@@ -36,74 +36,53 @@ namespace engine
 
 			~provider_data_t()
 			{
-				save_items_completed = true;
-				items.kill_queue();
-				save_items_thread.join();
-			}
-
-			void force_resave() final
-			{
 
 			}
 
-			void on_item_append(const logger_t::item_t & item) final
+			void process_item(const logger_t::item_t & item) final
 			{
-				items.push(item);
+				ustring_t subscript = _U("");
+
+				if (item.get_level() == logger_t::item_t::level_t::task_started)
+					subscript = _U("...");
+				else if (item.get_level() == logger_t::item_t::level_t::task_done)
+					subscript = _U("... DONE!");
+				else if (item.get_level() == logger_t::item_t::level_t::task_failed)
+					subscript = _U("... FAILED!!!");
+
+				ustring_t str = level_to_prompt(item.get_level());
+
+				padd(str, 5);
+				str.append(item.get_message());
+				str.append(subscript);
+				padd(str, 96);
+				str.append(_U("frame: "));
+				str.append(to_string(item.get_frame()));
+				str.append(_U(", time: "));
+				str.append(to_string(item.get_time()));
+				str.append(_U(", thread: "));
+				str.append(to_string(item.get_thread()));
+				str.append(_U(", func: "));
+				str.append(item.get_function());
+				str.append(_U("()"));
+				padd(str, 192);
+				str.append(_U("at ': "));
+				str.append(item.get_file());
+				str.append(_U("' on line "));
+				str.append(to_string(item.get_line()));
+				str.append(_U("\r\n"));
+
+				output->write_ustring(str);
+				output->force_flush();
 			}
 
 		private:
 
 			bool save_items_completed;
-
-			void save_items()
-			{
-				for (;;)
-				{
-					if (save_items_completed) break;
-
-					logger_t::item_t item = items.pop();
-					if (items.is_dead())
-						break;
-
-					ustring_t subscript = _U("");
-
-					if (item.get_level() == logger_t::item_t::level_t::task)
-						subscript = _U("...");
-					else if (item.get_level() == logger_t::item_t::level_t::task_done)
-						subscript = _U("... DONE!");
-					else if (item.get_level() == logger_t::item_t::level_t::task_failed)
-						subscript = _U("... FAILED!!!");
-
-					ustring_t str = level_to_prompt(item.get_level());
-
-					padd(str, 5);
-					str.append(item.get_message());
-					str.append(subscript);
-					padd(str, 96);
-					str.append(_U("frame: "));
-					str.append(to_string(item.get_frame()));
-					str.append(_U(", time: "));
-					str.append(to_string(item.get_time()));
-					str.append(_U(", thread: "));
-					str.append(to_string(item.get_thread()));
-					str.append(_U(", func: "));
-					str.append(item.get_function());
-					str.append(_U("()"));
-					padd(str, 192);
-					str.append(_U("at ': "));
-					str.append(item.get_file());
-					str.append(_U("' on line "));
-					str.append(to_string(item.get_line()));
-					str.append(_U("\r\n"));
-
-					output->write_ustring(str);
-					output->force_flush();
-				}
-			}
-
+			
 			ustring_t level_to_prompt(logger_t::item_t::level_t level)
 			{
-				if (level == logger_t::item_t::level_t::task)
+				if (level == logger_t::item_t::level_t::task_started)
 					return _U("...");
 				if (level == logger_t::item_t::level_t::task_failed)
 					return _U("..!");
@@ -128,10 +107,7 @@ namespace engine
 				}
 			}
 
-			queue_async_t<logger_t::item_t> items;
-
 			std::unique_ptr<engine::data::output_t> output;
-			std::thread save_items_thread;
 
 		};
 

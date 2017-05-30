@@ -15,7 +15,7 @@ namespace engine
 
 	public:
 
-		queue_async_t() : dead(false)
+		queue_async_t()
 		{
 			
 		}
@@ -27,18 +27,6 @@ namespace engine
 			condition.notify_one();
 		}
 
-		void kill_queue()
-		{
-			dead = true;
-			condition.notify_one();
-		}
-
-
-		bool is_dead()
-		{
-			return dead;
-		}
-
 
 		T pop(void)
 		{
@@ -46,14 +34,6 @@ namespace engine
 			while (queue.empty())
 			{
 				condition.wait(lock);
-				if (dead)
-				{
-					return T();
-				}
-			}
-			if (dead)
-			{
-				return T();
 			}
 			T ret = queue.front();
 			queue.pop();
@@ -62,7 +42,6 @@ namespace engine
 
 	private:
 		std::queue<T> queue;
-		bool dead;
 		mutable std::mutex mutex;
 		std::condition_variable condition;
 	};

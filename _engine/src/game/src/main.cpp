@@ -8,6 +8,7 @@
 #include "common/data/database.hpp"
 #include "common/data/item_content.hpp"
 #include "common/logger_container.hpp"
+#include "common/logger_output/providers.hpp"
 #include "common/manifest_app.hpp"
 #include "common/data/database_items.hpp"
 //#include "common/module/database.hpp"
@@ -195,13 +196,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		logger_container->update();
 
 		//		logger->p_msg(item->get<item_content_text_t>()->get_data());
-		
+		/*
 		++i;
 		logger->p_msg(_U("Test of huge outputs: #1#!"), i);
 
 		if (i == 10000)
 			break;
-		
+		*/
 		/*
 		if (i == 100)
 		database_module->get_database_manifest()->create_module(_U("HelloWorld"));

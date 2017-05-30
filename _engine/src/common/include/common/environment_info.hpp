@@ -20,7 +20,7 @@ namespace engine
 
 		enum class key_t
 		{
-#define GAME_ENVIRONMENT_INFO_STD(name, lang) name,
+#define GAME_ENVIRONMENT_INFO_STD(key, name) key,
 #include "common/std/environment_info_std.hpp"
 			count
 		};
@@ -34,21 +34,15 @@ namespace engine
 			{
 
 			}
-
-
-			void set(const ustring_t & value)
+			
+			const ustring_t & get_name() const
 			{
-				val = value;
+				return name;
 			}
 			
-			const ustring_t & get() const
+			const ustring_t & get_value() const
 			{
-				return val;
-			}
-			
-			const ustring_t & get_key() const
-			{
-				return key;
+				return value;
 			}
 
 
@@ -56,8 +50,13 @@ namespace engine
 
 			friend class environment_info_t;
 
-			ustring_t key;
-			ustring_t val;
+			void set(const ustring_t & value)
+			{
+				this->value = value;
+			}
+
+			ustring_t name;
+			ustring_t value;
 		};
 
 		environment_info_t(std::shared_ptr<engine::platform_t> platform, std::shared_ptr<engine::manifest_app_t> manifest_app);
@@ -80,7 +79,7 @@ namespace engine
 		std::shared_ptr<engine::platform_t> platform;
 		std::shared_ptr<engine::manifest_app_t> manifest_app;
 
-		void generate_data();
+		void gather_data();
 		vals_t vals;
 
 	};

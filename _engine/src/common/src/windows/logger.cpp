@@ -25,6 +25,11 @@
 #include <io.h>
 #include <fcntl.h>
 
+void engine::logger_output::provider_console_t::color_next_output(output_color_t color, output_color_t background)
+{
+	platform->get_pimpl()->set_console_colors_for_print(color, background);
+}
+
 void engine::logger_output::provider_console_t::platform_open_console()
 {
 	AllocConsole();
@@ -47,7 +52,7 @@ void engine::logger_output::provider_console_t::platform_open_console()
 	*stdin = *hf_in;
 #endif
 
-	platform->get_pimpl()->set_console_colors(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	platform->get_pimpl()->set_console_colors(platform->get_pimpl()->color_pair_to_attribs(output_color_t::background_default, output_color_t::background_default));
 
 	SetConsoleOutputCP(CP_UTF8);
 
@@ -73,12 +78,14 @@ void engine::logger_output::provider_console_t::platform_open_console()
 	std::wstring game_name_w = game_name.to_wide();
 	SetConsoleTitleW(game_name_w.c_str());
 
+	/*
+
 	platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE);
 	printf("########################\n");
 	printf("### "); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE | FOREGROUND_INTENSITY); printf("ENVIRONMENT INFO"); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE); printf(" ###\n");
 	printf("########################\n\n\n");
 
-#define GAME_ENVIRONMENT_INFO_STD(name, lang) { platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE); printf("> "); const environment_info_t::item_t & info = environment_info->get(environment_info_t::key_t::name); printf(info.get_key().get_cstring()); printf(": "); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE | FOREGROUND_INTENSITY); printf(info.get().get_cstring()); printf("\n"); }
+#define GAME_ENVIRONMENT_INFO_STD(key, name) { platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE); printf("> "); const environment_info_t::item_t & info = environment_info->get(environment_info_t::key_t::key); printf(info.get_name().get_cstring()); printf(": "); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE | FOREGROUND_INTENSITY); printf(info.get_value().get_cstring()); printf("\n"); }
 #include "common/std/environment_info_std.hpp"
 
 	platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE);
@@ -87,11 +94,8 @@ void engine::logger_output::provider_console_t::platform_open_console()
 	printf("###     "); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE | FOREGROUND_INTENSITY); printf("FULL LOG");platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_BLUE);  printf("     ###\n");
 	printf("########################\n\n\n");
 
-	std::size_t size = get_logger()->get_items().size();
-	for(std::size_t i = 0 ; i < size; i++)
-	{
-		platform_output(i);
-	}
+	*/
+
 }
 
 void engine::logger_output::provider_console_t::platform_close_console()
@@ -99,42 +103,38 @@ void engine::logger_output::provider_console_t::platform_close_console()
 	FreeConsole();
 }
 
-void engine::logger_output::provider_console_t::platform_output(const std::size_t item_changed)
+/*
+void engine::logger_output::provider_console_t::platform_output(const logger_t::item_t & item)
 {
-	auto & items = get_logger()->get_items();
 
-	if (item_changed <= items.size())
+	switch (item.get_level())
 	{
-
-		const engine::logger_t::item_t * item = &items[item_changed];
-		switch (item->get_level())
-		{
-		case engine::logger_t::item_t::level_t::task: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); printf(" @ "); break;
-		case engine::logger_t::item_t::level_t::task_done: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_GREEN | FOREGROUND_INTENSITY); printf(" v "); break;
-		case engine::logger_t::item_t::level_t::task_failed: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_INTENSITY); printf("!! "); break;
-		case engine::logger_t::item_t::level_t::message: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); printf(" - "); break;
-		case engine::logger_t::item_t::level_t::warning: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY); printf(" ! "); break;
-		case engine::logger_t::item_t::level_t::error: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_INTENSITY); printf("!! "); break;
-		}
-
-		std::string msg = item->get_message().to_utf8();
-		printf(msg.c_str());
-
-		switch (item->get_level())
-		{
-		case engine::logger_t::item_t::level_t::task: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_GREEN | FOREGROUND_BLUE); printf("..."); break;
-		case engine::logger_t::item_t::level_t::task_done: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_GREEN); printf("..."); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_GREEN | FOREGROUND_INTENSITY); printf(" Done!"); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_GREEN); break;
-		case engine::logger_t::item_t::level_t::task_failed: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED); printf("..."); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_INTENSITY); printf(" FAILED!"); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED); break;
-		case engine::logger_t::item_t::level_t::message: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE); break;
-		case engine::logger_t::item_t::level_t::warning: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_GREEN); break;
-		case engine::logger_t::item_t::level_t::error: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED); break;
-		}
-
-		std::string func = item->get_function().to_utf8();
-		printf(" <- %s(), line %lu\n", func.c_str(), item->get_line());
+	case engine::logger_t::item_t::level_t::task_started: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); printf(" @ "); break;
+	case engine::logger_t::item_t::level_t::task_done: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_GREEN | FOREGROUND_INTENSITY); printf(" v "); break;
+	case engine::logger_t::item_t::level_t::task_failed: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_INTENSITY); printf("!! "); break;
+	case engine::logger_t::item_t::level_t::message: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); printf(" - "); break;
+	case engine::logger_t::item_t::level_t::warning: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY); printf(" ! "); break;
+	case engine::logger_t::item_t::level_t::error: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_INTENSITY); printf("!! "); break;
 	}
+
+	std::string msg = item.get_message().to_utf8();
+	printf(msg.c_str());
+
+	switch (item.get_level())
+	{
+	case engine::logger_t::item_t::level_t::task_started: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_GREEN | FOREGROUND_BLUE); printf("..."); break;
+	case engine::logger_t::item_t::level_t::task_done: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_GREEN); printf("..."); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_GREEN | FOREGROUND_INTENSITY); printf(" Done!"); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_GREEN); break;
+	case engine::logger_t::item_t::level_t::task_failed: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED); printf("..."); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_INTENSITY); printf(" FAILED!"); platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED); break;
+	case engine::logger_t::item_t::level_t::message: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE); break;
+	case engine::logger_t::item_t::level_t::warning: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED | FOREGROUND_GREEN); break;
+	case engine::logger_t::item_t::level_t::error: platform->get_pimpl()->set_console_colors_for_print(FOREGROUND_RED); break;
+	}
+
+	std::string func = item.get_function().to_utf8();
+	printf(" <- %s(), line %lu\n", func.c_str(), item.get_line());
 }
 
+*/
 #include "debugbreak.h"
 
 void engine::logger_t::platform_fatal()
@@ -143,7 +143,7 @@ void engine::logger_t::platform_fatal()
 	ustring_t clipboard;
 	ustring_t buffer;
 
-#ifdef _DEBUG
+#if PIXIE_IS_DEBUG_BUILD
 	if (IsDebuggerPresent())
 		debug_break();
 #endif
@@ -157,7 +157,7 @@ void engine::logger_t::platform_fatal()
 			raported.append(item.get_message());
 			switch (item.get_level())
 			{
-			case engine::logger_t::item_t::level_t::task: raported.append_utf8(u8"... INTERRUPTED!"); break;
+			case engine::logger_t::item_t::level_t::task_started: raported.append_utf8(u8"..."); break;
 			case engine::logger_t::item_t::level_t::task_done: raported.append_utf8(u8"... Done!"); break;
 			case engine::logger_t::item_t::level_t::task_failed: raported.append_utf8(u8"... FAILED!"); break;
 			}
@@ -173,10 +173,6 @@ void engine::logger_t::platform_fatal()
 
 	platform->copy_to_clipboard(clipboard);
 	MessageBoxW(0, bufferW.c_str(), 0, MB_OK | MB_ICONSTOP);
-
-	auto output_providers_shard = output_providers.lock();
-	if(output_providers_shard)
-		output_providers_shard->force_resave();
 
 	exit(1);
 }

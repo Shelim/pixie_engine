@@ -115,7 +115,7 @@ engine::ustring_t engine::config_t::def(item_t key)
 {
 	switch (key)
 	{
-#ifdef _DEBUG
+#if PIXIE_IS_DEBUG_BUILD
 #define GAME_CONFIG_STD(name, valr, vald) case item_t::name: return to_string(vald);
 #else
 #define GAME_CONFIG_STD(name, valr, vald) case item_t::name: return to_string(valr);

@@ -1,6 +1,7 @@
 #include "common/platform.hpp"
 #include "common/logger.hpp"
 #include "common/manifest_app.hpp"
+#include "common/logger_output/provider_base.hpp"
 
 #if PIXIE_WINDOWS
 
@@ -51,6 +52,52 @@ private:
 	engine::manifest_app_t * manifest_app;
 
 	static implementation_t * impl;
+
+	WORD color_to_attribs(engine::logger_output::provider_base_t::output_color_t color)
+	{
+		switch (color)
+		{
+		case engine::logger_output::provider_base_t::output_color_t::red_dark: return FOREGROUND_RED;
+		case engine::logger_output::provider_base_t::output_color_t::red_light: return FOREGROUND_RED | FOREGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::green_dark: return FOREGROUND_GREEN;
+		case engine::logger_output::provider_base_t::output_color_t::green_light: return FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::blue_dark: return FOREGROUND_BLUE;
+		case engine::logger_output::provider_base_t::output_color_t::blue_light: return FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::gray_dark: return FOREGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::gray_light: return FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+		case engine::logger_output::provider_base_t::output_color_t::white: return FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::black: return 0;
+		case engine::logger_output::provider_base_t::output_color_t::yellow_dark: return FOREGROUND_RED | FOREGROUND_GREEN;
+		case engine::logger_output::provider_base_t::output_color_t::yellow_light: return FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::pink_dark: return FOREGROUND_RED | FOREGROUND_BLUE;
+		case engine::logger_output::provider_base_t::output_color_t::pink_light: return FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::teal_dark: return FOREGROUND_GREEN | FOREGROUND_BLUE;
+		case engine::logger_output::provider_base_t::output_color_t::teal_light: return FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+		}
+	}
+
+	WORD background_to_attribs(engine::logger_output::provider_base_t::output_color_t background)
+	{
+		switch (background)
+		{
+		case engine::logger_output::provider_base_t::output_color_t::red_dark: return BACKGROUND_RED;
+		case engine::logger_output::provider_base_t::output_color_t::red_light: return BACKGROUND_RED | BACKGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::green_dark: return BACKGROUND_GREEN;
+		case engine::logger_output::provider_base_t::output_color_t::green_light: return BACKGROUND_GREEN | BACKGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::blue_dark: return BACKGROUND_BLUE;
+		case engine::logger_output::provider_base_t::output_color_t::blue_light: return BACKGROUND_BLUE | BACKGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::gray_dark: return BACKGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::gray_light: return BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
+		case engine::logger_output::provider_base_t::output_color_t::white: return BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::black: return 0;
+		case engine::logger_output::provider_base_t::output_color_t::yellow_dark: return BACKGROUND_RED | BACKGROUND_GREEN;
+		case engine::logger_output::provider_base_t::output_color_t::yellow_light: return BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::pink_dark: return BACKGROUND_RED | BACKGROUND_BLUE;
+		case engine::logger_output::provider_base_t::output_color_t::pink_light: return BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY;
+		case engine::logger_output::provider_base_t::output_color_t::teal_dark: return BACKGROUND_GREEN | BACKGROUND_BLUE;
+		case engine::logger_output::provider_base_t::output_color_t::teal_light: return BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY;
+		}
+	}
 
 public:
 
@@ -322,10 +369,15 @@ public:
 		}
 	}
 
-	VOID WINAPI set_console_colors_for_print(WORD attribs)
+	WORD color_pair_to_attribs(engine::logger_output::provider_base_t::output_color_t color, engine::logger_output::provider_base_t::output_color_t background)
+	{
+		return color_to_attribs(color) | background_to_attribs(background);
+	}
+
+	VOID WINAPI set_console_colors_for_print(engine::logger_output::provider_base_t::output_color_t color, engine::logger_output::provider_base_t::output_color_t background)
 	{
 		HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hOutput, attribs);
+		SetConsoleTextAttribute(hOutput, color_pair_to_attribs(color, background));
 	}
 };
 

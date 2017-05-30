@@ -61,14 +61,9 @@ GAME_CONFIG_STD(game_volume_master, 1.0f, 1.0f)
 #define GAME_AUDIO_TYPE_STD(audio) GAME_CONFIG_STD(game_volume_ ## audio, 1.0f, 1.0f)
 #include "common/std/audio_type_std.hpp"
 
+GAME_CONFIG_STD(game_has_console, false, true)
 GAME_CONFIG_STD(game_has_anttweakbar, false, true)
 GAME_CONFIG_STD(game_has_interface_debugger, false, true)
-
-#define GAME_LOGGER_OUTPUT_STD(logger_output, reldef, debdef) GAME_CONFIG_STD(game_logger_output_ ## logger_output, reldef, debdef )
-#define EDITOR_LOGGER_OUTPUT_STD(logger_output, reldef, debdef) GAME_CONFIG_STD(editor_logger_output_ ## logger_output, reldef, debdef )
-#define LAUNCHER_LOGGER_OUTPUT_STD(logger_output, reldef, debdef) GAME_CONFIG_STD(launcher_logger_output_ ## logger_output, reldef, debdef )
-#include "common/std/logger_output_std.hpp"
-
 
 GAME_CONFIG_STD(game_skip_splashscreen, false, true)
 GAME_CONFIG_STD(editor_skip_splashscreen, false, true)

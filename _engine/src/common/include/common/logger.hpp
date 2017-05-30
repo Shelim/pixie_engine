@@ -18,6 +18,7 @@
 #include "common/ustring.hpp"
 #include "common/platform.hpp"
 #include "common/environment_info.hpp"
+#include "common/queue.hpp"
 #include <cereal/cereal.hpp>
 #include <cereal/access.hpp>
 #include <vlc/vlc.h>
@@ -54,7 +55,8 @@ namespace engine
 		public:
 			enum class level_t
 			{
-				task,
+				finished,
+				task_started,
 				task_failed,
 				task_done,
 				message,
@@ -70,16 +72,27 @@ namespace engine
 			};
 
 			friend class cereal::access;
+			
+			struct finished_t
+			{
 
-			item_t() = default;
+			};
+			
+			item_t(finished_t) : id(-1), level(level_t::finished)
+			{
 
-			item_t(level_t level, const ustring_t & message, const ustring_t & function, bool raport, bool cease_execution, const ustring_t & file, uint32_t line, uint64_t frame, std::chrono::seconds time, std::thread::id thread) :
-				level(level), message(message), function(function), file(file), line(line), frame(frame), time(time), thread(thread)
+			}
+
+			item_t(std::size_t id, level_t level, const ustring_t & message, const ustring_t & function, bool raport, bool cease_execution, const ustring_t & file, uint32_t line, uint64_t frame, std::chrono::seconds time, std::thread::id thread, std::size_t link = -1) :
+				id(id), level(level), message(message), function(function), file(file), line(line), frame(frame), time(time), thread(thread)
 			{
 				set_flag(flag_t::raport, raport);
 				set_flag(flag_t::cease_execution, cease_execution);
 			}
-
+			std::size_t get_id() const
+			{
+				return id;
+			}
 			level_t get_level() const
 			{
 				return level;
@@ -123,13 +136,19 @@ namespace engine
 				return flags.test(static_cast<std::size_t>(flag));
 			}
 
-			void set_level(level_t value)
+			std::size_t get_link() const
 			{
-				level = value;
+				return link;
+			}
+			
+			bool is_linked() const
+			{
+				return link != -1;
 			}
 
 		private:
 
+			std::size_t id;
 			level_t level;
 			ustring_t message;
 			ustring_t function;
@@ -139,6 +158,7 @@ namespace engine
 			uint64_t frame;
 			std::chrono::seconds time;
 			std::thread::id thread;
+			std::size_t link;
 
 		};
 
@@ -154,36 +174,17 @@ namespace engine
 
 		typedef size_t item_id_t;
 		typedef std::vector<item_t> items_t;
-
-		item_id_t task_end(item_id_t item, bool success = true, bool raport = false)
-		{
-			std::lock_guard<std::recursive_mutex> guard(mutex);
-
-			if (item >= 0 || item < items.size())
-			{
-				if (items[item].get_level() == item_t::level_t::task)
-				{
-					items[item].set_level(success ? item_t::level_t::task_done : item_t::level_t::task_failed);
-					if (raport)
-						items[item].set_flag(item_t::flag_t::raport, true);
-
-					item_changed(item);
-				}
-			}
-
-			return item;
-		}
-
-		template<class ...Args> item_id_t log(item_t::level_t level, bool raport, bool cease_execution, const ustring_t & file, uint32_t line, const ustring_t & function, const ustring_t & message, Args... args)
+		
+		template<class ...Args> item_id_t log(item_t::level_t level, bool raport, bool cease_execution, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message, Args... args)
 		{
 			size_t item_id;
 			{
 				std::lock_guard<std::recursive_mutex> guard(mutex);
 
-				items.emplace_back(item_t(level, format_string(message, args...), function, raport, cease_execution, file, line, frame_notifier->get_frame(), std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - time_start), std::this_thread::get_id()));
+				items.emplace_back(item_t(items.size(), level, format_string(message, args...), function, raport, cease_execution, file, line, frame_notifier->get_frame(), std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - time_start), std::this_thread::get_id(), link));
 
 				item_id = items.size() - 1;
-				item_changed(item_id);
+				items_queue.push(items[item_id]);
 			}
 
 			if(items[item_id].is_flag(item_t::flag_t::cease_execution))
@@ -204,27 +205,31 @@ namespace engine
 
 		friend class cereal::access;
 
-		const items_t & get_items()
+		items_t get_items()
 		{
+			std::lock_guard<std::recursive_mutex> guard(mutex);
 			return items;
 		}
 
-		void set_output_providers(std::weak_ptr<engine::logger_output::providers_t> output_providers)
+		item_t query_next_item()
 		{
-			this->output_providers = output_providers;
+			return items_queue.pop();
+		}
+
+		void kill_item_queue()
+		{
+			items_queue.push(item_t(item_t::finished_t()));
 		}
 
 	private:
-		
-		void item_changed(item_id_t item_id);
-
-		std::weak_ptr<engine::logger_output::providers_t> output_providers;
-		
+				
 		std::shared_ptr<environment_info_t> environment_info;
 
 		std::shared_ptr<engine::platform_t> platform;
 		std::unique_ptr<engine::logger_frame_notifier_t> frame_notifier;
 		items_t items;
+		
+		queue_async_t<item_t> items_queue;
 
 		void platform_fatal();
 
@@ -235,15 +240,15 @@ namespace engine
 	};
 }
 
-#define p_msg(...) log(engine::logger_t::item_t::level_t::message, false, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), __VA_ARGS__)
-#define p_task_start(...) log(engine::logger_t::item_t::level_t::task, false, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), __VA_ARGS__)
-#define p_task_done(task_id) task_end(task_id, true, false)
-#define p_task_failed(task_id) task_end(task_id, false, false)
-#define p_task_failed_raport(task_id) task_end(task_id, false, true)
-#define p_warn(...) log(engine::logger_t::item_t::level_t::warning, false, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), __VA_ARGS__)
-#define p_warn_raport(...) log(engine::logger_t::item_t::level_t::warning, true, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), __VA_ARGS__)
-#define p_err(...) log(engine::logger_t::item_t::level_t::error, false, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), __VA_ARGS__)
-#define p_err_raport(...) log(engine::logger_t::item_t::level_t::error, true, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), __VA_ARGS__)
-#define p_fatal_raport(...) log(engine::logger_t::item_t::level_t::error, true, true, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), __VA_ARGS__)
+#define p_msg(...) log(engine::logger_t::item_t::level_t::message, false, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), -1, __VA_ARGS__)
+#define p_task_start(...) log(engine::logger_t::item_t::level_t::task_started, false, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), -1, __VA_ARGS__)
+#define p_task_done(task_id) log(engine::logger_t::item_t::level_t::task_done, false, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), task_id, _U(""))
+#define p_task_failed(task_id) log(engine::logger_t::item_t::level_t::task_failed, false, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), task_id, _U(""))
+#define p_task_failed_raport(task_id) log(engine::logger_t::item_t::level_t::task_failed, true, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), task_id, _U(""))
+#define p_warn(...) log(engine::logger_t::item_t::level_t::warning, false, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), -1, __VA_ARGS__)
+#define p_warn_raport(...) log(engine::logger_t::item_t::level_t::warning, true, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), -1, __VA_ARGS__)
+#define p_err(...) log(engine::logger_t::item_t::level_t::error, false, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), -1, __VA_ARGS__)
+#define p_err_raport(...) log(engine::logger_t::item_t::level_t::error, true, false, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), -1, __VA_ARGS__)
+#define p_fatal_raport(...) log(engine::logger_t::item_t::level_t::error, true, true, _U(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), -1, __VA_ARGS__)
 
 #endif
