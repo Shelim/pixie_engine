@@ -94,6 +94,8 @@ namespace engine
 					return _U("-!- ");
 				if (level == logger_t::item_t::level_t::error)
 					return _U("!!!");
+
+				return _U("?!?");
 			}
 
 			void padd(ustring_t & str, std::size_t pos)
@@ -105,6 +107,11 @@ namespace engine
 					std::string s(pos - str.len() + 3, ' ');
 					str.append_utf8(s.c_str());
 				}
+			}
+
+			void output_string(const ustring_t & str) final
+			{
+
 			}
 
 			std::unique_ptr<engine::data::output_t> output;

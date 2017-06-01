@@ -74,6 +74,7 @@ private:
 		case engine::logger_output::provider_base_t::output_color_t::teal_dark: return FOREGROUND_GREEN | FOREGROUND_BLUE;
 		case engine::logger_output::provider_base_t::output_color_t::teal_light: return FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
 		}
+		return (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	}
 
 	WORD background_to_attribs(engine::logger_output::provider_base_t::output_color_t background)
@@ -97,6 +98,7 @@ private:
 		case engine::logger_output::provider_base_t::output_color_t::teal_dark: return BACKGROUND_GREEN | BACKGROUND_BLUE;
 		case engine::logger_output::provider_base_t::output_color_t::teal_light: return BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY;
 		}
+		return 0;
 	}
 
 public:

@@ -1,4 +1,4 @@
-#ifndef LOGGER_OUTPUT_STD(...)
+#ifndef LOGGER_OUTPUT_STD
 #define LOGGER_OUTPUT_STD(...)
 #endif
 

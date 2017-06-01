@@ -40,11 +40,6 @@ namespace engine
 		logger_frame_notifier_t& operator=(logger_frame_notifier_t const&) = delete;
 		logger_frame_notifier_t& operator=(logger_frame_notifier_t &&) = delete;
 	};
-	
-	namespace logger_output
-	{
-		class providers_t;
-	}
 
 	class logger_t final
 	{

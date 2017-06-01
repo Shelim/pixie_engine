@@ -123,7 +123,7 @@ namespace engine
 
 	public:
 
-		friend class std::hash<engine::ustring_t>;
+		friend struct std::hash<engine::ustring_t>;
 
 		//////////////////////////////////////////////////////////////////////////
 
