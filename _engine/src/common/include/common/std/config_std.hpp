@@ -61,7 +61,6 @@ GAME_CONFIG_STD(game_volume_master, 1.0f, 1.0f)
 #define GAME_AUDIO_TYPE_STD(audio) GAME_CONFIG_STD(game_volume_ ## audio, 1.0f, 1.0f)
 #include "common/std/audio_type_std.hpp"
 
-GAME_CONFIG_STD(game_has_console, false, true)
 GAME_CONFIG_STD(game_has_anttweakbar, false, true)
 GAME_CONFIG_STD(game_has_interface_debugger, false, true)
 

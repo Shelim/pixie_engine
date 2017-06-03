@@ -1087,6 +1087,16 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
+		* @brief Escapes characters before use in richtext_t
+		*
+		* This function make copy of string and returns escaped text, ready to be used in richtext_t .
+		*
+		* @return Escaped ustring_t
+		* @see richtext_t
+		*/
+		ustring_t escape_rich() const;
+
+		/**
 		 * @brief Converts this ustring_t into standard @c ASCII string
 		 *
 		 * @return Standard @c ASCII string

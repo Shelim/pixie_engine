@@ -37,6 +37,10 @@ engine::platform_t::platform_t(std::string arg0, std::shared_ptr<manifest_app_t>
 
 	CoInitialize(0);
 
+#if PIXIE_IS_DEBUG_BUILD
+	pimpl->open_console();
+#endif
+
 	std::error_code ec;
 
 #define GAME_VIRTUAL_PATH_STD(name, type, path) std::filesystem::create_directories(pimpl->get_save_path(engine::virtual_path_t::type_t::name), ec);
@@ -124,6 +128,10 @@ void engine::platform_t::set_logger(engine::logger_t * logger)
 
 engine::platform_t::~platform_t()
 {
+#if PIXIE_IS_DEBUG_BUILD
+	pimpl->close_console();
+#endif
+
 	CoUninitialize();
 }
 

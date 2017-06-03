@@ -56,17 +56,20 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_container.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\providers.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_base.hpp" />
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_console.hpp" />
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_data.hpp" />
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_text_base.hpp" />
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_text_data_output.hpp" />
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_text_stdout.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\manifest_app.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\modules.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\platform.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\queue.hpp" />
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\richtext.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\std\compiler_output_types_std.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\Std\config_std.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\std\environment_info_std.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\std\logger_output_std.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\std\problems_std.hpp" />
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\std\richtext_std.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\std\virtual_path_std.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\ustring.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\virtual_path.hpp" />
@@ -75,6 +78,7 @@
     <ClInclude Include="..\..\src\common\include\common\std\audio_type_std.hpp" />
     <ClInclude Include="..\..\src\common\include\common\std\config_game_std.hpp" />
     <ClInclude Include="..\..\src\common\include\common\std\language_type_std.hpp" />
+    <ClInclude Include="..\..\src\common\include\common\std\richtext_game_std.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1388A194-ACDA-4EE9-869D-4924F8C9E163}</ProjectGuid>

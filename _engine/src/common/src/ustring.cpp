@@ -423,6 +423,25 @@ int_fast32_t engine::ustring_t::last_index_of( const engine::ustring_t & str, in
 
 //////////////////////////////////////////////////////////////////////////
 
+engine::ustring_t engine::ustring_t::escape_rich() const
+{
+	ustring_t ret;
+
+	const char * it = _str.c_str();
+
+	while (*it)
+	{
+		engine::usymbol_t symbol = _decode(it);
+
+		if (symbol == '\\' || symbol == '[' || symbol == ']')
+			ret._encode('\\');
+		
+		ret._encode(symbol);
+	}
+
+	return ret;
+}
+
 std::string engine::ustring_t::to_ascii() const
 {
 	std::string ret;

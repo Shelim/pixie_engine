@@ -3,8 +3,8 @@
 #pragma once
 
 #include "common/logger_output/provider_base.hpp"
-#include "common/logger_output/provider_console.hpp"
-#include "common/logger_output/provider_data.hpp"
+#include "common/logger_output/provider_text_stdout.hpp"
+#include "common/logger_output/provider_text_data_output.hpp"
 #include "common/config.hpp"
 
 namespace engine
@@ -31,27 +31,22 @@ namespace engine
 				environment_info(environment_info)
 			{
 
-#define LOGGER_OUTPUT_STD(logger_output_var) provider_##logger_output_var->output_environment_info(environment_info); provider_##logger_output_var->begin_process_items();
+#define LOGGER_OUTPUT_STD(logger_output_var) provider_##logger_output_var->process_environment_info(environment_info);
 #include "common/std/logger_output_std.hpp"
-
 			}
 
 			~providers_t()
 			{
 
-#define LOGGER_OUTPUT_STD(logger_output_var) provider_##logger_output_var->end_process_items();
-#include "common/std/logger_output_std.hpp"
 			}
 
 			void process_item(const logger_t::item_t & item)
 			{
+
 #define LOGGER_OUTPUT_STD(logger_output_var) provider_##logger_output_var->process_item(item);
 #include "common/std/logger_output_std.hpp"
 
 			}
-
-#define LOGGER_OUTPUT_STD(logger_output_var) std::shared_ptr<engine::logger_output::provider_##logger_output_var##_t> get_provider_##logger_output_var() { return provider_##logger_output_var; };
-#include "common/std/logger_output_std.hpp"
 
 			void update()
 			{

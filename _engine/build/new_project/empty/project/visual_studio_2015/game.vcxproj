@@ -42,6 +42,7 @@
     <ClCompile Include="..\..\..\_engine\src\common\src\logger.cpp" />
     <ClCompile Include="..\..\..\_engine\src\common\src\module.cpp" />
     <ClCompile Include="..\..\..\_engine\src\common\src\modules.cpp" />
+    <ClCompile Include="..\..\..\_engine\src\common\src\richtext.cpp" />
     <ClCompile Include="..\..\..\_engine\src\common\src\ustring.cpp" />
     <ClCompile Include="..\..\..\_engine\src\common\src\windows\database.cpp" />
     <ClCompile Include="..\..\..\_engine\src\common\src\windows\logger.cpp" />
@@ -1970,17 +1971,20 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_container.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\providers.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_base.hpp" />
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_console.hpp" />
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_data.hpp" />
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_text_base.hpp" />
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_text_data_output.hpp" />
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_text_stdout.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\manifest_app.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\modules.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\platform.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\queue.hpp" />
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\richtext.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\std\compiler_output_types_std.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\Std\config_std.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\std\environment_info_std.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\std\logger_output_std.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\std\problems_std.hpp" />
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\std\richtext_std.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\std\virtual_path_std.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\ustring.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\virtual_path.hpp" />
@@ -1990,6 +1994,7 @@
     <ClInclude Include="..\..\src\common\include\common\std\audio_type_std.hpp" />
     <ClInclude Include="..\..\src\common\include\common\std\config_game_std.hpp" />
     <ClInclude Include="..\..\src\common\include\common\std\language_type_std.hpp" />
+    <ClInclude Include="..\..\src\common\include\common\std\richtext_game_std.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\_engine\depedency\directx\include\D3DX10math.inl" />
@@ -2171,6 +2176,7 @@
       <EnablePREfast>false</EnablePREfast>
       <ObjectFileName>$(IntDir)\%(Directory)\</ObjectFileName>
       <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\cg\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\directx\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\librocket\lib\windows_x86\debug;$(SolutionDir)..\..\..\_engine\depedency\libvlc\lib\windows_x86\;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\lib\windows_x86</AdditionalLibraryDirectories>

@@ -189,6 +189,67 @@ namespace engine
 			data.col = value;
 		}
 
+
+		/**
+		* @brief Find the difference between two colors
+		*
+		* This function should be use to compare colors for similiarity. The less returned value is more similiar.
+		*
+		* @note Return 0 means the colors are identical, minus alpha
+		*
+		* @param[in] c1 First color to compare
+		* @param[in] c2 Second color to compare
+		*
+		* @note Result of this function are range 0 - 195075
+		*
+		* @note This function uses separate square distance algorithm
+		*
+		* @see difference_including_alpha
+		*/
+		static uint32_t difference(color_t & c1, color_t & c2)
+		{
+			uint32_t ret = 0;
+			int32_t part = 0;
+
+			part = abs(static_cast<int32_t>(c1.data.r) - static_cast<int32_t>(c2.data.r)); ret += part * part;
+			part = abs(static_cast<int32_t>(c1.data.g) - static_cast<int32_t>(c2.data.g)); ret += part * part;
+			part = abs(static_cast<int32_t>(c1.data.b) - static_cast<int32_t>(c2.data.b)); ret += part * part;
+
+			return ret;
+
+		}
+
+
+		/**
+		* @brief Find the difference between two colors including alpha for calculation
+		*
+		* This function should be use to compare colors for similiarity. The less returned value is more similiar.
+		*
+		* @note Return 0 means the colors are identical, including alpha component
+		*
+		* @param[in] c1 First color to compare
+		* @param[in] c2 Second color to compare
+		*
+		* @note Result of this function are range 0 - 260100
+		*
+		* @note This function uses separate square distance algorithm
+		*
+		* @see difference
+		*/
+		static uint32_t difference_including_alpha(color_t & c1, color_t & c2)
+		{
+			uint32_t ret = 0;
+			int32_t part = 0;
+
+			part = abs(static_cast<int32_t>(c1.data.r) - static_cast<int32_t>(c2.data.r)); ret += part * part;
+			part = abs(static_cast<int32_t>(c1.data.g) - static_cast<int32_t>(c2.data.g)); ret += part * part;
+			part = abs(static_cast<int32_t>(c1.data.b) - static_cast<int32_t>(c2.data.b)); ret += part * part;
+			part = abs(static_cast<int32_t>(c1.data.a) - static_cast<int32_t>(c2.data.a)); ret += part * part;
+
+			return ret;
+
+		}
+
 	private:
 
 		union
