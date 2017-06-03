@@ -79,7 +79,7 @@ namespace engine
 			}
 
 			item_t(std::size_t id, level_t level, const ustring_t & message, const ustring_t & function, bool raport, bool cease_execution, const ustring_t & file, uint32_t line, uint64_t frame, std::chrono::seconds time, std::thread::id thread, std::size_t link = -1) :
-				id(id), level(level), message(message), function(function), file(file), line(line), frame(frame), time(time), thread(thread)
+				id(id), level(level), message(message), function(function), file(file), line(line), frame(frame), time(time), thread(thread), link(link)
 			{
 				set_flag(flag_t::raport, raport);
 				set_flag(flag_t::cease_execution, cease_execution);

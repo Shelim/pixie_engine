@@ -51,17 +51,17 @@ teal_light
 
 */
 
-GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(section_header, gray_light, black)
-GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(section_header_text, white, black)
+GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(section_header, pink_dark, black)
+GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(section_header_text, pink_light, black)
 
-GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(info, blue_light, black)
+GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(info, teal_light, black)
 GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(note, gray_light, black)
 GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(success, green_light, black)
 GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(pending, teal_light, black)
 GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(warning, yellow_light, black)
 GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(error, red_light, black)
 
-GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(info_meta, blue_light, black)
+GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(info_meta, teal_dark, black)
 GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(note_meta, gray_dark, black)
 GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(success_meta, green_dark, black)
 GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(pending_meta, teal_dark, black)

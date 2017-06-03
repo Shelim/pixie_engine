@@ -17,7 +17,7 @@ namespace engine
 
 		public:
 
-			provider_stdout_t(std::shared_ptr<logger_t> logger, std::shared_ptr<platform_t> platform) : provider_text_base_t(logger, provider_text_base_t::item_output_format_t::reduced), platform(platform)
+			provider_stdout_t(std::shared_ptr<logger_t> logger, std::shared_ptr<platform_t> platform) : provider_text_base_t(logger, static_cast<item_output_elements_t>(output_prompt | output_func | output_file)), platform(platform)
 			{
 
 			}

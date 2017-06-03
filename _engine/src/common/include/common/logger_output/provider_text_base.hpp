@@ -22,26 +22,22 @@ namespace engine
 
 			}
 
-			void process_item(const logger_t::item_t & item) final
-			{
-				change_section(section_t::item);
-
-				switch (item_output_format)
-				{
-				case item_output_format_t::normal: process_item_normal(item); break;
-				case item_output_format_t::reduced: process_item_reduced(item); break;
-				}
-			}
+			void process_item(const logger_t::item_t & item) final;
 			void process_environment_info(std::shared_ptr<environment_info_t> environment_info) final;
 
 			virtual void output_line(richtext_t line) = 0;
 
 		protected:
 
-			enum class item_output_format_t
+			enum item_output_elements_t
 			{
-				normal,
-				reduced
+				output_prompt		= 1 << 0,
+				output_columns		= 1 << 1,
+				output_frame		= 1 << 2,
+				output_time			= 1 << 3,
+				output_thread		= 1 << 4,
+				output_func			= 1 << 5,
+				output_file			= 1 << 6
 			};
 
 			enum class section_t
@@ -51,17 +47,21 @@ namespace engine
 				item
 			};
 
-			provider_text_base_t(std::shared_ptr<logger_t> logger, item_output_format_t item_output_format = item_output_format_t::normal) : provider_base_t(logger), section(section_t::unknown), item_output_format(item_output_format)
+			provider_text_base_t(std::shared_ptr<logger_t> logger, item_output_elements_t item_output_elements) : provider_base_t(logger), section(section_t::unknown), item_output_elements(item_output_elements)
 			{
 
 			}
 
 		private:
 
-			item_output_format_t item_output_format;
+			item_output_elements_t item_output_elements;
 
-			void process_item_normal(const logger_t::item_t & item);
-			void process_item_reduced(const logger_t::item_t & item);
+			bool is_item_output_element(item_output_elements_t item)
+			{
+				return ((item_output_elements & item) == item);
+			}
+
+			void output_element(richtext_t & line, richtext_t::flag_t normal, richtext_t::flag_t meta, item_output_elements_t element, bool & is_first_item, const ustring_t & name, const ustring_t & value, int & column, int add_column = 0);
 
 			static ustring_t level_to_prompt(logger_t::item_t::level_t level)
 			{

@@ -42,6 +42,7 @@ namespace engine
 			void output_line(richtext_t line) final
 			{
 				output->write_ustring(line.get_raw());
+				output->write_ustring(_U("\r\n"));
 				output->force_flush();
 			}
 
