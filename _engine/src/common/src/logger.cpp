@@ -17,7 +17,7 @@
 #include "common/environment_info.hpp"
 #include "common/logger_output/providers.hpp"
 
-void engine::logger_output::provider_text_base_t::query_richtext_flags(logger_t::item_t::level_t level, richtext_t::flag_t & normal, richtext_t::flag_t & meta)
+void engine::logger_output::provider_text_base_t::line_constructor_t::query_richtext_flags(logger_t::item_t::level_t level, richtext_t::flag_t & normal, richtext_t::flag_t & meta)
 {
 	switch (level)
 	{
@@ -31,33 +31,54 @@ void engine::logger_output::provider_text_base_t::query_richtext_flags(logger_t:
 	}
 }
 
-void engine::logger_output::provider_text_base_t::output_element(richtext_t & line, richtext_t::flag_t normal, richtext_t::flag_t meta, item_output_elements_t element, bool & is_first_item, const ustring_t & name, const ustring_t & value, int & column, int add_column)
+void engine::logger_output::provider_text_base_t::line_constructor_t::populate(const item_output_elements_t & item_output_elements)
 {
-	if (is_item_output_element(element))
+	for (auto & iter : item_output_elements)
 	{
-		if (add_column && is_item_output_element(output_columns))
+		switch (iter)
 		{
-			column += add_column;
-			is_first_item = true;
+		case item_output_element_t::output_sep_column: column += column_width; line.append(engine::logger_output::provider_text_base_t::generate_padding(line.get_len(), column)); break;
+		case item_output_element_t::output_sep_arrow: line.clear_flags(); line.set_flag(meta); line.append(_U(" <- ")); break;
+		case item_output_element_t::output_sep_comma: line.clear_flags(); line.set_flag(meta); line.append(_U(", ")); break;
 
-			line.append(generate_padding(line.get_len(), column));
+		case item_output_element_t::output_prompt: line.clear_flags(); line.set_flag(meta); line.append(level_to_prompt(item->get_level())); break;
+		case item_output_element_t::output_message:
+			line.clear_flags();
+			line.set_flag(normal);
+			if (item->get_link() != -1)
+			{
+				auto & items = owner->get_logger()->get_items();
+				line.append(items[item->get_link()].get_message());
+			}
+			else
+				line.append(item->get_message());
+
+			line.clear_flags();
+			line.set_flag(meta);
+
+			if (item->get_level() == logger_t::item_t::level_t::task_started)
+				line.append(_U("..."));
+			else if (item->get_level() == logger_t::item_t::level_t::task_done)
+				line.append(_U("... "));
+			else if (item->get_level() == logger_t::item_t::level_t::task_failed)
+				line.append(_U("... "));
+
+			line.clear_flags();
+			line.set_flag(normal);
+
+			if (item->get_level() == logger_t::item_t::level_t::task_done)
+				line.append(_U("DONE!"));
+			else if (item->get_level() == logger_t::item_t::level_t::task_failed)
+				line.append(_U("FAILED!!!"));
+
+			break;
+		case item_output_element_t::output_frame: line.clear_flags(); line.set_flag(meta); line.append(_U("frame: ")); line.clear_flags(); line.set_flag(normal); line.append(to_string(item->get_frame())); break;
+		case item_output_element_t::output_time: line.clear_flags(); line.set_flag(meta); line.append(_U("time: ")); line.clear_flags(); line.set_flag(normal); line.append(to_string(item->get_time())); break;
+		case item_output_element_t::output_thread: line.clear_flags(); line.set_flag(meta); line.append(_U("thread: ")); line.clear_flags(); line.set_flag(normal); line.append(to_string(item->get_thread())); break;
+		case item_output_element_t::output_func: line.clear_flags(); line.set_flag(meta); line.append(_U("func: ")); line.clear_flags(); line.set_flag(normal); line.append(item->get_function()); line.append(_U("()")); break;
+		case item_output_element_t::output_file: line.clear_flags(); line.set_flag(meta); line.append(_U("at: '")); line.clear_flags(); line.set_flag(normal); line.append(item->get_file()); line.clear_flags(); line.set_flag(meta); line.append(_U("'")); break;
+		case item_output_element_t::output_line: line.clear_flags(); line.set_flag(meta); line.append(_U("on line: ")); line.clear_flags(); line.set_flag(normal); line.append(to_string(item->get_line())); break;
 		}
-
-		line.clear_flags();
-		line.set_flag(meta);
-
-		if (!is_first_item)
-		{
-			line.append(_U(", "));
-		}
-
-		line.append(name);
-
-		line.clear_flags();
-		line.set_flag(normal);
-		line.append(value);
-
-		is_first_item = false;
 	}
 }
 
@@ -65,71 +86,11 @@ void engine::logger_output::provider_text_base_t::process_item(const logger_t::i
 {
 	change_section(section_t::item);
 
-	richtext_t::flag_t normal, meta;
-	query_richtext_flags(item.get_level(), normal, meta);
+	line_constructor.start(item);
 
-	richtext_t line;
+	line_constructor.populate(item_output_elements);
 	
-	if (is_item_output_element(output_prompt))
-	{
-		line.clear_flags();
-		line.set_flag(meta);
-		line.append(level_to_prompt(item.get_level()));
-
-		if (is_item_output_element(output_columns))
-			line.append(generate_padding(line.get_len(), 5));
-	}
-
-	line.clear_flags();
-	line.set_flag(normal);
-	if (item.get_link() != -1)
-	{
-		auto & items = get_logger()->get_items();
-		line.append(items[item.get_link()].get_message());
-	}
-	else
-		line.append(item.get_message());
-
-	line.clear_flags();
-	line.set_flag(meta);
-
-	if (item.get_level() == logger_t::item_t::level_t::task_started)
-		line.append(_U("..."));
-	else if (item.get_level() == logger_t::item_t::level_t::task_done)
-		line.append(_U("... "));
-	else if (item.get_level() == logger_t::item_t::level_t::task_failed)
-		line.append(_U("... "));
-
-	line.clear_flags();
-	line.set_flag(normal);
-
-	if (item.get_level() == logger_t::item_t::level_t::task_done)
-		line.append(_U("DONE!"));
-	else if (item.get_level() == logger_t::item_t::level_t::task_failed)
-		line.append(_U("FAILED!!!"));
-
-	line.clear_flags();
-	line.set_flag(meta);
-
-	if(is_item_output_element(output_columns))
-		line.append(generate_padding(line.get_len(), 96));
-	else
-		line.append(_U(" <- "));
-
-	bool is_first_item = true;
-	int column = 96;
-
-	output_element(line, normal, meta, output_frame, is_first_item, _U("frame: "), to_string(item.get_frame()), column);
-	output_element(line, normal, meta, output_time, is_first_item, _U("time: "), to_string(item.get_time()), column);
-	output_element(line, normal, meta, output_thread, is_first_item, _U("thread: "), to_string(item.get_thread()), column);
-
-	ustring_t func = item.get_function();
-	func.append(_U("()"));
-	output_element(line, normal, meta, output_func, is_first_item, _U("func: "), func, column);
-	output_element(line, normal, meta, output_file, is_first_item, _U("at: "), item.get_file(), column, 96);
-	output_element(line, normal, meta, output_file, is_first_item, _U("on line "), to_string(item.get_line()), column);
-
-	output_line(line);
+	output_line(line_constructor.get_line());
 }
 
 void engine::logger_output::provider_text_base_t::process_environment_info(std::shared_ptr<environment_info_t> environment_info)
@@ -140,7 +101,7 @@ void engine::logger_output::provider_text_base_t::process_environment_info(std::
 #include "common/std/environment_info_std.hpp"
 }
 
-engine::logger_output::provider_data_output_t::provider_data_output_t(std::shared_ptr<engine::data::database_t> database, std::shared_ptr<logger_t> logger, std::shared_ptr<environment_info_t> environment_info) : provider_text_base_t(logger, static_cast<item_output_elements_t>(output_prompt | output_columns | output_frame | output_time | output_thread | output_func | output_file))
+engine::logger_output::provider_data_output_t::provider_data_output_t(std::shared_ptr<engine::data::database_t> database, std::shared_ptr<logger_t> logger, std::shared_ptr<environment_info_t> environment_info) : provider_text_base_t(logger, { item_output_element_t::output_prompt, item_output_element_t::output_message, item_output_element_t::output_sep_column, item_output_element_t::output_frame, item_output_element_t::output_sep_comma, item_output_element_t::output_time, item_output_element_t::output_sep_comma, item_output_element_t::output_thread, item_output_element_t::output_sep_comma, item_output_element_t::output_func, item_output_element_t::output_sep_column, item_output_element_t::output_file, item_output_element_t::output_sep_comma, item_output_element_t::output_line })
 {
 
 #define GAME_LOGGER_VIRTUAL_PATH_STD(path) output = database->get_output(virtual_path_t(path, virtual_path_t::type_t::log));

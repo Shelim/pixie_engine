@@ -103,6 +103,13 @@ namespace engine
 			return len;
 		}
 
+		void clear()
+		{
+			parts.clear();
+			flags.reset();
+			len = 0;
+		}
+
 	private:
 
 		parts_t parts;

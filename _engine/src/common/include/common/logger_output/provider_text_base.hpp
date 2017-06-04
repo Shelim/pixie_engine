@@ -29,16 +29,23 @@ namespace engine
 
 		protected:
 
-			enum item_output_elements_t
+			enum class item_output_element_t
 			{
-				output_prompt		= 1 << 0,
-				output_columns		= 1 << 1,
-				output_frame		= 1 << 2,
-				output_time			= 1 << 3,
-				output_thread		= 1 << 4,
-				output_func			= 1 << 5,
-				output_file			= 1 << 6
+				output_sep_column,
+				output_sep_arrow,
+				output_sep_comma,
+
+				output_prompt,
+				output_message,
+				output_frame,
+				output_time,
+				output_thread,
+				output_func,
+				output_file,
+				output_line,
 			};
+
+			typedef std::vector<item_output_element_t> item_output_elements_t;
 
 			enum class section_t
 			{
@@ -47,56 +54,72 @@ namespace engine
 				item
 			};
 
-			provider_text_base_t(std::shared_ptr<logger_t> logger, item_output_elements_t item_output_elements) : provider_base_t(logger), section(section_t::unknown), item_output_elements(item_output_elements)
+			provider_text_base_t(std::shared_ptr<logger_t> logger, item_output_elements_t item_output_elements, std::size_t item_output_column_width = 96) : provider_base_t(logger), section(section_t::unknown), item_output_elements(item_output_elements), line_constructor(this, item_output_column_width)
 			{
 
 			}
 
 		private:
 
+			class line_constructor_t
+			{
+
+			public:
+
+				line_constructor_t(provider_text_base_t * owner, std::size_t column_width) : owner(owner), column_width(column_width)
+				{
+
+				}
+
+				void start(const logger_t::item_t & item)
+				{
+					line.clear();
+					this->item = &item;
+
+					query_richtext_flags(this->item->get_level(), normal, meta);
+					column = 0;
+				}
+
+				void populate(const item_output_elements_t & item_output_elements);
+
+				const richtext_t & get_line()
+				{
+					return line;
+				}
+
+			private:
+
+				provider_text_base_t * owner;
+				richtext_t line;
+				richtext_t::flag_t normal;
+				richtext_t::flag_t meta;
+				const logger_t::item_t * item;
+
+				std::size_t column_width;
+				std::size_t column;
+
+				void query_richtext_flags(logger_t::item_t::level_t level, richtext_t::flag_t & normal, richtext_t::flag_t & meta);
+
+				static ustring_t level_to_prompt(logger_t::item_t::level_t level)
+				{
+					if (level == logger_t::item_t::level_t::task_started)
+						return _U("... ");
+					if (level == logger_t::item_t::level_t::task_failed)
+						return _U("..! ");
+					if (level == logger_t::item_t::level_t::task_done)
+						return _U("..> ");
+					if (level == logger_t::item_t::level_t::message)
+						return _U("--> ");
+					if (level == logger_t::item_t::level_t::warning)
+						return _U("-!- ");
+					if (level == logger_t::item_t::level_t::error)
+						return _U("!!! ");
+				}
+			};
+
 			item_output_elements_t item_output_elements;
 
-			bool is_item_output_element(item_output_elements_t item)
-			{
-				return ((item_output_elements & item) == item);
-			}
-
-			void output_element(richtext_t & line, richtext_t::flag_t normal, richtext_t::flag_t meta, item_output_elements_t element, bool & is_first_item, const ustring_t & name, const ustring_t & value, int & column, int add_column = 0);
-
-			static ustring_t level_to_prompt(logger_t::item_t::level_t level)
-			{
-				if (level == logger_t::item_t::level_t::task_started)
-					return _U("...");
-				if (level == logger_t::item_t::level_t::task_failed)
-					return _U("..!");
-				if (level == logger_t::item_t::level_t::task_done)
-					return _U("..>");
-				if (level == logger_t::item_t::level_t::message)
-					return _U("-->");
-				if (level == logger_t::item_t::level_t::warning)
-					return _U("-!- ");
-				if (level == logger_t::item_t::level_t::error)
-					return _U("!!!");
-			}
-
-			static ustring_t generate_padding(const ustring_t & str, uint32_t pos, char c = ' ')
-			{
-				return generate_padding(str.len(), pos, c);
-			}
-
-			static ustring_t generate_padding(std::size_t len, uint32_t pos, char c = ' ')
-			{
-				if (len >= pos - 3)
-				{
-					std::string s(3, c);
-					return ustring_t::from_utf8(s.c_str());
-				}
-				else
-				{
-					std::string s(pos - len + 3, c);
-					return ustring_t::from_utf8(s.c_str());
-				}
-			}
+			line_constructor_t line_constructor;
 
 			void change_section(section_t section)
 			{
@@ -155,9 +178,26 @@ namespace engine
 				return ret;
 			}
 
-			void query_richtext_flags(logger_t::item_t::level_t level, richtext_t::flag_t & normal, richtext_t::flag_t & meta);
-
 			section_t section;
+
+			static ustring_t generate_padding(const ustring_t & str, uint32_t pos, char c = ' ')
+			{
+				return generate_padding(str.len(), pos, c);
+			}
+
+			static ustring_t generate_padding(std::size_t len, uint32_t pos, char c = ' ')
+			{
+				if (len >= pos - 3)
+				{
+					std::string s(3, c);
+					return ustring_t::from_utf8(s.c_str());
+				}
+				else
+				{
+					std::string s(pos - len + 3, c);
+					return ustring_t::from_utf8(s.c_str());
+				}
+			}
 
 		};
 

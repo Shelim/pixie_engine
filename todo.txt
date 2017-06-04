@@ -2,14 +2,10 @@ BuildSystem:
  - Build changelog
  - Update changelog
  - Remove comments from XML
- 
-Logger
- - Fix function (so it can use states):
-		void output_element(richtext_t & line, richtext_t::flag_t normal, richtext_t::flag_t meta, item_output_elements_t element, bool & is_first_item, const ustring_t & name, const ustring_t & value, int & column, int add_column = 0)
+ 		
+Config
 
-	It is inside logger/provider_text_base_t -> line 64
-		
-Config!!!
+Modules
 
 Database thread synchronization is taking too much of time of main thread!
 
