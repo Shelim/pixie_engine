@@ -35,6 +35,7 @@ namespace engine
 				output_sep_arrow,
 				output_sep_comma,
 
+				output_id,
 				output_prompt,
 				output_message,
 				output_frame,

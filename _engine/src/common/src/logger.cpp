@@ -41,6 +41,7 @@ void engine::logger_output::provider_text_base_t::line_constructor_t::populate(c
 		case item_output_element_t::output_sep_arrow: line.clear_flags(); line.set_flag(meta); line.append(_U(" <- ")); break;
 		case item_output_element_t::output_sep_comma: line.clear_flags(); line.set_flag(meta); line.append(_U(", ")); break;
 
+		case item_output_element_t::output_id: line.clear_flags(); line.set_flag(meta); line.append(_U("# ")); if (item->get_id() < 10) line.append(_U("0000")); else if (item->get_id() < 100) line.append(_U("000")); else if (item->get_id() < 1000) line.append(_U("00")); else if (item->get_id() < 10000) line.append(_U("0")); line.append(to_string(item->get_id())); line.append(_U(" ")); break;
 		case item_output_element_t::output_prompt: line.clear_flags(); line.set_flag(meta); line.append(level_to_prompt(item->get_level())); break;
 		case item_output_element_t::output_message:
 			line.clear_flags();
@@ -101,7 +102,7 @@ void engine::logger_output::provider_text_base_t::process_environment_info(std::
 #include "common/std/environment_info_std.hpp"
 }
 
-engine::logger_output::provider_data_output_t::provider_data_output_t(std::shared_ptr<engine::data::database_t> database, std::shared_ptr<logger_t> logger, std::shared_ptr<environment_info_t> environment_info) : provider_text_base_t(logger, { item_output_element_t::output_prompt, item_output_element_t::output_message, item_output_element_t::output_sep_column, item_output_element_t::output_frame, item_output_element_t::output_sep_comma, item_output_element_t::output_time, item_output_element_t::output_sep_comma, item_output_element_t::output_thread, item_output_element_t::output_sep_comma, item_output_element_t::output_func, item_output_element_t::output_sep_column, item_output_element_t::output_file, item_output_element_t::output_sep_comma, item_output_element_t::output_line })
+engine::logger_output::provider_data_output_t::provider_data_output_t(std::shared_ptr<engine::data::database_t> database, std::shared_ptr<logger_t> logger, std::shared_ptr<environment_info_t> environment_info) : provider_text_base_t(logger, { item_output_element_t::output_id, item_output_element_t::output_prompt, item_output_element_t::output_message, item_output_element_t::output_sep_column, item_output_element_t::output_frame, item_output_element_t::output_sep_comma, item_output_element_t::output_time, item_output_element_t::output_sep_comma, item_output_element_t::output_thread, item_output_element_t::output_sep_comma, item_output_element_t::output_func, item_output_element_t::output_sep_column, item_output_element_t::output_file, item_output_element_t::output_sep_comma, item_output_element_t::output_line })
 {
 
 #define GAME_LOGGER_VIRTUAL_PATH_STD(path) output = database->get_output(virtual_path_t(path, virtual_path_t::type_t::log));
