@@ -10,7 +10,7 @@
 #include "common/data/provider.hpp"
 #include "common/filesystem.hpp"
 #include "common/data/item_content.hpp"
-#include "common/data/item_operation.hpp"
+#include "common/data/item_task.hpp"
 #include <bitset>
 #include <cereal/access.hpp>
 
@@ -19,7 +19,7 @@ namespace engine
 	namespace data
 	{
 		class database_t;
-		class item_operation_t;
+		class item_task_t;
 
 		class item_base_t
 		{
@@ -32,19 +32,17 @@ namespace engine
 			{
 				is_requested_save,
 				is_requested_load,
+				is_requested_free,
 				is_deatached,
 				do_not_auto_reload,
 				auto_resave,
 				do_not_log_operations,
 				allow_changes_when_deleted,
 
+				is_operation_pending,
+
 				count
 			};
-
-			void request_save()
-			{
-				set_flag(flag_t::is_requested_save, true);
-			}
 
 			bool are_allowed_changes_when_deleted()
 			{
@@ -98,6 +96,11 @@ namespace engine
 			{
 				set_flag(flag_t::do_not_log_operations, true);
 			}
+
+			void request_save()
+			{
+				set_flag(flag_t::is_requested_save, true);
+			}
 			
 			bool is_requested_save()
 			{
@@ -110,6 +113,16 @@ namespace engine
 			}
 
 			bool is_requested_load()
+			{
+				return is_flag(flag_t::is_requested_load);
+			}
+
+			void request_free()
+			{
+				set_flag(flag_t::is_requested_free, true);
+			}
+
+			bool is_requested_free()
 			{
 				return is_flag(flag_t::is_requested_load);
 			}
@@ -131,6 +144,11 @@ namespace engine
 				return database_items;
 			}
 
+			bool is_operation_pending()
+			{
+				return is_flag(flag_t::is_operation_pending);
+			}
+
 		protected:
 
 			item_base_t(database_items_t * database_items, const virtual_path_t & path) : path(path), database_items(database_items)
@@ -148,6 +166,11 @@ namespace engine
 				set_flag(flag_t::is_requested_load, false);
 			}
 
+			void clear_requested_free()
+			{
+				set_flag(flag_t::is_requested_free, false);
+			}
+
 			void set_deatached_flag()
 			{
 				set_flag(flag_t::is_deatached, true);
@@ -160,6 +183,7 @@ namespace engine
 
 		private:
 			friend class database_items_t;
+			friend class item_task_t;
 
 			std::bitset<static_cast<std::size_t>(flag_t::count)> flags;
 
@@ -171,6 +195,16 @@ namespace engine
 			bool is_flag(flag_t flag) const
 			{
 				return flags.test(static_cast<std::size_t>(flag));
+			}
+
+			void start_operation()
+			{
+				set_flag(flag_t::is_operation_pending, true);
+			}
+
+			void end_operation()
+			{
+				set_flag(flag_t::is_operation_pending, false);
 			}
 
 			virtual_path_t path;
@@ -200,11 +234,6 @@ namespace engine
 
 			}
 
-			bool is_operation_pending()
-			{
-				return operation_pending || content->is_sub_operation_pending();
-			}
-
 			void resave(output_t * output) final
 			{
 				content->resave(output);
@@ -219,19 +248,19 @@ namespace engine
 
 			friend class database_items_t;
 			friend class item_content_base_t;
-			friend class item_operation_t;
+			friend class item_task_t;
 
 		protected:
 
 			typedef std::function<std::unique_ptr<item_content_base_t>(const virtual_path_t &, item_generic_t *)> create_content_t;
 
 			item_generic_t(database_items_t * database_items, const virtual_path_t & path, create_content_t create_content_func) :
-				item_base_t(database_items, path), create_content_func(create_content_func), operation_pending(nullptr), content_destroyed(nullptr)
+				item_base_t(database_items, path), create_content_func(create_content_func), content_destroyed(nullptr)
 			{
 				content = std::move(create_content_func(path, this));
 			}
 
-			item_generic_t(const item_generic_t & other) : item_base_t(other), create_content_func(other.create_content_func), operation_pending(nullptr), content(other.content->clone())
+			item_generic_t(const item_generic_t & other) : item_base_t(other), create_content_func(other.create_content_func), content(other.content->clone())
 			{
 
 			}
@@ -264,15 +293,15 @@ namespace engine
 
 				return ret;
 			}
-
-			bool set_operation_pending(item_operation_t * operation, bool clear = false);
+			
+			bool execute_operation(task::steps_t & steps, item_task_t * operation)
+			{
+				bool ret = content->execute_operation(steps, operation);
+				steps.step_completed();
+				return ret;
+			}
 
 			create_content_t create_content_func;
-			item_operation_t * operation_pending;
-
-			bool execute_operation_pending(item_operation_t::step_t step);
-
-			std::mutex mutex_operation_pending;
 
 			std::unique_ptr<item_content_base_t> content;
 			item_content_base_t * content_destroyed;

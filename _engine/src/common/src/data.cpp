@@ -3,103 +3,46 @@
 #include "common/data/item.hpp"
 #include "common/platform.hpp"
 #include "common/data/input.hpp"
-#include "common/data/item_operation.hpp"
+#include "common/data/item_task.hpp"
 
 engine::data::item_base_t::~item_base_t()
 {
 	database_items->get_logger()->p_msg(_U("Destroyed '#1#'"), get_path());
 }
 
-void engine::data::item_operation_t::execute_steps(step_t::caller_t caller)
+engine::data::item_task_t::~item_task_t()
 {
-	while (execute_step(caller))
+	if (logger)
 	{
-		// deliberately do nothing!
-	}
-	if (is_completed())
-	{
-		std::lock_guard<std::recursive_mutex> guard(mutex_completed);
-		if (!is_flag(flag_t::has_completed_executed))
+		if (task != -1)
 		{
-			set_flag(flag_t::has_completed_executed, true);
-			if (result == result_t::error)
-				target->destroy();
-			else if (result == result_t::success && get_type() != type_t::free)
-				target->undestroy();
+			if (get_result() == task::result_t::completed)
+				logger->p_task_done(task);
+			else if (get_result() == task::result_t::failed)
+				logger->p_task_failed(task);
 		}
 	}
+
+	target->end_operation();
 }
 
-void engine::data::item_operation_t::init()
+bool engine::data::item_task_t::execute_step_local(engine::task::steps_t & steps)
 {
-	if (target->set_operation_pending(this))
+	auto & step = steps.current();
+	if(step.get_id() == 0)
 	{
 		if (logger)
 		{
-			if(get_type() == type_t::load)
+			if (get_type() == type_t::load)
 				task = logger->p_task_start(_U("Reloading '#1#'"), target->get_path());
 			else if (get_type() == type_t::save)
 				task = logger->p_task_start(_U("Resaving '#1#'"), target->get_path());
 			else if (get_type() == type_t::free)
 				task = logger->p_task_start(_U("Freeing '#1#'"), target->get_path());
 		}
-
-		add_step(0, step_t::caller_t::sync);
-	}
-	else
-		result = result_t::already_started;
-}
-
-engine::data::item_operation_t::~item_operation_t()
-{
-	if (logger)
-	{
-		if (result == result_t::success)
-			logger->p_task_done(task);
-		else if(result != result_t::already_started)
-			logger->p_task_failed(task);
 	}
 
-	target->set_operation_pending(this, true);
-}
-
-bool engine::data::item_operation_t::execute_step(step_t::caller_t caller)
-{
-	if (current_step >= steps.size()) return false;
-
-	if (steps[current_step].get_caller() != caller) return false;
-
-	if (!target->execute_operation_pending(steps[current_step]))
-	{
-		result = result_t::error;
-		current_step = steps.size();
-		return false;
-	}
-	++current_step;
-
-	return true;
-}
-
-bool engine::data::item_generic_t::set_operation_pending(item_operation_t * operation, bool clear)
-{
-	std::lock_guard<std::mutex> guard(mutex_operation_pending);
-	if (operation_pending)
-	{
-		if (clear && operation_pending == operation)
-		{
-			operation_pending = nullptr;
-			return true;
-		}
-		return false;
-	}
-
-	if (operation->get_type() == engine::data::item_operation_t::type_t::save)
-		clear_requested_save();
-	else if (operation->get_type() == engine::data::item_operation_t::type_t::load)
-		clear_requested_load();
-
-	operation_pending = operation;
-	return true;
+	return target->execute_operation(steps, this);
 }
 
 std::unique_ptr<engine::data::input_t> engine::data::input_t::spawn_partial(int32_t size)
@@ -115,16 +58,6 @@ void engine::data::item_content_base_t::set_dirty()
 {
 	if(owner && owner->auto_resave())
 		owner->request_save();
-}
-
-bool engine::data::item_generic_t::execute_operation_pending(item_operation_t::step_t step)
-{
-	std::lock_guard<std::mutex> guard(mutex_operation_pending);
-	if (operation_pending)
-	{
-		return content->execute_operation(step, operation_pending);
-	}
-	return true;
 }
 
 void engine::data::database_t::refresh_virtual_path_type_changes()
@@ -242,7 +175,6 @@ void engine::data::database_items_t::save(std::shared_ptr<item_generic_t> item)
 		item->request_save();
 		create_operation(item, database->get_output(item->get_path()), !item->do_not_log_operations());
 	}
-	execute_operations(item_operation_t::step_t::caller_t::sync);
 }
 
 void engine::data::database_items_t::reload(std::shared_ptr<item_generic_t> item)
@@ -252,7 +184,6 @@ void engine::data::database_items_t::reload(std::shared_ptr<item_generic_t> item
 		item->request_load();
 		create_operation(item, database->get_input(item->get_path()), !item->do_not_log_operations());
 	}
-	execute_operations(item_operation_t::step_t::caller_t::sync);
 }
 
 void engine::data::database_items_t::perform_destroy(const virtual_path_t & path)
@@ -262,8 +193,9 @@ void engine::data::database_items_t::perform_destroy(const virtual_path_t & path
 
 	if (iter != items.end())
 	{
-		create_operation(iter->second, item_operation_t::free_t(), !iter->second->do_not_log_operations());
-		execute_operations(item_operation_t::step_t::caller_t::sync);
+		std::lock_guard<std::recursive_mutex> guard(operations_mutex);
+		iter->second->request_free();
+		create_operation(iter->second, item_task_t::free_t(), !iter->second->do_not_log_operations());
 	}
 }
 
@@ -277,13 +209,11 @@ template<class T> std::shared_ptr<engine::data::item_t<T> > engine::data::databa
 		item->request_load();
 		create_operation(item, std::move(input), !item->do_not_log_operations());
 	}
-	execute_operations(item_operation_t::step_t::caller_t::sync);
+	execute_operations(item_task_t::step_t::caller_t::sync);
 }
 
 void engine::data::database_items_t::update_async()
 {
-	execute_operations(item_operation_t::step_t::caller_t::async);
-
 	{
 		std::lock_guard<std::recursive_mutex> guard(operations_mutex);
 		for (auto & it : items)
@@ -319,8 +249,6 @@ void engine::data::database_items_t::update_async()
 			else
 				iter++;
 		}
-
-		clear_completed_operations();
 	}
 }
 
@@ -348,11 +276,20 @@ void engine::data::database_items_t::init_update()
 					iter->second->destroy();
 				}
 			}
+			if (iter->second->is_requested_save())
+			{
+				create_operation(iter->second, database->get_output(iter->second->get_path()), !iter->second->do_not_log_operations());
+			}
+			else if (iter->second->is_requested_load())
+			{
+				create_operation(iter->second, database->get_input(iter->second->get_path()), !iter->second->do_not_log_operations());
+			}
+			else if (iter->second->is_requested_free())
+			{
+				create_operation(iter->second, engine::data::item_task_t::free_t(), !iter->second->do_not_log_operations());
+			}
 		}
 	}
-
-	execute_operations(item_operation_t::step_t::caller_t::sync);
-	execute_operations(item_operation_t::step_t::caller_t::sync_force_main_thread);
 }
 
 /*

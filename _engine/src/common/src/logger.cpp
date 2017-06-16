@@ -17,6 +17,25 @@
 #include "common/environment_info.hpp"
 #include "common/logger_output/providers.hpp"
 
+void engine::logger_t::item_t::parse_file()
+{
+	static std::string engine_tag = "_engine/src/";
+	static std::string game_tag = XSTR(PIXIE_APP_UNIX_NAME) "/src/";
+
+	std::string file_tmp = file_raw.get_cstring();
+	std::replace(file_tmp.begin(), file_tmp.end(), '\\', '/');
+
+	std::size_t index = file_tmp.find(engine_tag);
+	if (index != std::string::npos)
+		file_tmp = file_tmp.substr(index);
+
+	index = file_tmp.find(game_tag);
+	if (index != std::string::npos)
+		file_tmp = file_tmp.substr(index);
+	
+	file = ustring_t::from_utf8(file_tmp.c_str());
+}
+
 void engine::logger_output::provider_text_base_t::line_constructor_t::query_richtext_flags(logger_t::item_t::level_t level, richtext_t::flag_t & normal, richtext_t::flag_t & meta)
 {
 	switch (level)
@@ -41,7 +60,7 @@ void engine::logger_output::provider_text_base_t::line_constructor_t::populate(c
 		case item_output_element_t::output_sep_arrow: line.clear_flags(); line.set_flag(meta); line.append(_U(" <- ")); break;
 		case item_output_element_t::output_sep_comma: line.clear_flags(); line.set_flag(meta); line.append(_U(", ")); break;
 
-		case item_output_element_t::output_id: line.clear_flags(); line.set_flag(meta); line.append(_U("# ")); if (item->get_id() < 10) line.append(_U("0000")); else if (item->get_id() < 100) line.append(_U("000")); else if (item->get_id() < 1000) line.append(_U("00")); else if (item->get_id() < 10000) line.append(_U("0")); line.append(to_string(item->get_id())); line.append(_U(" ")); break;
+		case item_output_element_t::output_id: line.clear_flags(); line.set_flag(meta); line.append(_U("# ")); line.append(to_string(item->get_id(), 5)); line.append(_U(" ")); break;
 		case item_output_element_t::output_prompt: line.clear_flags(); line.set_flag(meta); line.append(level_to_prompt(item->get_level())); break;
 		case item_output_element_t::output_message:
 			line.clear_flags();

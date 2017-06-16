@@ -520,6 +520,9 @@
     <Filter Include="src\autogen">
       <UniqueIdentifier>{ec84d822-cc46-4bc1-94d0-44bc471403f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\common\include\common\task">
+      <UniqueIdentifier>{46c697f2-5cff-4e7f-b104-f1267ad6e603}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\_engine\depedency\angelscript\include\angelscript.h">
@@ -6324,9 +6327,6 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\queue.hpp">
       <Filter>engine\common\include\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\item_operation.hpp">
-      <Filter>engine\common\include\common\data</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\output_file_safe.hpp">
       <Filter>engine\common\include\common\data</Filter>
     </ClInclude>
@@ -6353,6 +6353,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_text_stdout.hpp">
       <Filter>engine\common\include\common\logger_output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\task\tasks.hpp">
+      <Filter>engine\common\include\common\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\task\task.hpp">
+      <Filter>engine\common\include\common\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\std\task_std.hpp">
+      <Filter>engine\common\include\common\std</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\item_task.hpp">
+      <Filter>engine\common\include\common\data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -6405,6 +6417,9 @@
       <Filter>engine\common\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\_engine\src\common\src\richtext.cpp">
+      <Filter>engine\common\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\_engine\src\common\src\task.cpp">
       <Filter>engine\common\src</Filter>
     </ClCompile>
   </ItemGroup>

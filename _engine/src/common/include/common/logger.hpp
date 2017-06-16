@@ -73,14 +73,15 @@ namespace engine
 
 			};
 			
-			item_t(finished_t) : id(-1), level(level_t::finished)
+			item_t(finished_t) : id(-1), level(level_t::finished), link(-1)
 			{
 
 			}
 
 			item_t(std::size_t id, level_t level, const ustring_t & message, const ustring_t & function, bool raport, bool cease_execution, const ustring_t & file, uint32_t line, uint64_t frame, std::chrono::seconds time, std::thread::id thread, std::size_t link = -1) :
-				id(id), level(level), message(message), function(function), file(file), line(line), frame(frame), time(time), thread(thread), link(link)
+				id(id), level(level), message(message), function(function), file_raw(file), line(line), frame(frame), time(time), thread(thread), link(link)
 			{
+				parse_file();
 				set_flag(flag_t::raport, raport);
 				set_flag(flag_t::cease_execution, cease_execution);
 			}
@@ -103,6 +104,10 @@ namespace engine
 			ustring_t get_file() const
 			{
 				return file;
+			}
+			ustring_t get_file_raw() const
+			{
+				return file_raw;
 			}
 			uint32_t get_line() const
 			{
@@ -143,12 +148,15 @@ namespace engine
 
 		private:
 
+			void parse_file();
+
 			std::size_t id;
 			level_t level;
 			ustring_t message;
 			ustring_t function;
 			std::bitset<static_cast<std::size_t>(flag_t::count)> flags;
 			ustring_t file;
+			ustring_t file_raw;
 			uint32_t line;
 			uint64_t frame;
 			std::chrono::seconds time;

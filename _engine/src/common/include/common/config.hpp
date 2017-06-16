@@ -12,6 +12,7 @@
 #include "common/logger.hpp"
 #include "common/platform.hpp"
 #include "common/manifest_app.hpp"
+#include "common/data/item_content.hpp"
 #include <cereal/cereal.hpp>
 
 #define CONFIG_CURRENT_APP2(x, output) output ##_## x
@@ -29,7 +30,75 @@ namespace engine
 	{
 		class provider_base_t;
 	}
+	/*
+	class item_content_config_t final : public data::item_content_base_t
+	{
 
+	public:
+
+		item_content_config_t(engine::data::item_generic_t * item) : item_content_base_t(item)
+		{
+			item->allow_changes_when_deleted();
+			item->mark_as_both_auto_resave_and_auto_reload();
+		}
+
+		item_content_config_t(destroyed_t destroyed)
+		{
+			data = _U("");
+		}
+
+		engine::ustring_t get_data()
+		{
+			return data;
+		}
+
+		void mark_for_save()
+		{
+			data = _U("Sample");
+			set_dirty();
+		}
+
+	private:
+
+		item_content_config_t * clone() const final
+		{
+			return new item_content_config_t(*this);
+		}
+
+		bool resave(engine::data::output_t * output) final
+		{
+			output->write_ustring(data);
+			return true;
+		}
+
+		bool execute_input_operation(const engine::data::item_task_t::step_t & step, engine::data::item_task_t * operation) final
+		{
+			if (step.get_id() == 0)
+			{
+				operation->add_step('asyn', engine::data::item_task_t::step_t::caller_t::async);
+			}
+			else if (step.get_id() == 'asyn')
+			{
+				data = operation->get_input()->read_ustring();
+			}
+			return true;
+		}
+
+		bool execute_output_operation(const engine::data::item_task_t::step_t & step, engine::data::item_task_t * operation) final
+		{
+			resave(operation->get_output());
+			return true;
+		}
+
+		void execute_free_operation(const engine::data::item_task_t::step_t & step, engine::data::item_task_t * operation)
+		{
+			data = _U("");
+		}
+
+		engine::ustring_t data;
+
+	};
+	*/
 	class config_t final
 	{
 	public:

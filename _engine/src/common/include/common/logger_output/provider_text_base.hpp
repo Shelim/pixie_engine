@@ -55,7 +55,7 @@ namespace engine
 				item
 			};
 
-			provider_text_base_t(std::shared_ptr<logger_t> logger, item_output_elements_t item_output_elements, std::size_t item_output_column_width = 96) : provider_base_t(logger), section(section_t::unknown), item_output_elements(item_output_elements), line_constructor(this, item_output_column_width)
+			provider_text_base_t(std::shared_ptr<logger_t> logger, item_output_elements_t item_output_elements, std::size_t item_output_column_width = 128) : provider_base_t(logger), section(section_t::unknown), item_output_elements(item_output_elements), line_constructor(this, item_output_column_width)
 			{
 
 			}

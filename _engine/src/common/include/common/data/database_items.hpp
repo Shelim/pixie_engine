@@ -6,6 +6,7 @@
 #include "common/queue.hpp"
 #include "common/data/item.hpp"
 #include "common/data/database.hpp"
+#include "common/task/tasks.hpp"
 #include <map>
 #include <vector>
 #include <string>
@@ -24,7 +25,7 @@ namespace engine
 
 		public:
 
-			database_items_t(std::shared_ptr<logger_t> logger, std::shared_ptr<database_t> database) : logger(logger), database(database)
+			database_items_t(std::shared_ptr<logger_t> logger, std::shared_ptr<database_t> database, std::shared_ptr<tasks_t> tasks) : logger(logger), database(database), tasks(tasks)
 			{
 				main_thread_id = std::this_thread::get_id();
 
@@ -182,40 +183,33 @@ namespace engine
 
 			std::shared_ptr<logger_t> logger;
 			std::shared_ptr<database_t> database;
-
-			std::vector<std::unique_ptr<item_operation_t> > operations;
+			std::shared_ptr<tasks_t> tasks;
 
 			void create_operation(std::shared_ptr<item_generic_t> item, std::unique_ptr<input_t> input, bool log)
 			{
 				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
-				operations.push_back(std::move(std::make_unique<item_operation_t>(item, std::move(input), log ? logger : nullptr)));
+				if (!item->is_operation_pending())
+				{
+					item->start_operation();
+					tasks->run_task(std::make_unique<item_task_t>(item, std::move(input), log ? logger : nullptr));
+				}
 			}
 			void create_operation(std::shared_ptr<item_generic_t> item, std::unique_ptr<output_t> output, bool log)
 			{
 				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
-				operations.push_back(std::move(std::make_unique<item_operation_t>(item, std::move(output), log ? logger : nullptr)));
-			}
-			void create_operation(std::shared_ptr<item_generic_t> item, item_operation_t::free_t free, bool log)
-			{
-				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
-				operations.push_back(std::move(std::make_unique<item_operation_t>(item, free, log ? logger : nullptr)));
-			}
-			void execute_operations(item_operation_t::step_t::caller_t caller)
-			{
-				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
-				for (std::size_t op = operations.size(); op--> 0;)
+				if (!item->is_operation_pending())
 				{
-					operations[op]->execute_steps(caller);
+					item->start_operation();
+					tasks->run_task(std::make_unique<item_task_t>(item, std::move(output), log ? logger : nullptr));
 				}
 			}
-			void clear_completed_operations()
+			void create_operation(std::shared_ptr<item_generic_t> item, item_task_t::free_t free, bool log)
 			{
 				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
-
-				for (std::size_t op = operations.size(); op-- > 0;)
+				if (!item->is_operation_pending())
 				{
-					if (operations[op]->is_completed())
-						operations.erase(operations.begin() + op);
+					item->start_operation();
+					tasks->run_task(std::make_unique<item_task_t>(item, free, log ? logger : nullptr));
 				}
 			}
 

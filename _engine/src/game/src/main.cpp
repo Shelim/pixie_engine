@@ -13,6 +13,7 @@
 #include "common/data/database_items.hpp"
 //#include "common/module/database.hpp"
 #include "common/config_container.hpp"
+#include "common/task/tasks.hpp"
 //#include "common/asset.hpp"
 //#include "common/modules.hpp"
 
@@ -77,26 +78,26 @@ private:
 		return true;
 	}
 
-	bool execute_input_operation(const engine::data::item_operation_t::step_t & step, engine::data::item_operation_t * operation) final
+	bool execute_input_operation(engine::task::steps_t & steps, engine::data::item_task_t * operation) final
 	{
-		if (step.get_id() == 0)
+		if (steps.current().get_id() == 0)
 		{
-			operation->add_step('asyn', engine::data::item_operation_t::step_t::caller_t::async);
+			steps.add('asyn', engine::task::caller_t::spawn_new);
 		}
-		else if (step.get_id() == 'asyn')
+		else if (steps.current().get_id() == 'asyn')
 		{
 			data = operation->get_input()->read_ustring();
 		}
 		return true;
 	}
 
-	bool execute_output_operation(const engine::data::item_operation_t::step_t & step, engine::data::item_operation_t * operation) final
+	bool execute_output_operation(engine::task::steps_t & steps, engine::data::item_task_t * operation) final
 	{
 		resave(operation->get_output());
 		return true;
 	}
 
-	void execute_free_operation(const engine::data::item_operation_t::step_t & step, engine::data::item_operation_t * operation)
+	void execute_free_operation(engine::task::steps_t & steps, engine::data::item_task_t * operation)
 	{
 		data = _U("");
 	}
@@ -128,6 +129,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 //	auto database_module = injector.create<std::shared_ptr<engine::module::database_t>>();
 	auto logger_container = injector.create<std::shared_ptr<engine::logger_container_t>>();
 	auto config_container = injector.create<std::shared_ptr<engine::config_container_t>>();
+	auto tasks = injector.create<std::shared_ptr<engine::tasks_t>>();
 
 	platform->show_splashscreen(engine::virtual_path_t(_U("splashscreen/game.tga"), engine::virtual_path_t::type_t::modules));
 
@@ -193,8 +195,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		//		database_module->log_problems_since_last_update();
 
 		config_container->init_update();
+		tasks->init_update();
 		logger_container->update();
-
 		//		logger->p_msg(item->get<item_content_text_t>()->get_data());
 		/*
 		++i;

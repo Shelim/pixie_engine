@@ -1141,6 +1141,7 @@ namespace engine
 		template<class... Args> friend ustring_t format_string(const ustring_t & str, Args... args);
 		friend class cereal::access;
 		template <class T> friend ustring_t to_string(const T & item);
+		template <class T> friend ustring_t to_string(const T & item, std::size_t totalDigits);
 		template <class T> friend T from_string(const ustring_t & str);
 
 	private:
@@ -1491,6 +1492,32 @@ namespace engine
 		std::stringstream ss;
 		ss << id;
 		return ustring_t(ss.str());
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+
+	/**
+	* @brief Converts generic number into ustring_t padding it with leadingZeros
+	*
+	* @note This function works only on integer types
+	*
+	* For example calling this with `to_string(123, 5)` would result in `00123`
+	*
+	* @param[in] item Generic integer number
+	* @param[in] total_digits Number of total digits
+	* @return Converted `ustring_t`
+	* @see from_string
+	*/
+	template<class T> inline ustring_t to_string(const T & item, std::size_t total_digits)
+	{
+		static_assert(std::is_integral<T>::value, "This method only works on integral types");
+
+		std::string base = std::to_string(item);
+
+		std::string str(total_digits - base.length(), '0');
+		str += base;
+
+		return ustring_t(str);
 	}
 
 	//////////////////////////////////////////////////////////////////////////

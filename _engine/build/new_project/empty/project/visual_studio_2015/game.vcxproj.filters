@@ -535,6 +535,9 @@
     <Filter Include="src\autogen">
       <UniqueIdentifier>{22c50b5f-a865-40d8-b16f-fda5c96daf4f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\common\include\common\task">
+      <UniqueIdentifier>{1529ae76-f554-4497-b6e5-c3b4ef91d5b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\_engine\depedency\glew-1.10.0\src\glew.c">
@@ -589,6 +592,9 @@
       <Filter>engine\common\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\_engine\src\common\src\richtext.cpp">
+      <Filter>engine\common\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\_engine\src\common\src\task.cpp">
       <Filter>engine\common\src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -6395,9 +6401,6 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\queue.hpp">
       <Filter>engine\common\include\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\item_operation.hpp">
-      <Filter>engine\common\include\common\data</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\output_file_safe.hpp">
       <Filter>engine\common\include\common\data</Filter>
     </ClInclude>
@@ -6424,6 +6427,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\_engine\src\common\include\common\logger_output\provider_text_base.hpp">
       <Filter>engine\common\include\common\logger_output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\task\tasks.hpp">
+      <Filter>engine\common\include\common\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\task\task.hpp">
+      <Filter>engine\common\include\common\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\std\task_std.hpp">
+      <Filter>engine\common\include\common\std</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\item_task.hpp">
+      <Filter>engine\common\include\common\data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@
 #include "common/virtual_path.hpp"
 #include "common/data/input.hpp"
 #include "common/data/output.hpp"
-#include "common/data/item_operation.hpp"
+#include "common/data/item_task.hpp"
 #include <bitset>
 #include <map>
 #include <vector>
@@ -75,39 +75,33 @@ namespace engine
 		private:
 			
 			item_generic_t * owner;
-
-			virtual bool execute_operation(const item_operation_t::step_t & step, item_operation_t * operation)
+			
+			virtual bool execute_operation(task::steps_t & steps, item_task_t * operation)
 			{
-				if (operation->get_type() == item_operation_t::type_t::save)
-					return execute_output_operation(step, operation);
-				else if (operation->get_type() == item_operation_t::type_t::load)
-					return execute_input_operation(step, operation);
-				else if (operation->get_type() == item_operation_t::type_t::free)
+				if (operation->get_type() == item_task_t::type_t::save)
+					return execute_output_operation(steps, operation);
+				else if (operation->get_type() == item_task_t::type_t::load)
+					return execute_input_operation(steps, operation);
+				else if (operation->get_type() == item_task_t::type_t::free)
 				{
-					execute_free_operation(step, operation);
+					execute_free_operation(steps, operation);
 					return true;
 				}
 				return false;
 			}
 
-			virtual bool is_sub_operation_pending()
-			{
-				return false;
-			}
-
-			virtual bool execute_input_operation(const item_operation_t::step_t & step, item_operation_t * operation)
+			virtual bool execute_input_operation(task::steps_t & steps, item_task_t * operation)
 			{
 				return true;
 			}
-			virtual bool execute_output_operation(const item_operation_t::step_t & step, item_operation_t * operation)
+			virtual bool execute_output_operation(task::steps_t & steps, item_task_t * operation)
 			{
 				return true;
 			}
-			virtual void execute_free_operation(const item_operation_t::step_t & step, item_operation_t * operation)
+			virtual void execute_free_operation(task::steps_t & steps, item_task_t * operation)
 			{
 
 			}
-
 		};
 
 	}
