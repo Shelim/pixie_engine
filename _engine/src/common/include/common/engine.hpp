@@ -3,6 +3,8 @@
 #pragma once
 
 #include <thread>
+#include <mutex>
+#include <condition_variable>
 #include <memory>
 #include <condition_variable>
 #include "common/injector.hpp"
@@ -21,6 +23,7 @@
 
 namespace engine
 {
+	class engine_t;
 
 	class engine_t final
 	{
@@ -46,27 +49,15 @@ namespace engine
 
 		~engine_t()
 		{
-			while (!is_shutdown_completed())
-				std::this_thread::sleep_for(std::chrono::milliseconds(10));
-		}
-		
-		static engine_t * get();
 
-		void run();
-
-		void shutdown()
-		{
-			set_flag(flag_t::is_requested_shutdown, true);
-		}
-
-		bool is_shutdown_completed()
-		{
-			return is_flag(flag_t::shutdown_completed);
 		}
 
 	private:
 
-		static std::string platform_get_executable_filename();
+		void application_init();
+		void application_update();
+		void application_render();
+		void application_shutdown();
 
 		std::shared_ptr<engine::platform_t> platform;
 		std::shared_ptr<engine::data::database_providers_t> database_providers;
@@ -74,11 +65,68 @@ namespace engine
 		std::shared_ptr<engine::logger_container_t> logger_container;
 		std::shared_ptr<engine::config_container_t> config_container;
 		std::shared_ptr<engine::tasks_t> tasks;
+	};
+
+	class engine_container_t final
+	{
+
+	public:
+
+		engine_container_t()
+		{
+			main_thread_id = std::this_thread::get_id();
+		}
+
+		static engine_container_t * get()
+		{
+			static engine_container_t engine_container;
+
+			return &engine_container;
+		}
+
+		engine_t * get_engine()
+		{
+			return engine.get();
+		}
+
+		void run();
+
+		~engine_container_t()
+		{
+
+		}
+
+		void force_kill()
+		{
+			if (std::this_thread::get_id() == main_thread_id)
+			{
+				set_flag(flag_t::is_requested_shutdown, true);
+				exit(EXIT_FAILURE);
+			}
+			else
+			{
+				set_flag(flag_t::is_requested_shutdown, true);
+
+				std::unique_lock<std::mutex> lock(mutex);
+				condition_variable.wait(lock, [this] {return is_flag(flag_t::is_completed_shutdown);});
+				exit(EXIT_FAILURE);
+			}
+		}
+
+	private:
+
+		static std::string platform_get_executable_filename();
+
+		std::thread::id main_thread_id;
+
+		std::mutex mutex;
+		std::condition_variable condition_variable;
+
 
 		enum class flag_t
 		{
 			is_requested_shutdown,
-			shutdown_completed,
+			is_completed_shutdown,
 
 			count
 		};
@@ -94,6 +142,10 @@ namespace engine
 		{
 			return flags.test(static_cast<std::size_t>(flag));
 		}
+
+
+		std::unique_ptr<engine_t> engine;
+
 	};
 }
 

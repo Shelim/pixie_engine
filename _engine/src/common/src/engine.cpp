@@ -13,9 +13,13 @@ namespace
 	};
 }
 
-engine::engine_t * engine::engine_t::get()
+void engine::engine_container_t::run()
 {
-	static std::unique_ptr<engine_t> engine = make_di(platform_get_executable_filename()).create<std::unique_ptr<engine::engine_t> >();
+	engine = make_di(platform_get_executable_filename()).create<std::unique_ptr<engine::engine_t> >();
 
-	return engine.get();
+	engine->run();
+
+	is_completed = true;
+
+	condition_variable.notify_one();
 }

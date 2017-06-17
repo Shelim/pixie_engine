@@ -185,7 +185,7 @@ void engine::platform_t::show_splashscreen(const virtual_path_t & virtual_path)
 
 }
 
-std::string engine::engine_t::platform_get_executable_filename()
+std::string engine::engine_container_t::platform_get_executable_filename()
 {
 	CHAR file_name[MAX_PATH];
 	GetModuleFileNameA(NULL, file_name, MAX_PATH);
