@@ -11,7 +11,7 @@ namespace engine
 
 	namespace asset
 	{
-		class database_t;
+		class database_providers_t;
 
 		class collection_base_t
 		{
@@ -94,13 +94,13 @@ namespace engine
 
 			template<class T> friend class collection_t;
 			
-			void reload(std::shared_ptr<database_t> database, std::shared_ptr<logger_t> logger)
+			void reload(std::shared_ptr<database_providers_t> database, std::shared_ptr<logger_t> logger)
 			{
 				reload_local(database, logger);
 				refresh_items_named();
 			}
 
-			virtual void reload_local(std::shared_ptr<database_t> database, std::shared_ptr<logger_t> logger)
+			virtual void reload_local(std::shared_ptr<database_providers_t> database, std::shared_ptr<logger_t> logger)
 			{
 
 			}
@@ -144,7 +144,7 @@ namespace engine
 				items_casted.insert(items_casted.end(), std::dynamic_pointer_cast<T*>(*items.begin()), std::dynamic_pointer_cast<T*>(*items.end()));
 			}
 
-			void reload_local(std::shared_ptr<database_t> database, std::shared_ptr<logger_t> logger) final
+			void reload_local(std::shared_ptr<database_providers_t> database, std::shared_ptr<logger_t> logger) final
 			{
 				
 				refresh_items_casted(); // at the end!!!

@@ -5,7 +5,7 @@
 #include "common/asset/item_holder.hpp"
 #include "common/asset/collection.hpp"
 
-void engine::asset::item_collection_holder_t::resolve_collection(std::shared_ptr<database_t> database)
+void engine::asset::item_collection_holder_t::resolve_collection(std::shared_ptr<database_providers_t> database)
 {
 	/*
 	if (!collection && database && !is_deatached())
@@ -13,7 +13,7 @@ void engine::asset::item_collection_holder_t::resolve_collection(std::shared_ptr
 	*/
 }
 
-void engine::asset::item_holder_t::resolve_item(std::shared_ptr<database_t> database)
+void engine::asset::item_holder_t::resolve_item(std::shared_ptr<database_providers_t> database)
 {
 	/*
 	if (!is_deatached() && database)

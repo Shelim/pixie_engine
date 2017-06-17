@@ -1918,9 +1918,9 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\config_io\provider_base.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\config_io\provider_data.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\crc32.hpp" />
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\database.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\database_changes.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\database_items.hpp" />
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\database_providers.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\database_state.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\input.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\input_file.hpp" />
@@ -1942,6 +1942,7 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\scanner_directory.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\scanner_file.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\doxygen.hpp" />
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\engine.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\environment_info.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\factory.hpp" />
     <ClInclude Include="..\..\..\_engine\src\common\include\common\filesystem.hpp" />
@@ -1987,6 +1988,7 @@
     <ClCompile Include="..\..\..\_engine\src\common\src\config.cpp" />
     <ClCompile Include="..\..\..\_engine\src\common\src\crc32.cpp" />
     <ClCompile Include="..\..\..\_engine\src\common\src\data.cpp" />
+    <ClCompile Include="..\..\..\_engine\src\common\src\engine.cpp" />
     <ClCompile Include="..\..\..\_engine\src\common\src\environment_info.cpp" />
     <ClCompile Include="..\..\..\_engine\src\common\src\logger.cpp" />
     <ClCompile Include="..\..\..\_engine\src\common\src\module.cpp" />

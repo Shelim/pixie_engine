@@ -3,7 +3,7 @@
 #include "common/platform.hpp"
 #include "common/manifest_app.hpp"
 #include "common/config_io/provider_base.hpp"
-#include "common/data/database.hpp"
+#include "common/data/database_providers.hpp"
 #include "common/data/database_items.hpp"
 #include <fstream>
 #include <istream>
@@ -33,11 +33,11 @@ void engine::config_t::resave()
 	}
 }
 /*
-void engine::config_t::reload(engine::data::database_t * database)
+void engine::config_t::reload(engine::data::database_providers_t * database_providers)
 {
 	std::lock_guard<std::recursive_mutex> guard(mutex);
 
-	auto provider = database->get()->get_provider(path);
+	auto provider = database_providers->get()->get_provider(path);
 	
 	if (!provider)
 	{
@@ -70,11 +70,11 @@ void engine::config_t::reload(engine::data::database_t * database)
 
 }
 
-void engine::config_t::resave(engine::data::database_t * database)
+void engine::config_t::resave(engine::data::database_providers_t * database_providers)
 {
 	std::lock_guard<std::recursive_mutex> guard(mutex);
 
-	auto output = database->write_or_create(path);
+	auto output = database_providers->write_or_create(path);
 
 	engine::data::output_streambuf_t streambuf(output.get());
 
@@ -87,17 +87,17 @@ void engine::config_t::resave(engine::data::database_t * database)
 	}
 }
 
-void engine::config_t::update_from_database(engine::data::database_t * database)
+void engine::config_t::update_from_database(engine::data::database_providers_t * database_providers)
 {
 	data_prev = data;
 
-	if (database->is_type_change(virtual_path_t::type_t::config))
+	if (database_providers->is_type_change(virtual_path_t::type_t::config))
 	{
-		reload(database);
+		reload(database_providers);
 	}
 	if (is_dirty)
 	{
-		resave(database);
+		resave(database_providers);
 		is_dirty = false;
 	}
 }

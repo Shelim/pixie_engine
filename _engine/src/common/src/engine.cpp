@@ -1,0 +1,21 @@
+#include "common/engine.hpp"
+#include <memory>
+
+std::function<void()> engine::arg0 = [] {};
+
+
+namespace
+{
+	auto make_di = [](const std::string& program_path)
+	{
+		return di::make_injector(di::bind<std::string>().named(engine::arg0).to(program_path),
+			di::bind<engine::config_io::provider_base_t>().to<engine::config_io::GAME_CONFIG_PROVIDER_STD>());
+	};
+}
+
+engine::engine_t * engine::engine_t::get()
+{
+	static std::unique_ptr<engine_t> engine = make_di(platform_get_executable_filename()).create<std::unique_ptr<engine::engine_t> >();
+
+	return engine.get();
+}

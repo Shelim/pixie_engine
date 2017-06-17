@@ -2,6 +2,7 @@
 #include "common/logger.hpp"
 #include "common/manifest_app.hpp"
 #include "common/logger_output/provider_base.hpp"
+#include "common/engine.hpp"
 
 #if PIXIE_WINDOWS
 
@@ -78,6 +79,8 @@ private:
 	engine::logger_t * logger;
 	engine::manifest_app_t * manifest_app;
 
+	HANDLE handle_single_instance;
+
 	static implementation_t * impl;
 
 	WORD color_to_attribs(console_color_t color)
@@ -135,6 +138,23 @@ private:
 	
 public:
 
+	void ensure_single_instance()
+	{
+		handle_single_instance = CreateMutexA(NULL, TRUE, "Pixie" PIXIE_OUTPUT_TYPE_STR);
+		if (handle_single_instance == NULL || GetLastError() == ERROR_ALREADY_EXISTS)
+		{
+			HWND existingApp = FindWindowA("PixieGameWndClass", 0);
+			if (existingApp) SetForegroundWindow(existingApp);
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	void free_single_instance()
+	{
+		ReleaseMutex(handle_single_instance);
+		CloseHandle(handle_single_instance);
+	}
+
 	enum class console_default_color_t
 	{
 #define GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(key_name, key_color, key_backround) foreground_##key_name = static_cast<uint32_t>(console_color_t::key_color), background_##key_name = static_cast<uint32_t>(console_color_t::key_backround),
@@ -142,6 +162,18 @@ public:
 		foreground_default = static_cast<uint32_t>(console_color_t::gray_light),
 		background_default = static_cast<uint32_t>(console_color_t::black)
 	};
+
+	static BOOL WINAPI console_signal_handler(DWORD signal)
+	{
+		if (signal == CTRL_C_EVENT || signal == CTRL_BREAK_EVENT)
+		{
+			engine::engine_t::get()->shutdown();
+			exit(EXIT_FAILURE);
+			return TRUE;
+		}
+
+		return FALSE;
+	}
 
 	void open_console()
 	{
@@ -169,10 +201,14 @@ public:
 
 		SetConsoleOutputCP(CP_UTF8);
 
+		/*
 		DWORD mode;
 		GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &mode);
 		mode = (mode & (~ENABLE_PROCESSED_INPUT));
 		SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
+		*/
+
+		SetConsoleCtrlHandler(console_signal_handler, TRUE);
 
 		HWND hwnd = GetConsoleWindow();
 		HMENU hmenu = GetSystemMenu(hwnd, FALSE);

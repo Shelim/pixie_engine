@@ -23,7 +23,7 @@ namespace engine
 {
 	namespace data
 	{
-		class database_t;
+		class database_providers_t;
 	}
 
 	namespace config_io

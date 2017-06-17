@@ -8,7 +8,7 @@
 #include "common/asset/path.hpp"
 #include "common/data/input.hpp"
 #include "common/data/output.hpp"
-#include "common/data/database.hpp"
+#include "common/data/database_providers.hpp"
 #include "common/logger.hpp"
 #include <cereal/access.hpp>
 #include <cereal/types/polymorphic.hpp>
@@ -24,12 +24,12 @@ namespace engine
 	namespace asset
 	{
 
-		class database_t
+		class database_providers_t
 		{
 
 		public:
 
-			database_t(std::shared_ptr<data::database_t> data_database) : data_database(data_database)
+			database_providers_t(std::shared_ptr<data::database_providers_t> data_database) : data_database(data_database)
 			{
 
 			}
@@ -41,7 +41,7 @@ namespace engine
 
 		private:
 
-			std::shared_ptr<data::database_t> data_database;
+			std::shared_ptr<data::database_providers_t> data_database;
 
 		};
 

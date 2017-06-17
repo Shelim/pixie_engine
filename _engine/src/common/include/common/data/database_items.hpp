@@ -5,7 +5,7 @@
 #include "common/virtual_path.hpp"
 #include "common/queue.hpp"
 #include "common/data/item.hpp"
-#include "common/data/database.hpp"
+#include "common/data/database_providers.hpp"
 #include "common/task/tasks.hpp"
 #include <map>
 #include <vector>
@@ -25,7 +25,7 @@ namespace engine
 
 		public:
 
-			database_items_t(std::shared_ptr<logger_t> logger, std::shared_ptr<database_t> database, std::shared_ptr<tasks_t> tasks) : logger(logger), database(database), tasks(tasks)
+			database_items_t(std::shared_ptr<logger_t> logger, std::shared_ptr<database_providers_t> database_providers, std::shared_ptr<tasks_t> tasks) : logger(logger), database_providers(database_providers), tasks(tasks)
 			{
 				main_thread_id = std::this_thread::get_id();
 
@@ -40,9 +40,9 @@ namespace engine
 				init_update();
 			}
 
-			std::shared_ptr<database_t> get_database()
+			std::shared_ptr<database_providers_t> get_database_providers()
 			{
-				return database;
+				return database_providers;
 			}
 
 			void save(std::shared_ptr<item_generic_t> item);
@@ -159,7 +159,10 @@ namespace engine
 
 			void perform_destroy(const virtual_path_t & path);
 
-			void update_async();
+			void update_async()
+			{
+
+			}
 
 			void update_items()
 			{
@@ -175,47 +178,16 @@ namespace engine
 			}
 
 			std::thread::id main_thread_id;
-			
-			queue_t<std::shared_ptr<item_generic_t> > items_reload_next;
 
 			std::map<virtual_path_t, std::shared_ptr<item_generic_t> > items;
 			std::recursive_mutex mutex_items;
 
 			std::shared_ptr<logger_t> logger;
-			std::shared_ptr<database_t> database;
+			std::shared_ptr<database_providers_t> database_providers;
 			std::shared_ptr<tasks_t> tasks;
-
-			void create_operation(std::shared_ptr<item_generic_t> item, std::unique_ptr<input_t> input, bool log)
-			{
-				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
-				if (!item->is_operation_pending())
-				{
-					item->start_operation();
-					tasks->run_task(std::make_unique<item_task_t>(item, std::move(input), log ? logger : nullptr));
-				}
-			}
-			void create_operation(std::shared_ptr<item_generic_t> item, std::unique_ptr<output_t> output, bool log)
-			{
-				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
-				if (!item->is_operation_pending())
-				{
-					item->start_operation();
-					tasks->run_task(std::make_unique<item_task_t>(item, std::move(output), log ? logger : nullptr));
-				}
-			}
-			void create_operation(std::shared_ptr<item_generic_t> item, item_task_t::free_t free, bool log)
-			{
-				std::lock_guard<std::recursive_mutex> guard(operations_mutex);
-				if (!item->is_operation_pending())
-				{
-					item->start_operation();
-					tasks->run_task(std::make_unique<item_task_t>(item, free, log ? logger : nullptr));
-				}
-			}
 
 			bool end_update_data;
 			std::thread update_items_thread;
-			std::recursive_mutex operations_mutex;
 		};
 	}
 

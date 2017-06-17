@@ -12,7 +12,7 @@ namespace engine
 
 	namespace asset
 	{
-		class database_t;
+		class database_providers_t;
 		
 		class item_holder_t final
 		{
@@ -29,7 +29,7 @@ namespace engine
 				return path;
 			}
 
-			item_holder_t(const path_t::canonized_t & path, std::shared_ptr<database_t> database = nullptr) : path(path)
+			item_holder_t(const path_t::canonized_t & path, std::shared_ptr<database_providers_t> database = nullptr) : path(path)
 			{
 				resolve_item(database);
 			}
@@ -50,7 +50,7 @@ namespace engine
 					item = item->deatach();
 			}
 
-			void resolve_item(std::shared_ptr<database_t> database);
+			void resolve_item(std::shared_ptr<database_providers_t> database);
 
 		private:
 
@@ -107,7 +107,7 @@ namespace engine
 				return path;
 			}
 
-			item_collection_holder_t(const path_t::canonized_t & path, std::shared_ptr<database_t> database = nullptr) : path(path), deatached(false)
+			item_collection_holder_t(const path_t::canonized_t & path, std::shared_ptr<database_providers_t> database = nullptr) : path(path), deatached(false)
 			{
 				resolve_collection(database);
 			}
@@ -117,7 +117,7 @@ namespace engine
 
 			}
 
-			void resolve_collection(std::shared_ptr<database_t> database);
+			void resolve_collection(std::shared_ptr<database_providers_t> database);
 
 			bool is_deatached() const
 			{

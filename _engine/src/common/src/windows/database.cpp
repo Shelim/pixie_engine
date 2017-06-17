@@ -2,7 +2,7 @@
 
 #if PIXIE_WINDOWS
 
-#include "common/data/database.hpp"
+#include "common/data/database_providers.hpp"
 #include "common/data/scanner_file.hpp"
 #include "common/data/scanner_directory.hpp"
 #include "platform_pimpl.hpp"
@@ -49,7 +49,7 @@ static void add_path(engine::data::scanners_t::collection_t * ret, engine::platf
 	ret->push_back(std::make_unique<engine::data::scanner_directory_t>(engine::virtual_path_t(_U(""), type), path_local, false));
 }
 
-std::unique_ptr<engine::data::scanners_t::collection_t > engine::data::database_t::platform_get_scanners_collection()
+std::unique_ptr<engine::data::scanners_t::collection_t > engine::data::database_providers_t::platform_get_scanners_collection()
 {
 	std::unique_ptr<engine::data::scanners_t::collection_t > ret = std::make_unique<engine::data::scanners_t::collection_t >();
 

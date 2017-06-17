@@ -2,18 +2,7 @@
 
 #if PIXIE_WINDOWS
 
-#include "common/logger.hpp"
-#include "common/injector.hpp"
-#include "common/config.hpp"
-#include "common/data/database.hpp"
-#include "common/data/item_content.hpp"
-#include "common/logger_container.hpp"
-#include "common/logger_output/providers.hpp"
-#include "common/manifest_app.hpp"
-#include "common/data/database_items.hpp"
-//#include "common/module/database.hpp"
-#include "common/config_container.hpp"
-#include "common/task/tasks.hpp"
+#include "common/engine.hpp"
 //#include "common/asset.hpp"
 //#include "common/modules.hpp"
 
@@ -78,65 +67,25 @@ private:
 		return true;
 	}
 
-	bool execute_input_operation(engine::task::steps_t & steps, engine::data::item_task_t * operation) final
-	{
-		if (steps.current().get_id() == 0)
-		{
-			steps.add('asyn', engine::task::caller_t::spawn_new);
-		}
-		else if (steps.current().get_id() == 'asyn')
-		{
-			data = operation->get_input()->read_ustring();
-		}
-		return true;
-	}
-
-	bool execute_output_operation(engine::task::steps_t & steps, engine::data::item_task_t * operation) final
-	{
-		resave(operation->get_output());
-		return true;
-	}
-
-	void execute_free_operation(engine::task::steps_t & steps, engine::data::item_task_t * operation)
-	{
-		data = _U("");
-	}
-
 	engine::ustring_t data;
 
 };
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-	CHAR szFileName[MAX_PATH];
-	GetModuleFileNameA(NULL, szFileName, MAX_PATH);
+	engine::engine_t::get()->run();
 
-	HANDLE handle = CreateMutexA(NULL, TRUE, "Pixie" PIXIE_OUTPUT_TYPE_STR);
-	if (handle == NULL || GetLastError() == ERROR_ALREADY_EXISTS)
-	{
-		HWND existingApp = FindWindowA("PixieGameWndClass", 0);
-		if (existingApp) SetForegroundWindow(existingApp);
-		return EXIT_FAILURE;
-	}
+	return EXIT_SUCCESS;
+}
 
-	auto injector = make_di(std::string(szFileName));
-
-	auto platform = injector.create<std::shared_ptr<engine::platform_t>>();
-	auto logger = injector.create<std::shared_ptr<engine::logger_t>>();
-	auto config = injector.create<std::shared_ptr<engine::config_t>>();
-	auto database_data = injector.create<std::shared_ptr<engine::data::database_t>>();
-	auto database_items = injector.create<std::shared_ptr<engine::data::database_items_t>>();
-//	auto database_module = injector.create<std::shared_ptr<engine::module::database_t>>();
-	auto logger_container = injector.create<std::shared_ptr<engine::logger_container_t>>();
-	auto config_container = injector.create<std::shared_ptr<engine::config_container_t>>();
-	auto tasks = injector.create<std::shared_ptr<engine::tasks_t>>();
-
+void engine::engine_t::run()
+{
 	platform->show_splashscreen(engine::virtual_path_t(_U("splashscreen/game.tga"), engine::virtual_path_t::type_t::modules));
 
 	engine::color_t col = 0xff000000;
 	/*
 	auto asset_db = injector.create<std::shared_ptr<engine::asset_database_launcher>>();
-	
+
 	asset_db->rescan();
 
 	engine::module_manifest_t manifest1(_U("base"));
@@ -153,7 +102,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	engine::sub_module_manifest_t sub_manifest3(_U("sample"));
 	engine::sub_module_manifest_t sub_manifest4(_U("sample_invalid"));
 	engine::sub_module_manifest_t sub_manifest5(_U("sample_invalid2"));
-	
+
 	sub_manifest1.save();
 	sub_manifest2.save();
 	sub_manifest3.save();
@@ -171,14 +120,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	int32_t i = 0;
 
+	int * a = 0;
+	(*a) = 5;
+
 	std::shared_ptr<engine::data::item_t<item_content_text_t>> item = database_items->get_item<item_content_text_t>(engine::virtual_path_t(_U("base/_manifest.info"), engine::virtual_path_t::type_t::modules));
 	std::shared_ptr<engine::data::item_t<item_content_text_t>> item2 = database_items->get_item<item_content_text_t>(engine::virtual_path_t(_U("base/_manifest.info"), engine::virtual_path_t::type_t::modules));
-	
+
 	std::shared_ptr<engine::data::item_t<item_content_text_t>> item_deatached;
 
 	bool saved = false;
-	
-	for (;;)
+
+	while(!is_flag(flag_t::is_requested_shutdown))
 	{
 		if (!saved && !item2->is_operation_pending())
 		{
@@ -189,13 +141,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			item = nullptr;
 		}
 
-		database_data->init_update();
+		database_providers->init_update();
 		database_items->init_update();
 		//		database_module->init_update();
 		//		database_module->log_problems_since_last_update();
 
 		config_container->init_update();
-		tasks->init_update();
+		//		tasks->init_update();
 		logger_container->update();
 		//		logger->p_msg(item->get<item_content_text_t>()->get_data());
 		/*
@@ -203,7 +155,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		logger->p_msg(_U("Test of huge outputs: #1#!"), i);
 
 		if (i == 10000)
-			break;
+		break;
 		*/
 		/*
 		if (i == 100)
@@ -312,41 +264,38 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		*/
 	}
 
-//	engine::module_resolver resolv(config, platform);
+	//	engine::module_resolver resolv(config, platform);
 
 	/*
 	engine::asset_scanner_files asf(logger);
 	asf.scan(u8"modules/base");
 	for (auto & iter : asf.get_all())
 	{
-		if (iter.second.is_deleted())
-			logger->p_warn(_U("#1# - deleted"), iter.first);
-		else
-			logger->p_msg(_U("#1#"), iter.first);
+	if (iter.second.is_deleted())
+	logger->p_warn(_U("#1# - deleted"), iter.first);
+	else
+	logger->p_msg(_U("#1#"), iter.first);
 	}
 	asf.scan(u8"modules/test2");
 	for (auto & iter : asf.get_all())
 	{
-		if (iter.second.is_deleted())
-			logger->p_warn(_U("#1# - deleted"), iter.first);
-		else
-			logger->p_msg(_U("#1#"), iter.first);
+	if (iter.second.is_deleted())
+	logger->p_warn(_U("#1# - deleted"), iter.first);
+	else
+	logger->p_msg(_U("#1#"), iter.first);
 	}
 	asf.scan(u8"sub_modules/crs");
 	for (auto & iter : asf.get_all())
 	{
-		if (iter.second.is_deleted())
-			logger->p_warn(_U("#1# - deleted"), iter.first);
-		else
-			logger->p_msg(_U("#1#"), iter.first);
+	if (iter.second.is_deleted())
+	logger->p_warn(_U("#1# - deleted"), iter.first);
+	else
+	logger->p_msg(_U("#1#"), iter.first);
 	}
 	*/
 
-	logger->p_msg(_U("Completed main thread!"));
-	ReleaseMutex(handle);
-	CloseHandle(handle);
-
-	return EXIT_SUCCESS;
+	logger_container->get()->p_msg(_U("Completed main thread!"));
+	set_flag(flag_t::shutdown_completed, true);
 }
 
 #endif

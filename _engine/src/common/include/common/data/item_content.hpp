@@ -76,32 +76,6 @@ namespace engine
 			
 			item_generic_t * owner;
 			
-			virtual bool execute_operation(task::steps_t & steps, item_task_t * operation)
-			{
-				if (operation->get_type() == item_task_t::type_t::save)
-					return execute_output_operation(steps, operation);
-				else if (operation->get_type() == item_task_t::type_t::load)
-					return execute_input_operation(steps, operation);
-				else if (operation->get_type() == item_task_t::type_t::free)
-				{
-					execute_free_operation(steps, operation);
-					return true;
-				}
-				return false;
-			}
-
-			virtual bool execute_input_operation(task::steps_t & steps, item_task_t * operation)
-			{
-				return true;
-			}
-			virtual bool execute_output_operation(task::steps_t & steps, item_task_t * operation)
-			{
-				return true;
-			}
-			virtual void execute_free_operation(task::steps_t & steps, item_task_t * operation)
-			{
-
-			}
 		};
 
 	}

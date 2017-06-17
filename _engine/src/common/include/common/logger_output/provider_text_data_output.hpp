@@ -5,7 +5,7 @@
 #include "common/logger.hpp"
 #include "common/logger_output/provider_text_base.hpp"
 #include "common/environment_info.hpp"
-#include "common/data/database.hpp"
+#include "common/data/database_providers.hpp"
 #include "common/data/item.hpp"
 #include "common/data/output.hpp"
 #include "common/queue.hpp"
@@ -21,7 +21,7 @@ namespace engine
 {
 	namespace data
 	{
-		class database_t;
+		class database_providers_t;
 	}
 
 	namespace logger_output
@@ -32,7 +32,7 @@ namespace engine
 
 		public:
 
-			provider_data_output_t(std::shared_ptr<engine::data::database_t> database, std::shared_ptr<logger_t> logger, std::shared_ptr<environment_info_t> environment_info);
+			provider_data_output_t(std::shared_ptr<engine::data::database_providers_t> database_providers, std::shared_ptr<logger_t> logger, std::shared_ptr<environment_info_t> environment_info);
 
 			~provider_data_output_t()
 			{

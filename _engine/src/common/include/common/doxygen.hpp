@@ -28,7 +28,7 @@
  *     
  * @section pixie_features Features
  * @subsection pixie_features_data Data
- *     - @ref engine::data::database_t "Advanced data engine" for IO supporting range of different @ref engine::data::input_t "input sources"
+ *     - @ref engine::data::database_providers_t "Advanced data engine" for IO supporting range of different @ref engine::data::input_t "input sources"
  *     - @ref engine::data::output_t "Output target" supported, allowing writing arbitrary data
  *     - @ref Fully featured @ref virtual_path "Virtual File System (VFS)", completely abstract of physical implementation
  *     - @ref Hot-swapping supported for almost all input sources. Data engine monitors status of data streams and updates already loaded @ref engine::data::item_base_t "data items"

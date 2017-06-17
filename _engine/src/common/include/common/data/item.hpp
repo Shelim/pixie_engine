@@ -18,7 +18,7 @@ namespace engine
 {
 	namespace data
 	{
-		class database_t;
+		class database_providers_t;
 		class item_task_t;
 
 		class item_base_t
@@ -291,13 +291,6 @@ namespace engine
 				item_generic_t * ret = clone(get_path());
 				ret->set_deatached_flag();
 
-				return ret;
-			}
-			
-			bool execute_operation(task::steps_t & steps, item_task_t * operation)
-			{
-				bool ret = content->execute_operation(steps, operation);
-				steps.step_completed();
 				return ret;
 			}
 

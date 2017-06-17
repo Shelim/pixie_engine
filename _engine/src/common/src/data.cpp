@@ -1,4 +1,4 @@
-#include "common/data/database.hpp"
+#include "common/data/database_providers.hpp"
 #include "common/data/database_items.hpp"
 #include "common/data/item.hpp"
 #include "common/platform.hpp"
@@ -8,41 +8,6 @@
 engine::data::item_base_t::~item_base_t()
 {
 	database_items->get_logger()->p_msg(_U("Destroyed '#1#'"), get_path());
-}
-
-engine::data::item_task_t::~item_task_t()
-{
-	if (logger)
-	{
-		if (task != -1)
-		{
-			if (get_result() == task::result_t::completed)
-				logger->p_task_done(task);
-			else if (get_result() == task::result_t::failed)
-				logger->p_task_failed(task);
-		}
-	}
-
-	target->end_operation();
-}
-
-bool engine::data::item_task_t::execute_step_local(engine::task::steps_t & steps)
-{
-	auto & step = steps.current();
-	if(step.get_id() == 0)
-	{
-		if (logger)
-		{
-			if (get_type() == type_t::load)
-				task = logger->p_task_start(_U("Reloading '#1#'"), target->get_path());
-			else if (get_type() == type_t::save)
-				task = logger->p_task_start(_U("Resaving '#1#'"), target->get_path());
-			else if (get_type() == type_t::free)
-				task = logger->p_task_start(_U("Freeing '#1#'"), target->get_path());
-		}
-	}
-
-	return target->execute_operation(steps, this);
 }
 
 std::unique_ptr<engine::data::input_t> engine::data::input_t::spawn_partial(int32_t size)
@@ -60,7 +25,7 @@ void engine::data::item_content_base_t::set_dirty()
 		owner->request_save();
 }
 
-void engine::data::database_t::refresh_virtual_path_type_changes()
+void engine::data::database_providers_t::refresh_virtual_path_type_changes()
 {
 	type_changes.clear();
 
@@ -71,7 +36,7 @@ void engine::data::database_t::refresh_virtual_path_type_changes()
 	}
 }
 
-void engine::data::database_t::rescan()
+void engine::data::database_providers_t::rescan()
 {
 	std::lock_guard<std::recursive_mutex> guard(mutex_database_next);
 	if (requested_rescan)
@@ -170,20 +135,12 @@ void engine::data::item_generic_t::destroy_self(item_content_base_t * content)
 
 void engine::data::database_items_t::save(std::shared_ptr<item_generic_t> item)
 {
-	{
-		std::lock_guard<std::recursive_mutex> guard(operations_mutex);
-		item->request_save();
-		create_operation(item, database->get_output(item->get_path()), !item->do_not_log_operations());
-	}
+	item->request_save();
 }
 
 void engine::data::database_items_t::reload(std::shared_ptr<item_generic_t> item)
 {
-	{
-		std::lock_guard<std::recursive_mutex> guard(operations_mutex);
-		item->request_load();
-		create_operation(item, database->get_input(item->get_path()), !item->do_not_log_operations());
-	}
+	item->request_load();
 }
 
 void engine::data::database_items_t::perform_destroy(const virtual_path_t & path)
@@ -193,9 +150,7 @@ void engine::data::database_items_t::perform_destroy(const virtual_path_t & path
 
 	if (iter != items.end())
 	{
-		std::lock_guard<std::recursive_mutex> guard(operations_mutex);
 		iter->second->request_free();
-		create_operation(iter->second, item_task_t::free_t(), !iter->second->do_not_log_operations());
 	}
 }
 
@@ -212,50 +167,9 @@ template<class T> std::shared_ptr<engine::data::item_t<T> > engine::data::databa
 	execute_operations(item_task_t::step_t::caller_t::sync);
 }
 
-void engine::data::database_items_t::update_async()
-{
-	{
-		std::lock_guard<std::recursive_mutex> guard(operations_mutex);
-		for (auto & it : items)
-		{
-			if (!it.second->is_operation_pending())
-			{
-				if (it.second->is_requested_load())
-					create_operation(it.second, database->get_input(it.second->get_path()), !it.second->do_not_log_operations());
-				else if (it.second->is_requested_save())
-					create_operation(it.second, database->get_output(it.second->get_path()), !it.second->do_not_log_operations());
-			}
-		}
-
-		for (auto iter = items.begin(); iter != items.end(); )
-		{
-			if (iter->second.use_count() == 1)
-			{
-				if (iter->second->is_destroyed())
-				{
-					if (!iter->second->is_operation_pending())
-					{
-						iter = items.erase(iter);
-					}
-					else
-						iter++;
-				}
-				else
-				{
-					iter->second->destroy();
-					iter = items.erase(iter);
-				}
-			}
-			else
-				iter++;
-		}
-	}
-}
-
-
 void engine::data::database_items_t::init_update()
 {
-	auto & changes = database->get_changes();
+	auto & changes = database_providers->get_changes();
 
 	for (auto & change : changes)
 	{
@@ -275,18 +189,6 @@ void engine::data::database_items_t::init_update()
 				{
 					iter->second->destroy();
 				}
-			}
-			if (iter->second->is_requested_save())
-			{
-				create_operation(iter->second, database->get_output(iter->second->get_path()), !iter->second->do_not_log_operations());
-			}
-			else if (iter->second->is_requested_load())
-			{
-				create_operation(iter->second, database->get_input(iter->second->get_path()), !iter->second->do_not_log_operations());
-			}
-			else if (iter->second->is_requested_free())
-			{
-				create_operation(iter->second, engine::data::item_task_t::free_t(), !iter->second->do_not_log_operations());
 			}
 		}
 	}

@@ -6300,9 +6300,6 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\scanner.hpp">
       <Filter>engine\common\include\common\data</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\database.hpp">
-      <Filter>engine\common\include\common\data</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\input.hpp">
       <Filter>engine\common\include\common\data</Filter>
     </ClInclude>
@@ -6456,6 +6453,12 @@
     <ClInclude Include="..\..\..\_engine\src\common\include\common\data\item_task.hpp">
       <Filter>engine\common\include\common\data</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\data\database_providers.hpp">
+      <Filter>engine\common\include\common\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_engine\src\common\include\common\engine.hpp">
+      <Filter>engine\common\include\common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\_engine\src\common\src\ustring.cpp">
@@ -6522,6 +6525,9 @@
       <Filter>engine\common\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\_engine\src\common\src\task.cpp">
+      <Filter>engine\common\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\_engine\src\common\src\engine.cpp">
       <Filter>engine\common\src</Filter>
     </ClCompile>
   </ItemGroup>

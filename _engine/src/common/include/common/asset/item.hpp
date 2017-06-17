@@ -8,7 +8,7 @@
 #include "common/asset/path.hpp"
 #include "common/data/input.hpp"
 #include "common/data/output.hpp"
-#include "common/data/database.hpp"
+#include "common/data/database_providers.hpp"
 #include "common/logger.hpp"
 #include <cereal/access.hpp>
 #include <cereal/types/polymorphic.hpp>
@@ -23,7 +23,7 @@ namespace engine
 
 	namespace asset
 	{
-		class database_t;
+		class database_providers_t;
 
 		class item_t : public std::enable_shared_from_this<item_t>
 		{
@@ -68,7 +68,7 @@ namespace engine
 			item_t& operator=(item_t const&) = delete;
 			item_t& operator=(item_t &&) = delete;
 
-			void save_item(std::shared_ptr<data::database_t> database, std::shared_ptr<logger_t> logger)
+			void save_item(std::shared_ptr<data::database_providers_t> database, std::shared_ptr<logger_t> logger)
 			{
 				if(!deatached)
 					save_local(database->write_or_create(path.get_path_real()), logger);
@@ -129,7 +129,7 @@ namespace engine
 				ar(deatached);
 			}
 
-			virtual void reload_local(std::shared_ptr<database_t> database, std::unique_ptr<data::input_t> input, std::shared_ptr<logger_t> logger)
+			virtual void reload_local(std::shared_ptr<database_providers_t> database, std::unique_ptr<data::input_t> input, std::shared_ptr<logger_t> logger)
 			{
 
 			}
@@ -141,7 +141,7 @@ namespace engine
 			
 			friend class item_deatachable_base_t;
 
-			void reload(std::shared_ptr<database_t> database, std::unique_ptr<data::input_t> input, std::shared_ptr<logger_t> logger)
+			void reload(std::shared_ptr<database_providers_t> database, std::unique_ptr<data::input_t> input, std::shared_ptr<logger_t> logger)
 			{
 				if (!deatached)
 				{

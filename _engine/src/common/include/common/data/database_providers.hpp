@@ -22,14 +22,14 @@ namespace engine
 {
 	namespace data
 	{
-		class database_t final
+		class database_providers_t final
 		{
 
 		public:
 
-			database_t(std::shared_ptr<logger_t> logger, std::shared_ptr<platform_t> platform, std::shared_ptr<config_t> config) : logger(logger), platform(platform), config(config), requested_rescan(true)
+			database_providers_t(std::shared_ptr<logger_t> logger, std::shared_ptr<platform_t> platform, std::shared_ptr<config_t> config) : logger(logger), platform(platform), config(config), requested_rescan(true)
 			{
-				auto task = logger->p_task_start(_U("Initializing database engine"));
+				auto task = logger->p_task_start(_U("Initializing database providers engine"));
 
 				rescan();
 				refresh_changes();
@@ -44,7 +44,7 @@ namespace engine
 				check_filesystem_thread = std::thread([this] { check_filesystem(); });
 			}
 
-			~database_t()
+			~database_providers_t()
 			{
 				end_scanning = true;
 				check_filesystem_thread.join();

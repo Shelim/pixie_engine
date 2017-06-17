@@ -25,9 +25,18 @@
 #include <fcntl.h>
 
 engine::platform_t::implementation_t * engine::platform_t::implementation_t::impl = nullptr;
-std::function<void()> engine::arg0 = [] {};
 
+/*
+void engine::engine_t::platform_on_init()
+{
+	platform->get_pimpl()->ensure_single_instance();
+}
 
+void engine::engine_t::platform_on_shutdown()
+{
+	platform->get_pimpl()->free_single_instance();
+}
+*/
 engine::platform_t::platform_t(std::string arg0, std::shared_ptr<manifest_app_t> manifest_app) : pimpl(std::make_unique<implementation_t>(arg0, this, nullptr, manifest_app.get())), manifest_app(manifest_app)
 {
 	std::setlocale(LC_ALL, "C");
@@ -174,6 +183,14 @@ engine::ustring_t engine::platform_t::get_platform_version() const
 void engine::platform_t::show_splashscreen(const virtual_path_t & virtual_path)
 {
 
+}
+
+std::string engine::engine_t::platform_get_executable_filename()
+{
+	CHAR file_name[MAX_PATH];
+	GetModuleFileNameA(NULL, file_name, MAX_PATH);
+
+	return file_name;
 }
 
 #endif

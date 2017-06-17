@@ -4,16 +4,10 @@
 
 #if defined WIN32 || defined _WINDOWS
 #define PLATFORM_WINDOWS
-#endif
-
-#if PIXIE_IS_DEBUG_BUILD
-#define BOOST_DI_CFG_DIAGNOSTICS_LEVEL 2
-#else
-#define BOOST_DI_CFG_DIAGNOSTICS_LEVEL 0
-#endif
+#endif=
 
 #include "common/ustring.hpp"
-#include <boost/di.hpp>
+#include "common/injector.hpp"
 #include <memory>
 
 #include "common/filesystem.hpp"
@@ -29,7 +23,6 @@ namespace filesystem = std::experimental::filesystem;
 
 namespace engine
 {
-	extern std::function<void()> arg0;
 	class logger_t;
 
 	class platform_t final

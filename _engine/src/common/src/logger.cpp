@@ -12,7 +12,7 @@
 #include "common/platform.hpp"
 #include "common/config.hpp"
 #include "common/data/output.hpp"
-#include "common/data/database.hpp"
+#include "common/data/database_providers.hpp"
 #include "common/data/database_items.hpp"
 #include "common/environment_info.hpp"
 #include "common/logger_output/providers.hpp"
@@ -121,10 +121,10 @@ void engine::logger_output::provider_text_base_t::process_environment_info(std::
 #include "common/std/environment_info_std.hpp"
 }
 
-engine::logger_output::provider_data_output_t::provider_data_output_t(std::shared_ptr<engine::data::database_t> database, std::shared_ptr<logger_t> logger, std::shared_ptr<environment_info_t> environment_info) : provider_text_base_t(logger, { item_output_element_t::output_id, item_output_element_t::output_prompt, item_output_element_t::output_message, item_output_element_t::output_sep_column, item_output_element_t::output_frame, item_output_element_t::output_sep_comma, item_output_element_t::output_time, item_output_element_t::output_sep_comma, item_output_element_t::output_thread, item_output_element_t::output_sep_comma, item_output_element_t::output_func, item_output_element_t::output_sep_column, item_output_element_t::output_file, item_output_element_t::output_sep_comma, item_output_element_t::output_line })
+engine::logger_output::provider_data_output_t::provider_data_output_t(std::shared_ptr<engine::data::database_providers_t> database_providers, std::shared_ptr<logger_t> logger, std::shared_ptr<environment_info_t> environment_info) : provider_text_base_t(logger, { item_output_element_t::output_id, item_output_element_t::output_prompt, item_output_element_t::output_message, item_output_element_t::output_sep_column, item_output_element_t::output_frame, item_output_element_t::output_sep_comma, item_output_element_t::output_time, item_output_element_t::output_sep_comma, item_output_element_t::output_thread, item_output_element_t::output_sep_comma, item_output_element_t::output_func, item_output_element_t::output_sep_column, item_output_element_t::output_file, item_output_element_t::output_sep_comma, item_output_element_t::output_line })
 {
 
-#define GAME_LOGGER_VIRTUAL_PATH_STD(path) output = database->get_output(virtual_path_t(path, virtual_path_t::type_t::log));
+#define GAME_LOGGER_VIRTUAL_PATH_STD(path) output = database_providers->get_output(virtual_path_t(path, virtual_path_t::type_t::log));
 #include "common/std/virtual_path_std.hpp"
 
 }
