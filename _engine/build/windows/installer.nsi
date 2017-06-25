@@ -10,8 +10,8 @@ InstallDirRegKey HKLM "Software\$INSTALL_REGISTRY$" "Installation"
 
 RequestExecutionLevel admin
 
-!define MUI_ICON "icon_install.ico"
-!define MUI_UNICON "icon_uninstall.ico"
+!define MUI_ICON "install_icon.ico"
+!define MUI_UNICON "uninstall_icon.ico"
 
 !define MUI_ABORTWARNING
 
@@ -23,7 +23,7 @@ Var StartMenuFolder
 !define MUI_HEADERIMAGE_BITMAP "install_header.bmp"
 !define MUI_HEADERIMAGE_UNBITMAP "install_header.bmp"
 
-!define MUI_FINISHPAGE_RUN "$INSTDIR\$LAUNCHER_FILENAME$"
+!define MUI_FINISHPAGE_RUN "$INSTDIR\$INSTALL_RUN$"
 
 Function finishpageaction
 CreateShortcut "$DESKTOP\$INSTALL_SHORTCUT$" "$INSTDIR\$LAUNCHER_FILENAME$"

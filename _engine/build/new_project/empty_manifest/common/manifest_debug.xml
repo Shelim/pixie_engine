@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<manifest>
+	<!-- This file contains only overrides for common/manifest.xml for DEBUG -->
+	<name>$EMPTY_NAME$ debug</name>
+</manifest>

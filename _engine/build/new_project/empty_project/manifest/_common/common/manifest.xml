@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<manifest>
+	<website_url>http://games.kosek.com/game/$EMPTY_UNIX_NAME$.html</website_url>
+	<support_page_url>http://games.kosek.com/support/games.html</support_page_url>
+	<download_url>http://games.kosek.com/content/games/$EMPTY_UNIX_NAME$/download/</download_url>
+	<updater_url>http://games.kosek.com/content/games/$EMPTY_UNIX_NAME$/updater/</updater_url>
+	<deploy_upload_path>content/games/$EMPTY_UNIX_NAME$/download/</deploy_upload_path>
+	<updater_upload_path>content/games/$EMPTY_UNIX_NAME$/updater/</updater_upload_path>
+</manifest>

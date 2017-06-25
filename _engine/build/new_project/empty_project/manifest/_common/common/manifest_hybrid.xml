@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<manifest>
+	<download_url>http://localhost:1989/content/games/$EMPTY_UNIX_NAME$/download/</download_url>
+	<updater_url>http://localhost:1989/content/games/$EMPTY_UNIX_NAME$/updater/</updater_url>
+</manifest>

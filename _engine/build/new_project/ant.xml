@@ -2,18 +2,56 @@
 	
 	<property name="unix" value="game" />
 	<property name="full" value="Sample game" />
+	<property name="app_type" value="executable" />
+	<property name="app_src" value="empty" />
+	
+	<target name="replace_variables">
+		<replace token="$EMPTY_UNIX_NAME$" value="${unix}"><fileset dir="${replace_variables.file}" /></replace>
+		<replace token="$EMPTY_NAME$" value="${full}"><fileset dir="${replace_variables.file}" /></replace>
+		<replace token="$EMPTY_TYPE$" value="${app_type}"><fileset dir="${replace_variables.file}" /></replace>
+	</target>
 	
 	<target name="new_project">
 		<copy todir="../${unix}" includeEmptyDirs="true"> 
-			<fileset dir="build/new_project/empty" defaultexcludes="no" /> 
+			<fileset dir="build/new_project/empty_project" defaultexcludes="no" /> 
 		</copy>
 		<copy file="build/new_project/build_gitignore" tofile="../${unix}/.gitignore" />
-		<replace token="$EMPTY_GAME_UNIX_NAME$" value="${unix}">
-			<fileset dir="../${unix}" /> 
-		</replace>
-		<replace token="$EMPTY_GAME_NAME$" value="${full}">
-			<fileset dir="../${unix}" /> 
-		</replace>
+		
+		<antcall target="replace_variables">
+			<param name="replace_variables.file" value="../${unix}" />
+		</antcall>
+	</target>
+	
+	
+	<target name="new_application">
+		<mkdir dir="../${app_src}/manifest/${unix}" />
+		<copy todir="../${app_src}/manifest/${unix}" includeEmptyDirs="true"> 
+			<fileset dir="build/new_project/empty_manifest" defaultexcludes="no" /> 
+		</copy>
+		
+		<antcall target="replace_variables">
+			<param name="replace_variables.file" value="../${app_src}/manifest/${unix}" />
+		</antcall>
+		
+		<mkdir dir="../${app_src}/code/include/${unix}/" />
+		<mkdir dir="../${app_src}/code/src/${unix}/" />
+		
+		<copy todir="../${app_src}/code/include/${unix}" includeEmptyDirs="true"> 
+			<fileset dir="build/new_project/empty_include" defaultexcludes="no" /> 
+		</copy>
+		
+		<antcall target="replace_variables">
+			<param name="replace_variables.file" value="../${app_src}/code/include/${unix}" />
+		</antcall>
+		
+		<copy todir="../${app_src}/code/src/${unix}" includeEmptyDirs="true"> 
+			<fileset dir="build/new_project/empty_src" defaultexcludes="no" /> 
+		</copy>
+		
+		<antcall target="replace_variables">
+			<param name="replace_variables.file" value="../${app_src}/code/src/${unix}" />
+		</antcall>
+		
 	</target>
 	
 </project>

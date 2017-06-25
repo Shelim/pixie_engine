@@ -2,10 +2,14 @@
 
 <!-- Loading manifests... -->
 	
-	<xmlproperty file="${build_app_path}manifest/${platform_name}/manifest_${build_configuration}.xml" />
-	<xmlproperty file="${build_app_path}manifest/${platform_name}/manifest.xml" />
-	<xmlproperty file="${build_app_path}manifest/common/manifest_${build_configuration}.xml" />
-	<xmlproperty file="${build_app_path}manifest/common/manifest.xml" />
+	<xmlproperty file="${build_app_path}manifest/${output_unix_name}/${platform_name}/manifest_${build_configuration}.xml" />
+	<xmlproperty file="${build_app_path}manifest/${output_unix_name}/${platform_name}/manifest.xml" />
+	<xmlproperty file="${build_app_path}manifest/${output_unix_name}/common/manifest_${build_configuration}.xml" />
+	<xmlproperty file="${build_app_path}manifest/${output_unix_name}/common/manifest.xml" />
+	<xmlproperty file="${build_app_path}manifest/_common/${platform_name}/manifest_${build_configuration}.xml" />
+	<xmlproperty file="${build_app_path}manifest/_common/${platform_name}/manifest.xml" />
+	<xmlproperty file="${build_app_path}manifest/_common/common/manifest_${build_configuration}.xml" />
+	<xmlproperty file="${build_app_path}manifest/_common/common/manifest.xml" />
 	<xmlproperty file="${build_app_path}changelog/version.xml" />
 	
 <!-- Designating default platform fullname -->
@@ -48,19 +52,21 @@
 	</condition>
 	
 	<condition property="platform_dir" value="${platform_base_dir}_test" else="${platform_base_dir}${platform_dir_configuration_1}${platform_dir_configuration_2}${platform_dir_configuration_3}${platform_dir_configuration_4}${platform_dir_portable}${platform_dir_deploy}">
-		<equals arg1="${output_unix_name}" arg2="test"/> 
+		<equals arg1="${output_type}" arg2="test"/> 
 	</condition>
 	
 	
 <!-- Apply above dir name into paths -->
 
-	<property name="build_path" value="${build_app_path}/_build/${platform_dir}_${output_unix_name}/" />
+	<condition property="build_path" value="${build_app_path}/_build/${platform_dir}/" else="${build_app_path}/_build/${platform_dir}_${output_unix_name}/">
+		<equals arg1="${output_type}" arg2="test"/> 
+	</condition>
 	<property name="build_common_path" value="${build_app_path}/_build/${platform_dir}_common/" />
 	<property name="output_path" value="${build_app_path}/output/${platform_dir}/" />
 	<property name="deploy_output_path" value="${build_app_path}/output/${platform_dir}_ready/" />
 	<property name="build_installer_path" value="${build_app_path}/_build/${platform_dir}_installer/" />
 	<property name="autogen_path_relative" value="${platform_base_dir}/${output_unix_name}/" />
-	<property name="autogen_path" value="${build_app_path}src/autogen/${autogen_path_relative}" />
+	<property name="autogen_path" value="${build_app_path}code/include/_autogen/${autogen_path_relative}" />
 	
 	<condition property="autogen_hpp_path" value="${autogen_path}/autogen_${build_configuration}_portable.hpp" else="${autogen_path}/autogen_${build_configuration}.hpp">
 		<istrue value="${is_portable_build}"/> 
@@ -156,7 +162,7 @@
 			<istrue value="${is_ready_build}"/> 
 		</condition>
 	
-		<replace file="${replace_variables.file}" token="$OUTPUT_TYPE$" value="${output_unix_name}" />
+		<replace file="${replace_variables.file}" token="$OUTPUT_UNIX_NAME$" value="${output_unix_name}" />
 		<replace file="${replace_variables.file}" token="$IS_DEBUG_BUILD$" value="${is_debug_build_num}" />
 		<replace file="${replace_variables.file}" token="$IS_PORTABLE_BUILD$" value="${is_portable_build_num}" />
 		<replace file="${replace_variables.file}" token="$IS_DEPLOY_BUILD$" value="${is_deploy_build_num}" />
@@ -170,17 +176,14 @@
 		
 		<replace file="${replace_variables.file}" token="$PLATFORM_FULLNAME$" value="${platform_fullname}" />
 		
-		<replace file="${replace_variables.file}" token="$GAME_FILENAME$" value="${manifest.game_filename}" />
-		<replace file="${replace_variables.file}" token="$EDITOR_FILENAME$" value="${manifest.editor_filename}" />
-		<replace file="${replace_variables.file}" token="$LAUNCHER_FILENAME$" value="${manifest.launcher_filename}" />
+		<replace file="${replace_variables.file}" token="$BINARY_FILENAME$" value="${manifest.binary_filename}" />
+		<replace file="${replace_variables.file}" token="$BINARY_EXTENSION$" value="${manifest.binary_filename_ext_raw}" />
 		<replace file="${replace_variables.file}" token="$INSTALLER_FILENAME$" value="${manifest.installer_filename}" />
-		<replace file="${replace_variables.file}" token="$PORTABLEs_FILENAME$" value="${manifest.portable_filename}" />
+		<replace file="${replace_variables.file}" token="$PORTABLE_FILENAME$" value="${manifest.portable_filename}" />
 		
-		<replace file="${replace_variables.file}" token="$GAME_NAME$" value="${manifest.game_name}" />
-		<replace file="${replace_variables.file}" token="$EDITOR_NAME$" value="${manifest.editor_name}" />
-		<replace file="${replace_variables.file}" token="$LAUNCHER_NAME$" value="${manifest.launcher_name}" />
+		<replace file="${replace_variables.file}" token="$NAME$" value="${manifest.name}" />
 		<replace file="${replace_variables.file}" token="$UNIX_NAME$" value="${app_unix_name}" />
-		
+
 		<replace file="${replace_variables.file}" token="$WEBSITE_URL$" value="${manifest.website_url}" />
 		<replace file="${replace_variables.file}" token="$SUPPORT_PAGE_URL$" value="${manifest.support_page_url}" />
 		<replace file="${replace_variables.file}" token="$DOWNLOAD_URL$" value="${url_updater_binary}" />

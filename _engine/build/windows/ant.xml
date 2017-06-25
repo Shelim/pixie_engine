@@ -11,8 +11,10 @@
 	<!-- Move build to project/ready with distinctive name. Use for releases (even if for testers!) -->
 	<!-- Note: setting this to true will also store .pdb's inside project/ready -->
 	<property name="is_ready_build" value="false" />
-	<!-- sample values: game/editor/launcher/dll/test/etc. -->
+	<!-- As defined in project-->
 	<property name="output_unix_name" value="game" />
+	<!-- values: executable/shared_library/test -->
+	<property name="output_type" value="executable" />
 	<!-- unix name of the application -->
 	<property name="app_unix_name" value="empty" />
 
@@ -25,15 +27,14 @@
 	<property name="build_app_path" value="../${app_unix_name}/" />
 	
 <!-- Some more Windows replace_variables -->
-	<property name="resources_name_base" value="${output_unix_name}" />
-	<property name="resources_filename_rc" value="resources_${resources_name_base}.hpp" />
-	<property name="resources_filename_icon" value="icon_${resources_name_base}.ico" />
-	<condition property="binary_filename_raw" value="_pixie.dll" else="_${output_unix_name}.exe">
-		<equals arg1="${output_unix_name}" arg2="dll"/> 
+	<property name="resources_filename_rc_raw" value="resources_${output_type}.hpp" />
+	<property name="resources_filename_rc" value="resources_${output_unix_name}.hpp" />
+	<property name="resources_filename_icon" value="icon_${output_unix_name}.ico" />
+	<condition property="binary_filename_ext_raw" value="dll" else="exe">
+		<equals arg1="${output_type}" arg2="shared_library" />
 	</condition>
-	<condition property="pdb_filename_raw" value="_pixie.pdb" else="_${output_unix_name}.pdb">
-		<equals arg1="${output_unix_name}" arg2="dll"/> 
-	</condition>
+	<property name="binary_filename_raw" value="_${output_unix_name}.${binary_filename_ext_raw}" />
+	<property name="pdb_filename_raw" value="_${output_unix_name}.pdb" />
 	<property name="download_installer_filename" value="${app_unix_name}_installer.exe" />
 	<property name="download_portable_filename" value="${app_unix_name}_portable.zip" />
 	
@@ -53,7 +54,7 @@
 	<property name="upload_updater_binary" value="${upload_deploy_path}${download_filename}" />
 	<property name="url_updater_binary" value="${manifest.download_url}${upload_base_dir}${download_filename}" />
 	
-	<property name="resources_rc_path_raw" value="build/${platform_name}/${resources_filename_rc}" />
+	<property name="resources_rc_path_raw" value="build/${platform_name}/${resources_filename_rc_raw}" />
 	<property name="resources_icon_path_raw" value="${build_app_path}manifest/${platform_name}/${resources_filename_icon}" />
 	
 	<condition property="resources_rc_path" value="${autogen_path}/resources_${build_configuration}_portable.hpp" else="${autogen_path}/resources_${build_configuration}.hpp">
@@ -70,7 +71,6 @@
 <!-- Replaces tags inside given file (some are included in common/ant) -->
 	<target name="replace_variables" depends="replace_variables_common">
 		<replace file="${replace_variables.file}" token="$WINDOWS_GAME_APP_DIR$" value="${manifest.game_app_dir}" />
-		<replace file="${replace_variables.file}" token="$DLL_FILENAME$" value="${manifest.dll_filename}" />
 		<replace file="${replace_variables.file}" token="$FULL_SRCPATH_PDB$" value="${full_srcpath_pdb}" />
 		
 		<replace file="${replace_variables.file}" token="$RESOURCES_COMPANY$" value="${manifest.resources_company}" />
@@ -81,10 +81,7 @@
 		<replace file="${replace_variables.file}" token="$INSTALL_SHORTCUT$" value="${manifest.install_shortcut}" />
 		<replace file="${replace_variables.file}" token="$INSTALL_REGISTRY$" value="${manifest.install_registry}" />
 		<replace file="${replace_variables.file}" token="$INSTALL_DIR$" value="${manifest.install_dir}" />
-		
-		<replace file="${replace_variables.file}" token="$GAME_COMMAND$" value="${manifest.game_filename}" />
-		<replace file="${replace_variables.file}" token="$EDITOR_COMMAND$" value="${manifest.editor_filename}" />
-		<replace file="${replace_variables.file}" token="$LAUNCHER_COMMAND$" value="${manifest.launcher_filename}" />
+		<replace file="${replace_variables.file}" token="$INSTALL_RUN$" value="${manifest.install_run}" />
 		
 	</target>
 	
@@ -105,7 +102,7 @@
 					<equals arg1="${build_configuration}" arg2="debug" />
 				</not>
 				<not>
-					<equals arg1="${output_unix_name}" arg2="dll" />
+					<equals arg1="${output_type}" arg2="shared_library" />
 				</not>
 			</and>
 		</condition>
@@ -123,7 +120,7 @@
 		
 		<exec executable="${basedir}/depedency/upxw/${platform_name}/upx.exe" failonerror="true">
 			<arg value="--ultra-brute"/>
-			<arg value="${basedir}/${output_path}${filename}"/>
+			<arg value="${basedir}/${output_path}${filename}${binary_filename_ext_raw}"/>
 		</exec>
 	</target>
 	
@@ -164,7 +161,7 @@
 		</macrodef>
 		<set_filename out="${output_unix_name}"/>
 
-		<copy file="${build_path}bin/${binary_filename_raw}" tofile="${output_path}${filename}" preservelastmodified="true" overwrite="true" />
+		<copy file="${build_path}bin/${binary_filename_raw}" tofile="${output_path}${filename}${binary_filename_ext_raw}" preservelastmodified="true" overwrite="true" />
 	</target>
 	
 <!-- Helper target for below; Build installer only if we're deploy non-portable -->
@@ -186,7 +183,7 @@
 		</delete>	
 		<mkdir dir="${build_installer_path}"/>
 		<copy todir="${build_installer_path}" preservelastmodified="true" overwrite="true">
-			<fileset dir="${build_app_path}manifest/${platform_name}/"/>
+			<fileset dir="${build_app_path}manifest/_common/${platform_name}/"/>
 		</copy>
 		
 		<copy file="build/${platform_name}/installer.nsi" tofile="${build_installer_path}/installer.nsi" preservelastmodified="true" overwrite="true" />
