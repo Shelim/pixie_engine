@@ -1,5 +1,14 @@
 @echo off
 pushd %~dp0
+
+if "%~1"=="" goto no_app_src
+set app_name="%~1"
+goto choose_type 
+:no_app_src
+set /p app_name=Enter project unix name you wish to add new application to:
+IF EXIST ../../%app_name% goto choose_type
+echo This project seems not to exists, choose existing one!
+goto no_app_src
 :choose_type
 echo Enter type of your application:
 echo 1 - Executable
@@ -21,13 +30,14 @@ goto after_type
 set app_type=test
 goto after_type
 :after_type
+
 set /p unix_filename=Enter unix filename of your new application (lowercase, no spaces nor special characters): 
 set /p full_filename=Enter full name of your application (should be a valid filename!): 
-cd ../../depedency/apache_ant/bin
-set path=%~dp0../../depedency/jdk1.7.0_71/bin;%~dp0../../depedency/mingw/bin;%path%
+cd ../depedency/apache_ant/bin
+set path=%~dp0../depedency/jdk1.7.0_71/bin;%~dp0../depedency/mingw/bin;%path%
 echo on
-call ant -v -buildfile "../../../build/new_project/ant.xml" new_application -Dunix="%unix_filename%" -Dfull="%full_filename%" -Dapp_type="%app_type%" -Dapp_src="%~1"
-cd ../../../../%~1
+call ant -v -buildfile "../../../new/ant.xml" new_application -Dunix="%unix_filename%" -Dfull="%full_filename%" -Dapp_type="%app_type%" -Dapp_src="%app_name%"
+cd ../../../../%app_name%
 call update_vs_solution.bat
 popd
 pause

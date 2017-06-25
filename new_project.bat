@@ -7,5 +7,5 @@ IF NOT EXIST "./_engine/depedency" (
 	exit /b 1
 )
 
-call "./_engine/build/new_project/new_project.bat"
+call "./_engine/new/project.bat"
 popd
