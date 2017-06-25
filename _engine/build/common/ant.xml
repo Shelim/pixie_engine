@@ -51,7 +51,7 @@
 		<istrue value="${is_deploy_build}" />
 	</condition>
 	
-	<condition property="platform_dir" value="${platform_base_dir}_test" else="${platform_base_dir}${platform_dir_configuration_1}${platform_dir_configuration_2}${platform_dir_configuration_3}${platform_dir_configuration_4}${platform_dir_portable}${platform_dir_deploy}">
+	<condition property="platform_dir" value="${platform_base_dir}_${output_unix_name}_test" else="${platform_base_dir}${platform_dir_configuration_1}${platform_dir_configuration_2}${platform_dir_configuration_3}${platform_dir_configuration_4}${platform_dir_portable}${platform_dir_deploy}">
 		<equals arg1="${output_type}" arg2="test"/> 
 	</condition>
 	

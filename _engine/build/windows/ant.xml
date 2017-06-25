@@ -151,17 +151,7 @@
 	
 <!-- Self explaining :-) -->
 	<target name="copy_executable_to_output">
-		<property name="manifest.test_filename" value="test.exe" />
-				
-		<macrodef name="set_filename">
-		  <attribute name="out"/>
-		  <sequential>
-			<property name="filename" value="${manifest.@{out}_filename}" />
-		  </sequential>
-		</macrodef>
-		<set_filename out="${output_unix_name}"/>
-
-		<copy file="${build_path}bin/${binary_filename_raw}" tofile="${output_path}${filename}${binary_filename_ext_raw}" preservelastmodified="true" overwrite="true" />
+		<copy file="${build_path}bin/${binary_filename_raw}" tofile="${output_path}${manifest.binary_filename}${binary_filename_ext_raw}" preservelastmodified="true" overwrite="true" />
 	</target>
 	
 <!-- Helper target for below; Build installer only if we're deploy non-portable -->
@@ -288,6 +278,23 @@
 		</antcall>
 	</target>
 	
+<!-- Helper target for below; Build content debug well... if we're in debug! -->
+	<target name="check_if_content_if_test">
+		<condition property="is_content_if_test">
+			<equals arg1="${output_type}" arg2="test" />
+		</condition>
+	</target>
+	
+<!-- Copy content into target dir -->	
+	<target name="content_if_test" depends="check_if_content_if_test" if="is_content_if_test">
+		<antcall target="binary_base">
+			<param name="binary.output_path" value="${output_path}"/>
+		</antcall>
+		<antcall target="content_base">
+			<param name="content_base.output_path" value="${output_path}"/>
+		</antcall>
+	</target>
+	
 <!-- Copy content into target dir -->	
 	<target name="content">
 		<antcall target="binary_base">
@@ -302,7 +309,7 @@
 	
 	<target name="prebuild" depends="autogen" />
 	
-	<target name="postbuild" depends="copy_executable_to_output, pack_executable, build_ready_pdb" />
+	<target name="postbuild" depends="copy_executable_to_output, content_if_test, pack_executable, build_ready_pdb" />
 	
 	<target name="postbuild_all" depends="content, content_debug, build_installer, build_portable, build_upload, build_ready" />
 	

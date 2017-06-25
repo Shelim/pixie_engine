@@ -1,0 +1,34 @@
+<project name="game" basedir="../..">
+
+<!-- These are provided by target solution -->
+
+	<property name="app_unix_name" value="empty" />
+	
+<!-- Path to app build root -->
+	<property name="build_app_path" value="../${app_unix_name}/" />
+	<property name="build_vs_path" value="${build_app_path}project/visual_studio_2015" />
+
+<!-- Loading manifest... -->
+	
+	<xmlproperty file="${build_app_path}manifest/_common/common/manifest.xml" />
+
+<!-- End of initalization -->
+
+	<target name="replace_variables">
+		<replace token="$EMPTY_UNIX_NAME$" value="${app_unix_name}"><fileset dir="${replace_variables.file}" /></replace>
+		<replace token="$EMPTY_NAME$" value="${manifest.full_name}"><fileset dir="${replace_variables.file}" /></replace>
+	</target>
+	
+<!-- Updates VS solution -->
+	<target name="update_vs_solution">
+		<delete dir="${build_vs_path}" failonerror="false" />
+		<mkdir dir="${build_vs_path}" />
+		<copy todir="${build_vs_path}" preservelastmodified="true" overwrite="true">
+			<fileset dir="build/visual_studio_2015/bare"/>
+		</copy>
+		<antcall target="replace_variables">
+			<param name="replace_variables.file" value="${build_vs_path}" />
+		</antcall>
+	</target>
+	
+</project>

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <manifest>
+	<full_name>$EMPTY_NAME$</full_name>
 	<website_url>http://games.kosek.com/game/$EMPTY_UNIX_NAME$.html</website_url>
 	<support_page_url>http://games.kosek.com/support/games.html</support_page_url>
 	<download_url>http://games.kosek.com/content/games/$EMPTY_UNIX_NAME$/download/</download_url>
