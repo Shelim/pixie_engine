@@ -3,6 +3,8 @@
 	<property name="unix" value="game" />
 	<property name="full" value="Sample game" />
 	<property name="app_type" value="executable" />
+	<property name="app_predefined" value="executable" />
+	<property name="app_make_default" value="false" />
 	<property name="app_src" value="empty" />
 	
 	<target name="replace_variables">
@@ -18,7 +20,7 @@
 			<mapper>
 				<mapper type="regexp" from="(.*)$EMPTY_UNIX_NAME$(.*)" to="\1${unix}\2"/>
 				<mapper type="regexp" from="(.*)$EMPTY_NAME$(.*)" to="\1${full}\2"/>
-				<mapper type="regexp" from="(.*)$full$(.*)" to="\1${app_type}\2"/>
+				<mapper type="regexp" from="(.*)$EMPTY_TYPE$(.*)" to="\1${app_type}\2"/>
 				<mapper type="identity"/>
 			</mapper>
 		</copy>
@@ -29,12 +31,27 @@
 		</antcall>
 	</target>
 	
+<!-- Helper target for below; Make default if... well, was requested -->
+	<target name="check_if_make_default">
+		<condition property="can_make_default">
+			<istrue value="${app_make_default}" />
+		</condition>
+	</target>
+		
+<!-- Make this app default to launch  -->
+	<target name="make_default" depends="check_if_make_default" if="can_make_default">
+		
+		<replaceregexp file="../${app_src}/manifest/_common/windows/manifest.xml" match="&lt;install_run&gt;(.*)&lt;\/install_run&gt;" replace="&lt;install_run&gt;${full}.exe&lt;/install_run&gt;" byline="true" />
+		<replaceregexp file="../${app_src}/manifest/_common/windows/manifest_debug.xml" match="&lt;install_run&gt;(.*)&lt;\/install_run&gt;" replace="&lt;install_run&gt;${full}.exe&lt;/install_run&gt;" byline="true" />
+		<replaceregexp file="../${app_src}/manifest/_common/windows/manifest_release.xml" match="&lt;install_run&gt;(.*)&lt;\/install_run&gt;" replace="&lt;install_run&gt;${full}.exe&lt;/install_run&gt;" byline="true" />
+		
+	</target>
 	
-	<target name="new_application">
+	<target name="new_application_internal">
 		<mkdir dir="../${app_src}" />
 		<copy todir="../${app_src}" includeEmptyDirs="true" overwrite="true"> 
 			<fileset dir="new/application/common" defaultexcludes="no" /> 
-			<fileset dir="new/application/${app_type}" defaultexcludes="no" /> 
+			<fileset dir="new/application/${app_predefined}" defaultexcludes="no" /> 
 			
 			<mapper>
 				<mapper type="regexp" from="(.*)\$EMPTY_UNIX_NAME\$(.*)" to="\1${unix}\2"/>
@@ -48,6 +65,10 @@
 		<antcall target="replace_variables">
 			<param name="replace_variables.file" value="../${app_src}" />
 		</antcall>
+				
+	</target>
+	
+	<target name="new_application" depends="new_application_internal, make_default">
 				
 	</target>
 	
