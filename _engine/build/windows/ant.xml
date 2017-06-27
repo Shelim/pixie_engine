@@ -29,7 +29,7 @@
 <!-- Some more Windows replace_variables -->
 	<property name="resources_filename_rc_raw" value="resources_${output_type}.hpp" />
 	<property name="resources_filename_rc" value="resources_${output_unix_name}.hpp" />
-	<property name="resources_filename_icon" value="icon_${output_unix_name}.ico" />
+	<property name="resources_filename_icon" value="icon.ico" />
 	<condition property="binary_filename_ext_raw" value="dll" else="exe">
 		<equals arg1="${output_type}" arg2="shared_library" />
 	</condition>
@@ -55,7 +55,7 @@
 	<property name="url_updater_binary" value="${manifest.download_url}${upload_base_dir}${download_filename}" />
 	
 	<property name="resources_rc_path_raw" value="build/${platform_name}/${resources_filename_rc_raw}" />
-	<property name="resources_icon_path_raw" value="${build_app_path}manifest/${platform_name}/${resources_filename_icon}" />
+	<property name="resources_icon_path_raw" value="${build_app_path}manifest/${output_unix_name}/${platform_name}/${resources_filename_icon}" />
 	
 	<condition property="resources_rc_path" value="${autogen_path}/resources_${build_configuration}_portable.hpp" else="${autogen_path}/resources_${build_configuration}.hpp">
 		<istrue value="${is_portable_build}"/> 
@@ -110,17 +110,9 @@
 	
 <!-- Pack executable with UPX, greatly reducing its size -->
 	<target name="pack_executable" depends="check_if_can_pack_executable" if="can_pack_executable">		
-		<macrodef name="set_filename">
-		  <attribute name="out"/>
-		  <sequential>
-			<property name="filename" value="${manifest.@{out}_filename}" />
-		  </sequential>
-		</macrodef>
-		<set_filename out="${output_unix_name}"/>
-		
 		<exec executable="${basedir}/depedency/upxw/${platform_name}/upx.exe" failonerror="true">
 			<arg value="--ultra-brute"/>
-			<arg value="${basedir}/${output_path}${filename}${binary_filename_ext_raw}"/>
+			<arg value="${basedir}/${output_path}${manifest.binary_filename}.${binary_filename_ext_raw}"/>
 		</exec>
 	</target>
 	
@@ -151,7 +143,7 @@
 	
 <!-- Self explaining :-) -->
 	<target name="copy_executable_to_output">
-		<copy file="${build_path}bin/${binary_filename_raw}" tofile="${output_path}${manifest.binary_filename}${binary_filename_ext_raw}" preservelastmodified="true" overwrite="true" />
+		<copy file="${build_path}bin/${binary_filename_raw}" tofile="${output_path}${manifest.binary_filename}.${binary_filename_ext_raw}" preservelastmodified="true" overwrite="true" />
 	</target>
 	
 <!-- Helper target for below; Build installer only if we're deploy non-portable -->

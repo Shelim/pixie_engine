@@ -3,7 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 14.0.25420.1
-$SLN_PROJECT_SECTION$
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "postbuild", "postbuild.vcxproj", "{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{47F0434A-32FC-4640-A38D-7531A1CDB5EE} = {47F0434A-32FC-4640-A38D-7531A1CDB5EE}
@@ -12,6 +11,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "postbuild", "postbuild.vcxp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "prebuild", "prebuild.vcxproj", "{47F0434A-32FC-4640-A38D-7531A1CDB5EE}"
 EndProject
+$SLN_PROJECT_SECTION$
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		$SLN_CONFIGURATION_ONLY_SECTION$
@@ -26,14 +26,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		$SLN_CONFIGURATION_SECTION$
-		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.debug_only_dll|Win32.ActiveCfg = debug|Win32
-		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.debug_only_dll|Win32.Build.0 = debug|Win32
-		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.debug_only_editor|Win32.ActiveCfg = debug|Win32
-		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.debug_only_editor|Win32.Build.0 = debug|Win32
-		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.debug_only_game|Win32.ActiveCfg = debug|Win32
-		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.debug_only_game|Win32.Build.0 = debug|Win32
-		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.debug_only_launcher|Win32.ActiveCfg = debug|Win32
-		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.debug_only_launcher|Win32.Build.0 = debug|Win32
 		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.debug_portable|Win32.ActiveCfg = debug_portable|Win32
 		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.debug_portable|Win32.Build.0 = debug_portable|Win32
 		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.debug|Win32.ActiveCfg = debug|Win32
@@ -50,14 +42,6 @@ Global
 		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.hybrid_installer|Win32.Build.0 = hybrid_installer|Win32
 		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.test|Win32.ActiveCfg = test|Win32
 		{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}.test|Win32.Build.0 = test|Win32
-		{47F0434A-32FC-4640-A38D-7531A1CDB5EE}.debug_only_dll|Win32.ActiveCfg = debug|Win32
-		{47F0434A-32FC-4640-A38D-7531A1CDB5EE}.debug_only_dll|Win32.Build.0 = debug|Win32
-		{47F0434A-32FC-4640-A38D-7531A1CDB5EE}.debug_only_editor|Win32.ActiveCfg = debug|Win32
-		{47F0434A-32FC-4640-A38D-7531A1CDB5EE}.debug_only_editor|Win32.Build.0 = debug|Win32
-		{47F0434A-32FC-4640-A38D-7531A1CDB5EE}.debug_only_game|Win32.ActiveCfg = debug|Win32
-		{47F0434A-32FC-4640-A38D-7531A1CDB5EE}.debug_only_game|Win32.Build.0 = debug|Win32
-		{47F0434A-32FC-4640-A38D-7531A1CDB5EE}.debug_only_launcher|Win32.ActiveCfg = debug|Win32
-		{47F0434A-32FC-4640-A38D-7531A1CDB5EE}.debug_only_launcher|Win32.Build.0 = debug|Win32
 		{47F0434A-32FC-4640-A38D-7531A1CDB5EE}.debug_portable|Win32.ActiveCfg = debug_portable|Win32
 		{47F0434A-32FC-4640-A38D-7531A1CDB5EE}.debug_portable|Win32.Build.0 = debug_portable|Win32
 		{47F0434A-32FC-4640-A38D-7531A1CDB5EE}.debug|Win32.ActiveCfg = debug|Win32

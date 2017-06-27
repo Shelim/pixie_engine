@@ -3,7 +3,6 @@
 #pragma once
 
 #include <pugixml.hpp>
-#include <enum_flags.h>
 #include <string>
 #include <vector>
 #include <bitset>

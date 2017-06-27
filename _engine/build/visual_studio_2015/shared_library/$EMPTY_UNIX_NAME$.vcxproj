@@ -47,120 +47,120 @@
     <ConfigurationType>Makefile</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <OutDir>$(SolutionDir)..\..\output\windows_x86_debug</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_dll</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <OutDir>$(SolutionDir)..\..\output\windows_x86_debug</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_dll</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <OutDir>$(SolutionDir)..\..\output\windows_x86_debug</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_dll</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <OutDir>$(SolutionDir)..\..\output\windows_x86_debug</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_dll</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <OutDir>$(SolutionDir)..\..\output\windows_x86_debug</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_dll</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <OutDir>$(SolutionDir)..\..\output\windows_x86_debug</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_dll</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\out</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\int</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\out</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\int</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\out</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\int</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\out</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\int</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\out</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\int</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\out</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\int</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140_xp</PlatformToolset>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_dll\bin\</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_dll\obj\</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\obj\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140_xp</PlatformToolset>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_dll\bin\</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_dll\obj\</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\obj\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140_xp</PlatformToolset>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_dll\bin\</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_dll\obj\</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\obj\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140_xp</PlatformToolset>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_dll\bin\</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_dll\obj\</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\obj\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140_xp</PlatformToolset>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_dll\bin\</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_dll\obj\</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\obj\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140_xp</PlatformToolset>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_dll\bin\</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_dll\obj\</IntDir>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\obj\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='void|Win32'">
@@ -192,7 +192,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'">
     <NMakeoutput>$EMPTY_UNIX_NAME$.dll</NMakeoutput>
     <NMakePreprocessorDefinitions>NDEBUG;WINDOWS;UNICODE;_UNICODE;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <NMakeIncludeSearchPath>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\MinGW\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\gcc_debug;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\$EMPTY_UNIX_NAME$\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;$(SolutionDir)..\..\src\$EMPTY_UNIX_NAME$\include;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;NMakeIncludeSearchPath</NMakeIncludeSearchPath>
     <NMakeBuildCommandLine />
     <NMakeRebuildCommandLine />
     <NMakeCleanCommandLine />
@@ -201,7 +201,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'">
     <NMakeoutput>$EMPTY_UNIX_NAME$.dll</NMakeoutput>
     <NMakePreprocessorDefinitions>NDEBUG;WINDOWS;UNICODE;_UNICODE;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <NMakeIncludeSearchPath>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\MinGW\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\gcc_debug;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\$EMPTY_UNIX_NAME$\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;$(SolutionDir)..\..\src\$EMPTY_UNIX_NAME$\include;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;NMakeIncludeSearchPath</NMakeIncludeSearchPath>
     <NMakeBuildCommandLine />
     <NMakeRebuildCommandLine />
     <NMakeCleanCommandLine />
@@ -209,9 +209,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='void|Win32'">
     <NMakePreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=0;PIXIE_IS_DEPLOY_BUILD=0;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;UNICODE;_UNICODE;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <NMakeIncludeSearchPath>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\$EMPTY_UNIX_NAME$\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;$(SolutionDir)..\..\src\$EMPTY_UNIX_NAME$\include;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
-    <OutDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\out</OutDir>
-    <IntDir>$(SolutionDir)..\..\_build\windows_x86_void_dll\int</IntDir>
+    <NMakeIncludeSearchPath>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;NMakeIncludeSearchPath</NMakeIncludeSearchPath>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_void_$EMPTY_UNIX_NAME$\out</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_void_$EMPTY_UNIX_NAME$\int</IntDir>
     <NMakeBuildCommandLine>$(SolutionDir)..\..\..\_engine\build\windows\void.bat</NMakeBuildCommandLine>
     <NMakeReBuildCommandLine>$(SolutionDir)..\..\..\_engine\build\windows\void.bat</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>$(SolutionDir)..\..\..\_engine\build\windows\void.bat</NMakeCleanCommandLine>
@@ -230,32 +230,32 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\$EMPTY_UNIX_NAME$\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;$(SolutionDir)..\..\src\_common\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\$EMPTY_UNIX_NAME$\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\$EMPTY_UNIX_NAME$\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\$EMPTY_UNIX_NAME$\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\$EMPTY_UNIX_NAME$\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\$EMPTY_UNIX_NAME$\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
@@ -374,25 +374,25 @@
       <ObjectFileName>$(IntDir)\%(Directory)\</ObjectFileName>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\cg\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\directx\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\librocket\lib\windows_x86\debug;$(SolutionDir)..\..\..\_engine\depedency\libvlc\lib\windows_x86\;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\lib\windows_x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>angelscript_d.lib;anttweakbar.lib;cg.lib;cgD3D9.lib;cgGL.lib;glut32.lib;d3d9.lib;d3dcompiler.lib;D3DCSXd.lib;d3dx9d.lib;d3dxof.lib;dinput8.lib;DxErr.lib;dxgi.lib;dxguid.lib;XInput.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib;libvlc.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;OpenAL32.lib;SDL2.lib;SDL2_net.lib;wxbase31ud.lib;wxbase31ud_net.lib;wxbase31ud_xml.lib;wxexpatd.lib;wxjpegd.lib;wxmsw31ud_adv.lib;wxmsw31ud_aui.lib;wxmsw31ud_core.lib;wxmsw31ud_gl.lib;wxmsw31ud_html.lib;wxmsw31ud_media.lib;wxmsw31ud_propgrid.lib;wxmsw31ud_qa.lib;wxmsw31ud_ribbon.lib;wxmsw31ud_richtext.lib;wxmsw31ud_stc.lib;wxmsw31ud_webview.lib;wxmsw31ud_xrc.lib;wxpngd.lib;wxregexud.lib;wxscintillad.lib;wxtiffd.lib;wxzlibd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$CL_ADDITIONAL_LIBRARIES$</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$CL_ADDITIONAL_LIBRARIES_NAMES$opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OptimizeReferences>false</OptimizeReferences>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <MinimumRequiredVersion />
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="debug"" "is_portable_build="false"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="test"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="debug"" "is_portable_build="false"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="debug"" "is_portable_build="false"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="test"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="debug"" "is_portable_build="false"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
     </PostBuildEvent>
     <ProjectReference>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
     <ResourceCompile>
       <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=1;PIXIE_IS_PORTABLE_BUILD=0;PIXIE_IS_DEPLOY_BUILD=0;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\googletest;$(SolutionDir)..\..\..\_engine\depedency\googletest\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\game\include;$(SolutionDir)..\..\..\_engine\src\engine\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;$(SolutionDir)..\..\src\game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'">
@@ -417,25 +417,25 @@
       <ObjectFileName>$(IntDir)\%(Directory)\</ObjectFileName>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\cg\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\directx\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\librocket\lib\windows_x86\debug;$(SolutionDir)..\..\..\_engine\depedency\libvlc\lib\windows_x86\;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\lib\windows_x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>angelscript_d.lib;anttweakbar.lib;cg.lib;cgD3D9.lib;cgGL.lib;glut32.lib;d3d9.lib;d3dcompiler.lib;D3DCSXd.lib;d3dx9d.lib;d3dxof.lib;dinput8.lib;DxErr.lib;dxgi.lib;dxguid.lib;XInput.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib;libvlc.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;OpenAL32.lib;SDL2.lib;SDL2_net.lib;wxbase31ud.lib;wxbase31ud_net.lib;wxbase31ud_xml.lib;wxexpatd.lib;wxjpegd.lib;wxmsw31ud_adv.lib;wxmsw31ud_aui.lib;wxmsw31ud_core.lib;wxmsw31ud_gl.lib;wxmsw31ud_html.lib;wxmsw31ud_media.lib;wxmsw31ud_propgrid.lib;wxmsw31ud_qa.lib;wxmsw31ud_ribbon.lib;wxmsw31ud_richtext.lib;wxmsw31ud_stc.lib;wxmsw31ud_webview.lib;wxmsw31ud_xrc.lib;wxpngd.lib;wxregexud.lib;wxscintillad.lib;wxtiffd.lib;wxzlibd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$CL_ADDITIONAL_LIBRARIES$</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$CL_ADDITIONAL_LIBRARIES_NAMES$opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OptimizeReferences>false</OptimizeReferences>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <MinimumRequiredVersion />
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="debug"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="test"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="debug"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="debug"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="test"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="debug"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
     </PostBuildEvent>
     <ProjectReference>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
     <ResourceCompile>
       <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=1;PIXIE_IS_PORTABLE_BUILD=1;PIXIE_IS_DEPLOY_BUILD=0;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;DEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\googletest;$(SolutionDir)..\..\..\_engine\depedency\googletest\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\game\include;$(SolutionDir)..\..\..\_engine\src\engine\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;$(SolutionDir)..\..\src\game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'">
@@ -465,8 +465,8 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\cg\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\directx\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\librocket\lib\windows_x86\debug;$(SolutionDir)..\..\..\_engine\depedency\libvlc\lib\windows_x86\;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\lib\windows_x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>angelscript.lib;anttweakbar.lib;cg.lib;cgD3D9.lib;cgGL.lib;glut32.lib;d3d9.lib;d3dcompiler.lib;D3DCSX.lib;d3dx9.lib;d3dxof.lib;dinput8.lib;DxErr.lib;dxgi.lib;dxguid.lib;XInput.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib;libvlc.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;OpenAL32.lib;SDL2.lib;SDL2_net.lib;wxbase31u.lib;wxbase31u_net.lib;wxbase31u_xml.lib;wxexpat.lib;wxjpeg.lib;wxmsw31u_adv.lib;wxmsw31u_aui.lib;wxmsw31u_core.lib;wxmsw31u_gl.lib;wxmsw31u_html.lib;wxmsw31u_media.lib;wxmsw31u_propgrid.lib;wxmsw31u_qa.lib;wxmsw31u_ribbon.lib;wxmsw31u_richtext.lib;wxmsw31u_stc.lib;wxmsw31u_webview.lib;wxmsw31u_xrc.lib;wxpng.lib;wxregexu.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib;opengl32.lib;glu32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$CL_ADDITIONAL_LIBRARIES$</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$CL_ADDITIONAL_LIBRARIES_NAMES$opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OptimizeReferences>true</OptimizeReferences>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -474,17 +474,17 @@
       <MinimumRequiredVersion />
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="release"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="test"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="release"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="release"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="test"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="release"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
     </PostBuildEvent>
     <ProjectReference>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
     <ResourceCompile>
       <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=1;PIXIE_IS_DEPLOY_BUILD=1;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\googletest;$(SolutionDir)..\..\..\_engine\depedency\googletest\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\game\include;$(SolutionDir)..\..\..\_engine\src\engine\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;$(SolutionDir)..\..\src\game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'">
@@ -514,8 +514,8 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\cg\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\directx\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\librocket\lib\windows_x86\debug;$(SolutionDir)..\..\..\_engine\depedency\libvlc\lib\windows_x86\;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\lib\windows_x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>angelscript.lib;anttweakbar.lib;cg.lib;cgD3D9.lib;cgGL.lib;glut32.lib;d3d9.lib;d3dcompiler.lib;D3DCSX.lib;d3dx9.lib;d3dxof.lib;dinput8.lib;DxErr.lib;dxgi.lib;dxguid.lib;XInput.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib;libvlc.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;OpenAL32.lib;SDL2.lib;SDL2_net.lib;wxbase31u.lib;wxbase31u_net.lib;wxbase31u_xml.lib;wxexpat.lib;wxjpeg.lib;wxmsw31u_adv.lib;wxmsw31u_aui.lib;wxmsw31u_core.lib;wxmsw31u_gl.lib;wxmsw31u_html.lib;wxmsw31u_media.lib;wxmsw31u_propgrid.lib;wxmsw31u_qa.lib;wxmsw31u_ribbon.lib;wxmsw31u_richtext.lib;wxmsw31u_stc.lib;wxmsw31u_webview.lib;wxmsw31u_xrc.lib;wxpng.lib;wxregexu.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib;opengl32.lib;glu32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$CL_ADDITIONAL_LIBRARIES$</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$CL_ADDITIONAL_LIBRARIES_NAMES$opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OptimizeReferences>true</OptimizeReferences>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -524,17 +524,17 @@
       </MinimumRequiredVersion>
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="release"" "is_portable_build="true"" "is_deploy_build="true"" "is_ready_build="true"" "output_type="shared_library"" "output_unix_name="test"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="release"" "is_portable_build="true"" "is_deploy_build="true"" "is_ready_build="true"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="release"" "is_portable_build="true"" "is_deploy_build="true"" "is_ready_build="true"" "output_type="shared_library"" "output_unix_name="test"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="release"" "is_portable_build="true"" "is_deploy_build="true"" "is_ready_build="true"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
     </PostBuildEvent>
     <ProjectReference>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
     <ResourceCompile>
       <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=1;PIXIE_IS_DEPLOY_BUILD=1;PIXIE_IS_READY_BUILD=1;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;DEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\googletest;$(SolutionDir)..\..\..\_engine\depedency\googletest\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\game\include;$(SolutionDir)..\..\..\_engine\src\engine\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;$(SolutionDir)..\..\src\game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'">
@@ -564,8 +564,8 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\cg\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\directx\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\librocket\lib\windows_x86\debug;$(SolutionDir)..\..\..\_engine\depedency\libvlc\lib\windows_x86\;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\lib\windows_x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>angelscript.lib;anttweakbar.lib;cg.lib;cgD3D9.lib;cgGL.lib;glut32.lib;d3d9.lib;d3dcompiler.lib;D3DCSX.lib;d3dx9.lib;d3dxof.lib;dinput8.lib;DxErr.lib;dxgi.lib;dxguid.lib;XInput.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib;libvlc.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;OpenAL32.lib;SDL2.lib;SDL2_net.lib;wxbase31u.lib;wxbase31u_net.lib;wxbase31u_xml.lib;wxexpat.lib;wxjpeg.lib;wxmsw31u_adv.lib;wxmsw31u_aui.lib;wxmsw31u_core.lib;wxmsw31u_gl.lib;wxmsw31u_html.lib;wxmsw31u_media.lib;wxmsw31u_propgrid.lib;wxmsw31u_qa.lib;wxmsw31u_ribbon.lib;wxmsw31u_richtext.lib;wxmsw31u_stc.lib;wxmsw31u_webview.lib;wxmsw31u_xrc.lib;wxpng.lib;wxregexu.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib;opengl32.lib;glu32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$CL_ADDITIONAL_LIBRARIES$</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$CL_ADDITIONAL_LIBRARIES_NAMES$opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OptimizeReferences>true</OptimizeReferences>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -574,17 +574,17 @@
       </MinimumRequiredVersion>
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="release"" "is_portable_build="false"" "is_deploy_build="true"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="test"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="release"" "is_portable_build="false"" "is_deploy_build="true"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="release"" "is_portable_build="false"" "is_deploy_build="true"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="test"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="release"" "is_portable_build="false"" "is_deploy_build="true"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
     </PostBuildEvent>
     <ProjectReference>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
     <ResourceCompile>
       <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=0;PIXIE_IS_DEPLOY_BUILD=1;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\googletest;$(SolutionDir)..\..\..\_engine\depedency\googletest\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\game\include;$(SolutionDir)..\..\..\_engine\src\engine\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;$(SolutionDir)..\..\src\game\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'">
@@ -614,8 +614,8 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\cg\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\directx\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\librocket\lib\windows_x86\debug;$(SolutionDir)..\..\..\_engine\depedency\libvlc\lib\windows_x86\;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\lib\windows_x86;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\lib\windows_x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>angelscript.lib;anttweakbar.lib;cg.lib;cgD3D9.lib;cgGL.lib;glut32.lib;d3d9.lib;d3dcompiler.lib;D3DCSX.lib;d3dx9.lib;d3dxof.lib;dinput8.lib;DxErr.lib;dxgi.lib;dxguid.lib;XInput.lib;RocketControls.lib;RocketCore.lib;RocketDebugger.lib;libvlc.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;OpenAL32.lib;SDL2.lib;SDL2_net.lib;wxbase31u.lib;wxbase31u_net.lib;wxbase31u_xml.lib;wxexpat.lib;wxjpeg.lib;wxmsw31u_adv.lib;wxmsw31u_aui.lib;wxmsw31u_core.lib;wxmsw31u_gl.lib;wxmsw31u_html.lib;wxmsw31u_media.lib;wxmsw31u_propgrid.lib;wxmsw31u_qa.lib;wxmsw31u_ribbon.lib;wxmsw31u_richtext.lib;wxmsw31u_stc.lib;wxmsw31u_webview.lib;wxmsw31u_xrc.lib;wxpng.lib;wxregexu.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib;opengl32.lib;glu32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$CL_ADDITIONAL_LIBRARIES$</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$CL_ADDITIONAL_LIBRARIES_NAMES$opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OptimizeReferences>true</OptimizeReferences>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -624,17 +624,17 @@
       </MinimumRequiredVersion>
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="release"" "is_portable_build="false"" "is_deploy_build="true"" "is_ready_build="true"" "output_type="shared_library"" "output_unix_name="test"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="release"" "is_portable_build="false"" "is_deploy_build="true"" "is_ready_build="true"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="release"" "is_portable_build="false"" "is_deploy_build="true"" "is_ready_build="true"" "output_type="shared_library"" "output_unix_name="test"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="release"" "is_portable_build="false"" "is_deploy_build="true"" "is_ready_build="true"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
     </PostBuildEvent>
     <ProjectReference>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
     <ResourceCompile>
       <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=0;PIXIE_IS_DEPLOY_BUILD=1;PIXIE_IS_READY_BUILD=1;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\_engine\depedency\angelscript\include;$(SolutionDir)..\..\..\_engine\depedency\anttweakbar\include;$(SolutionDir)..\..\..\_engine\depedency\blowfish;$(SolutionDir)..\..\..\_engine\depedency\boost-experimental_di\include;$(SolutionDir)..\..\..\_engine\depedency\cereal\include;$(SolutionDir)..\..\..\_engine\depedency\cg\include;$(SolutionDir)..\..\..\_engine\depedency\debugbreak;$(SolutionDir)..\..\..\_engine\depedency\directx\include;$(SolutionDir)..\..\..\_engine\depedency\enum_flags;$(SolutionDir)..\..\..\_engine\depedency\glew-1.10.0\include;$(SolutionDir)..\..\..\_engine\depedency\googletest;$(SolutionDir)..\..\..\_engine\depedency\googletest\include;$(SolutionDir)..\..\..\_engine\depedency\gsl\include;$(SolutionDir)..\..\..\_engine\depedency\librocket\include;$(SolutionDir)..\..\..\_engine\depedency\libvlc\include;$(SolutionDir)..\..\..\_engine\depedency\openal_soft\include;$(SolutionDir)..\..\..\_engine\depedency\pugixml\src;$(SolutionDir)..\..\..\_engine\depedency\sdl\include;$(SolutionDir)..\..\..\_engine\depedency\sdl_net\include;$(SolutionDir)..\..\..\_engine\depedency\stb\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include;$(SolutionDir)..\..\..\_engine\depedency\wxwidgets\include\msvc;$(SolutionDir)..\..\..\_engine\src\common\include;$(SolutionDir)..\..\..\_engine\src\game\include;$(SolutionDir)..\..\..\_engine\src\engine\include;$(SolutionDir)..\..\src\_autogen;$(SolutionDir)..\..\src\_common\include;$(SolutionDir)..\..\src\$EMPTY_UNIX_NAME$\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

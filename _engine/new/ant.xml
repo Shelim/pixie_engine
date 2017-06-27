@@ -48,8 +48,8 @@
 	</target>
 	
 	<target name="new_application_internal">
-		<mkdir dir="../${app_src}" />
-		<copy todir="../${app_src}" includeEmptyDirs="true" overwrite="true"> 
+		<mkdir dir="../${app_src}/_build/new-${unix}" />
+		<copy todir="../${app_src}/_build/new-${unix}" includeEmptyDirs="true" overwrite="true"> 
 			<fileset dir="new/application/common" defaultexcludes="no" /> 
 			<fileset dir="new/application/${app_predefined}" defaultexcludes="no" /> 
 			
@@ -63,8 +63,12 @@
 		</copy>
 		
 		<antcall target="replace_variables">
-			<param name="replace_variables.file" value="../${app_src}" />
+			<param name="replace_variables.file" value="../${app_src}/_build/new-${unix}" />
 		</antcall>
+		
+		<copy todir="../${app_src}" includeEmptyDirs="true" overwrite="true"> 
+			<fileset dir="../${app_src}/_build/new-${unix}" defaultexcludes="no" /> 
+		</copy>
 				
 	</target>
 	

@@ -26,7 +26,7 @@ Var StartMenuFolder
 !define MUI_FINISHPAGE_RUN "$INSTDIR\$INSTALL_RUN$"
 
 Function finishpageaction
-CreateShortcut "$DESKTOP\$INSTALL_SHORTCUT$" "$INSTDIR\$LAUNCHER_FILENAME$"
+CreateShortcut "$DESKTOP\$INSTALL_SHORTCUT$" "$INSTDIR\$INSTALL_RUN$"
 FunctionEnd
 
 !define MUI_FINISHPAGE_SHOWREADME ""
@@ -119,7 +119,7 @@ Section
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   
 	CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-	CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$INSTALL_SHORTCUT$" "$INSTDIR\$LAUNCHER_FILENAME$"
+	CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$INSTALL_SHORTCUT$" "$INSTDIR\$INSTALL_RUN$"
 	CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\uninstall.exe"
 	
   !insertmacro MUI_STARTMENU_WRITE_END
@@ -137,7 +137,7 @@ Section
 	WriteRegStr HKLM "Software\Microsoft\Windows\Currentversion\Uninstall\$RESOURCES_INTERNAL$" \
                  "InstallLocation " "$INSTDIR"
 	WriteRegStr HKLM "Software\Microsoft\Windows\Currentversion\Uninstall\$RESOURCES_INTERNAL$" \
-                 "DisplayIcon" "$INSTDIR\$GAME_FILENAME$"
+                 "DisplayIcon" "$INSTDIR\$INSTALL_RUN$"
 	WriteRegDWORD HKLM "Software\Microsoft\Windows\Currentversion\Uninstall\$RESOURCES_INTERNAL$" \
                  "NoModify" 1
 	WriteRegDWORD HKLM "Software\Microsoft\Windows\Currentversion\Uninstall\$RESOURCES_INTERNAL$" \
@@ -163,19 +163,19 @@ Section /o "un.Remove saved games"
 
 ;	${SHGetKnownFolderPath} "${FOLDERID_Savedgames}" 0 $folder
 
-	RMdir /R "$PROFILE\saved_games\$APPDATAPATH$"
+	RMdir /R "$PROFILE\saved_games\$WINDOWS_GAME_APP_DIR$"
 
 SectionEnd
 
 Section /o "un.Remove keybinding"
 
-	RMdir /R "$APPDATA\$APPDATAPATH$"
+	RMdir /R "$APPDATA\$WINDOWS_GAME_APP_DIR$"
 
 SectionEnd
 
 Section /o "un.Remove config"
 
-	RMdir /R "$LOCALAPPDATA\$APPDATAPATH$"
+	RMdir /R "$LOCALAPPDATA\$WINDOWS_GAME_APP_DIR$"
 
 SectionEnd
 
