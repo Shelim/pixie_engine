@@ -110,8 +110,8 @@
     <NMakeIncludeSearchPath />
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_void_prebuild\out\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_void_prebuild\int\</IntDir>
-    <NMakeBuildCommandLine>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild_all "build_configuration="debug"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="executable"" "output_unix_name="_postbuild"" "app_unix_name="$EMPTY_UNIX_NAME$""</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild_all "build_configuration="debug"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="executable"" "output_unix_name="_postbuild"" "app_unix_name="$EMPTY_UNIX_NAME$""</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild_all "build_configuration="debug"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="test"" "output_unix_name="_postbuild"" "app_unix_name="$EMPTY_UNIX_NAME$""</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild_all "build_configuration="debug"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="test"" "output_unix_name="_postbuild"" "app_unix_name="$EMPTY_UNIX_NAME$""</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>$(SolutionDir)..\..\..\_engine\build\windows\void.bat</NMakeCleanCommandLine>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'">

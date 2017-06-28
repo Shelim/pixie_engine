@@ -278,16 +278,6 @@
 	</target>
 	
 <!-- Copy content into target dir -->	
-	<target name="content_if_test" depends="check_if_content_if_test" if="is_content_if_test">
-		<antcall target="binary_base">
-			<param name="binary.output_path" value="${output_path}"/>
-		</antcall>
-		<antcall target="content_base">
-			<param name="content_base.output_path" value="${output_path}"/>
-		</antcall>
-	</target>
-	
-<!-- Copy content into target dir -->	
 	<target name="content">
 		<antcall target="binary_base">
 			<param name="binary.output_path" value="${output_path}"/>
@@ -301,7 +291,7 @@
 	
 	<target name="prebuild" depends="autogen" />
 	
-	<target name="postbuild" depends="copy_executable_to_output, content_if_test, pack_executable, build_ready_pdb" />
+	<target name="postbuild" depends="copy_executable_to_output, pack_executable, build_ready_pdb" />
 	
 	<target name="postbuild_all" depends="content, content_debug, build_installer, build_portable, build_upload, build_ready" />
 	

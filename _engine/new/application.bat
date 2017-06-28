@@ -16,7 +16,11 @@ echo Do you wish to create sample application, or start with blank project?
 echo 1 - Blank application
 echo 2 - Launcher
 echo 3 - Editor
-choice /N /C:123 /M "Choose one"
+echo 4 - Engine Tester
+echo 5 - Windows Icon Provider (Shared lib)
+choice /N /C:12345 /M "Choose one"
+if errorlevel ==5 goto type_icon_provider
+if errorlevel ==4 goto type_tester
 if errorlevel ==3 goto type_editor
 if errorlevel ==2 goto type_launcher
 echo Enter type of your application:
@@ -30,6 +34,14 @@ if errorlevel ==1 goto type_exe
 echo Wrong answer. Please try again.
 goto choose_type
 
+:type_icon_provider
+set app_predefined=icon_provider
+set app_type=shared_library
+goto after_type
+:type_tester
+set app_predefined=tester
+set app_type=test
+goto after_type
 :type_editor
 set app_predefined=editor
 set app_type=executable

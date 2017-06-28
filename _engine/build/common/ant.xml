@@ -51,22 +51,20 @@
 		<istrue value="${is_deploy_build}" />
 	</condition>
 	
-	<condition property="platform_dir" value="${platform_base_dir}_test_${output_unix_name}" else="${platform_base_dir}${platform_dir_configuration_1}${platform_dir_configuration_2}${platform_dir_configuration_3}${platform_dir_configuration_4}${platform_dir_portable}${platform_dir_deploy}">
+	<condition property="platform_dir" value="${platform_base_dir}_test" else="${platform_base_dir}${platform_dir_configuration_1}${platform_dir_configuration_2}${platform_dir_configuration_3}${platform_dir_configuration_4}${platform_dir_portable}${platform_dir_deploy}">
 		<equals arg1="${output_type}" arg2="test"/> 
 	</condition>
 	
 	
 <!-- Apply above dir name into paths -->
-
-	<condition property="build_path" value="${build_app_path}/_build/${platform_dir}/" else="${build_app_path}/_build/${platform_dir}_${output_unix_name}/">
-		<equals arg1="${output_type}" arg2="test"/> 
-	</condition>
+	
+	<property name="build_path" value="${build_app_path}/_build/${platform_dir}_${output_unix_name}/" />
 	<property name="build_common_path" value="${build_app_path}/_build/${platform_dir}_common/" />
 	<property name="output_path" value="${build_app_path}/output/${platform_dir}/" />
 	<property name="deploy_output_path" value="${build_app_path}/output/${platform_dir}_ready/" />
 	<property name="build_installer_path" value="${build_app_path}/_build/${platform_dir}_installer/" />
-	<property name="autogen_path_relative" value="${platform_base_dir}/${output_unix_name}/" />
-	<property name="autogen_path" value="${build_app_path}code/include/_autogen/${autogen_path_relative}" />
+	<property name="autogen_path_relative" value="_autogen/${platform_base_dir}/${output_unix_name}/" />
+	<property name="autogen_path" value="${build_app_path}code/include/${autogen_path_relative}" />
 	
 	<condition property="autogen_hpp_path" value="${autogen_path}/autogen_${build_configuration}_portable.hpp" else="${autogen_path}/autogen_${build_configuration}.hpp">
 		<istrue value="${is_portable_build}"/> 
@@ -177,7 +175,7 @@
 		<replace file="${replace_variables.file}" token="$PLATFORM_FULLNAME$" value="${platform_fullname}" />
 		
 		<replace file="${replace_variables.file}" token="$BINARY_FILENAME$" value="${manifest.binary_filename}" />
-		<replace file="${replace_variables.file}" token="$BINARY_EXTENSION$" value="${manifest.binary_filename_ext_raw}" />
+		<replace file="${replace_variables.file}" token="$BINARY_EXTENSION$" value="${binary_filename_ext_raw}" />
 		<replace file="${replace_variables.file}" token="$INSTALLER_FILENAME$" value="${manifest.installer_filename}" />
 		<replace file="${replace_variables.file}" token="$PORTABLE_FILENAME$" value="${manifest.portable_filename}" />
 		
