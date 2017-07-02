@@ -10,13 +10,58 @@
 
 namespace engine
 {
-	
-	class bootstrapper_t final
+
+	template<class owner_t, class... providers_t> class register_providers_for
 	{
+
+	};
+
+	template<class implementation_t, class component_t> class register_as
+	{
+
+	};
+	
+	template<class ... registerable_t> class bootstrapper_t final
+	{
+
+	private:
+
+
+		template<class ...registerable_t> struct obj
+		{
+
+		};
+
+		static auto provide_di(obj<>)
+		{
+			return boost::di::make_injector();
+		}
+
+		template<class owner_t, class... providers_t> static auto provide_di_unit(register_providers_for<owner_t, providers_t...>)
+		{
+			return boost::di::make_injector(boost::di::bind<holder_t<owner_t>>().to < holder_implementation_t<owner_t, providers_t...> >());
+		}
+
+		template<class component_t, class implementation_t> static auto provide_di_unit(register_as<implementation_t, component_t>)
+		{
+			return boost::di::make_injector(boost::di::bind<component_t>().to <implementation_t>());
+		}
+
+		template<class provider_for, class... registerable_t> static auto provide_di(obj<provider_for, registerable_t...>)
+		{
+			return boost::di::make_injector(provide_di_unit(provider_for{}), provide_di(obj<registerable_t...>{}));
+		};
+
+		static auto provide_final_di()
+		{
+			return provide_di(obj<registerable_t...>{});
+		}
+
+		decltype(provide_final_di()) injector;
 
 	public:
 
-		bootstrapper_t()
+		bootstrapper_t() : injector(provide_final_di())
 		{
 
 		}
@@ -26,50 +71,31 @@ namespace engine
 
 		}
 
-		template<class component_t, class component_implementation_t> bootstrapper_t & register_component()
-		{
-
-			return (*this);
-		}
-
-		template<class owner_t, class... providers_t> bootstrapper_t & register_providers_for()
-		{
-
-			return (*this);
-		}
-
-		template<class ... components_t> bootstrapper_t & use_dummy_for()
-		{
-
-			return (*this);
-		}
-
-		bootstrapper_t & complete_configuration()
-		{
-
-			return (*this);
-		}
 
 		template<class component_t> std::shared_ptr<component_t> construct_component()
 		{
-
-			return (*this);
+			return injector.create<std::shared_ptr<component_t> >();
 		}
 
 		template<class component_t> bootstrapper_t & construct_component(std::shared_ptr<component_t> & ptr)
 		{
-
+			ptr = injector.create<std::shared_ptr<component_t> >();
 			return (*this);
 		}
 
 		template<class component_t> component_t* construct_component_with_lifetime_guard(instance_lifetime_guard<component_t> & guard)
 		{
-
-			return (*this);
+			std::unique_ptr<component_t> ptr = injector.create<std::unique_ptr<component_t> >();
+			component_t * ret = ptr.get();
+			guard.set_instance(std::move(ptr));
+			return ret;
 		}
 
-		template<class component_t> bootstrapper_t & construct_component_with_lifetime_guard(component_t* & ptr, instance_lifetime_guard<component_t> & guard)
+		template<class component_t> bootstrapper_t & construct_component_with_lifetime_guard(component_t* & ret, instance_lifetime_guard<component_t> & guard)
 		{
+			std::unique_ptr<component_t> ptr = injector.create<std::unique_ptr<component_t> >();
+			ret = ptr.get();
+			guard.set_instance(std::move(ptr));
 
 			return (*this);
 		}

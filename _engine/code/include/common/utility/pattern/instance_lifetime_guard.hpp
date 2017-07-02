@@ -12,9 +12,9 @@ namespace engine
 
 	public:
 
-		void set_instance(object_t * object)
+		void set_instance(std::unique_ptr<object_t> object)
 		{
-			instance = object;
+			instance = std::move(object);
 		}
 
 		void destroy_instance()

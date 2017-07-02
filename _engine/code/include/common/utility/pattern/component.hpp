@@ -49,7 +49,7 @@ namespace engine
 
 	};
 
-	template<class owner_t, class ... providers_t> class holder_implementation_t final : public holder_t<owner_t>
+	template<class owner_t, class ... providers_t> class holder_implementation_t : public holder_t<owner_t>
 	{
 
 	public:
