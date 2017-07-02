@@ -3,10 +3,11 @@
 #pragma once
 
 #include <memory>
+#include "boost/di.hpp"
+#include "utility/pattern/instance_guard.hpp"
 
 namespace game
 {
-	class engine_t;
 	
 	class bootstrapper_t final
 	{
@@ -23,22 +24,14 @@ namespace game
 
 		}
 
-		engine_t * get_engine()
-		{
-			return engine.get();
-		}
-
-		bootstrapper_t & configure_debug()
+		template<class component_t, class component_implementation_t> bootstrapper_t & register_component()
 		{
 
+
+			return (*this);
 		}
 
-		bootstrapper_t & configure_release()
-		{
-
-		}
-
-		template<class component_t, class provider_t> bootstrapper_t & register_provider_for()
+		template<class component_t, class... providers_t> bootstrapper_t & register_providers_for()
 		{
 
 		}
@@ -68,10 +61,19 @@ namespace game
 
 		}
 
+		template<class component_t> component_t* construct_component_with_guard(instance_guard<component_t> & guard)
+		{
+
+		}
+
+		template<class component_t> bootstrapper_t & construct_component_with_guard(component_t* & ptr, instance_guard<component_t> & guard)
+		{
+
+		}
+
 
 	private:
 
-		std::unique_ptr<engine_t> engine;
 
 	};
 

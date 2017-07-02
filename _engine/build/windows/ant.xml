@@ -110,7 +110,7 @@
 	
 <!-- Pack executable with UPX, greatly reducing its size -->
 	<target name="pack_executable" depends="check_if_can_pack_executable" if="can_pack_executable">		
-		<exec executable="${basedir}/depedency/upxw/${platform_name}/upx.exe" failonerror="true">
+		<exec executable="${basedir}/depedency/upxw/${platform_name}/upx.exe" failonerror="false">
 			<arg value="--ultra-brute"/>
 			<arg value="${basedir}/${output_path}${manifest.binary_filename}.${binary_filename_ext_raw}"/>
 		</exec>

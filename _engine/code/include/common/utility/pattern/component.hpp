@@ -7,43 +7,7 @@
 namespace game
 {
 
-	template<class component_t> class dummy_for final
-	{
-		static_assert("This component does not supports dummy for!");
-
-		typedef component_t type;
-	};
-
-	class provider_t
-	{
-
-	public:
-
-		virtual ~provider_t()
-		{
-			
-		}
-
-	private:
-
-	};
-
-	template<class ... providers_t> class holder_t final
-	{
-
-	public:
-
-		holder_t(std::unique_ptr<provider_t>... providers) : provider(std::move(providers)...)
-		{
-
-		}
-
-	private:
-
-		std::tuple<std::unique_ptr<providers_t>...> providers;
-	};
-
-	class component_base_t
+	template<class component_t> class component_base_t
 	{
 
 	public:
@@ -55,24 +19,54 @@ namespace game
 
 	};
 	
-	template<class ... providers_t> class component_t : public component_base_t
+	template<class owner_t> class provider_base_t
 	{
 
 	public:
 
-	protected:
-
-		auto get_holder()
+		virtual ~provider_base_t()
 		{
-			return &holder;
+			
 		}
 
 	private:
 
-		holder_t<providers_t...> holder;
+	};
+
+	template<class owner_t> class holder_base_t
+	{
+
+	public:
+
+		virtual ~holder_base_t()
+		{
+
+		}
+
+		virtual provider_base_t<owner_t> * get_provider() = 0;
 
 	};
 
+	template<class owner_t, class ... providers_t> class holder_t final : public holder_base_t<owner_t>
+	{
+
+	public:
+
+		holder_t(std::unique_ptr<providers_t>... providers) : providers(std::move(providers)...)
+		{
+
+		}
+
+		provider_base_t<owner_t> * get_provider() final
+		{
+			return std::get<0>(providers).get();
+		}
+
+	private:
+
+		std::tuple<std::unique_ptr<providers_t>...> providers;
+	};
+	
 }
 
 #endif

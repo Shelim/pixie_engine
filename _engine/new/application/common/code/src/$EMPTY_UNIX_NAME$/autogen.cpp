@@ -1,3 +1,5 @@
+#if 0 // temporary
+
 #if PIXIE_WINDOWS
 
 #if PIXIE_IS_DEBUG_BUILD
@@ -17,5 +19,7 @@
 #else
 
 #error "Autogen requires known platform - did you forgot to define PIXIE_PLATFORM_FULL?"
+
+#endif
 
 #endif

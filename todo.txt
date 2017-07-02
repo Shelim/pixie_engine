@@ -2,9 +2,8 @@ BuildSystem:
  - Build changelog
  - Update changelog
  - Remove comments from XML
- 
- - update _engine\new\application\tester\manifest\$EMPTY_UNIX_NAME$\windows to PIXIE ENGINE icon
 		
+ - Clean build VS project 2015
 
 DataItems	
  - Move loading task to generic task
