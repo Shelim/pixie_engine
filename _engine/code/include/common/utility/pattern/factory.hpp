@@ -7,7 +7,7 @@
 #include <memory>
 #include <vector>
 
-namespace game
+namespace engine
 {
 	template<class key_t> class factorable_t;
 

@@ -6,7 +6,7 @@
 #include <bitset>
 #include <type_traits>
 
-namespace game
+namespace engine
 {
 	template<class flag_t> class flags_t final
 	{

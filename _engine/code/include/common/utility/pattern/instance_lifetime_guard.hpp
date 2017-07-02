@@ -4,10 +4,10 @@
 
 #include <memory>
 
-namespace game
+namespace engine
 {
 
-	template<class object_t> class instance_guard final
+	template<class object_t> class instance_lifetime_guard final
 	{
 
 	public:
