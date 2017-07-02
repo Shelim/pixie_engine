@@ -5,7 +5,7 @@ set unix_filename=example_app
 set full_filename="My Example Application"
 set exe_filename=game
 
-set /p unix_filename=Enter unix filename of your project (lowercase, no spaces nor special characters): 
+set /p unix_filename=Enter unix filename of your project (lowercase, no spaces nor special characters):
 set /p full_filename=Enter full name of your project (should be a valid filename!):
 set /p exe_filename=Enter unix filename of your first application (typically you should enter just 'game'):
 

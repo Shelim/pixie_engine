@@ -83,7 +83,13 @@ goto after_launch
 )
 
 :after_launch
+:set_unix_filename
 set /p unix_filename=Enter unix filename of your new application (lowercase, no spaces nor special characters): 
+
+IF NOT EXIST ../../%app_name%/manifest/%unix_filename% goto set_full_filename
+echo This project does already exists, choose existing one!
+goto set_unix_filename
+:set_full_filename
 set /p full_filename=Enter full name of your application (should be a valid filename!): 
 cd ../depedency/apache_ant/bin
 set path=%~dp0../depedency/jdk1.7.0_71/bin;%~dp0../depedency/mingw/bin;%path%
