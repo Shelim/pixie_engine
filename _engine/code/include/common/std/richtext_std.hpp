@@ -68,7 +68,7 @@ GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(pending_meta, teal_dark, black)
 GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(warning_meta, yellow_dark, black)
 GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(error_meta, red_dark, black)
 
-#include "common/std/richtext_game_std.hpp"
+#include "std/richtext_game_std.hpp"
 
 #undef GAME_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD
 #undef GAME_RICHTEXT_TAG_STD

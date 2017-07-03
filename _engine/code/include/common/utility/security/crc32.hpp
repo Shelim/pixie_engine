@@ -4,7 +4,7 @@
 
 #include <cinttypes>
 #include <cstddef>
-#include "common/utility/text/ustring.hpp"
+#include "utility/text/ustring.hpp"
 
 namespace engine
 {

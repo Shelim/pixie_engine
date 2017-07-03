@@ -6,7 +6,7 @@
 #include <functional>
 #include "boost/di.hpp"
 #include "utility/pattern/instance_lifetime_guard.hpp"
-#include "utility/pattern/component.hpp"
+#include "utility/pattern/provider.hpp"
 
 namespace engine
 {

@@ -2,7 +2,7 @@
 #define ENGINE_COMMON_UTILITY_STRING_RICHTEXT_HPP
 #pragma once
 
-#include "common/utility/text/ustring.hpp"
+#include "utility/text/ustring.hpp"
 #include <bitset>
 
 namespace engine
@@ -16,7 +16,7 @@ namespace engine
 		enum class flag_t
 		{
 #define GAME_RICHTEXT_TAG_STD(id) id,
-#include "common/std/richtext_std.hpp"
+#include "std/richtext_std.hpp"
 
 			count
 		};

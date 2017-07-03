@@ -32,10 +32,10 @@
 // GAME_CONFIG_STD(Name, ReleaseDefValue, DebugDefValue)
 
 #define GAME_COMPILER_OUTPUT_TYPE_STD(output) GAME_CONFIG_STD(output##_is_first_run, true, true)
-#include "common/std/compiler_output_types_std.hpp"
+#include "std/compiler_output_types_std.hpp"
 
-#define GAME_LANGUAGE_TYPE_STD(LANG) GAME_CONFIG_STD(common_language_ ## LANG, _U("_default"), _U("_default"))
-#include "common/std/language_type_std.hpp"
+#define GAME_LANGUAGE_TYPE_STD(LANG) GAME_CONFIG_STD(common_language_ ## LANG, "_default"_u, "_default"_u)
+#include "std/language_type_std.hpp"
 
 GAME_CONFIG_STD(game_window_w, 800, 800)
 GAME_CONFIG_STD(game_window_h, 600, 600)
@@ -51,15 +51,15 @@ GAME_CONFIG_STD(game_vsync, true, true)
 GAME_CONFIG_STD(game_movie_w, 512, 512)
 GAME_CONFIG_STD(game_movie_h, 512, 512)
 
-GAME_CONFIG_STD(game_renderer, _U("sdl2_opengl"), _U("sdl2_opengl"))
+GAME_CONFIG_STD(game_renderer, "sdl2_opengl"_u, "sdl2_opengl"_u)
 
-GAME_CONFIG_STD(game_module, _U("base"), _U("base"))
+GAME_CONFIG_STD(game_module, "base"_u, "base"_u)
 GAME_CONFIG_STD(game_submodules, engine::ustring_collection_t{}, engine::ustring_collection_t{})
 
-GAME_CONFIG_STD(game_audio, _U(""), _U(""))
+GAME_CONFIG_STD(game_audio, ""), _U(""_u)
 GAME_CONFIG_STD(game_volume_master, 1.0f, 1.0f)
 #define GAME_AUDIO_TYPE_STD(audio) GAME_CONFIG_STD(game_volume_ ## audio, 1.0f, 1.0f)
-#include "common/std/audio_type_std.hpp"
+#include "std/audio_type_std.hpp"
 
 GAME_CONFIG_STD(game_has_anttweakbar, false, true)
 GAME_CONFIG_STD(game_has_interface_debugger, false, true)
@@ -69,13 +69,13 @@ GAME_CONFIG_STD(editor_skip_splashscreen, false, true)
 GAME_CONFIG_STD(game_skip_fadein_on_startup, false, true)
 GAME_CONFIG_STD(game_skip_fades_between_states, false, false)
 
-#include "common/std/config_game_std.hpp"
+#include "std/config_game_std.hpp"
 
 /*
 GAME_CONFIG_STD_BEGIN_CATEGORY(system)
 	GAME_CONFIG_STD_BEGIN_GROUP(system_language)
 #define GAME_LANGUAGE_TYPE_STD(LANG) GAME_CONFIG_STD_CONFIGURABLE(language, system_language_language_ ## LANG, engine_language_ ## LANG, _U("lang_available_" #LANG))
-#include "common/std/language_type_std.hpp"
+#include "std/language_type_std.hpp"
 	GAME_CONFIG_STD_END_GROUP()
 GAME_CONFIG_STD_END_CATEGORY()
 
@@ -120,7 +120,7 @@ GAME_CONFIG_STD_BEGIN_CATEGORY(sounds)
 	GAME_CONFIG_STD_BEGIN_GROUP(sounds_volume)
 		GAME_CONFIG_STD_CONFIGURABLE(volume, sounds_volume_volume_master, engine_volume_master)
 #define GAME_AUDIO_TYPE_STD(AUDIO) GAME_CONFIG_STD_CONFIGURABLE(volume, sounds_volume_volume_ ## AUDIO, engine_volume_ ## AUDIO)
-#include "common/std/audio_type_std.hpp"
+#include "std/audio_type_std.hpp"
 	GAME_CONFIG_STD_END_GROUP()
 GAME_CONFIG_STD_END_CATEGORY()
 
@@ -135,7 +135,7 @@ GAME_CONFIG_STD_BEGIN_CATEGORY(debug)
 	GAME_CONFIG_STD_END_GROUP()
 	GAME_CONFIG_STD_BEGIN_GROUP(debug_logger_output)
 #define GAME_LOGGER_OUTPUT_STD(LOGGER_OUTPUT, ReleaseDefValue, DebugDefValue) GAME_CONFIG_STD_CONFIGURABLE(boolean, debug_logger_output_ ## LOGGER_OUTPUT, engine_logger_output_ ## LOGGER_OUTPUT)
-#include "common/std/logger_output_std.hpp"
+#include "std/logger_output_std.hpp"
 	GAME_CONFIG_STD_END_GROUP()
 GAME_CONFIG_STD_END_CATEGORY()
 

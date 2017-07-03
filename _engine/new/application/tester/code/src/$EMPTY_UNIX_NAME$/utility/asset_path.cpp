@@ -1,13 +1,11 @@
-/// USING Google Test engine
-#if 0
-
 #include <gtest/gtest.h>
 #include <sstream>
 #include <string>
-#include "common/utility/text/ustring.hpp"
-#include "common/asset/path.hpp"
-#include "common/utility/vfs/virtual_path.hpp"
-#include "test/print_to.hpp"
+#include "utility/text/ustring.hpp"
+#include "utility/vfs/virtual_path.hpp"
+#include "print_to.hpp"
+
+/*
 
 #define EXPECT_CLEAN_EQ(val, res) { engine::ustring_t item = engine::asset::path_t::clean_path(_U(val)); EXPECT_EQ(item, _U(res)); }
 
@@ -260,4 +258,4 @@ TEST(asset_path, info_t_common_lang_tag)
 	EXPECT_PATH_COMMON_EQ("mod#blah/#test.^exe", tag, "exe");
 }
 
-#endif
+*/

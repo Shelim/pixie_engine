@@ -68,6 +68,7 @@ function list_paths(project_id, project_type)
 	"_engine/depedency/*/src",
 	"_engine/depedency/googletest",
 	project.getProperty('app_unix_name') + "/code/include/common",
+	project.getProperty('app_unix_name') + "/code/src/common",
 	project.getProperty('app_unix_name') + "/code/include/" + project_id,
 	project.getProperty('app_unix_name') + "/code/src/" + project_id,
 	];				
@@ -90,6 +91,7 @@ function list_ignored_depedencies(project_type)
 	'apache_ant',
 	'nsis',
 	'wxwidgets\\include',
+	'jdk1.8.0_131',
 	'googletest\\src\\gtest.cc',
 	'googletest\\src\\gtest-death-test.cc',
 	'googletest\\src\\gtest-filepath.cc',

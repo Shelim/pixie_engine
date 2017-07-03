@@ -2,9 +2,9 @@
 #define ENGINE_COMMON_VIRTUAL_PATH_HPP
 #pragma once
 
-#include "common/filesystem.hpp"
+#include "filesystem.hpp"
 #include <vector>
-#include "common/utility/text/ustring.hpp"
+#include "utility/text/ustring.hpp"
 
 
 /**
@@ -55,7 +55,7 @@ namespace engine
 		{
 			unknown,
 #define GAME_VIRTUAL_PATH_STD(name, type, path) name,
-#include "common/std/virtual_path_std.hpp"
+#include "std/virtual_path_std.hpp"
 			count
 		};
 
@@ -203,7 +203,7 @@ namespace engine
 
 		ss << path.get_cstring() << " [";
 #define GAME_VIRTUAL_PATH_STD(name, type_id, dirname) if(item.get_type() == virtual_path_t::type_t::name) { ss << #name; }
-#include "common/std/virtual_path_std.hpp"
+#include "std/virtual_path_std.hpp"
 
 		ss << "]";
 
