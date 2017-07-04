@@ -16,6 +16,11 @@ namespace engine
 
 	};
 
+	template<class owner_t, class provider_t> class register_provider_for
+	{
+
+	};
+
 	template<class implementation_t, class component_t> class register_as
 	{
 
@@ -40,6 +45,11 @@ namespace engine
 		template<class owner_t, class... providers_t> static auto provide_di_unit(register_providers_for<owner_t, providers_t...>)
 		{
 			return boost::di::make_injector(boost::di::bind<holder_t<owner_t>>().to < holder_implementation_t<owner_t, providers_t...> >());
+		}
+
+		template<class owner_t, class provider_t> static auto provide_di_unit(register_provider_for<owner_t, provider_t>)
+		{
+			return boost::di::make_injector(boost::di::bind<holder_t<owner_t>>().to < holder_implementation_t<owner_t, provider_t> >());
 		}
 
 		template<class component_t, class implementation_t> static auto provide_di_unit(register_as<implementation_t, component_t>)

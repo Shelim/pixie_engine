@@ -113,7 +113,7 @@ function list_additional_includes(project_id, project_type)
 	
 	var ret = [];
 	
-	dir = project.getBaseDir() + "/../" + project.getProperty("app_unix_name") + "/project/visual_studio_2017/";
+	dir = project.getBaseDir() + "/../" + project.getProperty("app_unix_name") + "/project/visual_studio_2015/";
 	
 	for (var i=0; i<src_path.length; i++)
 	{
@@ -139,7 +139,7 @@ function list_sources(project_id, project_type, extensions, func)
 	if(!func)
 		func = list_paths;
 		
-	dir = project.getBaseDir() + "/../" + project.getProperty("app_unix_name") + "/project/visual_studio_2017/";
+	dir = project.getBaseDir() + "/../" + project.getProperty("app_unix_name") + "/project/visual_studio_2015/";
 	
 	var src_path = func(project_id, project_type);
 				

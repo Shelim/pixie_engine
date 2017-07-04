@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
-MinimumVisualStudioVersion = 15.0.26430.14
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 14.0.25420.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "postbuild", "postbuild.vcxproj", "{2E20FD25-ABA9-4471-B0A4-F3F358D9DC2B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{47F0434A-32FC-4640-A38D-7531A1CDB5EE} = {47F0434A-32FC-4640-A38D-7531A1CDB5EE}

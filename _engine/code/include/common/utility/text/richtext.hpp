@@ -15,7 +15,7 @@ namespace engine
 
 		enum class flag_t
 		{
-#define GAME_RICHTEXT_TAG_STD(id) id,
+#define ENGINE_RICHTEXT_TAG_STD(id) id,
 #include "std/richtext_std.hpp"
 
 			count

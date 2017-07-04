@@ -4,6 +4,7 @@ BuildSystem:
  - Remove comments from XML
 		
  - Clean build VS project 2015
+ - Add app_manifest to compile
 
 DataItems	
  - Move loading task to generic task

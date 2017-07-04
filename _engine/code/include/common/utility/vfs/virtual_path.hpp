@@ -54,7 +54,7 @@ namespace engine
 		enum class type_t : uint8_t
 		{
 			unknown,
-#define GAME_VIRTUAL_PATH_STD(name, type, path) name,
+#define ENGINE_VIRTUAL_PATH_STD(name, type, path) name,
 #include "std/virtual_path_std.hpp"
 			count
 		};
@@ -202,7 +202,7 @@ namespace engine
 		virtual_path_t::path_t path = item.get_path();
 
 		ss << path.get_cstring() << " [";
-#define GAME_VIRTUAL_PATH_STD(name, type_id, dirname) if(item.get_type() == virtual_path_t::type_t::name) { ss << #name; }
+#define ENGINE_VIRTUAL_PATH_STD(name, type_id, dirname) if(item.get_type() == virtual_path_t::type_t::name) { ss << #name; }
 #include "std/virtual_path_std.hpp"
 
 		ss << "]";

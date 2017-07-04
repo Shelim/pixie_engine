@@ -7,10 +7,6 @@
 
 namespace engine
 {
-	class provider_base_t
-	{
-
-	};
 
 	template<class owner_t> struct provider_info_t;
 
@@ -26,11 +22,7 @@ namespace engine
 
 		}
 		
-		virtual typename provider_info_t<owner_t>::provider_t * get_provider(std::size_t id = 0)
-		{
-
-		}
-		
+		virtual typename provider_info_t<owner_t>::provider_t * get_provider(std::size_t id = 0) = 0;
 		virtual std::size_t get_providers_count() const = 0;
 
 	};

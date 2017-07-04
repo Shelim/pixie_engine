@@ -13,7 +13,7 @@ namespace engine
 
 	private:
 
-		typedef std::underlying_type<flag_t>::type utype_t;
+		typedef typename std::underlying_type<flag_t>::type utype_t;
 
 	public:
 

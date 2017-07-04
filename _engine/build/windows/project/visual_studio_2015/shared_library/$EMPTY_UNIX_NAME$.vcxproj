@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="debug_portable|Win32">
       <Configuration>debug_portable</Configuration>
@@ -37,7 +37,7 @@
   <ItemGroup>$CL_RESOURCE_SECTION$
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>15.0</VCProjectVersion>
+    <VCProjectVersion>14.0</VCProjectVersion>
     <ProjectGuid>{7A97AC28-2A98-489C-A848-79B77D7C06BE}</ProjectGuid>
     <Keyword>MakeFileProj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -46,126 +46,126 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\obj\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\obj\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\obj\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\obj\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\obj\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
     <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\obj\</IntDir>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='void|Win32'">
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <ConfigurationType>Makefile</ConfigurationType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
