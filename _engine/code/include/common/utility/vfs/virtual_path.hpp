@@ -111,11 +111,16 @@ namespace engine
 
 			for (auto & iter : ret)
 			{
-				if (!path.is_empty()) path.append_utf8(u8"/");
+				if (!path.is_empty())
+				{
+					usymbol_t last = path.at(path.len() - 1);
+					if (last != '/' && last != '\\') path.append_utf8(u8"/");
+				}
 				std::string iter_str = iter.u8string();
-				if (iter_str == "\\")
-					iter_str = "/";
-				path.append_utf8(iter_str.c_str());
+				if (iter_str != "\\" && iter_str != "/")
+				{
+					path.append_utf8(iter_str.c_str());
+				}
 			}
 
 			return path;

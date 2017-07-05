@@ -7,7 +7,47 @@
 #include <fstream>
 #include "pugixml.hpp"
 #include "component/logger.hpp"
+#include "utility/vfs/virtual_path.hpp"
 #include "utility/text/stringify.hpp"
+
+engine::logger_output_provider_console_t::logger_output_provider_console_t(std::shared_ptr<platform_internal_t> platform_internal) : platform_internal(platform_internal)
+{
+
+}
+
+engine::logger_output_provider_file_t::logger_output_provider_file_t(std::shared_ptr<platform_internal_t> platform_internal) : platform_internal(platform_internal), fp(nullptr)
+{
+
+#define ENGINE_LOGGER_VIRTUAL_PATH_STD(path_to_log) ustring_t path = virtual_path_t::canonize_path(platform_internal->get_save_path(virtual_path_t(path_to_log##_u, virtual_path_t::type_t::log)));
+#include "std/virtual_path_std.hpp"
+
+	fp = fopen(path.get_cstring(), "wb");
+	
+}
+
+engine::logger_output_provider_file_t::~logger_output_provider_file_t()
+{
+	if (fp)
+		fclose(fp);
+
+	fp = nullptr;
+}
+
+void engine::logger_output_provider_console_t::output(const logger_item_t & item)
+{
+	puts(item.get_message().get_cstring()); // ToDo: Temporary!
+}
+
+void engine::logger_output_provider_file_t::output(const logger_item_t & item)
+{
+	if (fp)
+	{
+		fputs(item.get_message().get_cstring(), fp); // ToDo: Temporary!
+
+		fputs("\r\n", fp);
+		fflush(fp);
+	}
+}
 
 void engine::logger_item_t::parse_file()
 {

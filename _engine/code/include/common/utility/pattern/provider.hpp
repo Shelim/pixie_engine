@@ -32,7 +32,7 @@ namespace engine
 
 	public:
 
-		holder_implementation_t(std::unique_ptr<providers_t>... providers) : providers(std::move(providers)...)
+		holder_implementation_t(std::unique_ptr<providers_t>... providers) : providers{ {std::move(providers)...} }
 		{
 
 		}

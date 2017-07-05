@@ -95,4 +95,8 @@ namespace engine
 	REGISTER_PROVIDER_BASE_TYPE(logger_output_t, logger_output_provider_base_t)
 
 }
+
+#include "component/logger/output_provider/console.hpp"
+#include "component/logger/output_provider/file.hpp"
+
 #endif

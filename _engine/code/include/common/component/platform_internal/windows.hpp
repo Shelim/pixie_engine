@@ -4,6 +4,7 @@
 #if PIXIE_WINDOWS
 
 #include "component/platform_internal.hpp"
+#include "model/manifest_app.hpp"
 
 #include <clocale>
 #include <string>
@@ -32,7 +33,7 @@ namespace engine
 
 	public:
 
-		platform_internal_windows_t();
+		platform_internal_windows_t(std::shared_ptr<manifest_app_t> manifest_app);
 
 		void console_write(const richtext_t & richtext) final;
 
@@ -63,7 +64,19 @@ namespace engine
 			teal_light
 		};
 
+		std::filesystem::path get_self_path() final;
+
 	private:
+
+		enum class directory_special_t
+		{
+			local_app_data,
+			roaming_app_data,
+			saves,
+			crash_dumps
+		};
+
+		std::shared_ptr<manifest_app_t> manifest_app;
 
 		enum class console_default_color_t
 		{
@@ -78,7 +91,9 @@ namespace engine
 		WORD background_to_attribs(console_color_t background);
 		WORD color_pair_to_attribs(console_color_t color, console_color_t background);
 		VOID WINAPI set_console_colors_for_print(console_color_t color, console_color_t background);
-		VOID WINAPI set_console_colors(WORD attribs);
+		VOID WINAPI set_console_colors(console_color_t color, console_color_t background);
+
+		std::filesystem::path get_special_path(directory_special_t dir);
 
 		static BOOL WINAPI console_signal_handler(DWORD signal);
 

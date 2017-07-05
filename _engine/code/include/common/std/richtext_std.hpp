@@ -49,8 +49,6 @@ pink_light,
 teal_dark,
 teal_light
 
-*/
-
 ENGINE_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(section_header, pink_dark, black)
 ENGINE_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(section_header_text, pink_light, black)
 
@@ -67,6 +65,8 @@ ENGINE_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(success_meta, green_dark, black)
 ENGINE_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(pending_meta, teal_dark, black)
 ENGINE_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(warning_meta, yellow_dark, black)
 ENGINE_RICHTEXT_COLOR_WINDOWS_CONSOLE_STD(error_meta, red_dark, black)
+
+*/
 
 #include "std/app_richtext_std.hpp"
 

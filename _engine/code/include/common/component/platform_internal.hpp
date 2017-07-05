@@ -3,6 +3,8 @@
 #pragma once
 
 #include "utility/text/richtext.hpp"
+#include "utility/vfs/filesystem.hpp"
+#include "utility/vfs/virtual_path.hpp"
 #include <mutex>
 
 namespace engine
@@ -27,7 +29,7 @@ namespace engine
 
 		virtual ~platform_internal_t()
 		{
-			console_update_window(console_window_state_t::close);
+
 		}
 		
 		void console_update_window(console_window_state_t next_console_window_state)
@@ -47,6 +49,8 @@ namespace engine
 		}
 
 		virtual void console_write(const richtext_t & richtext) = 0;
+		virtual std::filesystem::path get_self_path() = 0;
+		virtual std::filesystem::path get_save_path(const virtual_path_t & path);
 
 	private:
 

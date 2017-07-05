@@ -44,7 +44,7 @@
 	
 <!-- Even more Windows replace_variables! -->
 	
-	<condition property="deploy_filename" value="${manifest.portable_filename}" else="${manifest.installer_filename}">
+	<condition property="deploy_filename" value="${manifest.windows_portable_filename}" else="${manifest.windows_installer_filename}">
 		<istrue value="${is_portable_build}"/> 
 	</condition>
 	<condition property="download_filename" value="${download_portable_filename}" else="${download_installer_filename}">
@@ -70,18 +70,18 @@
 
 <!-- Replaces tags inside given file (some are included in common/ant) -->
 	<target name="replace_variables" depends="replace_variables_common">
-		<replace file="${replace_variables.file}" token="$WINDOWS_GAME_APP_DIR$" value="${manifest.game_app_dir}" />
+		<replace file="${replace_variables.file}" token="$WINDOWS_GAME_APP_DIR$" value="${manifest.windows_game_app_dir}" />
 		<replace file="${replace_variables.file}" token="$FULL_SRCPATH_PDB$" value="${full_srcpath_pdb}" />
 		
-		<replace file="${replace_variables.file}" token="$RESOURCES_COMPANY$" value="${manifest.resources_company}" />
-		<replace file="${replace_variables.file}" token="$RESOURCES_INTERNAL$" value="${manifest.resources_internal}" />
-		<replace file="${replace_variables.file}" token="$RESOURCES_COPYRIGHTS$" value="${manifest.resources_copyrights}" />
-		<replace file="${replace_variables.file}" token="$RESOURCES_PRODUCT$" value="${manifest.resources_product}" />
+		<replace file="${replace_variables.file}" token="$RESOURCES_COMPANY$" value="${manifest.windows_resources_company}" />
+		<replace file="${replace_variables.file}" token="$RESOURCES_INTERNAL$" value="${manifest.windows_resources_internal}" />
+		<replace file="${replace_variables.file}" token="$RESOURCES_COPYRIGHTS$" value="${manifest.windows_resources_copyrights}" />
+		<replace file="${replace_variables.file}" token="$RESOURCES_PRODUCT$" value="${manifest.windows_resources_product}" />
 		
-		<replace file="${replace_variables.file}" token="$INSTALL_SHORTCUT$" value="${manifest.install_shortcut}" />
-		<replace file="${replace_variables.file}" token="$INSTALL_REGISTRY$" value="${manifest.install_registry}" />
-		<replace file="${replace_variables.file}" token="$INSTALL_DIR$" value="${manifest.install_dir}" />
-		<replace file="${replace_variables.file}" token="$INSTALL_RUN$" value="${manifest.install_run}" />
+		<replace file="${replace_variables.file}" token="$INSTALL_SHORTCUT$" value="${manifest.windows_install_shortcut}" />
+		<replace file="${replace_variables.file}" token="$INSTALL_REGISTRY$" value="${manifest.windows_install_registry}" />
+		<replace file="${replace_variables.file}" token="$INSTALL_DIR$" value="${manifest.windows_install_dir}" />
+		<replace file="${replace_variables.file}" token="$INSTALL_RUN$" value="${manifest.windows_install_run}" />
 		
 	</target>
 	
@@ -112,7 +112,7 @@
 	<target name="pack_executable" depends="check_if_can_pack_executable" if="can_pack_executable">		
 		<exec executable="${basedir}/depedency/upxw/${platform_name}/upx.exe" failonerror="false">
 			<arg value="--ultra-brute"/>
-			<arg value="${basedir}/${output_path}${manifest.binary_filename}.${binary_filename_ext_raw}"/>
+			<arg value="${basedir}/${output_path}${manifest.windows_binary_filename}.${binary_filename_ext_raw}"/>
 		</exec>
 	</target>
 	
@@ -143,7 +143,7 @@
 	
 <!-- Self explaining :-) -->
 	<target name="copy_executable_to_output">
-		<copy file="${build_path}bin/${binary_filename_raw}" tofile="${output_path}${manifest.binary_filename}.${binary_filename_ext_raw}" preservelastmodified="true" overwrite="true" />
+		<copy file="${build_path}bin/${binary_filename_raw}" tofile="${output_path}${manifest.windows_binary_filename}.${binary_filename_ext_raw}" preservelastmodified="true" overwrite="true" />
 	</target>
 	
 <!-- Helper target for below; Build installer only if we're deploy non-portable -->

@@ -1,9 +1,77 @@
+/******************************************************
+ *                                                    *
+ * REBUILDS VISUAL STUDIO SOLUTIONS FROM SOURCE FILES *
+ *                                                    *
+ ******************************************************/
+ 
+ // Paths you can configure. First, the one that will be used to search for source/include files
+ 
+function list_paths(project_id, project_type)
+{
+	var ret = [
+	"_engine/code/include/common",
+	"_engine/code/src/common",
+	"_engine/code/include/" + project_type,
+	"_engine/code/src/" + project_type,
+	"_engine/depedency/*/include",
+	"_engine/depedency/*/src",
+	"_engine/depedency/googletest",
+	project.getProperty('app_unix_name') + "/code/include/common",
+	project.getProperty('app_unix_name') + "/code/src/common",
+	project.getProperty('app_unix_name') + "/code/include/" + project_id,
+	project.getProperty('app_unix_name') + "/code/src/" + project_id,
+	];				
+	
+	return ret;
+}
+
+// Then path that will be used to search for *.lib files
+
+function list_libraries(project_id, project_type)
+{
+	var ret = [
+	"_engine/depedency/*/lib/windows_x86",
+	];				
+	
+	return ret;
+}
+
+// And last one: exclusions for above (in depedency directory)
+
+function list_ignored_depedencies(project_type)
+{
+	var ret = [
+	'apache_ant',
+	'nsis',
+	'wxwidgets\\include',
+	'jdk1.8.0_131',
+	'googletest\\src\\gtest.cc',
+	'googletest\\src\\gtest-death-test.cc',
+	'googletest\\src\\gtest-filepath.cc',
+	'googletest\\src\\gtest-port.cc',
+	'googletest\\src\\gtest-printers.cc',
+	'googletest\\src\\gtest-test-part.cc',
+	'googletest\\src\\gtest-typed-test.cc',
+	];
+	
+	if(project_type != 'test')
+		ret.push('googletest');
+	
+	return ret;
+}
+
+// Generate GUID. You can't get faster that this one :-)
+
 function b(a){return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,b)}
-		
-function gen_guid()
+	
+// Helpful wrapper for above
+
+function generate_guid()
 {
 	return b();
 }
+
+// File IO
 
 function load_file(filename)
 {
@@ -29,11 +97,13 @@ function save_file(filename, content)
 	writer.close();
 }
 
+// Quick and dirty way to parse XML. Children: don't do that on your own!
+
 function get_output_type(xml)
 {
 	var regex = /<!--.*?-->/;
 	
-	var regex2 = /.*<output_type>(.*)<\/output_type>.*/;
+	var regex2 = /.*<output_type>(.*?)<\/output_type>.*/;
 	
 	var ret = xml.replace(/\n/g, "").replace(regex, '')
 	
@@ -43,69 +113,23 @@ function get_output_type(xml)
 	return ret.replace(regex2, '$1');
 }
 
+// Quick and dirty way to parse XML. Children: don't do that on your own!
+
 function get_binary_filename(xml)
 {
 	var regex = /<!--.*?-->/;
 	
-	var regex2 = /.*<binary_filename>(.*)<\/binary_filename>.*/;
+	var regex2 = /.*<windows_binary_filename>(.*)<\/windows_binary_filename>.*/;
 	
 	var ret = xml.replace(/\n/g, "").replace(regex, '')
 	
-	if(ret.indexOf('<binary_filename>') == -1)
+	if(ret.indexOf('<windows_binary_filename>') == -1)
 		return '';
 	
 	return ret.replace(regex2, '$1');
 }
 
-function list_paths(project_id, project_type)
-{
-	var ret = [
-	"_engine/code/include/common",
-	"_engine/code/src/common",
-	"_engine/code/include/" + project_type,
-	"_engine/code/src/" + project_type,
-	"_engine/depedency/*/include",
-	"_engine/depedency/*/src",
-	"_engine/depedency/googletest",
-	project.getProperty('app_unix_name') + "/code/include/common",
-	project.getProperty('app_unix_name') + "/code/src/common",
-	project.getProperty('app_unix_name') + "/code/include/" + project_id,
-	project.getProperty('app_unix_name') + "/code/src/" + project_id,
-	];				
-	
-	return ret;
-}
-
-function list_libraries(project_id, project_type)
-{
-	var ret = [
-	"_engine/depedency/*/lib/windows_x86",
-	];				
-	
-	return ret;
-}
-
-function list_ignored_depedencies(project_type)
-{
-	var ret = [
-	'apache_ant',
-	'nsis',
-	'wxwidgets\\include',
-	'jdk1.8.0_131',
-	'googletest\\src\\gtest.cc',
-	'googletest\\src\\gtest-death-test.cc',
-	'googletest\\src\\gtest-filepath.cc',
-	'googletest\\src\\gtest-port.cc',
-	'googletest\\src\\gtest-printers.cc',
-	'googletest\\src\\gtest-test-part.cc',
-	'googletest\\src\\gtest-typed-test.cc',
-	];
-	
-	if(project_type != 'test')
-		ret.push('googletest');
-	
-	return ret;
-}
+// Generate a list of additional includes for solution
 
 function list_additional_includes(project_id, project_type)
 {
@@ -133,6 +157,8 @@ function list_additional_includes(project_id, project_type)
 	}
 	return ret;
 }
+
+// Generate a list of source files for solution
 
 function list_sources(project_id, project_type, extensions, func)
 {
@@ -177,11 +203,6 @@ function list_sources(project_id, project_type, extensions, func)
 				{		
 					if(ret.indexOf(vs_path) == -1)
 						ret.push(vs_path);
-					/*
-					echo = project.createTask("echo");
-					echo.setMessage( vs_path );
-					echo.perform( );
-					*/
 				}
 			}
 		}
@@ -189,6 +210,8 @@ function list_sources(project_id, project_type, extensions, func)
 	
 	return ret;
 }
+
+// Convert source path to VS filter path
 
 function src_to_filter(src)
 {
@@ -207,6 +230,8 @@ function src_to_filter(src)
 	}
 	return src;
 }
+
+// Search for projects
 
 ds = project.createDataType("dirset");
 dir = project.getBaseDir() + "/" + project.getProperty("build_manifest_path");
@@ -228,9 +253,9 @@ for ( i = 0; i < projectsToGen.length; i++ )
 	var manifestFilename = project.getBaseDir() + "/" + project.getProperty("build_manifest_path") + "/" + projectToGen + "/manifest.xml";
 					
 	var projectType = get_output_type(load_file(manifestFilename));
-	var binaryFilenameBase = get_binary_filename(load_file(project.getBaseDir() + "/" + project.getProperty("build_manifest_path") + "/" + projectToGen + '/windows/manifest.xml'));
-	var binaryFilenameDebug = get_binary_filename(load_file(project.getBaseDir() + "/" + project.getProperty("build_manifest_path") + "/" + projectToGen + '/windows/manifest_debug.xml'));
-	var binaryFilenameRelease = get_binary_filename(load_file(project.getBaseDir() + "/" + project.getProperty("build_manifest_path") + "/" + projectToGen + '/windows/manifest_release.xml'));
+	var binaryFilenameBase = get_binary_filename(load_file(project.getBaseDir() + "/" + project.getProperty("build_manifest_path") + "/" + projectToGen + '/common/manifest.xml'));
+	var binaryFilenameDebug = get_binary_filename(load_file(project.getBaseDir() + "/" + project.getProperty("build_manifest_path") + "/" + projectToGen + '/common/manifest_debug.xml'));
+	var binaryFilenameRelease = get_binary_filename(load_file(project.getBaseDir() + "/" + project.getProperty("build_manifest_path") + "/" + projectToGen + '/common/manifest_release.xml'));
 	
 	if(binaryFilenameDebug == '' || binaryFilenameDebug == null)
 		binaryFilenameDebug = binaryFilenameBase;	
@@ -238,7 +263,7 @@ for ( i = 0; i < projectsToGen.length; i++ )
 		binaryFilenameRelease = binaryFilenameBase;	
 		
 		
-	var projectGuid = gen_guid();
+	var projectGuid = generate_guid();
 	solutionProjectSection += '\nProject("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "' + projectToGen + '", "' + projectToGen + '.vcxproj", "{' + projectGuid + '}"\n	ProjectSection(ProjectDependencies) = postProject\n		{47F0434A-32FC-4640-A38D-7531A1CDB5EE} = {47F0434A-32FC-4640-A38D-7531A1CDB5EE}\n	EndProjectSection\nEndProject';
 	solutionProjectPostBuildOrder += '\n{' + projectGuid + '} = {' + projectGuid + '}\n';
 				
@@ -434,11 +459,11 @@ for ( i = 0; i < projectsToGen.length; i++ )
 	cl_section = '';
 	for(var c = 0; c < filters_base.length; c++)
 	{
-		cl_section += '\n	<Filter Include="' + filters_base[c] + '">\n      <UniqueIdentifier>{' + gen_guid() + '}</UniqueIdentifier>\n    </Filter>';
+		cl_section += '\n	<Filter Include="' + filters_base[c] + '">\n      <UniqueIdentifier>{' + generate_guid() + '}</UniqueIdentifier>\n    </Filter>';
 	}
 	for(var c = 0; c < filters.length; c++)
 	{
-		cl_section += '\n	<Filter Include="' + filters[c] + '">\n      <UniqueIdentifier>{' + gen_guid() + '}</UniqueIdentifier>\n    </Filter>';
+		cl_section += '\n	<Filter Include="' + filters[c] + '">\n      <UniqueIdentifier>{' + generate_guid() + '}</UniqueIdentifier>\n    </Filter>';
 	}
 	vcxproj_filters = vcxproj_filters.replace('$CL_FILTERS_SECTION$', cl_section);
 	
@@ -446,13 +471,6 @@ for ( i = 0; i < projectsToGen.length; i++ )
 	save_file(vcxproj_path, vcxproj);
 	save_file(vcxproj_path + '.user', vcxproj_user);
 	save_file(vcxproj_path + '.filters', vcxproj_filters);
-	/*
-	
-	echo = project.createTask("echo");
-	echo.setMessage( project.getBaseDir() + "/" + project.getProperty("build_manifest_path") + "/" + projectToGen + '/windows/manifest_debug.xml' );
-	echo.perform( );
-	
-	*/
 }
 
 for ( p = 0; p < projectsToGen.length; p++ )
