@@ -1,0 +1,663 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="debug_portable|Win32">
+      <Configuration>debug_portable</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="debug|Win32">
+      <Configuration>debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="final_portable|Win32">
+      <Configuration>final_portable</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="final_installer|Win32">
+      <Configuration>final_installer</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="hybrid_installer|Win32">
+      <Configuration>hybrid_installer</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="hybrid_portable|Win32">
+      <Configuration>hybrid_portable</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="void|Win32">
+      <Configuration>void</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>$CL_COMPILE_SECTION$
+  </ItemGroup>
+  <ItemGroup>$CL_INCLUDE_SECTION$
+  </ItemGroup>
+  <ItemGroup>$CL_RESOURCE_SECTION$
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>14.0</VCProjectVersion>
+    <ProjectGuid>{7A97AC28-2A98-489C-A848-79B77D7C06BE}</ProjectGuid>
+    <Keyword>MakeFileProj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>$EMPTY_UNIX_NAME$</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\int</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\int</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\int</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\int</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\int</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\int</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\int</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_$EMPTY_UNIX_NAME$\obj\</IntDir>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_debug_portable_$EMPTY_UNIX_NAME$\obj\</IntDir>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_portable_$EMPTY_UNIX_NAME$\obj\</IntDir>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_portable_deploy_$EMPTY_UNIX_NAME$\obj\</IntDir>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_hybrid_deploy_$EMPTY_UNIX_NAME$\obj\</IntDir>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_final_deploy_$EMPTY_UNIX_NAME$\obj\</IntDir>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='void|Win32'">
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <ConfigurationType>Makefile</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'">
+    <NMakeoutput>$EMPTY_UNIX_NAME$.dll</NMakeoutput>
+    <NMakePreprocessorDefinitions>NDEBUG;WINDOWS;UNICODE;_UNICODE;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;NMakeIncludeSearchPath</NMakeIncludeSearchPath>
+    <NMakeBuildCommandLine />
+    <NMakeRebuildCommandLine />
+    <NMakeCleanCommandLine />
+    <TargetName>_$EMPTY_UNIX_NAME$</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'">
+    <NMakeoutput>$EMPTY_UNIX_NAME$.dll</NMakeoutput>
+    <NMakePreprocessorDefinitions>NDEBUG;WINDOWS;UNICODE;_UNICODE;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;NMakeIncludeSearchPath</NMakeIncludeSearchPath>
+    <NMakeBuildCommandLine />
+    <NMakeRebuildCommandLine />
+    <NMakeCleanCommandLine />
+    <TargetName>_$EMPTY_UNIX_NAME$</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='void|Win32'">
+    <NMakePreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=0;PIXIE_IS_DEPLOY_BUILD=0;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;UNICODE;_UNICODE;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;NMakeIncludeSearchPath</NMakeIncludeSearchPath>
+    <OutDir>$(SolutionDir)..\..\_build\windows_x86_void_$EMPTY_UNIX_NAME$\out</OutDir>
+    <IntDir>$(SolutionDir)..\..\_build\windows_x86_void_$EMPTY_UNIX_NAME$\int</IntDir>
+    <NMakeBuildCommandLine>$(SolutionDir)..\..\..\_engine\build\windows\void.bat</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>$(SolutionDir)..\..\..\_engine\build\windows\void.bat</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>$(SolutionDir)..\..\..\_engine\build\windows\void.bat</NMakeCleanCommandLine>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'">
+    <TargetName>_$EMPTY_UNIX_NAME$</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <TargetName>_$EMPTY_UNIX_NAME$</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'">
+    <TargetName>_$EMPTY_UNIX_NAME$</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'">
+    <TargetName>_$EMPTY_UNIX_NAME$</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <ClCompile>
+      <CompileAsManaged>false</CompileAsManaged>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'">
+    <ClCompile>
+      <CompileAsManaged>false</CompileAsManaged>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'">
+    <ClCompile>
+      <CompileAsManaged>false</CompileAsManaged>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'">
+    <ClCompile>
+      <CompileAsManaged>false</CompileAsManaged>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'">
+    <ClCompile>
+      <CompileAsManaged>false</CompileAsManaged>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'">
+    <ClCompile>
+      <CompileAsManaged>false</CompileAsManaged>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <ClCompile>
+      <SDLCheck>false</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'">
+    <ClCompile>
+      <SDLCheck>false</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'">
+    <ClCompile>
+      <SDLCheck>
+      </SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'">
+    <ClCompile>
+      <SDLCheck>
+      </SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'">
+    <ClCompile>
+      <SDLCheck>
+      </SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'">
+    <ClCompile>
+      <SDLCheck>
+      </SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <ClCompile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ErrorReporting>None</ErrorReporting>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ErrorReporting>None</ErrorReporting>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=1;PIXIE_IS_PORTABLE_BUILD=0;PIXIE_IS_DEPLOY_BUILD=0;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>false</StringPooling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ObjectFileName>$(IntDir)\%(Directory)\</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$CL_ADDITIONAL_LIBRARIES$</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$CL_ADDITIONAL_LIBRARIES_NAMES$opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>false</OptimizeReferences>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <MinimumRequiredVersion />
+    </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="debug"" "is_portable_build="false"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="debug"" "is_portable_build="false"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+    </PostBuildEvent>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ResourceCompile>
+      <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=1;PIXIE_IS_PORTABLE_BUILD=0;PIXIE_IS_DEPLOY_BUILD=0;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_portable|Win32'">
+    <ClCompile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ErrorReporting>None</ErrorReporting>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=1;PIXIE_IS_PORTABLE_BUILD=1;PIXIE_IS_DEPLOY_BUILD=0;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;DEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>false</StringPooling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ObjectFileName>$(IntDir)\%(Directory)\</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$CL_ADDITIONAL_LIBRARIES$</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$CL_ADDITIONAL_LIBRARIES_NAMES$opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>false</OptimizeReferences>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <MinimumRequiredVersion />
+    </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="debug"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="debug"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+    </PostBuildEvent>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ResourceCompile>
+      <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=1;PIXIE_IS_PORTABLE_BUILD=1;PIXIE_IS_DEPLOY_BUILD=0;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;DEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_portable|Win32'">
+    <ClCompile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ErrorReporting>None</ErrorReporting>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=1;PIXIE_IS_DEPLOY_BUILD=1;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ObjectFileName>$(IntDir)\%(Directory)\</ObjectFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$CL_ADDITIONAL_LIBRARIES$</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$CL_ADDITIONAL_LIBRARIES_NAMES$opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>true</OptimizeReferences>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <MinimumRequiredVersion />
+    </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="release"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="release"" "is_portable_build="true"" "is_deploy_build="false"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+    </PostBuildEvent>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ResourceCompile>
+      <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=1;PIXIE_IS_DEPLOY_BUILD=1;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_portable|Win32'">
+    <ClCompile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ErrorReporting>None</ErrorReporting>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=1;PIXIE_IS_DEPLOY_BUILD=1;PIXIE_IS_READY_BUILD=1;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;DEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ObjectFileName>$(IntDir)\%(Directory)\</ObjectFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$CL_ADDITIONAL_LIBRARIES$</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$CL_ADDITIONAL_LIBRARIES_NAMES$opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>true</OptimizeReferences>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <MinimumRequiredVersion>
+      </MinimumRequiredVersion>
+    </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="release"" "is_portable_build="true"" "is_deploy_build="true"" "is_ready_build="true"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="release"" "is_portable_build="true"" "is_deploy_build="true"" "is_ready_build="true"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+    </PostBuildEvent>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ResourceCompile>
+      <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=1;PIXIE_IS_DEPLOY_BUILD=1;PIXIE_IS_READY_BUILD=1;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;DEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='hybrid_installer|Win32'">
+    <ClCompile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ErrorReporting>None</ErrorReporting>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=0;PIXIE_IS_DEPLOY_BUILD=1;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ObjectFileName>$(IntDir)\%(Directory)\</ObjectFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$CL_ADDITIONAL_LIBRARIES$</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$CL_ADDITIONAL_LIBRARIES_NAMES$opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>true</OptimizeReferences>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <MinimumRequiredVersion>
+      </MinimumRequiredVersion>
+    </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="release"" "is_portable_build="false"" "is_deploy_build="true"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="release"" "is_portable_build="false"" "is_deploy_build="true"" "is_ready_build="false"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+    </PostBuildEvent>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ResourceCompile>
+      <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=0;PIXIE_IS_DEPLOY_BUILD=1;PIXIE_IS_READY_BUILD=0;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='final_installer|Win32'">
+    <ClCompile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ErrorReporting>None</ErrorReporting>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=0;PIXIE_IS_DEPLOY_BUILD=1;PIXIE_IS_READY_BUILD=1;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ObjectFileName>$(IntDir)\%(Directory)\</ObjectFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$CL_ADDITIONAL_LIBRARIES$</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$CL_ADDITIONAL_LIBRARIES_NAMES$opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>true</OptimizeReferences>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <MinimumRequiredVersion>
+      </MinimumRequiredVersion>
+    </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat prebuild "build_configuration="release"" "is_portable_build="false"" "is_deploy_build="true"" "is_ready_build="true"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>$(SolutionDir)..\..\..\_engine\build\windows\execute.bat postbuild "build_configuration="release"" "is_portable_build="false"" "is_deploy_build="true"" "is_ready_build="true"" "output_type="shared_library"" "output_unix_name="$EMPTY_UNIX_NAME$"" "app_unix_name="$APP_UNIX_NAME$""</Command>
+    </PostBuildEvent>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ResourceCompile>
+      <PreprocessorDefinitions>PIXIE_WINDOWS=1;PIXIE_OUTPUT_UNIX_NAME=$EMPTY_UNIX_NAME$;PIXIE_APP_UNIX_NAME=$APP_UNIX_NAME$;PIXIE_IS_DEBUG_BUILD=0;PIXIE_IS_PORTABLE_BUILD=0;PIXIE_IS_DEPLOY_BUILD=1;PIXIE_IS_READY_BUILD=1;GLEW_STATIC;AS_USE_FLOAT=0;STATIC_LIB;CEREAL_XML_STRING_VALUE="pixie";WXUSINGDLL;__WXMSW__;NDEBUG;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$CL_ADDITIONAL_INCLUDES$;$(SolutionDir)..\..\code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties WinGDB_qVB57QUOT0lynJh0o1aKEg_strMakefileName="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strMakefileCompilerC="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strMakefileCompilerCXX="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strMakefileAR="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strMakefileRM="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strMakefileMKDIR="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strMakefileIntDir="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strMakefileDestDir="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strMakefileCFLAGS="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strMakefileCXXFLAGS="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strMakefileLDFLAGS="" WinGDB_qVB57QUOT0lynJh0o1aKEg_bMakefileAskBeforeOverwrite="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_strRemoteBuildCommand="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strRemoteRebuildCommand="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strRemoteCleanCommand="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strRemoteDeployCommand="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathRemoteBuildDirectory="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strRemoteBuildVariables="" WinGDB_qVB57QUOT0lynJh0o1aKEg_bDeployBeforeStartDebugging="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_bDeployOnlyIfFileChanged="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathDeployFile="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathDeployTargetDirectory="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strRemoteSolutionBuildCommand="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strRemoteSolutionRebuildCommand="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strRemoteSolutionCleanCommand="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strRemoteSolutionDeployCommand="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathRemoteSolutionBuildDirectory="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strRemoteSolutionBuildVariables="" WinGDB_qVB57QUOT0lynJh0o1aKEg_bSolutionDeployOnlyIfFileChanged="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathSolutionDeployFile="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathSolutionDeployTargetDirectory="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathCore="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathWorkingDirectory="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strLaunchArguments="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strLaunchEnvironment="" WinGDB_qVB57QUOT0lynJh0o1aKEg_bStopInMain="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_strMainFunctionName="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strTarget="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathLoadProgramPath="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathExecutableOnTarget="" WinGDB_qVB57QUOT0lynJh0o1aKEg_bServerAutoLaunch="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_bUseSysroot="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathDynamicLinker="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathServerLibraryPaths="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathServerPath="" WinGDB_qVB57QUOT0lynJh0o1aKEg_bServerPortIsForwarded="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathExecutable="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathCustomPreLoadInitScript="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathCustomInitScript="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathCustomCondPreLoadInitScript="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathCondCustomInitScript="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strAdditionalDebuggerOptions="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathSourceDirectories="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathDebugInfoDirectory="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathSysrootOnHost="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathSysrootOnTarget="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathSharedLibraryDirectories="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strVisualizerProfile="" WinGDB_qVB57QUOT0lynJh0o1aKEg_bSourceSession="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathExecutableOnBuildHost="" WinGDB_qVB57QUOT0lynJh0o1aKEg_bForwardX11ForDebugging="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_bLaunchDebuggerInSudo="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_bDisableHangReporter="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_bUseProtoCtl="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathProtoCtlLogFile="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathDebugger="" WinGDB_qVB57QUOT0lynJh0o1aKEg_pathToolchain="" WinGDB_qVB57QUOT0lynJh0o1aKEg_bReuseStandardBuildCommand="false" WinGDB_qVB57QUOT0lynJh0o1aKEg_strDebugHostLogin="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strBuildHostLogin="" WinGDB_qVB57QUOT0lynJh0o1aKEg_strDebugTargetLogin="" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

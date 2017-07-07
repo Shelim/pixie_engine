@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include <sstream>
 #include <string>
-#include "common/utility/text/ustring.hpp"
+#include "utility/text/ustring.hpp"
 
 namespace engine
 {

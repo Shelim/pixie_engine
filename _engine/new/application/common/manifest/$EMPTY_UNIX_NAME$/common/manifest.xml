@@ -2,4 +2,5 @@
 <manifest>
 	<!-- Name which will be used through the project -->
 	<name>$EMPTY_NAME$</name>
+	<windows_binary_filename>$EMPTY_NAME$</windows_binary_filename>	
 </manifest>

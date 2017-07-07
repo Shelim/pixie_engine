@@ -7,7 +7,7 @@ set "psCommand=powershell -Command "$pword = read-host 'Enter FTP password' -AsS
         [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)""
 for /f "usebackq delims=" %%p in (`%psCommand%`) do set ftp_password=%%p
 cd ../../depedency/apache_ant/bin
-set path=%~dp0../../depedency/jdk1.7.0_71/bin;%~dp0../../depedency/mingw/bin;%path%
+set path=%~dp0../../depedency/jdk1.8.0_131/bin;%~dp0../../depedency/mingw/bin;%path%
 echo on
 call ant -v -buildfile "../../../build/depedency/ant.xml" pack_and_upload -Dftp_server="%ftp_server%" -Dftp_login="%ftp_login%" -Dftp_password="%ftp_password%"
 popd

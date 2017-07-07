@@ -2,8 +2,8 @@
 #define ENGINE_COMMON_XML_HPP
 #pragma once
 
-#include "common/logger.hpp"
-#include "common/utility/text/ustring.hpp"
+#include "logger.hpp"
+#include "utility/text/ustring.hpp"
 #include <pugixml.hpp>
 
 namespace engine
@@ -17,7 +17,7 @@ namespace engine
 		else
 		{
 			int prev = std::max(0, res.offset - 16);
-			logger->p_err_raport(_U("While parsing '#1#' got error: #2# [near '#3#']"), path, ustring_t::from_utf8(res.description()), data.substr(prev, 32));
+			logger->p_err_raport("While parsing '#1#' got error: #2# [near '#3#']"_u, path, ustring_t::from_utf8(res.description()), data.substr(prev, 32));
 			return false;
 		}
 	}
@@ -30,9 +30,9 @@ namespace engine
 			if (!ignore_missing)
 			{
 				if (additional_log_data.is_empty())
-					logger->p_err_raport(_U("Missing '#1#' attribute in '#2#' node!"), ustring_t::from_utf8(attribute_name), ustring_t::from_utf8(node.name()));
+					logger->p_err_raport("Missing '#1#' attribute in '#2#' node!"_u, ustring_t::from_utf8(attribute_name), ustring_t::from_utf8(node.name()));
 				else
-					logger->p_err_raport(_U("Missing '#1#' attribute in '#2#' node (#3#)!"), ustring_t::from_utf8(attribute_name), ustring_t::from_utf8(node.name()), additional_log_data);
+					logger->p_err_raport("Missing '#1#' attribute in '#2#' node (#3#)!"_u, ustring_t::from_utf8(attribute_name), ustring_t::from_utf8(node.name()), additional_log_data);
 			}
 
 			return def_val;
@@ -48,9 +48,9 @@ namespace engine
 			if (!ignore_missing)
 			{
 				if (additional_log_data.is_empty())
-					logger->p_err_raport(_U("Missing '#1#' value in '#2#' node!"), ustring_t::from_utf8(node.value()), ustring_t::from_utf8(node.name()));
+					logger->p_err_raport("Missing '#1#' value in '#2#' node!"_u, ustring_t::from_utf8(node.value()), ustring_t::from_utf8(node.name()));
 				else
-					logger->p_err_raport(_U("Missing '#1#' value in '#2#' node (#3#)!"), ustring_t::from_utf8(node.value()), ustring_t::from_utf8(node.name()), additional_log_data);
+					logger->p_err_raport("Missing '#1#' value in '#2#' node (#3#)!"_u, ustring_t::from_utf8(node.value()), ustring_t::from_utf8(node.name()), additional_log_data);
 			}
 
 			return def_val;

@@ -7,7 +7,7 @@ goto choose_type
 
 :no_app_src
 set /p app_name=Enter project unix name you wish to add new application to:
-IF EXIST ../../%app_name% goto choose_type
+IF EXIST ..\..\%app_name% goto choose_type
 echo This project seems not to exists, choose existing one!
 goto no_app_src
 
@@ -86,16 +86,16 @@ goto after_launch
 :set_unix_filename
 set /p unix_filename=Enter unix filename of your new application (lowercase, no spaces nor special characters): 
 
-IF NOT EXIST ../../%app_name%/manifest/%unix_filename% goto set_full_filename
+IF NOT EXIST ..\..\%app_name%\manifest\%unix_filename% goto set_full_filename
 echo This project does already exists, choose existing one!
 goto set_unix_filename
 :set_full_filename
 set /p full_filename=Enter full name of your application (should be a valid filename!): 
-cd ../depedency/apache_ant/bin
-set path=%~dp0../depedency/jdk1.7.0_71/bin;%~dp0../depedency/mingw/bin;%path%
+cd ..\depedency\apache_ant\bin
+set path=%cd%\..\..\..\depedency\jdk1.8.0_131\bin;%cd%\..\..\..\depedency\mingw\bin;%path%
 echo on
-call ant -v -buildfile "../../../new/ant.xml" new_application -Dunix="%unix_filename%" -Dfull="%full_filename%" -Dapp_type="%app_type%" -Dapp_src="%app_name%" -Dapp_predefined="%app_predefined%" -Dapp_make_default="%app_make_default%"
-cd ../../../../%app_name%
+call ant -v -buildfile "..\..\..\new\ant.xml" new_application -Dunix="%unix_filename%" -Dfull="%full_filename%" -Dapp_type="%app_type%" -Dapp_src="%app_name%" -Dapp_predefined="%app_predefined%" -Dapp_make_default="%app_make_default%"
+cd ..\..\..\..\%app_name%
 call update_vs_solution.bat
 
 popd

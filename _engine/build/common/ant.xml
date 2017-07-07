@@ -2,12 +2,8 @@
 
 <!-- Loading manifests... -->
 	
-	<xmlproperty file="${build_app_path}manifest/${output_unix_name}/${platform_name}/manifest_${build_configuration}.xml" />
-	<xmlproperty file="${build_app_path}manifest/${output_unix_name}/${platform_name}/manifest.xml" />
 	<xmlproperty file="${build_app_path}manifest/${output_unix_name}/common/manifest_${build_configuration}.xml" />
 	<xmlproperty file="${build_app_path}manifest/${output_unix_name}/common/manifest.xml" />
-	<xmlproperty file="${build_app_path}manifest/_common/${platform_name}/manifest_${build_configuration}.xml" />
-	<xmlproperty file="${build_app_path}manifest/_common/${platform_name}/manifest.xml" />
 	<xmlproperty file="${build_app_path}manifest/_common/common/manifest_${build_configuration}.xml" />
 	<xmlproperty file="${build_app_path}manifest/_common/common/manifest.xml" />
 	<xmlproperty file="${build_app_path}changelog/version.xml" />
@@ -65,8 +61,9 @@
 	<property name="build_installer_path" value="${build_app_path}/_build/${platform_dir}_installer/" />
 	<property name="autogen_path_relative" value="_autogen/${platform_base_dir}/${output_unix_name}/" />
 	<property name="autogen_path" value="${build_app_path}code/include/${autogen_path_relative}" />
+	<property name="autogen_manifest_app_script" location="build/common/manifest_app_builder.js" />
 	
-	<condition property="autogen_hpp_path" value="${autogen_path}/autogen_${build_configuration}_portable.hpp" else="${autogen_path}/autogen_${build_configuration}.hpp">
+	<condition property="autogen_manifest_app_hpp_path" value="${autogen_path}/manifest_app_${build_configuration}_portable.hpp" else="${autogen_path}/manifest_app_${build_configuration}.hpp">
 		<istrue value="${is_portable_build}"/> 
 	</condition>
 	
@@ -85,11 +82,11 @@
 		<equals arg1="${build_configuration}" arg2="debug" />
 	</condition>
 	
-	<property name="upload_deploy_path" value="${upload_base_path}${manifest.deploy_upload_path}${upload_base_dir}" />
-	<property name="upload_updater_path" value="${upload_base_path}${manifest.updater_upload_path}${upload_base_dir}" />
+	<property name="upload_deploy_path" value="${upload_base_path}${manifest.windows_deploy_upload_path}${upload_base_dir}" />
+	<property name="upload_updater_path" value="${upload_base_path}${manifest.windows_updater_upload_path}${upload_base_dir}" />
 	
 	<property name="upload_updater_manifest" value="${upload_updater_path}updater_manifest.xml" />
-	<property name="url_updater_manifest" value="${manifest.updater_url}${manifest.updater_upload_path}${upload_base_dir}updater_manifest.xml" />
+	<property name="url_updater_manifest" value="${manifest.updater_url}${manifest.windows_updater_upload_path}${upload_base_dir}updater_manifest.xml" />
 	
 	<property name="upload_updater_changelog" value="${upload_updater_path}${upload_base_dir}changelog.xml" />
 	<property name="url_updater_changelog" value="${manifest.updater_url}${upload_base_dir}changelog.xml" />
@@ -174,10 +171,10 @@
 		
 		<replace file="${replace_variables.file}" token="$PLATFORM_FULLNAME$" value="${platform_fullname}" />
 		
-		<replace file="${replace_variables.file}" token="$BINARY_FILENAME$" value="${manifest.binary_filename}" />
+		<replace file="${replace_variables.file}" token="$BINARY_FILENAME$" value="${manifest.windows_binary_filename}" />
 		<replace file="${replace_variables.file}" token="$BINARY_EXTENSION$" value="${binary_filename_ext_raw}" />
-		<replace file="${replace_variables.file}" token="$INSTALLER_FILENAME$" value="${manifest.installer_filename}" />
-		<replace file="${replace_variables.file}" token="$PORTABLE_FILENAME$" value="${manifest.portable_filename}" />
+		<replace file="${replace_variables.file}" token="$INSTALLER_FILENAME$" value="${manifest.windows_installer_filename}" />
+		<replace file="${replace_variables.file}" token="$PORTABLE_FILENAME$" value="${manifest.windows_portable_filename}" />
 		
 		<replace file="${replace_variables.file}" token="$NAME$" value="${manifest.name}" />
 		<replace file="${replace_variables.file}" token="$UNIX_NAME$" value="${app_unix_name}" />
@@ -195,10 +192,11 @@
 	<target name="autogen_common">
 		<mkdir dir="${autogen_path}" />
 		
-		<copy file="build/common/autogen_base.hpp" tofile="${autogen_hpp_path}" preservelastmodified="true" overwrite="true" />
+		<copy file="build/common/manifest_app_base.hpp" tofile="${autogen_manifest_app_hpp_path}" preservelastmodified="true" overwrite="true" />
 		<antcall target="replace_variables">
-			<param name="replace_variables.file" value="${autogen_hpp_path}" />
+			<param name="replace_variables.file" value="${autogen_manifest_app_hpp_path}" />
 		</antcall>
+		<script language="javascript" src="${autogen_manifest_app_script}" />
 	</target>
 		
 <!-- Helper target for below; Build upload directory if we're deploying... -->

@@ -13,7 +13,7 @@ namespace engine
 
 	private:
 
-		typedef std::underlying_type<flag_t>::type utype_t;
+		typedef typename std::underlying_type<flag_t>::type utype_t;
 
 	public:
 
@@ -25,6 +25,11 @@ namespace engine
 		bool is_flag(flag_t flag) const
 		{
 			return flags.test(static_cast<utype_t>(flag));
+		}
+
+		void clear_all()
+		{
+			flags.reset();
 		}
 
 	private:

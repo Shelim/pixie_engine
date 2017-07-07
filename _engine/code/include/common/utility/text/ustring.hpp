@@ -17,8 +17,8 @@
 #include <sstream>
 #include <iomanip>
 #include <cereal/access.hpp>
-#include "common/filesystem.hpp"
-#include "common/utility/renderer/color.hpp"
+#include "utility/vfs/filesystem.hpp"
+#include "utility/renderer/color.hpp"
 
 /**
  * @page ustring_format UString formatting
@@ -35,13 +35,13 @@
  *		some arguments more then once.
  * @section ustring_format_tutorial How to use it? (Quick Start)
  *		@code{.cpp}
- *			engine::format_string(_U("Hello my #2# #1# world!"), _U("nice"), _U("really"));
+ *			engine::format_string("Hello my #2# #1# world!"_u, "nice"_u, "really"_u);
  *			// Outputs: "Hello my really nice world!"
  *
- *			engine::format_string(_U("You can have #1:what?# in tags too!"), _U("comments"));
+ *			engine::format_string("You can have #1:what?# in tags too!"_u, "comments"_u);
  *			// Outputs: "You can have comments in tags too!"
  *
- *			engine::format_string(_U("Argument type is detected on compile time: #1# (#3#)"), true, 1.0F, _U("As you can see you can skip the numbers!"));
+ *			engine::format_string("Argument type is detected on compile time: #1# (#3#)"_u, true, 1.0F, "As you can see you can skip the numbers!"_u);
  *			// Outputs: "Argument type is detected on compile time: True (As you can see you can skip the numbers!)"
  *		@endcode
  * @section ustring_format_reference Full Reference
@@ -65,6 +65,13 @@
  *			In such case the formatting code will be safely substituted for empty string
  * @see engine::ustring_t, engine::ustring_t::format_string
  */
+
+namespace engine
+{
+	class ustring_t;
+}
+
+engine::ustring_t operator""_u(const char * str, std::size_t);
 
 namespace engine
 {
@@ -504,6 +511,19 @@ namespace engine
 		{
 			return to_lower_string(from_wide(str));
 		}
+
+		//////////////////////////////////////////////////////////////////////////
+
+		/**
+		* @brief Replaces ALL occurence of from into to
+		*
+		* Returns changed string. This string remains unaffected
+		*
+		* @param[in] from ustring_t what to 
+		* @param[in] to ustring_t for what
+		* @return replaced string
+		*/
+		ustring_t replace(const ustring_t & from, const ustring_t & to) const;
 
 		//////////////////////////////////////////////////////////////////////////
 
@@ -1320,32 +1340,6 @@ namespace engine
 	 */
 	inline bool operator>=(const ustring_t & left, const ustring_t & right) { return !operator< (left, right); }
 
-	/**
-	 * @brief Helper macro. Do not use!
-	 *
-	 * @note This is defined so you can do `_U(__FILE__)` or anything like that...
-	 * @see _U
-	 */
-#define _U2(x) engine::ustring_t::from_utf8(u8##x)
-	/**
-	 * @brief Converts string literal into engine::ustring_t
-	 * @note Do not use on variables!
-	 */
-#define _U(x) _U2(x)
-
-	 /**
-	 * @brief Helper macro. Do not use!
-	 *
-	 * @note This is defined so you can do `_U(__FILE__)` or anything like that...
-	 * @see _U
-	 */
-#define _L2(x) L##x
-	 /**
-	 * @brief Converts string literal into engine::ustring_t
-	 * @note Do not use on variables!
-	 */
-#define _L(x) _L2(x)
-
 	typedef std::vector<ustring_t> ustring_collection_t;
 
 	/**
@@ -1474,8 +1468,8 @@ namespace engine
 		uint32_t int_minutes = std::chrono::duration_cast<std::chrono::minutes>(item).count() % 60;
 		uint32_t int_seconds = std::chrono::duration_cast<std::chrono::seconds>(item).count() % 60;
 
-		const ustring_t str_zero = _U("0");
-		const ustring_t str_none = _U("");
+		const ustring_t str_zero = "0"_u;
+		const ustring_t str_none = ""_u;
 
 		return format_utf8(u8"#1##2#:#3##4#:#5##6#", (int_hours < 10 ? str_zero : str_none), int_hours,
 			(int_minutes < 10 ? str_zero : str_none), int_minutes,

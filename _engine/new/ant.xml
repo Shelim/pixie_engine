@@ -41,9 +41,9 @@
 <!-- Make this app default to launch  -->
 	<target name="make_default" depends="check_if_make_default" if="can_make_default">
 		
-		<replaceregexp file="../${app_src}/manifest/_common/windows/manifest.xml" match="&lt;install_run&gt;(.*)&lt;\/install_run&gt;" replace="&lt;install_run&gt;${full}.exe&lt;/install_run&gt;" byline="true" />
-		<replaceregexp file="../${app_src}/manifest/_common/windows/manifest_debug.xml" match="&lt;install_run&gt;(.*)&lt;\/install_run&gt;" replace="&lt;install_run&gt;${full}.exe&lt;/install_run&gt;" byline="true" />
-		<replaceregexp file="../${app_src}/manifest/_common/windows/manifest_release.xml" match="&lt;install_run&gt;(.*)&lt;\/install_run&gt;" replace="&lt;install_run&gt;${full}.exe&lt;/install_run&gt;" byline="true" />
+		<replaceregexp file="../${app_src}/manifest/_common/windows/manifest.xml" match="&lt;windows_install_run&gt;(.*)&lt;\/windows_install_run&gt;" replace="&lt;windows_install_run&gt;${full}.exe&lt;/windows_install_run&gt;" byline="true" />
+		<replaceregexp file="../${app_src}/manifest/_common/windows/manifest_debug.xml" match="&lt;windows_install_run&gt;(.*)&lt;\/windows_install_run&gt;" replace="&lt;windows_install_run&gt;${full}.exe&lt;/windows_install_run&gt;" byline="true" />
+		<replaceregexp file="../${app_src}/manifest/_common/windows/manifest_release.xml" match="&lt;windows_install_run&gt;(.*)&lt;\/windows_install_run&gt;" replace="&lt;windows_install_run&gt;${full}.exe&lt;/windows_install_run&gt;" byline="true" />
 		
 	</target>
 	

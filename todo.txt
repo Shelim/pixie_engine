@@ -3,7 +3,9 @@ BuildSystem:
  - Update changelog
  - Remove comments from XML
 		
- - Clean build VS project 2015
+ - Add logger_output_file_providers_t
+	- Sample: *.log
+	- Sample: *.rtf
 
 DataItems	
  - Move loading task to generic task

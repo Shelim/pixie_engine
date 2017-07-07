@@ -6,7 +6,8 @@
 #include <functional>
 #include "boost/di.hpp"
 #include "utility/pattern/instance_lifetime_guard.hpp"
-#include "utility/pattern/component.hpp"
+#include "utility/pattern/provider.hpp"
+#include "utility/pattern/class_settings.hpp"
 
 namespace engine
 {
@@ -16,11 +17,21 @@ namespace engine
 
 	};
 
+	template<class owner_t, class provider_t> class register_provider_for
+	{
+
+	};
+
 	template<class implementation_t, class component_t> class register_as
 	{
 
 	};
-	
+
+	template<class owner_t, class settings_t> class settings_for
+	{
+
+	};
+
 	template<class ... registerable_t> class bootstrapper_t final
 	{
 
@@ -42,9 +53,19 @@ namespace engine
 			return boost::di::make_injector(boost::di::bind<holder_t<owner_t>>().to < holder_implementation_t<owner_t, providers_t...> >());
 		}
 
+		template<class owner_t, class provider_t> static auto provide_di_unit(register_provider_for<owner_t, provider_t>)
+		{
+			return boost::di::make_injector(boost::di::bind<holder_t<owner_t>>().to < holder_implementation_t<owner_t, provider_t> >());
+		}
+
 		template<class component_t, class implementation_t> static auto provide_di_unit(register_as<implementation_t, component_t>)
 		{
 			return boost::di::make_injector(boost::di::bind<component_t>().to <implementation_t>());
+		}
+
+		template<class owner_t, class settings_values_t> static auto provide_di_unit(settings_for<owner_t, settings_values_t>)
+		{
+			return boost::di::make_injector(boost::di::bind<settings_t<owner_t> >().to <settings_implementation_t<owner_t, settings_values_t> >());
 		}
 
 		template<class provider_for, class... registerable_t> static auto provide_di(obj<provider_for, registerable_t...>)

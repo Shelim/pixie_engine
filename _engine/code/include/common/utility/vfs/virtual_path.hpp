@@ -1,11 +1,14 @@
-#ifndef ENGINE_COMMON_VIRTUAL_PATH_HPP
-#define ENGINE_COMMON_VIRTUAL_PATH_HPP
+#ifndef ENGINE_COMMON_UTILITY_VFS_VIRTUAL_PATH_HPP
+#define ENGINE_COMMON_UTILITY_VFS_VIRTUAL_PATH_HPP
 #pragma once
 
-#include "common/filesystem.hpp"
+#include "filesystem.hpp"
 #include <vector>
-#include "common/utility/text/ustring.hpp"
-
+#include "utility/text/ustring.hpp"
+#include "utility/pattern/class_settings.hpp"
+#include "utility/pattern/compilation.hpp"
+#include "manifest_app.hpp"
+#include "platform/path.hpp"
 
 /**
 * @page virtual_path Virtual File System (VFS)
@@ -54,8 +57,8 @@ namespace engine
 		enum class type_t : uint8_t
 		{
 			unknown,
-#define GAME_VIRTUAL_PATH_STD(name, type, path) name,
-#include "common/std/virtual_path_std.hpp"
+#define ENGINE_VIRTUAL_PATH_STD(name) name,
+#include "std/virtual_path_std.hpp"
 			count
 		};
 
@@ -89,6 +92,14 @@ namespace engine
 			return type;
 		}
 
+		static std::filesystem::path resolve_path(const ustring_t & path)
+		{
+			return path.
+#define ENGINE_PATH_RESOLVE_STD(src, trg) replace(src, trg).
+#include "std/virtual_path_std.hpp"
+				get_cstring();
+		}
+
 		static path_t canonize_path(const std::filesystem::path & value)
 		{
 			std::vector<std::filesystem::path> ret;
@@ -111,11 +122,16 @@ namespace engine
 
 			for (auto & iter : ret)
 			{
-				if (!path.is_empty()) path.append_utf8(u8"/");
+				if (!path.is_empty())
+				{
+					usymbol_t last = path.at(path.len() - 1);
+					if (last != '/' && last != '\\') path.append_utf8(u8"/");
+				}
 				std::string iter_str = iter.u8string();
-				if (iter_str == "\\")
-					iter_str = "/";
-				path.append_utf8(iter_str.c_str());
+				if (iter_str != "\\" && iter_str != "/")
+				{
+					path.append_utf8(iter_str.c_str());
+				}
 			}
 
 			return path;
@@ -202,14 +218,13 @@ namespace engine
 		virtual_path_t::path_t path = item.get_path();
 
 		ss << path.get_cstring() << " [";
-#define GAME_VIRTUAL_PATH_STD(name, type_id, dirname) if(item.get_type() == virtual_path_t::type_t::name) { ss << #name; }
-#include "common/std/virtual_path_std.hpp"
+#define ENGINE_VIRTUAL_PATH_STD(name) if(item.get_type() == virtual_path_t::type_t::name) { ss << #name; }
+#include "std/virtual_path_std.hpp"
 
 		ss << "]";
 
 		return ustring_t(ss.str());
 	}
-
 }
 
 #endif

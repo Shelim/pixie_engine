@@ -9,12 +9,11 @@ set /p unix_filename=Enter unix filename of your project (lowercase, no spaces n
 set /p full_filename=Enter full name of your project (should be a valid filename!):
 set /p exe_filename=Enter unix filename of your first application (typically you should enter just 'game'):
 
-cd ../depedency/apache_ant/bin
-set path=%~dp0../depedency/jdk1.7.0_71/bin;%~dp0../depedency/mingw/bin;%path%
-echo on
-call ant -v -buildfile "../../../new/ant.xml" new_project -Dunix="%unix_filename%" -Dfull="%full_filename%"
-call ant -v -buildfile "../../../new/ant.xml" new_application -Dunix="%exe_filename%" -Dfull="%full_filename%" -Dapp_type="executable" -Dapp_src="%unix_filename%"
-cd ../../../../%unix_filename%
+cd ..\depedency\apache_ant\bin
+set path=%cd%\..\..\..\depedency\jdk1.8.0_131\bin;%cd%\..\..\..\depedency\mingw\bin;%path%
+call ant -v -buildfile "..\..\..\new\ant.xml" new_project -Dunix="%unix_filename%" -Dfull="%full_filename%"
+call ant -v -buildfile "..\..\..\new\ant.xml" new_application -Dunix="%exe_filename%" -Dfull="%full_filename%" -Dapp_type="executable" -Dapp_src="%unix_filename%"
+cd ..\..\..\..\%unix_filename%
 call update_vs_solution.bat
 popd
 pause
