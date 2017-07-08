@@ -11,6 +11,7 @@
 #include "settings/default_paths.hpp"
 #include "settings/default_terminal.hpp"
 #include "settings/default_logger.hpp"
+#include "settings/default_richtext.hpp"
 
 int main(int arg, char * argv[])
 {
@@ -29,6 +30,7 @@ int main(int arg, char * argv[])
 		USE_SETTINGS(common_filenames_t, normal),
 		USE_SETTINGS(terminal_output_colors_t, normal),
 		USE_SETTINGS(logger_output_t, normal),
+		USE_SETTINGS(richtext_colors_t, normal),
 
 		engine::register_providers_for<engine::logger_output_t, engine::logger_output_provider_terminal_t, engine::logger_output_provider_file_t>
 	
@@ -40,11 +42,23 @@ int main(int arg, char * argv[])
 	terminal->update_window(engine::terminal_output_t::window_state_t::open);
 
 	int i = 0;
+
+	auto task = logger->log_task_start(core, "Calculating"_u);
+	logger->log_task_done(task);
+
+	task = logger->log_task_start(core, "Calculating no 2"_u);
+	logger->log_task_failed(task);
+	task = logger->log_msg(core, "Sample message"_u);
+	task = logger->log_warn(core, "Sample warning"_u);
+	task = logger->log_err(core, "Sample error"_u);
+	
 	for (;;)
 	{
-		if (i == 50000) break;
+		if (i == 1000) break;
 
 		logger->log_msg(core, "Hello world: #1#!"_u, ++i);
+		if ((i % 100) == 66)
+			logger->log_err(core, "Critical failure!"_u);
 	}
 
 	return 0;

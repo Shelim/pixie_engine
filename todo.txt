@@ -2,10 +2,6 @@ BuildSystem:
  - Build changelog
  - Update changelog
  - Remove comments from XML
-		
- - Add logger_output_file_providers_t
-	- Sample: *.log
-	- Sample: *.rtf
 
 DataItems	
  - Move loading task to generic task

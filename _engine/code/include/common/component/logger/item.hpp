@@ -45,10 +45,17 @@ namespace engine
 		enum class module_t
 		{
 			unknown,
-#define ENGINE_LOGGER_MODULE_STD(module) module,
+#define ENGINE_LOGGER_MODULE_STD(mod) mod,
 #include "std/logger_std.hpp"
 			count
 		};
+
+		static ustring_t get_module_name(module_t mod)
+		{
+#define ENGINE_LOGGER_MODULE_STD(concrete_mod) if(mod == module_t::concrete_mod) return #concrete_mod##_u;
+#include "std/logger_std.hpp"
+			return "unknown"_u;
+		}
 
 		friend class cereal::access;
 
@@ -79,6 +86,10 @@ namespace engine
 		module_t get_module() const
 		{
 			return module;
+		}
+		ustring_t get_module_name() const
+		{
+			return get_module_name(get_module());
 		}
 		const ustring_t & get_message() const
 		{

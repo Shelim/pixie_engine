@@ -15,6 +15,7 @@ namespace engine
 #define SETTINGS_TABLE_ENTRY_NO_DEF_VALUE(type, key) virtual type key() const = 0;
 #define SETTINGS_TABLE_END() }; };
 
+#define NON_OWNING_PTR_TO_SETTINGS_FOR(owner) settings_t < owner > *
 #define PTR_TO_SETTINGS_FOR(owner) std::unique_ptr < settings_t < owner > >
 
 #define SETTINGS_START(owner, id) class settings_metadata_##owner##_##id##_t : public engine::settings_t<engine::owner>::values_t { public:

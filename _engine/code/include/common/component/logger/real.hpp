@@ -106,6 +106,8 @@ namespace engine
 
 	SETTINGS_TABLE_START(logger_output_t)
 
+		SETTINGS_TABLE_ENTRY(bool, is_file_richtext_format, true)
+
 #define ENGINE_LOGGER_LEVEL_STD(level, file_pattern, terminal_pattern) SETTINGS_TABLE_ENTRY(ustring_t, format_file_##level, file_pattern) SETTINGS_TABLE_ENTRY(ustring_t, format_terminal_##level, terminal_pattern)
 #include "std/logger_std.hpp"
 
