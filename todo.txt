@@ -3,6 +3,10 @@ BuildSystem:
  - Update changelog
  - Remove comments from XML
 
+Richtext_t
+ - Parsing is taking way too much time for logger!
+ - Move to semi-parsed string
+ 
 DataItems	
  - Move loading task to generic task
 		

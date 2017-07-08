@@ -97,6 +97,8 @@ namespace
 		HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hOutput, color_pair_to_attribs(foreground, background));
 	}
+
+	char stdout_buffer[BUFSIZ];
 }
 
 void engine::platform::open_terminal(terminal_color_t foreground, terminal_color_t background)
@@ -151,6 +153,8 @@ void engine::platform::open_terminal(terminal_color_t foreground, terminal_color
 
 	std::wstring app_name_w = app_name.to_wide();
 	SetConsoleTitleW(app_name_w.c_str());
+
+	setbuf(stdout, stdout_buffer);
 }
 
 void engine::platform::set_terminal_colors(engine::platform::terminal_color_t foreground, engine::platform::terminal_color_t background)

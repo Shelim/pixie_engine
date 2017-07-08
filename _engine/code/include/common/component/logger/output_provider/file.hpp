@@ -16,7 +16,7 @@ namespace engine
 
 	public:
 
-		logger_output_provider_file_t(std::shared_ptr<save_location_provider_t> save_location_provider, std::shared_ptr<common_filenames_provider_t> common_filenames_provider, PTR_TO_SETTINGS_FOR(logger_output_t) logger_output, PTR_TO_SETTINGS_FOR(richtext_colors_t) richtext_colors);
+		logger_output_provider_file_t(std::shared_ptr<save_location_provider_t> save_location_provider, std::shared_ptr<common_filenames_provider_t> common_filenames_provider, PTR_TO_SETTINGS_FOR(logger_output_t) logger_output);
 		~logger_output_provider_file_t();
 
 	private:
@@ -31,7 +31,6 @@ namespace engine
 		std::FILE * fp;
 
 		PTR_TO_SETTINGS_FOR(logger_output_t) logger_output;
-		PTR_TO_SETTINGS_FOR(richtext_colors_t) richtext_colors;
 	};
 
 }

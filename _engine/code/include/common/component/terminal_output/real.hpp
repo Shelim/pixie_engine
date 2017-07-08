@@ -26,6 +26,10 @@ namespace engine
 		mutable std::recursive_mutex write_mutex;
 		window_state_t current_window_state;
 
+		void write_local(const richtext_t & richtext);
+
+		std::vector<richtext_t> buffer;
+
 		PTR_TO_SETTINGS_FOR(terminal_output_colors_t) terminal_output_colors;
 
 	};

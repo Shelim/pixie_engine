@@ -11,7 +11,7 @@
 #include "utility/pattern/compilation.hpp"
 #include "platform/terminal.hpp"
 
-engine::logger_output_provider_file_t::logger_output_provider_file_t(std::shared_ptr<save_location_provider_t> save_location_provider, std::shared_ptr<common_filenames_provider_t> common_filenames_provider, PTR_TO_SETTINGS_FOR(logger_output_t) logger_output, PTR_TO_SETTINGS_FOR(richtext_colors_t) richtext_colors) : save_location_provider(save_location_provider), common_filenames_provider(common_filenames_provider), fp(nullptr), logger_output(std::move(logger_output)), richtext_colors(std::move(richtext_colors))
+engine::logger_output_provider_file_t::logger_output_provider_file_t(std::shared_ptr<save_location_provider_t> save_location_provider, std::shared_ptr<common_filenames_provider_t> common_filenames_provider, PTR_TO_SETTINGS_FOR(logger_output_t) logger_output) : save_location_provider(save_location_provider), common_filenames_provider(common_filenames_provider), fp(nullptr), logger_output(std::move(logger_output))
 {
 	std::lock_guard<std::recursive_mutex> guard(fp_mutex);
 
@@ -36,12 +36,9 @@ void engine::logger_output_provider_file_t::output(const richtext_t & item)
 	std::lock_guard<std::recursive_mutex> guard(fp_mutex);
 	if (fp)
 	{
-		ustring_t raw;
-		if (logger_output->get()->is_file_richtext_format())
-			raw = item.get_inline_html(richtext_colors.get());
-		else
-			raw = item.get_raw();
+		ustring_t raw = item.get_raw();
 		fputs(raw.get_cstring(), fp);
+		fputs("\n", fp);
 		fflush(fp);
 	}
 }

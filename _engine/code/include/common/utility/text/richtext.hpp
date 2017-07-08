@@ -9,54 +9,6 @@
 
 namespace engine
 {
-	struct richtext_colors_t
-	{
-
-	};
-
-	SETTINGS_TABLE_START(richtext_colors_t)
-
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_default, "#C0C0C0"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_default, "#000000"_u)
-
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_section_header, "#800080"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_section_header, "#000000"_u)
-
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_section_header_text, "#FF00FF"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_section_header_text, "#000000"_u)
-
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_info, "#00FFFF"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_info, "#000000"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_info_meta, "#008080"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_info_meta, "#000000"_u)
-
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_note, "#C0C0C0"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_note, "#000000"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_note_meta, "#808080"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_note_meta, "#000000"_u)
-
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_success, "#00FF00"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_success, "#000000"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_success_meta, "#008000"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_success_meta, "#000000"_u)
-
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_pending, "#00FFFF"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_pending, "#000000"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_pending_meta, "#008080"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_pending_meta, "#000000"_u)
-
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_warning, "#FFFF00"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_warning, "#000000"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_warning_meta, "#808000"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_warning_meta, "#000000"_u)
-
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_error, "#FF0000"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_error, "#000000"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, foreground_error_meta, "#800000"_u)
-		SETTINGS_TABLE_ENTRY(ustring_t, background_error_meta, "#000000"_u)
-
-		SETTINGS_TABLE_END()
-
 	class richtext_t final
 	{
 
@@ -115,26 +67,6 @@ namespace engine
 			{
 				ret.append(part.get_text());
 			}
-
-			return ret;
-		}
-
-		ustring_t get_inline_html(NON_OWNING_PTR_TO_SETTINGS_FOR(richtext_colors_t) richtext_colors) const
-		{
-			ustring_t ret;
-
-			ret.append("<div style=\"margin:0px; font-family:monospace; padding:10px; text-indent:-50px; padding-left:50px; white-space:pre-wrap; color:"_u).append(richtext_colors->get()->foreground_default()).append("; background-color:"_u).append(richtext_colors->get()->background_default()).append(";\">"_u);
-
-			for (auto & part : parts)
-			{
-#define ENGINE_RICHTEXT_TAG_STD(richtext_type) if (part.is_flag(richtext_t::flag_t::richtext_type)) { ret.append("<span style=\"color:"_u).append(richtext_colors->get()->foreground_##richtext_type()).append(";background-color:"_u).append(richtext_colors->get()->background_##richtext_type()).append("\">"_u).append(part.get_text().replace("<"_u, "&lt;"_u).replace(">"_u, "&gt;"_u)).append("</span>"_u); continue; }
-#include "std/richtext_std.hpp"
-				
-				ret.append("<span style=\"color:"_u).append(richtext_colors->get()->foreground_default()).append(";background-color:"_u).append(richtext_colors->get()->background_default()).append("\">"_u).append(part.get_text().replace("<"_u, "&lt;"_u).replace(">"_u, "&gt;"_u)).append("</span>"_u);
-
-			}
-
-			ret.append("</div>\n"_u);
 
 			return ret;
 		}

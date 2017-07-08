@@ -41,7 +41,7 @@ namespace engine
 	SETTINGS_END()
 
 	SETTINGS_START(common_filenames_t, normal)
-		SETTINGS_SET(std::filesystem::path, logger, "log_" XSTR(PIXIE_OUTPUT_UNIX_NAME) ".html")
+		SETTINGS_SET(std::filesystem::path, logger, "log_" XSTR(PIXIE_OUTPUT_UNIX_NAME) ".log")
 	SETTINGS_END()
 }
 
