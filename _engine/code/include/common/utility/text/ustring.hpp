@@ -1508,10 +1508,14 @@ namespace engine
 
 		std::string base = std::to_string(item);
 
-		std::string str(total_digits - base.length(), '0');
-		str += base;
+		if (total_digits > base.length())
+		{
+			std::string str(total_digits - base.length(), '0');
+			str += base;
+			return ustring_t(str);
+		}
 
-		return ustring_t(str);
+		return ustring_t(base);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
