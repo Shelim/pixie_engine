@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_UTILITY_STRING_USTRING_HPP
-#define ENGINE_COMMON_UTILITY_STRING_USTRING_HPP
+#ifndef ENGINE_COMMON_UTILITY_TEXT_USTRING_HPP
+#define ENGINE_COMMON_UTILITY_TEXT_USTRING_HPP
 #pragma once
 
 #include <string>
@@ -16,6 +16,8 @@
 #include <functional>
 #include <sstream>
 #include <iomanip>
+#include <utility>
+#include <iterator>
 #include <cereal/access.hpp>
 #include "utility/vfs/filesystem.hpp"
 #include "utility/renderer/color.hpp"
@@ -110,7 +112,7 @@ namespace engine
 	* @param[in] item usymbol_t to check
 	* @return true if usymbol_t contains whitespace
 	*/
-	bool is_whitespace(usymbol_t item);
+	bool is_whitespace_ascii(char item);
 
 	/**
 	* @brief Check if given usymbol_t contains path separator
@@ -120,7 +122,7 @@ namespace engine
 	* @param[in] item usymbol_t to check
 	* @return true if usymbol_t contains path separator
 	*/
-	bool is_path_separator(usymbol_t ch);
+	bool is_path_separator_ascii(char ch);
 
 	/**
 	 * @brief Class for handling @c UTF-8 string
@@ -129,6 +131,112 @@ namespace engine
 	{
 
 	public:
+
+		friend class iterator_t;
+
+		class iterator_t
+		{
+
+		public:
+
+			typedef ptrdiff_t difference_type;
+			typedef usymbol_t value_type;
+			typedef const usymbol_t & reference;
+			typedef const usymbol_t * pointer;
+			typedef std::forward_iterator_tag iterator_category;
+
+			iterator_t(const iterator_t& other) : str(other.str), decoded_symbol(other.decoded_symbol), pos(other.pos)
+			{
+
+			}
+
+			~iterator_t()
+			{
+
+			}
+
+			iterator_t& operator=(const iterator_t& other)
+			{
+				str = other.str;
+				decoded_symbol = other.decoded_symbol;
+				pos = other.pos;
+
+				return (*this);
+			}
+
+			iterator_t& operator++()
+			{
+				pos += _symbol_size(pos);
+
+				const char * p2 = pos;
+				decoded_symbol = str->_decode(p2);
+
+				return (*this);
+			}
+			reference operator*() const
+			{
+				return decoded_symbol;
+			}
+
+			void swap(iterator_t & other)
+			{
+				std::swap(str, other.str);
+				std::swap(decoded_symbol, other.decoded_symbol);
+				std::swap(pos, other.pos);
+			}
+
+			iterator_t operator++(int)
+			{
+				iterator_t ret = *this;
+				++(*this);
+
+				return ret;
+			}
+			value_type operator*()
+			{
+				return decoded_symbol;
+			}
+			pointer operator->() const
+			{
+				return &decoded_symbol;
+			}
+
+			inline bool equals(const iterator_t& other) const
+			{
+				return pos == other.pos;
+			}
+
+			friend class ustring_t;
+
+		private:
+
+			iterator_t(const ustring_t * str) : str(str)
+			{
+				pos = str->get_cstring();
+
+				const char * p2 = pos;
+				decoded_symbol = str->_decode(p2);
+			}
+
+			struct end_t
+			{
+			
+			};
+
+			iterator_t(const ustring_t * str, end_t) : str(str)
+			{
+				pos = str->get_cstring();
+				pos += str->_str.length();
+
+				decoded_symbol = 0;
+			}
+
+			const ustring_t * str;
+			usymbol_t decoded_symbol;
+			const char * pos;
+		};
+		
+		typedef iterator_t const_iterator_t;
 
 		friend struct std::hash<engine::ustring_t>;
 
@@ -162,6 +270,28 @@ namespace engine
 		* @return Converted ustring_t
 		*/
 		static ustring_t from_symbol(usymbol_t str);
+
+		//////////////////////////////////////////////////////////////////////////
+
+		iterator_t begin()
+		{
+			return iterator_t(this);
+		}
+
+		iterator_t end()
+		{
+			return iterator_t(this, iterator_t::end_t{});
+		}
+
+		const_iterator_t begin() const
+		{
+			return iterator_t(this);
+		}
+
+		const_iterator_t end() const
+		{
+			return iterator_t(this, iterator_t::end_t{});
+		}
 
 		//////////////////////////////////////////////////////////////////////////
 
@@ -528,6 +658,17 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
+		* @brief Appends given symbol to the end of this string
+		*
+		* @param[in] symbol usymbol_t to append
+		*/
+		ustring_t & append(usymbol_t symbol)
+		{
+			_encode(symbol);
+			return *this;
+		}
+
+		/**
 		* @brief Appends given string to the end of this string
 		*
 		* Appends given string to the end of this string. No conversion will be made
@@ -865,17 +1006,6 @@ namespace engine
 		 * @param[in] pos Position in ustring_t
 		 * @return Full Unicode glyph code
 		 */
-		usymbol_t at(uint_fast32_t pos) const;
-		/**
-		 * @brief Returns Unicode Symbol at given position in ustring_t
-		 *
-		 * @param[in] pos Position in ustring_t
-		 * @return Full Unicode glyph code
-		 */
-		usymbol_t operator[](uint_fast32_t pos) const
-		{
-			return at(pos);
-		}
 		/**
 		 * @brief Return length of ustring_t
 		 *
@@ -1045,6 +1175,23 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
+		* @brief Return last character ustring_t ONLY if it is ASCII (7-bit)
+		*
+		* Return last character of ustring_t ONLY If it is ASCII (7-bit). For use in some more advance algorithms.
+		* Returns 0 if ustring_t is empty or last character is NOT ASCII.
+		*
+		* @return Last character as ASCII or 0 if last character is not ASCII
+		*/
+		char last_ascii() const
+		{
+			if (_str.length() == 0) return 0;
+			if (_str.back() & 0x80) return 0;
+			return _str.back();
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+
+		/**
 		 * @brief Return last index of given substring in ustring_t
 		 *
 		 * Return last index of given substring in ustring_t, or -1 if is not found. Optional argument @c last tells how many chars from end have to be skipped
@@ -1107,16 +1254,6 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Escapes characters before use in richtext_t
-		*
-		* This function make copy of string and returns escaped text, ready to be used in richtext_t .
-		*
-		* @return Escaped ustring_t
-		* @see richtext_t
-		*/
-		ustring_t escape_rich() const;
-
-		/**
 		 * @brief Converts this ustring_t into standard @c ASCII string
 		 *
 		 * @return Standard @c ASCII string
@@ -1158,7 +1295,6 @@ namespace engine
 		friend bool operator< (const ustring_t & left, const ustring_t & right);
 		friend bool operator< (const ustring_t & left, const ustring_t & right);
 		
-		template<class... Args> friend ustring_t format_string(const ustring_t & str, Args... args);
 		friend class cereal::access;
 		template <class T> friend ustring_t to_string(const T & item);
 		template <class T> friend ustring_t to_string(const T & item, std::size_t totalDigits);
@@ -1190,89 +1326,7 @@ namespace engine
 		{
 			_str = value;
 		}
-
-		template<class... Args> static inline void _format(ustring_t & str, Args... args)
-		{
-			if (sizeof...(Args) > 0)
-			{
-				std::array<ustring_t, sizeof...(Args)> a;
-				expand<0>(a, args...);
-				str = _base_format(str, a);
-			}
-		}
-
-		template<std::size_t iter, std::size_t size, class Arg, class... Args> static void expand(std::array<ustring_t, size> & array, const Arg & arg, Args... args);
-
-		template<std::size_t iter, std::size_t size> static inline void expand(std::array<ustring_t, size> & array)
-		{
-			// Intentionally do nothing. The array is already populated!
-		}
 		
-		template<std::size_t size> static inline ustring_t _base_format(ustring_t str, std::array<ustring_t, size> & args)
-		{
-			char * it = const_cast<char*>(str._str.c_str());
-			ustring_t ret;
-			ret._str.reserve(str._str.length());
-
-			enum state_t
-			{
-				closed,
-				just_opened,
-				number,
-				comment
-			};
-
-			char * tag_number_start;
-
-			state_t state = state_t::closed;
-
-			while (*it)
-			{
-				uint_fast32_t symbol_size = ustring_t::_symbol_size(it);
-				usymbol_t symbol = ustring_t::_decode(const_cast<const char *&>(it));
-				if (symbol == '#')
-				{
-					if (state == state_t::closed)
-					{
-						tag_number_start = it;
-						state = state_t::just_opened;
-					}
-					else if (state == state_t::just_opened)		// This is doubled '##'
-					{
-						ret._encode(symbol);
-						state = state_t::closed;
-					}
-					else if (state == state_t::number || state == state_t::comment)
-					{
-						if (state == state_t::number)
-						{
-							*(it - symbol_size) = 0;
-						}
-
-						int32_t id = atoi(tag_number_start);
-						--id;
-
-						if (id >= 0 || id < size)
-							ret.append(args[id]);
-
-						state = state_t::closed;
-					}
-				}
-				else if (symbol == ':' && state == state_t::number)
-				{
-					*(it - symbol_size) = 0;
-					state = state_t::comment;
-				}
-				else
-				{
-					if (state == state_t::just_opened)
-						state = state_t::number;
-					else if (state == state_t::closed)
-						ret._encode(symbol);
-				}
-			}
-			return ret;
-		}
 	};
 
 	/**
@@ -1460,8 +1514,6 @@ namespace engine
 		return ustring_t(ss.str());
 	}
 
-	template<class... Args> ustring_t format_utf8(const char * str, Args... args);
-
 	template <> inline ustring_t to_string<std::chrono::seconds>(const std::chrono::seconds & item)
 	{
 		uint32_t int_hours = std::chrono::duration_cast<std::chrono::hours>(item).count();
@@ -1471,9 +1523,19 @@ namespace engine
 		const ustring_t str_zero = "0"_u;
 		const ustring_t str_none = ""_u;
 
-		return format_utf8(u8"#1##2#:#3##4#:#5##6#", (int_hours < 10 ? str_zero : str_none), int_hours,
-			(int_minutes < 10 ? str_zero : str_none), int_minutes,
-			(int_seconds < 10 ? str_zero : str_none), int_seconds);
+		std::string ret = "";
+		if (int_hours < 10) ret.push_back('0');
+		ret += std::to_string(int_hours);
+
+		ret.push_back(':');
+		if (int_minutes < 10) ret.push_back('0');
+		ret += std::to_string(int_minutes);
+
+		ret.push_back(':');
+		if (int_seconds < 10) ret.push_back('0');
+		ret += std::to_string(int_seconds);
+
+		return ustring_t(ret);
 	}
 
 	template<> inline ustring_t to_string<ustring_t>(const ustring_t & item)
@@ -1615,7 +1677,7 @@ namespace engine
 	template<> inline color_t from_string<color_t>(const ustring_t & str)
 	{
 		uint32_t color;
-		if(str[0] == '#')
+		if(*str.begin() == '#')
 			color = static_cast<uint32_t>(std::strtoul(str.get_cstring() + 1, nullptr, 16));
 		else
 			color = static_cast<uint32_t>(std::strtoul(str.get_cstring(), nullptr, 16));
@@ -1630,15 +1692,17 @@ namespace engine
 		int_fast32_t level = 0;
 		size_t start = str.len();
 
-		for (size_t i = str.len(); i-- > 0;)
+		const std::string & str_internal = str.to_utf8();
+
+		for (size_t i = str_internal.length(); i-- > 0;)
 		{
-			usymbol_t u = str[i];
+			usymbol_t u = str_internal[i];
 			if (u == ':')
 			{
 				int_fast64_t number = 0;
 				for (size_t s = i + 1; s < start; s++)
 				{
-					u = str[s];
+					u = str_internal[s];
 					if (isdigit(u))
 					{
 						number *= 10;
@@ -1662,74 +1726,6 @@ namespace engine
 	{
 		return str;
 	}
-
-    /**
-     * @brief Formats string with arguments
-     *
-     * @note This function differs from standard C-like formatting.
-     * @note See complete instruction at @ref ustring_format "Formatting Description"
-     *
-     * @param[in] str ustring_t containing format
-     * @param[in] args Zero or more arguments to format
-     * @return Formated ustring_t
-     */
-    template<class... Args> ustring_t format_string(const ustring_t & str, Args... args)
-    {
-        ustring_t ret = str;
-		ustring_t::_format(ret, args...);
-        return ret;
-    }
-    /**
-     * @brief Formats string with arguments
-     *
-     * This converts first argument into ustring_t, then passes execution into ustring_t::format_string
-     *
-     * @note This function differs from standard C-like formatting.
-     * @note See complete instruction at @ref ustring_format "Formatting Description"
-     *
-     * @param[in] str @c ASCII string containing format
-     * @param[in] args Zero or more arguments to format
-     * @return Formated ustring_t
-     * @see format_string
-     */
-    template<class... Args> ustring_t format_ascii(const char * str, Args... args)
-    {
-        return format_string(ustring_t::from_ascii(str), args...);
-    }
-    /**
-     * @brief Formats string with arguments
-     *
-     * This converts first argument into ustring_t, then passes execution into ustring_t::format_string
-     *
-     * @note This function differs from standard C-like formatting.
-     * @note See complete instruction at @ref ustring_format "Formatting Description"
-     *
-     * @param[in] str @c UTF-8 string containing format
-     * @param[in] args Zero or more arguments to format
-     * @return Formated ustring_t
-     * @see format_string
-     */
-    template<class... Args> ustring_t format_utf8(const char * str, Args... args)
-    {
-        return format_string(ustring_t::from_utf8(str), args...);
-    }
-    /**
-     * @brief Formats string with arguments
-     *
-     * This converts first argument into ustring_t, then passes execution into ustring_t::format_string
-     *
-     * @note This function differs from standard C-like formatting.
-     * @note See complete instruction at @ref ustring_format "Formatting Description"
-     *
-     * @param[in] str @c Wide string containing format
-     * @param[in] args Zero or more arguments to format
-     * @return Formated ustring_t
-     * @see format_string
-     */
-    template<class... Args> ustring_t format_wide(const wchar_t * str, Args... args)
-    {
-        return format_string(ustring_t::from_wide(str), args...);
-    }
 
 	/**
 	* @brief Serilizes ustring_collection_t
@@ -1764,11 +1760,14 @@ namespace engine
 		obj = from_string<ustring_collection_t>(engine::ustring_t::from_utf8(value.c_str()));
 	}
 
-	template<std::size_t iter, std::size_t size, class Arg, class... Args> inline void ustring_t::expand(std::array<ustring_t, size> & array, const Arg & arg, Args... args)
+	inline bool operator==(const ustring_t::iterator_t& lhs, const ustring_t::iterator_t& rhs)
 	{
-		array[iter] = to_string(arg);
+		return lhs.equals(rhs);
+	}
 
-		expand<iter + 1>(array, args...);
+	inline bool operator!=(const ustring_t::iterator_t& lhs, const ustring_t::iterator_t& rhs)
+	{
+		return !lhs.equals(rhs);
 	}
 }
 
@@ -1792,6 +1791,12 @@ namespace std
 			return std::hash<std::string>{}(s._str);
 		}
 	};
+
+
+	inline void swap(engine::ustring_t::iterator_t& lhs, engine::ustring_t::iterator_t& rhs)
+	{
+		lhs.swap(rhs);
+	}
 }
 
 #endif

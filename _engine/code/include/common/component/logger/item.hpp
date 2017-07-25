@@ -33,7 +33,8 @@ namespace engine
 #define ENGINE_LOGGER_LEVEL_STD(level, file_pattern, terminal_pattern) level,
 #include "std/logger_std.hpp"
 
-			finished
+			finished,
+			count = finished,
 		};
 
 		enum class flag_t
@@ -148,18 +149,18 @@ namespace engine
 
 		void parse_file();
 
-		std::size_t id;
+		std::size_t id; // 1 for formatting
 		level_t level;
-		module_t module;
-		ustring_t message;
-		ustring_t function;
+		module_t module; // 2 for formatting
+		ustring_t message; // 3 for formatting
+		ustring_t function; // 4 for formatting
 		flags_t<flag_t> flags;
-		ustring_t file;
+		ustring_t file; // 5 for formatting
 		ustring_t file_raw;
-		uint32_t line;
-		uint64_t frame;
-		std::chrono::seconds time;
-		std::thread::id thread;
+		uint32_t line; // 6 for formatting
+		uint64_t frame; // 7 for formatting
+		std::chrono::seconds time; // 8 for formatting
+		std::thread::id thread; // 9 for formatting
 		std::size_t link;
 
 	};

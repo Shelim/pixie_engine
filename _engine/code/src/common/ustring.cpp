@@ -15,11 +15,11 @@ engine::usymbol_t engine::to_lower(engine::usymbol_t item)
 	return towlower(item);			// Is it cross platform?
 }
 
-bool engine::is_whitespace(engine::usymbol_t item)
+bool engine::is_whitespace_ascii(char item)
 {
 	return item == ' ' || item == '\t' || item == '\n' || item == '\r';
 }
-bool engine::is_path_separator(engine::usymbol_t ch)
+bool engine::is_path_separator_ascii(char ch)
 {
 	return ch == '/' || ch == '\\';
 }
@@ -72,40 +72,40 @@ engine::ustring_t engine::ustring_t::from_symbol(usymbol_t str)
 engine::ustring_t engine::ustring_t::trim_string(const engine::ustring_t & str)
 {
 	uint_fast32_t left = 0;
-	uint_fast32_t right = str.len();
+	uint_fast32_t right = str._str.length();
 
-	while (left < right && is_whitespace(str.at(left)))
+	while (left < right && is_whitespace_ascii(str._str[left]))
 		++left;
-	while (right > 0 && is_whitespace(str.at(right)))
+	while (right > 0 && is_whitespace_ascii(str._str[right]))
 		--right;
 
 	if (left < right)
-		return substr_string(str, left, right - left);
+		return ustring_t(str._str.substr(left, right - left));
 	return ustring_t();
 }
 
 engine::ustring_t engine::ustring_t::left_trim_string(const engine::ustring_t & str)
 {
 	uint_fast32_t left = 0;
-	uint_fast32_t right = str.len();
+	uint_fast32_t right = str._str.length();
 
-	while (left < right && is_whitespace(str.at(left)))
+	while (left < right && is_whitespace_ascii(str._str[left]))
 		++left;
 
 	if (left < right)
-		return substr_string(str, left, right - left);
+		return ustring_t(str._str.substr(left, right - left));
 	return ustring_t();
 }
 
 engine::ustring_t engine::ustring_t::right_trim_string(const engine::ustring_t & str)
 {
-	uint_fast32_t right = str.len();
+	uint_fast32_t right = str._str.length();
 
-	while (right > 0 && is_whitespace(str.at(right)))
+	while (right > 0 && is_whitespace_ascii(str._str[right]))
 		--right;
 
 	if (0 < right)
-		return substr_string(str, 0, right);
+		return ustring_t(str._str.substr(0, right));
 	return ustring_t();
 }
 
@@ -239,19 +239,19 @@ engine::ustring_t engine::ustring_t::substr_string(const engine::ustring_t & str
 
 engine::ustring_t engine::ustring_t::basename_string(const engine::ustring_t & str)
 {
-	uint_fast32_t len = str.len();
+	uint_fast32_t len = str._str.length();
 
-	if (len > 0 && is_path_separator(str[len - 1]))		// This cut last dir separator
+	if (len > 0 && is_path_separator_ascii(str._str[len - 1]))		// This cut last dir separator
 		--len;
 
 	uint_fast32_t i = len;
 	while (i > 0)
 	{
-		if (is_path_separator(str[i - 1]))
+		if (is_path_separator_ascii(str._str[i - 1]))
 			break;
 		--i;
 	}
-	return str.substr(i, len - i);
+	return engine::ustring_t(str._str.substr(i, len - i));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -289,21 +289,6 @@ engine::ustring_t::~ustring_t()
 }
 
 //////////////////////////////////////////////////////////////////////////
-
-engine::usymbol_t engine::ustring_t::at(uint_fast32_t pos) const
-{
-	const char * it = _str.c_str();
-
-	for (uint_fast32_t i = 0; i < pos; ++i)
-	{
-		if (*it == '\0')
-			return '\0';
-
-		it += _symbol_size(it);
-	}
-
-	return _decode(it);
-}
 
 uint_fast32_t engine::ustring_t::len() const
 {
@@ -442,25 +427,6 @@ int_fast32_t engine::ustring_t::last_index_of(const engine::ustring_t & str, int
 }
 
 //////////////////////////////////////////////////////////////////////////
-
-engine::ustring_t engine::ustring_t::escape_rich() const
-{
-	ustring_t ret;
-
-	const char * it = _str.c_str();
-
-	while (*it)
-	{
-		engine::usymbol_t symbol = _decode(it);
-
-		if (symbol == '\\' || symbol == '[' || symbol == ']')
-			ret._encode('\\');
-
-		ret._encode(symbol);
-	}
-
-	return ret;
-}
 
 std::string engine::ustring_t::to_ascii() const
 {

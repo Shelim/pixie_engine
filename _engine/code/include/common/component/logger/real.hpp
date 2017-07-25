@@ -20,7 +20,6 @@
 #include "utility/text/ustring.hpp"
 #include "utility/container/concurrent_queue.hpp"
 #include "utility/pattern/class_settings.hpp"
-#include "utility/text/richtext.hpp"
 #include <cereal/cereal.hpp>
 #include <cereal/access.hpp>
 #include <vlc/vlc.h>
@@ -38,16 +37,9 @@ namespace engine
 
 		}
 
-		void output(const logger_item_t & item)
-		{
-			output(format(format_provider(item), item));
-		}
+		virtual void output(const logger_item_t & item) const = 0;
 
 	private:
-
-		virtual void output(const richtext_t & text) = 0;
-		virtual ustring_t format_provider(const logger_item_t & item) = 0;
-		richtext_t format(ustring_t format, const logger_item_t & item);
 	};
 
 	class logger_output_t
@@ -106,7 +98,7 @@ namespace engine
 
 	SETTINGS_TABLE_START(logger_output_t)
 
-#define ENGINE_LOGGER_LEVEL_STD(level, file_pattern, terminal_pattern) SETTINGS_TABLE_ENTRY(ustring_t, format_file_##level, file_pattern) SETTINGS_TABLE_ENTRY(ustring_t, format_terminal_##level, terminal_pattern)
+#define ENGINE_LOGGER_LEVEL_STD(level, file_pattern, terminal_pattern) SETTINGS_TABLE_ENTRY(ustring_t, format_file_##level) SETTINGS_TABLE_ENTRY(ustring_t, format_terminal_##level)
 #include "std/logger_std.hpp"
 
 	SETTINGS_TABLE_END()

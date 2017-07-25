@@ -27,6 +27,13 @@ namespace engine
 			condition.notify_one();
 		}
 
+		void push(T && t)
+		{
+			std::lock_guard<std::mutex> lock(mutex);
+			queue.push(std::move(t));
+			condition.notify_one();
+		}
+
 
 		T pop(void)
 		{
@@ -35,9 +42,9 @@ namespace engine
 			{
 				condition.wait(lock);
 			}
-			T ret = queue.front();
+			T ret = std::move(queue.front());
 			queue.pop();
-			return ret;
+			return std::move(ret);
 		}
 
 	private:

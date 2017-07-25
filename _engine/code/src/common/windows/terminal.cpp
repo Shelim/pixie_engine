@@ -149,7 +149,7 @@ void engine::platform::open_terminal(terminal_color_t foreground, terminal_color
 
 	app_name.append(" ("_u);
 	app_name.append(app_data_canonized);
-	app_name.append(")"_u);
+	app_name.append(')');
 
 	std::wstring app_name_w = app_name.to_wide();
 	SetConsoleTitleW(app_name_w.c_str());
@@ -191,11 +191,13 @@ void engine::platform::output_terminal_text(const ustring_t & text, engine::plat
 {
 	set_console_colors_for_print(foreground, background);
 	fputs(text.get_cstring(), stdout);
+	fflush(stdout);
 }
 
 void engine::platform::output_terminal_new_line()
 {
 	puts("");
+	fflush(stdout);
 }
 
 void engine::platform::close_terminal()

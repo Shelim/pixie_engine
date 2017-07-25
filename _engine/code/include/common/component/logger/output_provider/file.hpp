@@ -5,6 +5,7 @@
 #include "component/logger/real.hpp"
 #include "provider/save_location.hpp"
 #include "provider/common_filenames.hpp"
+#include "utility/text/parser.hpp"
 #include <memory>
 #include <cstdio>
 
@@ -16,13 +17,14 @@ namespace engine
 
 	public:
 
-		logger_output_provider_file_t(std::shared_ptr<save_location_provider_t> save_location_provider, std::shared_ptr<common_filenames_provider_t> common_filenames_provider, PTR_TO_SETTINGS_FOR(logger_output_t) logger_output);
+		logger_output_provider_file_t(std::shared_ptr<save_location_provider_t> save_location_provider, std::shared_ptr<common_filenames_provider_t> common_filenames_provider, std::unique_ptr<settings_t<logger_output_t>> settings);
 		~logger_output_provider_file_t();
+
+		void output(const logger_item_t & item) const final;
 
 	private:
 
-		void output(const richtext_t & item) final;
-		ustring_t format_provider(const logger_item_t & item) final;
+		std::array<formattable_string_t, static_cast<std::underlying_type<logger_item_t::level_t>::type>(logger_item_t::level_t::count)> formattable_string;
 
 		std::shared_ptr<save_location_provider_t> save_location_provider;
 		std::shared_ptr<common_filenames_provider_t> common_filenames_provider;
@@ -30,7 +32,7 @@ namespace engine
 
 		std::FILE * fp;
 
-		PTR_TO_SETTINGS_FOR(logger_output_t) logger_output;
+		std::unique_ptr<settings_t<logger_output_t>> settings;
 	};
 
 }

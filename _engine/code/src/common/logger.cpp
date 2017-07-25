@@ -11,14 +11,16 @@
 #include "utility/pattern/compilation.hpp"
 #include "platform/terminal.hpp"
 
-engine::logger_output_provider_file_t::logger_output_provider_file_t(std::shared_ptr<save_location_provider_t> save_location_provider, std::shared_ptr<common_filenames_provider_t> common_filenames_provider, PTR_TO_SETTINGS_FOR(logger_output_t) logger_output) : save_location_provider(save_location_provider), common_filenames_provider(common_filenames_provider), fp(nullptr), logger_output(std::move(logger_output))
+engine::logger_output_provider_file_t::logger_output_provider_file_t(std::shared_ptr<save_location_provider_t> save_location_provider, std::shared_ptr<common_filenames_provider_t> common_filenames_provider, std::unique_ptr<settings_t<logger_output_t>> settings) : save_location_provider(save_location_provider), common_filenames_provider(common_filenames_provider), fp(nullptr), settings(std::move(settings))
 {
 	std::lock_guard<std::recursive_mutex> guard(fp_mutex);
 
 	ustring_t path = save_location_provider->get_save_path(virtual_path_t(common_filenames_provider->get()->logger(), virtual_path_t::type_t::log));
 
-	fp = fopen(path.get_cstring(), "wb");
-	
+	fp = fopen(path.get_cstring(), "w");
+
+#define ENGINE_LOGGER_LEVEL_STD(type_id) formattable_string[static_cast<std::underlying_type<logger_item_t::level_t>::type>(logger_item_t::level_t::type_id)] = this->settings->get()->format_file_##type_id ();
+#include "std/logger_std.hpp"
 }
 
 engine::logger_output_provider_file_t::~logger_output_provider_file_t()
@@ -31,47 +33,49 @@ engine::logger_output_provider_file_t::~logger_output_provider_file_t()
 	fp = nullptr;
 }
 
-void engine::logger_output_provider_file_t::output(const richtext_t & item)
+void engine::logger_output_provider_file_t::output(const logger_item_t & item) const
 {
 	std::lock_guard<std::recursive_mutex> guard(fp_mutex);
 	if (fp)
 	{
-		ustring_t raw = item.get_raw();
+		
+		ustring_t raw = format_string(formattable_string[static_cast<std::underlying_type<logger_item_t::level_t>::type>(item.get_level())],
+				item.get_id(),
+				item.get_module_name(),
+				item.get_message(),
+				item.get_function(),
+				item.get_file(),
+				item.get_line(),
+				item.get_frame(),
+				item.get_time(),
+				item.get_thread());
+
 		fputs(raw.get_cstring(), fp);
 		fputs("\n", fp);
 		fflush(fp);
 	}
 }
 
-engine::logger_output_provider_terminal_t::logger_output_provider_terminal_t(std::shared_ptr<terminal_output_t> terminal_output, PTR_TO_SETTINGS_FOR(logger_output_t) logger_output) : terminal_output(terminal_output), logger_output(std::move(logger_output))
+engine::logger_output_provider_terminal_t::logger_output_provider_terminal_t(std::shared_ptr<terminal_output_t> terminal_output, std::unique_ptr<settings_t<logger_output_t>> settings) : terminal_output(terminal_output), settings(std::move(settings))
 {
-
-}
-
-void engine::logger_output_provider_terminal_t::output(const richtext_t & item)
-{
-	terminal_output->write(item);
-}
-
-engine::ustring_t engine::logger_output_provider_file_t::format_provider(const logger_item_t & item)
-{
-#define ENGINE_LOGGER_LEVEL_STD(level, file_pattern, terminal_pattern) if(item.get_level() == logger_item_t::level_t::level) return file_pattern;
+#define ENGINE_LOGGER_LEVEL_STD(type_id) formattable_string[static_cast<std::underlying_type<logger_item_t::level_t>::type>(logger_item_t::level_t::type_id)] = this->settings->get()->format_terminal_##type_id ();
 #include "std/logger_std.hpp"
-	return ""_u;
 }
 
-engine::ustring_t engine::logger_output_provider_terminal_t::format_provider(const logger_item_t & item)
+void engine::logger_output_provider_terminal_t::output(const logger_item_t & item) const
 {
-#define ENGINE_LOGGER_LEVEL_STD(level, file_pattern, terminal_pattern) if(item.get_level() == logger_item_t::level_t::level) return terminal_pattern;
-#include "std/logger_std.hpp"
-	return ""_u;
-}
+	ustring_t raw = format_string(formattable_string[static_cast<std::underlying_type<logger_item_t::level_t>::type>(item.get_level())],
+		item.get_id(),
+		item.get_module_name(),
+		item.get_message(),
+		item.get_function(),
+		item.get_file(),
+		item.get_line(),
+		item.get_frame(),
+		item.get_time(),
+		item.get_thread());
 
-engine::richtext_t engine::logger_output_provider_base_t::format(ustring_t format, const logger_item_t & item)
-{
-#define ENGINE_LOGGER_ITEM_PART_STD(format_from, item_to) format = format.replace(format_from, item_to);
-#include "std/logger_std.hpp"
-	return format;
+	terminal_output->write(raw);
 }
 
 void engine::logger_item_t::parse_file()

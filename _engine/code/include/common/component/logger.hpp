@@ -18,6 +18,7 @@
 #include "component/frame_notifier.hpp"
 #include "utility/pattern/flags.hpp"
 #include "component/logger/item.hpp"
+#include "utility/text/parser.hpp"
 #include <cereal/cereal.hpp>
 #include <cereal/access.hpp>
 #include <vlc/vlc.h>

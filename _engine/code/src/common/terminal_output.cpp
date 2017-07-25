@@ -1,26 +1,50 @@
 #include "component/terminal_output.hpp"
 #include "platform/terminal.hpp"
 
-void engine::terminal_output_real_t::write(const richtext_t & richtext)
+
+void engine::terminal_output_real_t::write(const terminal_output_string_t & terminal_string)
 {
 	std::lock_guard<std::recursive_mutex> guard(write_mutex);
 
-	buffer.push_back(richtext);
-	write_local(richtext);
-
-	fflush(stdout);
+	buffer.push_back(terminal_string);
+	write_local(terminal_string);
 }
 
-void engine::terminal_output_real_t::write_local(const richtext_t & richtext)
+void engine::terminal_output_real_t::on_config_update(msg_base_t * msg)
+{
+	if (msg->get_type() == msg_config_updated_t::type)
+	{
+		msg_config_updated_t* cfg_updated_msg = static_cast<msg_config_updated_t*>(msg);
+		if (cfg_updated_msg->get_item() == config_t::item_t::game_has_console)
+		{
+			std::shared_ptr<config_t> config = cfg_updated_msg->get_config().lock();
+			if (config)
+			{
+				if (config->get_game_has_console())
+					update_window(window_state_t::open);
+				else
+					update_window(window_state_t::close);
+			}
+		}
+	}
+}
+
+void engine::terminal_output_real_t::write_local(const terminal_output_string_t & terminal_string)
 {
 	std::lock_guard<std::recursive_mutex> guard(write_mutex);
-	for (const auto & iter : richtext.get())
-	{
-#define ENGINE_RICHTEXT_TAG_STD(richtext_type) if (iter.is_flag(richtext_t::flag_t::richtext_type)) { platform::output_terminal_text(iter.get_text(), terminal_output_colors->get()->foreground_##richtext_type(), terminal_output_colors->get()->background_##richtext_type()); continue; }
-#include "std/richtext_std.hpp"
 
-		platform::output_terminal_text(iter.get_text(), terminal_output_colors->get()->foreground_default(), terminal_output_colors->get()->background_default());
-	}
+	engine::parser::resolver_output_t terminal_output;
+
+	resolve(terminal_string.get(), &terminal_output, parser::resolver_terminal_t([this](const ustring_t & str, terminal_output_tag_t tag) {
+
+		platform::terminal_color_t fore = terminal_output_colors->get()->foreground_default();
+		platform::terminal_color_t back = terminal_output_colors->get()->background_default();
+#define ENGINE_TERMINAL_OUTPUT_TAG_STD(tag_type) if (tag == terminal_output_tag_t::tag_type) { fore = terminal_output_colors->get()->foreground_##tag_type(); back = terminal_output_colors->get()->background_##tag_type(); }
+#include "std/terminal_output_std.hpp"
+
+		platform::output_terminal_text(str, fore, back);
+
+	}));
 
 	platform::output_terminal_new_line();
 }

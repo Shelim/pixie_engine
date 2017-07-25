@@ -126,9 +126,16 @@ for ( i = 0; i < projectsToGen.length; i++ )
 	}
 }
 
+var existingItems = [];
+
 for(var i in possibleItems)
 {
 	var item = possibleItems[i];
+	
+	if(existingItems.indexOf(item) != -1)
+		continue;
+	
+	existingItems.push(item);
 	output_hpp += '\t\tstatic ustring_t get_common_manifest_' + item + '(app_t app) \n\t\t{';
 	for ( i = 0; i < projectsToGen.length; i++ )
 	{

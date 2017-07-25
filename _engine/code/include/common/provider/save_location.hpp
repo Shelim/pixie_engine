@@ -10,13 +10,13 @@
 namespace engine
 {
 
-	struct save_locatin_resolver_t
+	struct save_location_resolver_t
 	{
 
 	};
 
-	SETTINGS_TABLE_START(save_locatin_resolver_t)
-#define ENGINE_VIRTUAL_PATH_STD(name) SETTINGS_TABLE_ENTRY_NO_DEF_VALUE(ustring_t, save_path_for_##name)
+	SETTINGS_TABLE_START(save_location_resolver_t)
+#define ENGINE_VIRTUAL_PATH_STD(name) SETTINGS_TABLE_ENTRY(ustring_t, save_path_for_##name)
 #include "std/virtual_path_std.hpp"
 	SETTINGS_TABLE_END()
 
@@ -26,7 +26,7 @@ namespace engine
 
 	public:
 
-		save_location_provider_t(PTR_TO_SETTINGS_FOR(save_locatin_resolver_t) path_resolver) : path_resolver(std::move(path_resolver))
+		save_location_provider_t(std::unique_ptr<settings_t<save_location_resolver_t>> path_resolver) : path_resolver(std::move(path_resolver))
 		{
 
 		}
@@ -35,7 +35,7 @@ namespace engine
 
 	private:
 
-		PTR_TO_SETTINGS_FOR(save_locatin_resolver_t) path_resolver;
+		std::unique_ptr<settings_t<save_location_resolver_t>> path_resolver;
 	};
 
 }

@@ -1,11 +1,8 @@
-BuildSystem:
- - Build changelog
- - Update changelog
- - Remove comments from XML
+Fix storage_fetcher_for_config
 
-Richtext_t
- - Parsing is taking way too much time for logger!
- - Move to semi-parsed string
+Do string parsing
+ 
+///////////////////////////////////////////////////////// 
  
 DataItems	
  - Move loading task to generic task
@@ -23,3 +20,10 @@ Asset Manager
  - Map asset_path_t -> virtual_path_t
 
 Bug: Database thread synchronization is taking too much of time of main thread!
+
+////////////////////////////////////////////////////////
+
+BuildSystem:
+ - Build changelog
+ - Update changelog
+ - Remove comments from XML

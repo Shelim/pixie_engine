@@ -14,7 +14,7 @@ namespace engine
 	};
 
 	SETTINGS_TABLE_START(common_filenames_t)
-		SETTINGS_TABLE_ENTRY(std::filesystem::path, logger, "log_" XSTR(PIXIE_OUTPUT_UNIX_NAME) ".log")
+		SETTINGS_TABLE_ENTRY(std::filesystem::path, logger)
 	SETTINGS_TABLE_END()
 
 	class common_filenames_provider_t
@@ -22,7 +22,7 @@ namespace engine
 
 	public:
 
-		common_filenames_provider_t(PTR_TO_SETTINGS_FOR(common_filenames_t) common_filenames) : common_filenames(std::move(common_filenames))
+		common_filenames_provider_t(std::unique_ptr<settings_t<common_filenames_t>> common_filenames) : common_filenames(std::move(common_filenames))
 		{
 
 		}
@@ -34,7 +34,7 @@ namespace engine
 
 	private:
 
-		PTR_TO_SETTINGS_FOR(common_filenames_t) common_filenames;
+		std::unique_ptr<settings_t<common_filenames_t>> common_filenames;
 	};
 }
 

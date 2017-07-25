@@ -14,17 +14,18 @@ namespace engine
 
 	public:
 
-		logger_output_provider_terminal_t(std::shared_ptr<terminal_output_t> terminal_output, PTR_TO_SETTINGS_FOR(logger_output_t) logger_output);
+		logger_output_provider_terminal_t(std::shared_ptr<terminal_output_t> terminal_output, std::unique_ptr<settings_t<logger_output_t>> settings);
 
+		void output(const logger_item_t & item) const final;
 
 	private:
 
-		void output(const richtext_t & item) final;
-		ustring_t format_provider(const logger_item_t & item) final;
+		std::array<formattable_string_t, static_cast<std::underlying_type<logger_item_t::level_t>::type>(logger_item_t::level_t::count)> formattable_string;
+
 
 		std::shared_ptr<terminal_output_t> terminal_output;
 
-		PTR_TO_SETTINGS_FOR(logger_output_t) logger_output;
+		std::unique_ptr<settings_t<logger_output_t>> settings;
 
 	};
 

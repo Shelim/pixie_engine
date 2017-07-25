@@ -124,8 +124,8 @@ namespace engine
 			{
 				if (!path.is_empty())
 				{
-					usymbol_t last = path.at(path.len() - 1);
-					if (last != '/' && last != '\\') path.append_utf8(u8"/");
+					if (!is_path_separator_ascii(path.last_ascii()))
+						path.append('/');
 				}
 				std::string iter_str = iter.u8string();
 				if (iter_str != "\\" && iter_str != "/")
@@ -173,8 +173,8 @@ namespace engine
 		virtual_path_t subitem(const path_t & item)
 		{
 			path_t p = path;
-			if (p[p.len() - 1] != '/')
-				p.append_utf8(u8"/");
+			if (p.last_ascii() != '/')
+				p.append('/');
 			p.append(item);
 
 			return virtual_path_t(p, type);

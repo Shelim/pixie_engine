@@ -8,7 +8,7 @@ engine::ustring_t engine::save_location_provider_t::get_save_path(const virtual_
 #define ENGINE_VIRTUAL_PATH_STD(name) if(path.get_type() == virtual_path_t::type_t::name) { ret = path_resolver->get()->save_path_for_##name(); }
 #include "std/virtual_path_std.hpp"
 
-	ret.append("/"_u).append(path.get_path());
+	ret.append('/').append(path.get_path());
 	
 	ret = virtual_path_t::canonize_path(virtual_path_t::resolve_path(ret));
 

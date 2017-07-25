@@ -12,7 +12,7 @@ namespace engine
 
 	public:
 
-		void write(const richtext_t & richtext) final
+		void write(const terminal_output_string_t & terminal_string) final
 		{
 			// Do nothing, it is dummy.
 		}

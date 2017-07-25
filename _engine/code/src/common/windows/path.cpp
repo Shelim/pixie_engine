@@ -48,9 +48,9 @@ engine::ustring_t engine::platform::resolve_directory(engine::platform::director
 
 	switch (directory)
 	{
-	case engine::platform::directory_special_t::local_app_data: ret = engine::ustring_t::from_wide(_wgetenv(L"LOCALAPPDATA")); ret.append("\\"_u).append(engine::manifest_app_t::get_manifest_windows_game_app_dir()).append("\\"_u); break;
-	case engine::platform::directory_special_t::roaming_app_data: ret = engine::ustring_t::from_wide(_wgetenv(L"APPDATA")); ret.append("\\"_u).append(engine::manifest_app_t::get_manifest_windows_game_app_dir()).append("\\"_u); break;
-	case engine::platform::directory_special_t::saves: ret = engine::ustring_t::from_wide(_wgetenv(L"USERPROFILE")); ret.append("\\Saved Games\\"_u).append(engine::manifest_app_t::get_manifest_full_name()).append("\\"_u); break;
+	case engine::platform::directory_special_t::local_app_data: ret = engine::ustring_t::from_wide(_wgetenv(L"LOCALAPPDATA")); ret.append('\\').append(engine::manifest_app_t::get_manifest_windows_game_app_dir()).append('\\'); break;
+	case engine::platform::directory_special_t::roaming_app_data: ret = engine::ustring_t::from_wide(_wgetenv(L"APPDATA")); ret.append('\\').append(engine::manifest_app_t::get_manifest_windows_game_app_dir()).append('\\'); break;
+	case engine::platform::directory_special_t::saves: ret = engine::ustring_t::from_wide(_wgetenv(L"USERPROFILE")); ret.append("\\Saved Games\\"_u).append(engine::manifest_app_t::get_manifest_full_name()).append('\\'); break;
 	}
 
 	return ret;
@@ -69,12 +69,12 @@ std::filesystem::path engine::platform_internal_windows_t::get_special_path(dire
 	case directory_special_t::saves: ret = ustring_t::from_wide(_wgetenv(L"USERPROFILE")); ret.append("\\Saved Games"_u); break;
 	case directory_special_t::crash_dumps: ret = ustring_t::from_wide(_wgetenv(L"LOCALAPPDATA")); break;
 	}
-	ret.append("\\"_u);
+	ret.append('\\');
 	if (dir == directory_special_t::saves)
 		ret.append(get_manifest_app()->get_manifest_full_name());
 	else
 		ret.append(get_manifest_app()->get_manifest_windows_game_app_dir());
-	ret.append("\\"_u);
+	ret.append('\\');
 
 	return ret.get_cstring();
 

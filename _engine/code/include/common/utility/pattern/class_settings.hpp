@@ -11,11 +11,8 @@ namespace engine
 	template<class owner_t> struct settings_manifest_t;
 
 #define SETTINGS_TABLE_START(owner) template<> struct settings_manifest_t<owner> { class values_t { public: virtual ~values_t() { }
-#define SETTINGS_TABLE_ENTRY(type, key, def_value) virtual type key() const { return def_value; }
-#define SETTINGS_TABLE_ENTRY_NO_DEF_VALUE(type, key) virtual type key() const = 0;
+#define SETTINGS_TABLE_ENTRY(type, key) virtual type key() const = 0;
 #define SETTINGS_TABLE_END() }; };
-
-#define PTR_TO_SETTINGS_FOR(owner) std::unique_ptr < settings_t < owner > >
 
 #define SETTINGS_START(owner, id) class settings_metadata_##owner##_##id##_t : public engine::settings_t<engine::owner>::values_t { public:
 #define SETTINGS_SET(type, key, value) type key() const final { return value; }
