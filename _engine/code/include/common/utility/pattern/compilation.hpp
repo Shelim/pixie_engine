@@ -58,17 +58,17 @@ namespace engine
 #endif
 		}
 
-		enum class platform_t
+		enum class os_t
 		{
-#define ENGINE_PLATFORM_STD(platform) platform,
-#include "std/platforms_std.hpp"
+#define ENGINE_OS_STD(os) os,
+#include "std/os_std.hpp"
 			count
 		};
 
-		constexpr static platform_t get_platform()
+		constexpr static os_t get_os()
 		{
 #if PIXIE_WINDOWS
-			return platform_t::windows;
+			return os_t::windows;
 #endif
 		}
 

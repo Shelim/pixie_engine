@@ -27,6 +27,16 @@ namespace engine
 			return $VERSION_BUILD$;
 		}
 		
+		static ustring_t get_version_text()
+		{
+#if PIXIE_IS_DEBUG_BUILD
+	return "$VERSION_MAJOR$.$VERSION_MINOR$.$VERSION_REVISION$ (Build $VERSION_BUILD$) DEBUG"_u;
+#else
+	return "$VERSION_MAJOR$.$VERSION_MINOR$.$VERSION_REVISION$ (Build $VERSION_BUILD$)"_u;
+#endif
+
+		}
+		
 $MANIFEST_APP$
 
 	};

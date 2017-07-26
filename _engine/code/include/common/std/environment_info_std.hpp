@@ -2,9 +2,9 @@
 #define ENGINE_ENVIRONMENT_INFO_STD(...)
 #endif
 
-ENGINE_ENVIRONMENT_INFO_STD(game_name, "Game Name"_u)
-ENGINE_ENVIRONMENT_INFO_STD(app_type, "App Type"_u)
-ENGINE_ENVIRONMENT_INFO_STD(game_version, "Game version"_u)
+ENGINE_ENVIRONMENT_INFO_STD(full_name, "Game Name"_u)
+ENGINE_ENVIRONMENT_INFO_STD(app_name, "App Type"_u)
+ENGINE_ENVIRONMENT_INFO_STD(app_version, "Game version"_u)
 ENGINE_ENVIRONMENT_INFO_STD(launched_time, "Launched at"_u)
 ENGINE_ENVIRONMENT_INFO_STD(os_name, "OS"_u)
 ENGINE_ENVIRONMENT_INFO_STD(os_ver, "OS version"_u)

@@ -33,7 +33,7 @@ namespace engine
 		
 		virtual void reset_raports(logger_item_t::module_t module = logger_item_t::module_t::unknown) = 0;
 
-		typedef size_t item_id_t;
+		typedef std::size_t item_id_t;
 
 		template<class ...Args> item_id_t log(logger_item_t::level_t level, logger_item_t::module_t module, bool raport, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message, Args... args)
 		{

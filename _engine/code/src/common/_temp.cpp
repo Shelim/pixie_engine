@@ -8,6 +8,7 @@
 #include "component/frame_notifier.hpp"
 #include "component/terminal_output.hpp"
 #include "component/config.hpp"
+#include "component/environment_info.hpp"
 #include "utility/vfs/filesystem.hpp"
 #include "utility/text/ustring.hpp"
 #include "utility/vfs/virtual_path.hpp"
@@ -26,6 +27,7 @@ int main(int arg, char * argv[])
 		engine::register_as<engine::logger_real_t, engine::logger_t>,
 		engine::register_as<engine::terminal_output_real_t, engine::terminal_output_t>,
 		engine::register_as<engine::config_real_t, engine::config_t>,
+		engine::register_as<engine::environment_info_real_t, engine::environment_info_t>,
 
 #if PIXIE_IS_PORTABLE_BUILD
 		USE_SETTINGS(save_location_resolver_t, windows_portable),
@@ -49,6 +51,7 @@ int main(int arg, char * argv[])
 	std::shared_ptr<engine::terminal_output_t> terminal = bootstrapper.construct_component<engine::terminal_output_t>();
 	std::shared_ptr<engine::logger_t> logger = bootstrapper.construct_component<engine::logger_t>();
 	std::shared_ptr<engine::config_t> config = bootstrapper.construct_component<engine::config_t>();
+	std::shared_ptr<engine::environment_info_t> environment_info = bootstrapper.construct_component<engine::environment_info_t>();
 
 	int i = 0;
 
