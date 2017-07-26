@@ -1541,7 +1541,11 @@ namespace engine
 	template <> inline ustring_t to_string<std::chrono::system_clock::time_point>(const std::chrono::system_clock::time_point & item)
 	{
 		std::time_t time = std::chrono::system_clock::to_time_t(item);
-		return ustring_t::from_ascii(ctime(&time));
+		std::tm timetm = *std::localtime(&time);
+		std::stringstream ss;
+		ss << std::put_time(&timetm, "%c");
+		std::string str = ss.str();
+		return ustring_t::from_ascii(str.c_str());
 	}
 
 	template<> inline ustring_t to_string<ustring_t>(const ustring_t & item)

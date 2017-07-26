@@ -21,6 +21,9 @@ namespace engine
 
 		ustring_t get_os_version();
 
+		uint32_t get_cache_line_size();
+
+		ustring_t get_cpu_features();
 	}
 
 }

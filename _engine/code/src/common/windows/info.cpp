@@ -38,4 +38,28 @@ engine::ustring_t engine::platform::get_os_version()
 	return engine::format_string("Windows #1#.#2# (Build #3#) #4#"_u, (uint32_t)osvi.dwMajorVersion, (uint32_t)osvi.dwMinorVersion, (uint32_t)osvi.dwBuildNumber, ustring_t::from_wide(osvi.szCSDVersion));
 }
 
+uint32_t engine::platform::get_cache_line_size()
+{
+	return SDL_GetCPUCacheLineSize();
+}
+
+engine::ustring_t engine::platform::get_cpu_features()
+{
+	ustring_t features;
+	if (SDL_Has3DNow()) features.append_ascii("3DNow ");
+	if (SDL_HasAltiVec()) features.append_ascii("AltiVec ");
+	if (SDL_HasMMX()) features.append_ascii("MMX ");
+	if (SDL_HasRDTSC()) features.append_ascii("RDTSC ");
+	if (SDL_HasSSE()) features.append_ascii("SSE ");
+	if (SDL_HasSSE2()) features.append_ascii("SSE2 ");
+	if (SDL_HasSSE3()) features.append_ascii("SSE3 ");
+	if (SDL_HasSSE41()) features.append_ascii("SSE41 ");
+	if (SDL_HasSSE42()) features.append_ascii("SSE42 ");
+
+	if (features.len() > 0)
+		return features.substr(0, features.len() - 1);
+
+	return features;
+}
+
 #endif
