@@ -16,6 +16,7 @@
 #include <sstream>
 #include <SDL.h>
 #include <pugixml.hpp>
+#include "component/environment_info.hpp"
 #include "utility/pattern/provider.hpp"
 #include "utility/text/ustring.hpp"
 #include "utility/container/concurrent_queue.hpp"
@@ -37,7 +38,9 @@ namespace engine
 
 		}
 
+		virtual void output_start() const = 0;
 		virtual void output(const logger_item_t & item) const = 0;
+		virtual void output_end() const = 0;
 
 	private:
 	};
@@ -52,7 +55,7 @@ namespace engine
 
 	public:
 
-		logger_real_t(std::shared_ptr<engine::frame_notifier_t> frame_notifier, std::unique_ptr<holder_t<logger_output_t> > logger_output_providers);
+		logger_real_t(std::shared_ptr<engine::frame_notifier_t> frame_notifier, std::shared_ptr<engine::environment_info_t> environment_info, std::unique_ptr<holder_t<logger_output_t> > logger_output_providers);
 
 		~logger_real_t();
 
@@ -72,6 +75,8 @@ namespace engine
 
 		std::shared_ptr<engine::frame_notifier_t> frame_notifier;
 
+		void output_start();
+		void output_end();
 		std::unique_ptr<holder_t<logger_output_t> > logger_output_providers;
 
 		std::thread output_thread;
@@ -97,6 +102,11 @@ namespace engine
 	REGISTER_PROVIDER_BASE_TYPE(logger_output_t, logger_output_provider_base_t)
 
 	SETTINGS_TABLE_START(logger_output_t)
+
+		SETTINGS_TABLE_ENTRY(ustring_t, file_start)
+		SETTINGS_TABLE_ENTRY(ustring_t, file_end)
+		SETTINGS_TABLE_ENTRY(ustring_t, terminal_start)
+		SETTINGS_TABLE_ENTRY(ustring_t, terminal_end)
 
 #define ENGINE_LOGGER_LEVEL_STD(level, file_pattern, terminal_pattern) SETTINGS_TABLE_ENTRY(ustring_t, format_file_##level) SETTINGS_TABLE_ENTRY(ustring_t, format_terminal_##level)
 #include "std/logger_std.hpp"

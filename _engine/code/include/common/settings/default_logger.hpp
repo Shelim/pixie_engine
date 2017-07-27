@@ -11,12 +11,18 @@
 #include "utility/vfs/filesystem.hpp"
 #include "utility/text/ustring.hpp"
 #include "utility/vfs/virtual_path.hpp"
-#include "component/terminal_output.hpp"
+#include "component/terminal_writer.hpp"
 
 namespace engine
 {
 
 	SETTINGS_START(logger_output_t, normal)
+
+		SETTINGS_SET(ustring_t, file_start, "#####################\n### LOGGER OUTPUT ###\n#####################\n"_u)
+		SETTINGS_SET(ustring_t, file_end, "\n##################\n### CLEAN EXIT ###\n##################\n"_u)
+		SETTINGS_SET(ustring_t, terminal_start, "$section_header$#####################\n### $section_header_text$LOGGER OUTPUT$section_header$ ###\n#####################\n"_u)
+		SETTINGS_SET(ustring_t, terminal_end, "\n$section_header$##################\n### $section_header_text$CLEAN EXIT$section_header$ ###\n##################\n"_u)
+
 		SETTINGS_SET(ustring_t, format_file_task_started, "###1:id# ... <#2:module#> #3:message#...#>61#   frame: #7:frame#, time: #8:time#, thread: #9:thread#, func: #4:function#()#>125#   at: '#5:file#', on line: #6:line#"_u)
 		SETTINGS_SET(ustring_t, format_terminal_task_started, "$pending_meta$...$pending$#3:message#...#>29#   $pending_meta$func: $pending$#4:function#(), $pending_meta$line: $pending$#6:line#"_u)
 

@@ -10,15 +10,15 @@
 namespace engine
 {
 
-	enum terminal_output_tag_t
+	enum terminal_writer_tag_t
 	{
 #define ENGINE_TERMINAL_OUTPUT_TAG_STD(tag) tag,
-#include "std/terminal_output_std.hpp"
+#include "std/terminal_writer_std.hpp"
 		def,
 		count = def
 	};
 
-	class terminal_output_t;
+	class terminal_writer_t;
 	
 	namespace parser
 	{
@@ -95,9 +95,9 @@ namespace engine
 
 			static const id_t id = 'tfrm';
 
-			terminal_output_tag_t get_terminal_output_tag() const
+			terminal_writer_tag_t get_terminal_writer_tag() const
 			{
-				return terminal_output_tag;
+				return terminal_writer_tag;
 			}
 
 			static std::unique_ptr<token_base_t> create(stream_t & stream)
@@ -118,9 +118,9 @@ namespace engine
 					{
 						stream.advance();
 
-						if (key == "0"_u) return std::make_unique<token_terminal_format_t>(terminal_output_tag_t::def);
-#define ENGINE_TERMINAL_OUTPUT_TAG_STD(tag) if (key == #tag##_u) return std::make_unique<token_terminal_format_t>(terminal_output_tag_t::tag);
-#include "std/terminal_output_std.hpp"
+						if (key == "0"_u) return std::make_unique<token_terminal_format_t>(terminal_writer_tag_t::def);
+#define ENGINE_TERMINAL_OUTPUT_TAG_STD(tag) if (key == #tag##_u) return std::make_unique<token_terminal_format_t>(terminal_writer_tag_t::tag);
+#include "std/terminal_writer_std.hpp"
 
 					}
 				}
@@ -133,14 +133,14 @@ namespace engine
 				return std::make_unique<token_terminal_format_t>(*this);
 			}
 
-			token_terminal_format_t(terminal_output_tag_t terminal_output_tag) : token_base_t(id), terminal_output_tag(terminal_output_tag)
+			token_terminal_format_t(terminal_writer_tag_t terminal_writer_tag) : token_base_t(id), terminal_writer_tag(terminal_writer_tag)
 			{
 
 			}
 
 		private:
 
-			terminal_output_tag_t terminal_output_tag;
+			terminal_writer_tag_t terminal_writer_tag;
 		};
 
 		class resolver_terminal_t
@@ -148,9 +148,9 @@ namespace engine
 
 		public:
 
-			resolver_terminal_t(std::function<void(const ustring_t &, terminal_output_tag_t)> output_text) : output_text(output_text)
+			resolver_terminal_t(std::function<void(const ustring_t &, terminal_writer_tag_t)> output_text) : output_text(output_text)
 			{
-				output_tag = engine::terminal_output_tag_t::def;
+				output_tag = engine::terminal_writer_tag_t::def;
 			}
 
 			void resolve(const token_base_t * token, resolver_output_t * output)
@@ -161,7 +161,7 @@ namespace engine
 				}
 				else if (token->get_id() == token_terminal_format_t::id)
 				{
-					engine::terminal_output_tag_t new_tag = static_cast<const token_terminal_format_t*>(token)->get_terminal_output_tag();
+					engine::terminal_writer_tag_t new_tag = static_cast<const token_terminal_format_t*>(token)->get_terminal_writer_tag();
 
 					if(new_tag != output_tag && output->non_empty_since_last_truncate())
 						output_text(output->get_result(), output_tag);
@@ -179,12 +179,12 @@ namespace engine
 
 		private:
 
-			std::function<void(const ustring_t &, terminal_output_tag_t)> output_text;
-			engine::terminal_output_tag_t output_tag;
+			std::function<void(const ustring_t &, terminal_writer_tag_t)> output_text;
+			engine::terminal_writer_tag_t output_tag;
 		};
 	}
 
-	typedef tokenized_string_t<parser::token_terminal_eof_t, parser::token_terminal_escape_t, parser::token_terminal_format_t> terminal_output_string_t;
+	typedef tokenized_string_t<parser::token_terminal_eof_t, parser::token_terminal_escape_t, parser::token_terminal_format_t> terminal_writer_string_t;
 
 }
 

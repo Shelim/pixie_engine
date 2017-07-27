@@ -11,12 +11,12 @@
 #include "utility/vfs/filesystem.hpp"
 #include "utility/text/ustring.hpp"
 #include "utility/vfs/virtual_path.hpp"
-#include "component/terminal_output.hpp"
+#include "component/terminal_writer.hpp"
 
 namespace engine
 {
 
-	SETTINGS_START(terminal_output_colors_t, normal)
+	SETTINGS_START(terminal_writer_colors_t, normal)
 
 		SETTINGS_SET(engine::platform::terminal_color_t, foreground_default, engine::platform::terminal_color_t::gray_light)
 		SETTINGS_SET(engine::platform::terminal_color_t, background_default, engine::platform::terminal_color_t::black)

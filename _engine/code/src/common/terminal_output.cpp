@@ -1,8 +1,8 @@
-#include "component/terminal_output.hpp"
+#include "component/terminal_writer.hpp"
 #include "platform/terminal.hpp"
 
 
-void engine::terminal_output_real_t::write(const terminal_output_string_t & terminal_string)
+void engine::terminal_writer_real_t::write(const terminal_writer_string_t & terminal_string)
 {
 	std::lock_guard<std::recursive_mutex> guard(write_mutex);
 
@@ -10,7 +10,7 @@ void engine::terminal_output_real_t::write(const terminal_output_string_t & term
 	write_local(terminal_string);
 }
 
-void engine::terminal_output_real_t::on_config_update(msg_base_t * msg)
+void engine::terminal_writer_real_t::on_config_update(msg_base_t * msg)
 {
 	if (msg->get_type() == msg_config_updated_t::type)
 	{
@@ -29,18 +29,18 @@ void engine::terminal_output_real_t::on_config_update(msg_base_t * msg)
 	}
 }
 
-void engine::terminal_output_real_t::write_local(const terminal_output_string_t & terminal_string)
+void engine::terminal_writer_real_t::write_local(const terminal_writer_string_t & terminal_string)
 {
 	std::lock_guard<std::recursive_mutex> guard(write_mutex);
 
-	engine::parser::resolver_output_t terminal_output;
+	engine::parser::resolver_output_t terminal_writer;
 
-	resolve(terminal_string.get(), &terminal_output, parser::resolver_terminal_t([this](const ustring_t & str, terminal_output_tag_t tag) {
+	resolve(terminal_string.get(), &terminal_writer, parser::resolver_terminal_t([this](const ustring_t & str, terminal_writer_tag_t tag) {
 
-		platform::terminal_color_t fore = terminal_output_colors->get()->foreground_default();
-		platform::terminal_color_t back = terminal_output_colors->get()->background_default();
-#define ENGINE_TERMINAL_OUTPUT_TAG_STD(tag_type) if (tag == terminal_output_tag_t::tag_type) { fore = terminal_output_colors->get()->foreground_##tag_type(); back = terminal_output_colors->get()->background_##tag_type(); }
-#include "std/terminal_output_std.hpp"
+		platform::terminal_color_t fore = terminal_writer_colors->get()->foreground_default();
+		platform::terminal_color_t back = terminal_writer_colors->get()->background_default();
+#define ENGINE_TERMINAL_OUTPUT_TAG_STD(tag_type) if (tag == terminal_writer_tag_t::tag_type) { fore = terminal_writer_colors->get()->foreground_##tag_type(); back = terminal_writer_colors->get()->background_##tag_type(); }
+#include "std/terminal_writer_std.hpp"
 
 		platform::output_terminal_text(str, fore, back);
 
@@ -49,7 +49,7 @@ void engine::terminal_output_real_t::write_local(const terminal_output_string_t 
 	platform::output_terminal_new_line();
 }
 
-void engine::terminal_output_real_t::update_window(window_state_t next_window_state)
+void engine::terminal_writer_real_t::update_window(window_state_t next_window_state)
 {
 	std::lock_guard<std::recursive_mutex> guard(window_state_mutex);
 
@@ -58,7 +58,7 @@ void engine::terminal_output_real_t::update_window(window_state_t next_window_st
 		switch (next_window_state)
 		{
 		case window_state_t::open:
-			platform::open_terminal(terminal_output_colors->get()->foreground_default(), terminal_output_colors->get()->background_default());
+			platform::open_terminal(terminal_writer_colors->get()->foreground_default(), terminal_writer_colors->get()->background_default());
 			{
 				std::lock_guard<std::recursive_mutex> guard(write_mutex);
 				for (const auto & item : buffer)

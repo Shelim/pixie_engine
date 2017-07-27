@@ -2,17 +2,17 @@
 #define ENGINE_COMPONENT_TERMINAL_OUTPUT_DUMMY_HPP
 #pragma once
 
-#include "component/terminal_output.hpp"
+#include "component/terminal_writer.hpp"
 
 namespace engine
 {
 
-	class terminal_output_dummy_t : public terminal_output_t
+	class terminal_writer_dummy_t : public terminal_writer_t
 	{
 
 	public:
 
-		void write(const terminal_output_string_t & terminal_string) final
+		void write(const terminal_writer_string_t & terminal_string) final
 		{
 			// Do nothing, it is dummy.
 		}
@@ -20,6 +20,8 @@ namespace engine
 		{
 			// Do nothing, it is dummy.
 		}
+
+	private:
 
 	};
 }

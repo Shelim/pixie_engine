@@ -3,7 +3,7 @@
 #pragma once
 
 #include "component/logger/real.hpp"
-#include "component/terminal_output.hpp"
+#include "component/terminal_writer.hpp"
 #include <memory>
 
 namespace engine
@@ -14,16 +14,21 @@ namespace engine
 
 	public:
 
-		logger_output_provider_terminal_t(std::shared_ptr<terminal_output_t> terminal_output, std::unique_ptr<settings_t<logger_output_t>> settings);
+		logger_output_provider_terminal_t(std::shared_ptr<terminal_writer_t> terminal_writer, std::unique_ptr<settings_t<logger_output_t>> settings);
+		~logger_output_provider_terminal_t();
 
+		void output_start() const final;
 		void output(const logger_item_t & item) const final;
+		void output_end() const final;
 
 	private:
 
+		terminal_writer_string_t start_text;
+		terminal_writer_string_t end_text;
 		std::array<formattable_string_t, static_cast<std::underlying_type<logger_item_t::level_t>::type>(logger_item_t::level_t::count)> formattable_string;
 
 
-		std::shared_ptr<terminal_output_t> terminal_output;
+		std::shared_ptr<terminal_writer_t> terminal_writer;
 
 		std::unique_ptr<settings_t<logger_output_t>> settings;
 

@@ -1,15 +1,8 @@
-Fix storage_fetcher_for_config
-
-Do string parsing
- 
-///////////////////////////////////////////////////////// 
- 
 DataItems	
  - Move loading task to generic task
 		
 Config
  - Loader/Saver (DataItems)
- - Loader/Saver (Registry)
 
 Modules
  - Manifests

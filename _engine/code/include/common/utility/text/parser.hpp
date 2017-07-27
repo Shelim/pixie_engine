@@ -173,7 +173,7 @@ namespace engine
 			const ustring_t buffer;
 		};
 
-		class token_terminal_output_helper_t : public token_base_t
+		class token_terminal_writer_helper_t : public token_base_t
 		{
 
 		public:
@@ -200,14 +200,14 @@ namespace engine
 						buffer.append('$');
 						stream.advance();
 
-						return std::make_unique<token_terminal_output_helper_t>(buffer);
+						return std::make_unique<token_terminal_writer_helper_t>(buffer);
 					}
 				}
 
 				return nullptr;
 			}
 
-			token_terminal_output_helper_t(const ustring_t & buffer) : token_base_t(id), buffer(buffer)
+			token_terminal_writer_helper_t(const ustring_t & buffer) : token_base_t(id), buffer(buffer)
 			{
 
 			}
@@ -219,7 +219,7 @@ namespace engine
 
 			std::unique_ptr<token_base_t> clone() const final
 			{
-				return std::make_unique<token_terminal_output_helper_t>(*this);
+				return std::make_unique<token_terminal_writer_helper_t>(*this);
 			}
 
 		private:
@@ -331,6 +331,11 @@ namespace engine
 				return column;
 			}
 
+			usymbol_t get_symbol() const
+			{
+				return symbol;
+			}
+
 			static std::unique_ptr<token_base_t> create(stream_t & stream)
 			{
 				if (stream.peek() == '#')
@@ -343,12 +348,19 @@ namespace engine
 						if(stream.peek_is_number())
 						{
 							uint32_t column = stream.advance_number();
+							usymbol_t symbol = ' ';
 
+							if (stream.peek() == ':')
+							{
+								stream.advance();
+								symbol = stream.peek();
+								stream.advance();
+							}
 							if (stream.peek() == '#')
 							{
 								stream.advance();
 
-								return std::make_unique<token_aligment_t>(column);
+								return std::make_unique<token_aligment_t>(column, symbol);
 							}
 						}
 
@@ -364,7 +376,7 @@ namespace engine
 				return std::make_unique<token_aligment_t>(*this);
 			}
 
-			token_aligment_t(uint32_t column) : token_base_t(id), column(column)
+			token_aligment_t(uint32_t column, usymbol_t symbol = ' ') : token_base_t(id), column(column), symbol(symbol)
 			{
 
 			}
@@ -372,6 +384,7 @@ namespace engine
 		private:
 
 			const uint32_t column;
+			const usymbol_t symbol;
 		};
 
 		class resolver_output_t
@@ -457,12 +470,13 @@ namespace engine
 				}
 				else if (token->get_id() == token_aligment_t::id)
 				{
+					usymbol_t symbol = static_cast<const token_aligment_t*>(token)->get_symbol();
 					while (output->len() < static_cast<const token_aligment_t*>(token)->get_column())
-						output->append(' ');
+						output->append(symbol);
 				}
-				else if (token->get_id() == token_terminal_output_helper_t::id)
+				else if (token->get_id() == token_terminal_writer_helper_t::id)
 				{
-					output->append_ghostly(static_cast<const token_terminal_output_helper_t*>(token)->get_buffer());
+					output->append_ghostly(static_cast<const token_terminal_writer_helper_t*>(token)->get_buffer());
 				}
 			}
 
@@ -639,7 +653,7 @@ namespace engine
 		}
 	}
 
-	typedef tokenized_string_t<parser::token_escape_t, parser::token_aligment_t, parser::token_format_number_t, parser::token_terminal_output_helper_t> formattable_string_t;
+	typedef tokenized_string_t<parser::token_escape_t, parser::token_aligment_t, parser::token_format_number_t, parser::token_terminal_writer_helper_t> formattable_string_t;
 
 	template<class... args_t> inline ustring_t format_string(const formattable_string_t & str, args_t... args)
 	{

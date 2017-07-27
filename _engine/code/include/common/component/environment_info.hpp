@@ -40,10 +40,9 @@ namespace engine
 
 		enum class status_t
 		{
-			not_yet_populated,
-			normal,
-			good,
-			bad
+#define ENGINE_ENVIRONMENT_INFO_STATUS_STD(status) status,
+#include "std/environment_info_std.hpp"
+			count
 		};
 
 		environment_info_t()
