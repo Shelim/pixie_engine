@@ -6,7 +6,7 @@
 #include "utility/data/input/void.hpp"
 #include "utility/data/output/void.hpp"
 #include "provider/save_location.hpp"
-#include "platform/filesystem.hpp"
+#include "platform/data.hpp"
 #include <set>
 
 namespace engine
@@ -124,10 +124,8 @@ namespace engine
 				}
 				return false;
 			}
-			
-		private:
 
-			virtual_path_t virtual_path;
+		private:
 
 			struct providers_comparator
 			{
@@ -137,7 +135,20 @@ namespace engine
 				}
 			};
 
-			std::set<std::unique_ptr<provider_actual_t>, providers_comparator> providers;
+		public:
+			
+			typedef std::set<std::unique_ptr<provider_actual_t>, providers_comparator> providers_t;
+
+			const providers_t & get_all_providers() const
+			{
+				return providers;
+			}
+			
+		private:
+
+			virtual_path_t virtual_path;
+
+			providers_t providers;
 
 		};
 	}

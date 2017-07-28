@@ -95,67 +95,15 @@ for ( i = 0; i < projectsToGen.length; i++ )
 
 var output_hpp = '';
 
-for(var item in manifestCommonFinal)
-{
-	output_hpp += '\t\tstatic ustring_t get_manifest_' + item + '() { return "' + manifestCommonFinal[item] + '"_u; }\n';
-}
 
-output_hpp += '\n\n\t\tstatic ustring_t get_app_name(app_t app)\n\t\t{\n\t\t\tswitch(app)\n\t\t\t{';
 for(var proj in projectsManifests)
 {
-	output_hpp += '\n\t\t\t\tcase app_t::' + proj + ': return "' + proj + '"_u;';
-}
-output_hpp += '\n\t\t\t}\n\t\t\treturn ""_u;\n\t\t}\n\n';
-
-var possibleItems = [];
-
-for ( i = 0; i < projectsToGen.length; i++ )
-{
-	var projectToGen = projectsToGen[i];
-	for(var item in projectsManifests[projectToGen])
-	{
-		possibleItems.push(item);
-		output_hpp += '\t\tstatic ustring_t get_app_' + projectToGen + '_manifest_' + item + '() { return "' + projectsManifests[projectToGen][item] + '"_u; }\n';
-	}
+	output_hpp += '\nAPP_STD(' + proj + ')';
 }
 
-var existingItems = [];
+var content = load_file(project.getBaseDir() + '/' + project.getProperty('autogen_app_list_path'), content);
 
-for(var i in possibleItems)
-{
-	var item = possibleItems[i];
-	
-	if(existingItems.indexOf(item) != -1)
-		continue;
-	
-	existingItems.push(item);
-	output_hpp += '\t\tstatic ustring_t get_common_manifest_' + item + '(app_t app) \n\t\t{';
-	for ( i = 0; i < projectsToGen.length; i++ )
-	{
-		var projectToGen = projectsToGen[i];
-		for(var item2 in projectsManifests[projectToGen])
-		{
-			if(item2 == item)
-				output_hpp += '\n\t\t\tif(app == app_t::' + projectToGen + ') return "' + projectsManifests[projectToGen][item] + '"_u;';
-		}
-	}
-	output_hpp += '\n\t\t\treturn ""_u;\n\t\t}\n';
+content = content.replace(/\$APP_LIST\$/g, output_hpp);
 
-}
-
-var local_app = project.getProperty('output_unix_name');
-for(var item in projectsManifests[local_app])
-{
-	output_hpp += '\t\tstatic ustring_t get_local_manifest_' + item + '() { return "' + projectsManifests[local_app][item] + '"_u; }\n';
-}
-
-output_hpp += '\n\t\tstatic app_t get_local_app() { return app_t::' + local_app + '; }\n';
-
-output_hpp += '\n\n\t\tstatic ustring_t get_local_app_name() { return "' + local_app + '"_u; }';
-
-var content = load_file(project.getBaseDir() + '/' + project.getProperty('autogen_manifest_app_hpp_path'), content);
-
-content = content.replace(/\$MANIFEST_APP\$/g, output_hpp);
-
-save_file(project.getBaseDir() + '/' + project.getProperty('autogen_manifest_app_hpp_path'), content);
+save_file(project.getBaseDir() + '/' + project.getProperty('autogen_app_list_path'), content);
 

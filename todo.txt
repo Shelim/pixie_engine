@@ -1,5 +1,8 @@
+Tasks
+ - ConcurrentTasks
+
 DataItems	
- - Move loading task to generic task
+ - Actual items
 		
 Config
  - Loader/Saver (DataItems)
@@ -11,10 +14,6 @@ Modules
 
 Asset Manager
  - Map asset_path_t -> virtual_path_t
-
-Bug: Database thread synchronization is taking too much of time of main thread!
-
-////////////////////////////////////////////////////////
 
 BuildSystem:
  - Build changelog

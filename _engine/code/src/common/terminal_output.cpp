@@ -15,16 +15,13 @@ void engine::terminal_writer_real_t::on_config_update(msg_base_t * msg)
 	if (msg->get_type() == msg_config_updated_t::type)
 	{
 		msg_config_updated_t* cfg_updated_msg = static_cast<msg_config_updated_t*>(msg);
-		if (cfg_updated_msg->get_item() == config_t::item_t::game_has_console)
+		if (cfg_updated_msg->get_item() == config_t::item_t::GAME_CONFIG_LOCAL(has_terminal))
 		{
-			std::shared_ptr<config_t> config = cfg_updated_msg->get_config().lock();
-			if (config)
-			{
-				if (config->get_game_has_console())
-					update_window(window_state_t::open);
-				else
-					update_window(window_state_t::close);
-			}
+			config_t * config = cfg_updated_msg->get_config();
+			if (config->config_get_local(has_terminal))
+				update_window(window_state_t::open);
+			else
+				update_window(window_state_t::close);
 		}
 	}
 }

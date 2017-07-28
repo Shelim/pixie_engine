@@ -556,10 +556,10 @@ namespace engine
 				tokens.push_back(std::move(token));
 
 			}
-
-			if (tokens.empty())
+			else if (!elem.is_empty())
 			{
 				tokens.push_back(std::make_unique<parser::token_text_t>(elem));
+				elem = ustring_t();
 			}
 		}
 

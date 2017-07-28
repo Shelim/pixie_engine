@@ -61,9 +61,13 @@
 	<property name="build_installer_path" value="${build_app_path}/_build/${platform_dir}_installer/" />
 	<property name="autogen_path_relative" value="_autogen/${platform_base_dir}/${output_unix_name}/" />
 	<property name="autogen_path" value="${build_app_path}code/include/${autogen_path_relative}" />
+	<property name="autogen_app_list_script" location="build/common/app_list_builder.js" />
 	<property name="autogen_manifest_app_script" location="build/common/manifest_app_builder.js" />
 	
 	<condition property="autogen_manifest_app_hpp_path" value="${autogen_path}/manifest_app_${build_configuration}_portable.hpp" else="${autogen_path}/manifest_app_${build_configuration}.hpp">
+		<istrue value="${is_portable_build}"/> 
+	</condition>
+	<condition property="autogen_app_list_path" value="${autogen_path}/app_list_std_${build_configuration}_portable.hpp" else="${autogen_path}/app_list_std_${build_configuration}.hpp">
 		<istrue value="${is_portable_build}"/> 
 	</condition>
 	
@@ -197,6 +201,10 @@
 			<param name="replace_variables.file" value="${autogen_manifest_app_hpp_path}" />
 		</antcall>
 		<script language="javascript" src="${autogen_manifest_app_script}" />
+		
+		<copy file="build/common/app_list_std.hpp" tofile="${autogen_app_list_path}" preservelastmodified="true" overwrite="true" />
+		<script language="javascript" src="${autogen_app_list_script}" />
+		
 	</target>
 		
 <!-- Helper target for below; Build upload directory if we're deploying... -->

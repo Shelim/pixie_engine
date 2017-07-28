@@ -2,8 +2,12 @@
 #define ENGINE_COMMON_WINDOWS_INTERNAL_HPP
 #pragma once
 
-#include "utility/vfs/filesystem.hpp"
+#include "platform/path.hpp"
+#include "utility/text/ustring.hpp"
 #include "utility/vfs/virtual_path.hpp"
+#include "utility/data/scanners.hpp"
+#include "utility/data/scanner.hpp"
+#include <memory>
 
 namespace engine
 {

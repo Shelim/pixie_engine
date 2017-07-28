@@ -17,11 +17,13 @@ namespace engine
 {
 
 	SETTINGS_START(config_t, debug)
-		SETTINGS_SET(bool, game_has_console, true)
+#define APP_STD(app_name) SETTINGS_SET(bool, app_name##_has_terminal, true)
+#include "std/app_list_std.hpp"
 	SETTINGS_END()
 
 	SETTINGS_START(config_t, release)
-		SETTINGS_SET(bool, game_has_console, false)
+#define APP_STD(app_name) SETTINGS_SET(bool, app_name##_has_terminal, true)
+#include "std/app_list_std.hpp"
 	SETTINGS_END()
 }
 

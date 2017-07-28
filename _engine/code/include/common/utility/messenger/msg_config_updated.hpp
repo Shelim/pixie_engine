@@ -39,7 +39,7 @@ namespace engine
 
 		static const uint32_t type = 'cfgu';
 
-		msg_config_updated_t(config_t::item_t item, std::weak_ptr<config_t> config) : msg_base_t(type), item(item), config(config)
+		msg_config_updated_t(config_t::item_t item, config_t * config) : msg_base_t(type), item(item), config(config)
 		{
 
 		}
@@ -49,7 +49,7 @@ namespace engine
 			return item;
 		}
 
-		std::weak_ptr<config_t> get_config() const
+		config_t * get_config() const
 		{
 			return config;
 		}
@@ -57,7 +57,7 @@ namespace engine
 	private:
 		
 		config_t::item_t item;
-		std::weak_ptr<config_t> config;
+		config_t * config;
 
 	};
 

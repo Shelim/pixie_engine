@@ -2,8 +2,6 @@
 #define ENGINE_COMMON_PLATFORM_FILESYSTEM_HPP
 
 #include "utility/vfs/virtual_path.hpp"
-#include "utility/vfs/filesystem.hpp"
-#include "utility/text/ustring.hpp"
 #include "provider/save_location.hpp"
 #include "utility/data/output.hpp"
 #include <memory>

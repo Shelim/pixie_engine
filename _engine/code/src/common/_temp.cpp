@@ -9,6 +9,7 @@
 #include "component/terminal_writer.hpp"
 #include "component/config.hpp"
 #include "component/log_file_writer.hpp"
+#include "component/data_provider.hpp"
 #include "component/environment_info.hpp"
 #include "utility/vfs/filesystem.hpp"
 #include "utility/text/ustring.hpp"
@@ -31,11 +32,14 @@ int main(int arg, char * argv[])
 		engine::register_as<engine::config_real_t, engine::config_t>,
 		engine::register_as<engine::environment_info_real_t, engine::environment_info_t>,
 		engine::register_as<engine::log_file_writer_real_t, engine::log_file_writer_t>,
+		engine::register_as<engine::data_provider_real_t, engine::data_provider_t>,
 
 #if PIXIE_IS_PORTABLE_BUILD
 		USE_SETTINGS(save_location_resolver_t, windows_portable),
+		USE_SETTINGS(scanners_provider_settings_t, windows_portable),
 #else
 		USE_SETTINGS(save_location_resolver_t, windows_normal),
+		USE_SETTINGS(scanners_provider_settings_t, windows_normal),
 #endif
 #if PIXIE_IS_DEBUG_BUILD
 		USE_SETTINGS(config_t, debug),
@@ -57,6 +61,7 @@ int main(int arg, char * argv[])
 	std::shared_ptr<engine::logger_t> logger = bootstrapper.construct_component<engine::logger_t>();
 	std::shared_ptr<engine::config_t> config = bootstrapper.construct_component<engine::config_t>();
 	std::shared_ptr<engine::environment_info_t> environment_info = bootstrapper.construct_component<engine::environment_info_t>();
+	std::shared_ptr<engine::data_provider_t> data_provider = bootstrapper.construct_component<engine::data_provider_t>();
 
 	int i = 0;
 
@@ -69,26 +74,27 @@ int main(int arg, char * argv[])
 	task = logger->log_warn(core, "Sample warning"_u);
 	task = logger->log_err(core, "Sample error"_u);
 
-	/*
+	
 	std::this_thread::sleep_for(std::chrono::seconds(1));
-	config->set_game_has_console(false);
+	config->config_set_local(has_terminal, false);
 	std::this_thread::sleep_for(std::chrono::seconds(1));
-	config->set_game_has_console(true);
+	config->config_set_local(has_terminal, true);
 	std::this_thread::sleep_for(std::chrono::seconds(1));
-	*/
+	
 	for (;;)
 	{
+		data_provider->update();
 		
-		if (i == 25000) config->set_game_has_console(false);
-		if (i == 40000) config->set_game_has_console(true);
-		if (i == 50000) break;
+		/*
+		if (i == 250000) config->set_game_has_console(false);
+		if (i == 400000) config->set_game_has_console(true);
+		if (i == 500000) break;
+		*/
 
-		++i;
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		i++;
+		if (i == 10000) break;
 		
-		engine::terminal_writer_string_t str(engine::format_string("#1# sample"_u, i));
-		logger->log_msg(core, "#1# log"_u, i);
-
-		terminal->write(str);
 
 		/*
 		logger->log_msg(core, "Hello world: #1#!"_u, ++i);

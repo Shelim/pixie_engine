@@ -3,6 +3,7 @@
 #pragma once
 
 #include "component/config.hpp"
+#include "component/logger.hpp"
 #include "utility/pattern/provider.hpp"
 #include "utility/messenger/messenger.hpp"
 #include "utility/messenger/msg_config_updated.hpp"
@@ -48,12 +49,9 @@ namespace engine
 
 	public:
 
-		config_real_t(std::shared_ptr<messenger_t> messenger, std::unique_ptr<holder_t<config_t> > config_provider);
+		config_real_t(std::shared_ptr<messenger_t> messenger, std::unique_ptr<holder_t<config_t> > config_provider, std::shared_ptr<logger_t> logger);
 
-		~config_real_t()
-		{
-			messenger->deatach_all(this);
-		}
+		~config_real_t();
 
 #define GAME_CONFIG_STD(type, name) const type & get_##name() const final { return config_provider->get_provider()->get_##name(); }; void set_##name(const type & val) final { if(config_provider->get_provider()->set_##name(val)) notify_on_change(item_t::name); }
 #include "std/config_std.hpp"
@@ -63,9 +61,11 @@ namespace engine
 		void on_change_from_provider(msg_base_t * msg);
 
 		void notify_on_change(item_t item);
+		void notify_on_initial_value(item_t item);
 		
 		std::shared_ptr<messenger_t> messenger;
 		std::unique_ptr<holder_t<config_t> > config_provider;
+		std::shared_ptr<logger_t> logger;
 
 	};
 }

@@ -25,10 +25,22 @@
 #include <vlc/vlc.h>
 #include <bitset>
 
+#define GAME_CONFIG_LOCAL__(name, app_unix_name) GAME_CONFIG_LOCAL_(name, app_unix_name)
+#define GAME_CONFIG_LOCAL_(name, app_unix_name) app_unix_name##_##name
+#define GAME_CONFIG_LOCAL(name) GAME_CONFIG_LOCAL__(name, PIXIE_OUTPUT_UNIX_NAME)
+
+#define GAME_CONFIG_GET_LOCAL__(name, app_unix_name) GAME_CONFIG_GET_LOCAL_(name, app_unix_name)
+#define GAME_CONFIG_GET_LOCAL_(name, app_unix_name) get_##app_unix_name##_##name
+#define config_get_local(name) GAME_CONFIG_GET_LOCAL__(name, PIXIE_OUTPUT_UNIX_NAME) ()
+
+#define GAME_CONFIG_SET_LOCAL__(name, app_unix_name) GAME_CONFIG_SET_LOCAL_(name, app_unix_name)
+#define GAME_CONFIG_SET_LOCAL_(name, app_unix_name) set_##app_unix_name##_##name
+#define config_set_local(name, value) GAME_CONFIG_SET_LOCAL__(name, PIXIE_OUTPUT_UNIX_NAME) (value)
+
 namespace engine
 {
 
-	class config_t : public std::enable_shared_from_this<config_t>
+	class config_t
 	{
 	public:
 
@@ -52,6 +64,13 @@ namespace engine
 #include "std/config_std.hpp"
 			count
 		};
+
+		static const ustring_t type_to_text(item_t item)
+		{
+#define GAME_CONFIG_STD(type, name) if(item == item_t::name) return #name##_u;
+#include "std/config_std.hpp"
+			return "Unknown"_u;
+		}
 
 	private:
 

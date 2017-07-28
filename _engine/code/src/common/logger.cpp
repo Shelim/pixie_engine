@@ -211,7 +211,7 @@ engine::logger_real_t::item_id_t engine::logger_real_t::log_local(logger_item_t:
 		auto & cache = get_cache(logger_item_t::module_t::unknown);
 
 		if (module == logger_item_t::module_t::unknown && link < cache.size())
-			module = cache[0].get_module();
+			module = cache[link].get_module();
 
 		ustring_t msg = message;
 		if (link < cache.size() && msg.is_empty())
