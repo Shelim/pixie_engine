@@ -2,6 +2,10 @@
 
 #if PIXIE_WINDOWS
 
+#include "utility/data/output.hpp"
+#include "provider/save_location.hpp"
+
+#include "windows/internal.hpp"
 #include "utility/text/ustring.hpp"
 #include "manifest_app.hpp"
 
@@ -56,30 +60,5 @@ engine::ustring_t engine::platform::resolve_directory(engine::platform::director
 	return ret;
 }
 
-/*
-
-std::filesystem::path engine::platform_internal_windows_t::get_special_path(directory_special_t dir)
-{
-	ustring_t ret;
-
-	switch (dir)
-	{
-	case directory_special_t::local_app_data: ret = ustring_t::from_wide(_wgetenv(L"LOCALAPPDATA")); break;
-	case directory_special_t::roaming_app_data: ret = ustring_t::from_wide(_wgetenv(L"APPDATA")); break;
-	case directory_special_t::saves: ret = ustring_t::from_wide(_wgetenv(L"USERPROFILE")); ret.append("\\Saved Games"_u); break;
-	case directory_special_t::crash_dumps: ret = ustring_t::from_wide(_wgetenv(L"LOCALAPPDATA")); break;
-	}
-	ret.append('\\');
-	if (dir == directory_special_t::saves)
-		ret.append(get_manifest_app()->get_manifest_full_name());
-	else
-		ret.append(get_manifest_app()->get_manifest_windows_game_app_dir());
-	ret.append('\\');
-
-	return ret.get_cstring();
-
-}
-
-*/
 
 #endif
