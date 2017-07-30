@@ -20,22 +20,11 @@
 #include "utility/pattern/flags.hpp"
 #include "component/logger/item.hpp"
 #include "utility/pattern/class_settings.hpp"
+#include "manifest_app.hpp"
 #include <cereal/cereal.hpp>
 #include <cereal/access.hpp>
 #include <vlc/vlc.h>
 #include <bitset>
-
-#define GAME_CONFIG_LOCAL__(name, app_unix_name) GAME_CONFIG_LOCAL_(name, app_unix_name)
-#define GAME_CONFIG_LOCAL_(name, app_unix_name) app_unix_name##_##name
-#define GAME_CONFIG_LOCAL(name) GAME_CONFIG_LOCAL__(name, PIXIE_OUTPUT_UNIX_NAME)
-
-#define GAME_CONFIG_GET_LOCAL__(name, app_unix_name) GAME_CONFIG_GET_LOCAL_(name, app_unix_name)
-#define GAME_CONFIG_GET_LOCAL_(name, app_unix_name) get_##app_unix_name##_##name
-#define config_get_local(name) GAME_CONFIG_GET_LOCAL__(name, PIXIE_OUTPUT_UNIX_NAME) ()
-
-#define GAME_CONFIG_SET_LOCAL__(name, app_unix_name) GAME_CONFIG_SET_LOCAL_(name, app_unix_name)
-#define GAME_CONFIG_SET_LOCAL_(name, app_unix_name) set_##app_unix_name##_##name
-#define config_set_local(name, value) GAME_CONFIG_SET_LOCAL__(name, PIXIE_OUTPUT_UNIX_NAME) (value)
 
 namespace engine
 {
@@ -55,19 +44,25 @@ namespace engine
 
 		}
 
-#define GAME_CONFIG_STD(type, name) virtual const type & get_##name() const = 0;  virtual void set_##name(const type & val) = 0;
+#define GAME_CONFIG_GLOBAL_STD(type, name) virtual const type & get_global_##name() const = 0;  virtual void set_global_##name(const type & val) = 0;
+#define GAME_CONFIG_LOCAL_STD(type, app, name) virtual const type & get_app_##app##_##name() const = 0;  virtual void set_app_##app##_##name(const type & val) = 0;
+#define GAME_CONFIG_STD(type, name) virtual const type & get_cfg_##name(manifest_app_t::app_t app) const = 0;  virtual void set_cfg_##name(manifest_app_t::app_t app, const type & val) = 0; const type & get_cfg_##name() const { return get_cfg_##name(manifest_app_t::get_local_app()); } void set_cfg_##name(const type & val) { set_cfg_##name(manifest_app_t::get_local_app(), val); }
 #include "std/config_std.hpp"
 
 		enum class item_t
 		{
-#define GAME_CONFIG_STD(type, name) name,
+#define GAME_CONFIG_GLOBAL_STD(type, name) global_##name,
+#define GAME_CONFIG_LOCAL_STD(type, app, name) app_##app##_##name,
+#define GAME_CONFIG_STD(type, name) cfg_##name,
 #include "std/config_std.hpp"
 			count
 		};
 
 		static const ustring_t type_to_text(item_t item)
 		{
-#define GAME_CONFIG_STD(type, name) if(item == item_t::name) return #name##_u;
+#define GAME_CONFIG_GLOBAL_STD(type, name) if(item == item_t::global_##name) return "global_" #name##_u;
+#define GAME_CONFIG_LOCAL_STD(type, app, name) if(item == item_t::app_##app##_##name) return "local_" #app "_" #name##_u;
+#define GAME_CONFIG_STD(type, name) if(item == item_t::cfg_##name) return "cfg_" #name##_u;
 #include "std/config_std.hpp"
 			return "Unknown"_u;
 		}
@@ -78,7 +73,9 @@ namespace engine
 
 	SETTINGS_TABLE_START(config_t)
 
-#define GAME_CONFIG_STD(type, name) SETTINGS_TABLE_ENTRY(type, name)
+#define GAME_CONFIG_GLOBAL_STD(type, name) SETTINGS_TABLE_ENTRY(type, global_##name)
+#define GAME_CONFIG_LOCAL_STD(type, app, name) SETTINGS_TABLE_ENTRY(type, app_##app##_##name)
+#define GAME_CONFIG_STD(type, name) SETTINGS_TABLE_ENTRY(type, cfg_##name)
 #include "std/config_std.hpp"
 
 	SETTINGS_TABLE_END()

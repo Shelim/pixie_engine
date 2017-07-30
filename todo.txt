@@ -1,3 +1,5 @@
+ - Game configuration should be included in settings/default_config
+
 Tasks
  - ConcurrentTasks
 

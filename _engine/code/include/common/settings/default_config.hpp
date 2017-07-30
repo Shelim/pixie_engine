@@ -17,13 +17,11 @@ namespace engine
 {
 
 	SETTINGS_START(config_t, debug)
-#define APP_STD(app_name) SETTINGS_SET(bool, app_name##_has_terminal, true)
-#include "std/app_list_std.hpp"
+		SETTINGS_SET(bool, cfg_has_terminal, true)
 	SETTINGS_END()
 
 	SETTINGS_START(config_t, release)
-#define APP_STD(app_name) SETTINGS_SET(bool, app_name##_has_terminal, true)
-#include "std/app_list_std.hpp"
+		SETTINGS_SET(bool, cfg_has_terminal, false)
 	SETTINGS_END()
 }
 

@@ -74,11 +74,13 @@ int main(int arg, char * argv[])
 	task = logger->log_warn(core, "Sample warning"_u);
 	task = logger->log_err(core, "Sample error"_u);
 
+	config->set_app_sample_app_test_local(25);
+	config->set_global_test_global("Beta test"_u);
 	
 	std::this_thread::sleep_for(std::chrono::seconds(1));
-	config->config_set_local(has_terminal, false);
+	config->set_cfg_has_terminal(false);
 	std::this_thread::sleep_for(std::chrono::seconds(1));
-	config->config_set_local(has_terminal, true);
+	config->set_cfg_has_terminal(true);
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 	
 	for (;;)

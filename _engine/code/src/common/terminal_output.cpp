@@ -15,10 +15,10 @@ void engine::terminal_writer_real_t::on_config_update(msg_base_t * msg)
 	if (msg->get_type() == msg_config_updated_t::type)
 	{
 		msg_config_updated_t* cfg_updated_msg = static_cast<msg_config_updated_t*>(msg);
-		if (cfg_updated_msg->get_item() == config_t::item_t::GAME_CONFIG_LOCAL(has_terminal))
+		if (cfg_updated_msg->get_item() == config_t::item_t::cfg_has_terminal)
 		{
 			config_t * config = cfg_updated_msg->get_config();
-			if (config->config_get_local(has_terminal))
+			if (config->get_cfg_has_terminal(manifest_app_t::get_local_app()))
 				update_window(window_state_t::open);
 			else
 				update_window(window_state_t::close);

@@ -21,14 +21,16 @@ namespace engine
 
 		}
 
-#define GAME_CONFIG_STD(type, name) virtual const type & get_##name() const = 0;
-#include "std/config_std.hpp"
-#define GAME_CONFIG_STD(type, name) virtual bool set_##name(const type & val) = 0;
+#define GAME_CONFIG_GLOBAL_STD(type, name) virtual const type & get_global_##name() const = 0;  virtual bool set_global_##name(const type & val) = 0;
+#define GAME_CONFIG_LOCAL_STD(type, app, name) virtual const type & get_app_##app##_##name() const = 0;  virtual bool set_app_##app##_##name(const type & val) = 0;
+#define GAME_CONFIG_STD(type, name) virtual const type & get_cfg_##name(manifest_app_t::app_t app) const = 0;  virtual bool set_cfg_##name(manifest_app_t::app_t app, const type & val) = 0;
 #include "std/config_std.hpp"
 
 	protected:
 
-#define GAME_CONFIG_STD(type, name) const type & get_default_##name() const;
+#define GAME_CONFIG_GLOBAL_STD(type, name) const type & get_default_global_##name() const; 
+#define GAME_CONFIG_LOCAL_STD(type, app, name) const type & get_default_app_##app##_##name() const;
+#define GAME_CONFIG_STD(type, name) const type & get_default_local_##name(manifest_app_t::app_t app) const;
 #include "std/config_std.hpp"
 
 		config_provider_base_t(std::unique_ptr<settings_t<config_t>> configuration) : configuration(std::move(configuration))
@@ -53,7 +55,9 @@ namespace engine
 
 		~config_real_t();
 
-#define GAME_CONFIG_STD(type, name) const type & get_##name() const final { return config_provider->get_provider()->get_##name(); }; void set_##name(const type & val) final { if(config_provider->get_provider()->set_##name(val)) notify_on_change(item_t::name); }
+#define GAME_CONFIG_GLOBAL_STD(type, name) const type & get_global_##name() const final { return config_provider->get_provider()->get_global_##name(); }; void set_global_##name(const type & val) final { if(config_provider->get_provider()->set_global_##name(val)) notify_on_change(item_t::global_##name); }
+#define GAME_CONFIG_LOCAL_STD(type, app, name) const type & get_app_##app##_##name() const final { return config_provider->get_provider()->get_app_##app##_##name(); }; void set_app_##app##_##name(const type & val) final { if(config_provider->get_provider()->set_app_##app##_##name(val)) notify_on_change(item_t::app_##app##_##name); }
+#define GAME_CONFIG_STD(type, name) const type & get_cfg_##name(manifest_app_t::app_t app) const final { return config_provider->get_provider()->get_cfg_##name(app); }; void set_cfg_##name(manifest_app_t::app_t app, const type & val) final { if(config_provider->get_provider()->set_cfg_##name(app, val)) notify_on_change(item_t::cfg_##name); }
 #include "std/config_std.hpp"
 
 	private:
@@ -70,7 +74,6 @@ namespace engine
 	};
 }
 
-#include "component/config/provider/data.hpp"
 #include "component/config/provider/storage.hpp"
 
 #endif

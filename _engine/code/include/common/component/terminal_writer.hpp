@@ -6,7 +6,7 @@
 #include "utility/vfs/filesystem.hpp"
 #include "utility/pattern/class_settings.hpp"
 #include "utility/vfs/virtual_path.hpp"
-#include "platform/terminal.hpp""
+#include "platform/terminal.hpp"
 #include <mutex>
 
 namespace engine

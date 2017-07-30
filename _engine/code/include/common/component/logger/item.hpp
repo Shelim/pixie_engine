@@ -30,7 +30,7 @@ namespace engine
 
 		enum class level_t
 		{
-#define ENGINE_LOGGER_LEVEL_STD(level, file_pattern, terminal_pattern) level,
+#define ENGINE_LOGGER_LEVEL_STD(level) level,
 #include "std/logger_std.hpp"
 
 			finished,
