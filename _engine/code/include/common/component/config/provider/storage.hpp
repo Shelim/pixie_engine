@@ -33,9 +33,9 @@ namespace engine
 			scanner_thread.join();
 		}
 
-#define GAME_CONFIG_GLOBAL_STD(type_t, name) const type_t & get_global_##name() const final { std::lock_guard<std::recursive_mutex> guard(ready_mutex); return rdy_vals.val_for_global_##name; };
-#define GAME_CONFIG_LOCAL_STD(type_t, app, name) const type_t & get_app_##app##_##name() const final { std::lock_guard<std::recursive_mutex> guard(ready_mutex); return rdy_vals.val_for_app_##app##_##name; };
-#define GAME_CONFIG_STD(type_t, name) const type_t & get_cfg_##name(manifest_app_t::app_t app) const final { std::lock_guard<std::recursive_mutex> guard(ready_mutex); return rdy_vals.val_for_cfg_##name[static_cast<std::underlying_type<manifest_app_t::app_t>::type>(app)]; };
+#define GAME_CONFIG_GLOBAL_STD(type_t, name) type_t get_global_##name() const final { std::lock_guard<std::recursive_mutex> guard(ready_mutex); return rdy_vals.val_for_global_##name; };
+#define GAME_CONFIG_LOCAL_STD(type_t, app, name) type_t get_app_##app##_##name() const final { std::lock_guard<std::recursive_mutex> guard(ready_mutex); return rdy_vals.val_for_app_##app##_##name; };
+#define GAME_CONFIG_STD(type_t, name) type_t get_cfg_##name(manifest_app_t::app_t app) const final { std::lock_guard<std::recursive_mutex> guard(ready_mutex); return rdy_vals.val_for_cfg_##name[static_cast<std::underlying_type<manifest_app_t::app_t>::type>(app)]; };
 #include "std/config_std.hpp"
 #define GAME_CONFIG_GLOBAL_STD(type_t, name) bool set_global_##name(const type_t & val) final { std::lock_guard<std::recursive_mutex> guard(ready_mutex); if(rdy_vals.val_for_global_##name != val) { std::lock_guard<std::recursive_mutex> guard(scanner_mutex); rdy_vals.val_for_global_##name = val; old_vals.val_for_global_##name = val; platform::store("global_" #name ##_u, val); return true; } return false; };
 #define GAME_CONFIG_LOCAL_STD(type_t, app, name) bool set_app_##app##_##name(const type_t & val) final { std::lock_guard<std::recursive_mutex> guard(ready_mutex); if(rdy_vals.val_for_app_##app##_##name != val) { std::lock_guard<std::recursive_mutex> guard(scanner_mutex); rdy_vals.val_for_app_##app##_##name = val; old_vals.val_for_app_##app##_##name = val; platform::store("local_" #app "_" #name ##_u, val); return true; } return false; };

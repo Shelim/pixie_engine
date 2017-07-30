@@ -44,9 +44,9 @@ namespace engine
 
 		}
 
-#define GAME_CONFIG_GLOBAL_STD(type, name) virtual const type & get_global_##name() const = 0;  virtual void set_global_##name(const type & val) = 0;
-#define GAME_CONFIG_LOCAL_STD(type, app, name) virtual const type & get_app_##app##_##name() const = 0;  virtual void set_app_##app##_##name(const type & val) = 0;
-#define GAME_CONFIG_STD(type, name) virtual const type & get_cfg_##name(manifest_app_t::app_t app) const = 0;  virtual void set_cfg_##name(manifest_app_t::app_t app, const type & val) = 0; const type & get_cfg_##name() const { return get_cfg_##name(manifest_app_t::get_local_app()); } void set_cfg_##name(const type & val) { set_cfg_##name(manifest_app_t::get_local_app(), val); }
+#define GAME_CONFIG_GLOBAL_STD(type, name) virtual type get_global_##name() const = 0;  virtual void set_global_##name(type val) = 0;
+#define GAME_CONFIG_LOCAL_STD(type, app, name) virtual type get_app_##app##_##name() const = 0;  virtual void set_app_##app##_##name(type val) = 0;
+#define GAME_CONFIG_STD(type, name) virtual type get_cfg_##name(manifest_app_t::app_t app) const = 0;  virtual void set_cfg_##name(manifest_app_t::app_t app, type val) = 0; type get_cfg_##name() const { return get_cfg_##name(manifest_app_t::get_local_app()); } void set_cfg_##name(type val) { set_cfg_##name(manifest_app_t::get_local_app(), val); }
 #include "std/config_std.hpp"
 
 		enum class item_t

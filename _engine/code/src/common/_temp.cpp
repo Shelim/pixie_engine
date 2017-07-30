@@ -20,6 +20,7 @@
 #include "settings/default_config.hpp"
 #include "settings/default_environment_info.hpp"
 #include "utility/text/parser.hpp"
+#include "manifest_app.hpp"
 
 int main(int arg, char * argv[])
 {
@@ -73,9 +74,6 @@ int main(int arg, char * argv[])
 	task = logger->log_msg(core, "Sample message"_u);
 	task = logger->log_warn(core, "Sample warning"_u);
 	task = logger->log_err(core, "Sample error"_u);
-
-	config->set_app_sample_app_test_local(25);
-	config->set_global_test_global("Beta test"_u);
 	
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 	config->set_cfg_has_terminal(false);
