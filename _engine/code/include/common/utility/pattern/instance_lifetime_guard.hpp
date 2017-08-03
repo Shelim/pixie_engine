@@ -12,6 +12,11 @@ namespace engine
 
 	public:
 
+		instance_lifetime_guard()
+		{
+
+		}
+
 		void set_instance(std::unique_ptr<object_t> object)
 		{
 			instance = std::move(object);

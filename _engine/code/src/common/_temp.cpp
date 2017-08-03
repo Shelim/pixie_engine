@@ -20,14 +20,49 @@
 #include "settings/default_config.hpp"
 #include "settings/default_environment_info.hpp"
 #include "utility/text/parser.hpp"
+#include "utility/container/thread_pool.hpp"
 #include "manifest_app.hpp"
+
+class sample_job_t final : public engine::thread_pool_job_t
+{
+
+public:
+
+	sample_job_t(std::shared_ptr<engine::logger_t> logger) : logger(logger)
+	{
+		id++;
+		cur_id = id;
+	}
+
+	engine::ustring_t get_name() const final
+	{
+		return engine::format_string("Sample job #1#"_u, cur_id);
+	}
+
+	void run() final
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(750));
+			logger->log_msg(core, "Simulating execution #1#: #2#..."_u, cur_id, i);
+		}
+
+	}
+
+private:
+
+	uint32_t cur_id;
+	static uint32_t id;
+	std::shared_ptr<engine::logger_t> logger;
+};
+
+uint32_t sample_job_t::id;
 
 int main(int arg, char * argv[])
 {
 
 	engine::bootstrapper_t< 
 
-		engine::register_as<engine::frame_notifier_dummy_t, engine::frame_notifier_t>,
 		engine::register_as<engine::logger_real_t, engine::logger_t>,
 		engine::register_as<engine::terminal_writer_real_t, engine::terminal_writer_t>,
 		engine::register_as<engine::config_real_t, engine::config_t>,
@@ -63,6 +98,17 @@ int main(int arg, char * argv[])
 	std::shared_ptr<engine::config_t> config = bootstrapper.construct_component<engine::config_t>();
 	std::shared_ptr<engine::environment_info_t> environment_info = bootstrapper.construct_component<engine::environment_info_t>();
 	std::shared_ptr<engine::data_provider_t> data_provider = bootstrapper.construct_component<engine::data_provider_t>();
+	std::shared_ptr<engine::thread_pool_t<4>> thread_pool = bootstrapper.construct_component<engine::thread_pool_t<4>>();
+
+	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
+	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
+	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
+	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
+	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
+	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
+	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
+	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
+	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
 
 	int i = 0;
 
@@ -83,6 +129,8 @@ int main(int arg, char * argv[])
 	
 	for (;;)
 	{
+		break;
+
 		data_provider->update();
 		
 		/*

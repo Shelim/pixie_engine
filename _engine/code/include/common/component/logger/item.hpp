@@ -161,7 +161,7 @@ namespace engine
 		uint64_t frame; // 7 for formatting
 		std::chrono::seconds time; // 8 for formatting
 		std::thread::id thread; // 9 for formatting
-		std::size_t link;
+		std::size_t link; // 10 for formatting
 
 	};
 

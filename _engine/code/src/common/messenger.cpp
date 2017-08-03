@@ -1,4 +1,10 @@
 #include "utility/messenger/messenger.hpp"
+#include "utility/messenger/msg_config_updated.hpp"
+#include "utility/messenger/msg_kill_messanger.hpp"
+
+const engine::id_t engine::msg_config_provider_updated_t::type = engine::make_id_t<'c', 'f', 'g', 'p'>::value;
+const engine::id_t engine::msg_config_updated_t::type = engine::make_id_t<'c', 'f', 'g', 'u'>::value;
+const engine::id_t engine::msg_kill_messanger_t::type = engine::make_id_t<'k', 'i', 'l', 'l'>::value;
 
 
 engine::messenger_t::messenger_t()
@@ -11,7 +17,11 @@ engine::messenger_t::messenger_t()
 engine::messenger_t::~messenger_t()
 {
 	post_message(std::make_unique<msg_kill_messanger_t>());
-	messages_thread.join();
+	try
+	{
+		messages_thread.join();
+	}
+	catch (const std::system_error& e) {}
 }
 
 void engine::messenger_t::dispatch_message(msg_base_t * msg)

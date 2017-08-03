@@ -13,7 +13,7 @@ namespace engine
 
 	public:
 
-		static const uint32_t type = 'kill';
+		static const id_t type;
 		
 		msg_kill_messanger_t(): msg_base_t(type)
 		{

@@ -3,6 +3,7 @@
 #pragma once
 
 #include <cstdint>
+#include "utility/pattern/fourcc.hpp"
 
 namespace engine
 {
@@ -17,7 +18,7 @@ namespace engine
 
 		}
 
-		typedef uint32_t type_t;
+		typedef id_t type_t;
 
 		type_t get_type() const
 		{

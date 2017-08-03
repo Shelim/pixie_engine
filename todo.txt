@@ -1,13 +1,11 @@
- - Game configuration should be included in settings/default_config
+Fourcc
+ - Finish it up
 
 Tasks
  - ConcurrentTasks
 
 DataItems	
  - Actual items
-		
-Config
- - Loader/Saver (DataItems)
 
 Modules
  - Manifests
@@ -17,7 +15,7 @@ Modules
 Asset Manager
  - Map asset_path_t -> virtual_path_t
 
-BuildSystem:
+BuildSystem
  - Build changelog
  - Update changelog
  - Remove comments from XML

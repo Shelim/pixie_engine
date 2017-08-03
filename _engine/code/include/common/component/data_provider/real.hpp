@@ -35,7 +35,11 @@ namespace engine
 		~data_provider_real_t()
 		{
 			end_scanning = true;
-			check_filesystem_thread.join();
+			try
+			{
+				check_filesystem_thread.join();
+			}
+			catch (const std::system_error& e) { }
 		}
 
 		const data::changes_t & get_changes() const final

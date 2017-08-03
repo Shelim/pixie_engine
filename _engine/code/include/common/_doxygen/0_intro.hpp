@@ -24,35 +24,23 @@
 *
 * @section pixie_intro Introduction
 *     The fourth release of awesome 2D engine for video games.
-*     Written in modern C++'14/C++'17. Powerful and extendable. And completely stand-alone!
+*     Written in modern C++. Powerful, flexible and extendable. And completely stand-alone!
 *
 * @section pixie_features Features
-* @subsection pixie_features_data Data
-*     - @ref engine::data::database_providers_t "Advanced data engine" for IO supporting range of different @ref engine::data::input_t "input sources"
-*     - @ref engine::data::output_t "Output target" supported, allowing writing arbitrary data
-*     - @ref Fully featured @ref virtual_path "Virtual File System (VFS)", completely abstract of physical implementation
-*     - @ref Hot-swapping supported for almost all input sources. Data engine monitors status of data streams and updates already loaded @ref engine::data::item_base_t "data items"
-*     - Ability to 'detach' object from monitoring (thus, creating hard copy in memory); Useful for assets that needs not to be tampered, for example during network play
-*     - Almost all IO operations performed asynchronously
-* @subsection pixie_features_assets Asset system
-*     - Build atop @ref pixie_features_data "data subsystem"
-*     - Allows hot-swapping of all assets (including network patches and modding tools)
-*     - Support for `modules` and `submodules` with permission rules (allow/disallow certain mod/submod configurations to be used together)
-*     - All assets are localizable (not only by string-tables!)
-*     - All assets can have variants, for example HD textures or panoramic gui definitions
 * @subsection pixie_features_lo_system System (low level)
 *     - @ref engine::ustring_t "Portable UTF-8 strings"
-*     - @ref engine::logger_t "Advanced logger" with @ref engine::execution_info_t "plenty of execution-time information"
+*     - @ref engine::logger_t "Advanced logger" with @ref engine::environment_info_t "plenty of environmental information"
 *     - Crash dumper, if something goes wrong (allowing post-mortem debugging on Windows)
 *     - @ref engine::crc32_t "CRC32 calculator"
 *     - @ref engine::config_t "Configuration class"
-*     - ~10,000 LoC as of May, 24th, 2017
+*     - ~10,000 LoC as of August, 1st, 2017
 * @todo Expand the @ref pixie_features "features" section
 *
 * @section pixie_platforms Supported Platforms
 * @subsection pixie_platforms_win Windows XP/Vista/7/8/8.1/10
 *    - Both x86 and x64
 *    - OpenGL renderer
+*    - DirectX 9.0c renderer
 * @subsection pixie_platforms_lin Linux
 *    (Expected, not yet working)
 * @subsection pixie_platforms_osx OS X
