@@ -15,19 +15,11 @@ namespace engine
 
 	public:
 
-		terminal_writer_real_t(std::shared_ptr<engine::config_t> config, std::shared_ptr<messenger_t> messenger, std::unique_ptr<settings_t<terminal_writer_colors_t>> terminal_writer_colors) : current_window_state(window_state_t::close), terminal_writer_colors(std::move(terminal_writer_colors)), messenger(messenger)
-		{
-			messenger->attach(msg_config_updated_t::type, [this](msg_base_t * msg) { on_config_update(msg); }, this);\
-
-			if (config->get_game_has_console())
-				update_window(window_state_t::open);
-			else
-				update_window(window_state_t::close);
-		}
+		terminal_writer_real_t(std::shared_ptr<messenger_t> messenger, std::unique_ptr<settings_t<terminal_writer_colors_t>> terminal_writer_colors);
 
 		~terminal_writer_real_t()
 		{
-			messenger->deatach_all(this);
+
 		}
 
 		void write(const terminal_writer_string_t & terminal_string) final;
@@ -49,6 +41,7 @@ namespace engine
 		std::unique_ptr<settings_t<terminal_writer_colors_t>> terminal_writer_colors;
 		std::shared_ptr<messenger_t> messenger;
 
+		callback_container_t callbacks_container;
 	};
 }
 

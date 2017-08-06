@@ -4,6 +4,7 @@
 
 #include "utility/text/ustring.hpp"
 #include "utility/text/expand.hpp"
+#include "utility/pattern/fourcc.hpp"
 #include <deque>
 
 namespace engine
@@ -124,8 +125,6 @@ namespace engine
 
 			}
 
-			typedef uint32_t id_t;
-
 			id_t get_id() const
 			{
 				return id;
@@ -151,7 +150,7 @@ namespace engine
 
 		public:
 
-			static const id_t id = 'text';
+			static const id_t id ;
 
 			const ustring_t & get_buffer() const
 			{
@@ -178,7 +177,7 @@ namespace engine
 
 		public:
 
-			static const id_t id = 'thlp';
+			static const id_t id;
 
 			static std::unique_ptr<token_base_t> create(stream_t & stream)
 			{
@@ -232,7 +231,7 @@ namespace engine
 
 		public:
 
-			static const id_t id = 'escp';
+			static const id_t id;
 
 			static std::unique_ptr<token_base_t> create(stream_t & stream)
 			{
@@ -269,7 +268,7 @@ namespace engine
 
 		public:
 
-			static const id_t id = 'frmt';
+			static const id_t id;
 
 			uint32_t get_format_number() const
 			{
@@ -324,7 +323,7 @@ namespace engine
 
 		public:
 
-			static const id_t id = 'algn';
+			static const id_t id;
 
 			uint32_t get_column() const
 			{
@@ -556,10 +555,10 @@ namespace engine
 				tokens.push_back(std::move(token));
 
 			}
-
-			if (tokens.empty())
+			else if (!elem.is_empty())
 			{
 				tokens.push_back(std::make_unique<parser::token_text_t>(elem));
+				elem = ustring_t();
 			}
 		}
 

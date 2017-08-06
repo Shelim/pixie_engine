@@ -2,7 +2,7 @@
 #define ENGINE_COMPONENT_LOG_FILE_OUTPUT_REAL_HPP
 #pragma once
 
-#include "platform/terminal.hpp""
+#include "platform/terminal.hpp"
 #include "component/log_file_writer.hpp"
 #include "provider/save_location.hpp"
 #include "provider/common_filenames.hpp"

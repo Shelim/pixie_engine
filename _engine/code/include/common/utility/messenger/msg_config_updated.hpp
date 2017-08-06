@@ -4,6 +4,7 @@
 
 #include <cstdint>
 #include "utility/messenger/msg_base.hpp"
+#include "utility/pattern/fourcc.hpp"
 #include "component/config.hpp"
 
 namespace engine
@@ -14,7 +15,7 @@ namespace engine
 
 	public:
 
-		static const uint32_t type = 'cfgp';
+		static const id_t type;
 
 		msg_config_provider_updated_t(config_t::item_t item) : msg_base_t(type), item(item)
 		{
@@ -37,9 +38,9 @@ namespace engine
 
 	public:
 
-		static const uint32_t type = 'cfgu';
+		static const id_t type;
 
-		msg_config_updated_t(config_t::item_t item, std::weak_ptr<config_t> config) : msg_base_t(type), item(item), config(config)
+		msg_config_updated_t(config_t::item_t item, config_t * config) : msg_base_t(type), item(item), config(config)
 		{
 
 		}
@@ -49,7 +50,7 @@ namespace engine
 			return item;
 		}
 
-		std::weak_ptr<config_t> get_config() const
+		config_t * get_config() const
 		{
 			return config;
 		}
@@ -57,7 +58,7 @@ namespace engine
 	private:
 		
 		config_t::item_t item;
-		std::weak_ptr<config_t> config;
+		config_t * config;
 
 	};
 

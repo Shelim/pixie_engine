@@ -28,7 +28,7 @@ namespace engine
 
 		public:
 
-			static const id_t id = 'tesc';
+			static const id_t id;
 
 			static std::unique_ptr<token_base_t> create(stream_t & stream)
 			{
@@ -65,7 +65,7 @@ namespace engine
 
 		public:
 
-			static const id_t id = 'teof';
+			static const id_t id;
 
 			token_terminal_eof_t() : token_base_t(id)
 			{
@@ -93,7 +93,7 @@ namespace engine
 
 		public:
 
-			static const id_t id = 'tfrm';
+			static const id_t id;
 
 			terminal_writer_tag_t get_terminal_writer_tag() const
 			{

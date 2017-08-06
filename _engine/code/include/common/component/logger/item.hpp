@@ -30,7 +30,7 @@ namespace engine
 
 		enum class level_t
 		{
-#define ENGINE_LOGGER_LEVEL_STD(level, file_pattern, terminal_pattern) level,
+#define ENGINE_LOGGER_LEVEL_STD(level) level,
 #include "std/logger_std.hpp"
 
 			finished,
@@ -161,7 +161,7 @@ namespace engine
 		uint64_t frame; // 7 for formatting
 		std::chrono::seconds time; // 8 for formatting
 		std::thread::id thread; // 9 for formatting
-		std::size_t link;
+		std::size_t link; // 10 for formatting
 
 	};
 

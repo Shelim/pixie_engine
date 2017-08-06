@@ -45,7 +45,12 @@ namespace engine
 
 		static auto provide_di(obj<>)
 		{
-			return boost::di::make_injector();
+			return boost::di::make_injector(
+
+#define ENGINE_COMPONENT_STD(component)	boost::di::bind<component##_t>().to <component##_dummy_t>(),
+#include "std/component_std.hpp"
+				boost::di::make_injector()
+			);
 		}
 
 		template<class owner_t, class... providers_t> static auto provide_di_unit(register_providers_for<owner_t, providers_t...>)
@@ -60,7 +65,7 @@ namespace engine
 
 		template<class component_t, class implementation_t> static auto provide_di_unit(register_as<implementation_t, component_t>)
 		{
-			return boost::di::make_injector(boost::di::bind<component_t>().to <implementation_t>());
+			return boost::di::make_injector(boost::di::bind<component_t>().to <implementation_t>()[boost::di::override]);
 		}
 
 		template<class owner_t, class settings_values_t> static auto provide_di_unit(settings_for<owner_t, settings_values_t>)

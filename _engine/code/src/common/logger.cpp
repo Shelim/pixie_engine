@@ -41,7 +41,8 @@ void engine::logger_output_provider_file_t::output(const logger_item_t & item) c
 			item.get_line(),
 			item.get_frame(),
 			item.get_time(),
-			item.get_thread());
+			item.get_thread(),
+		    item.get_link());
 
 	log_file_writer->write(raw);
 }
@@ -81,7 +82,8 @@ void engine::logger_output_provider_terminal_t::output(const logger_item_t & ite
 		item.get_line(),
 		item.get_frame(),
 		item.get_time(),
-		item.get_thread());
+		item.get_thread(),
+		item.get_link());
 
 	terminal_writer->write(raw);
 }
@@ -130,7 +132,11 @@ engine::logger_real_t::logger_real_t(std::shared_ptr<engine::frame_notifier_t> f
 engine::logger_real_t::~logger_real_t()
 {
 	items_queue.push(logger_item_t(logger_item_t::finished_t{}));
-	output_thread.join();
+	try
+	{
+		output_thread.join();
+	}
+	catch (const std::system_error& e) {}
 	output_end();
 }
 
@@ -211,7 +217,7 @@ engine::logger_real_t::item_id_t engine::logger_real_t::log_local(logger_item_t:
 		auto & cache = get_cache(logger_item_t::module_t::unknown);
 
 		if (module == logger_item_t::module_t::unknown && link < cache.size())
-			module = cache[0].get_module();
+			module = cache[link].get_module();
 
 		ustring_t msg = message;
 		if (link < cache.size() && msg.is_empty())

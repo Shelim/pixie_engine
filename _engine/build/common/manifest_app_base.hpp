@@ -37,6 +37,13 @@ namespace engine
 
 		}
 		
+		enum class app_t
+		{
+#define APP_STD(name) name,
+#include "std/app_list_std.hpp"
+			count
+		};
+		
 $MANIFEST_APP$
 
 	};

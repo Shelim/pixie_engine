@@ -17,7 +17,10 @@ namespace engine
 			
 		}
 
-#define GAME_CONFIG_STD(type, name) const type & get_##name() const final { return configuration->get()->name(); }; void set_##name(const type & val) final {  } 
+
+#define ENGINE_CONFIG_GLOBAL_STD(type, name) type get_global_##name() const final { return configuration->get()->global_##name(); }  virtual void set_global_##name(type val) final { }
+#define ENGINE_CONFIG_LOCAL_STD(type, app, name) type get_app_##app##_##name() const final { return configuration->get()->app_##app##_##name(); }  virtual void set_app_##app##_##name(type val) final { }
+#define ENGINE_CONFIG_STD(type, name) type get_cfg_##name(manifest_app_t::app_t app) const final { return configuration->get()->cfg_##name(); } virtual void set_cfg_##name(manifest_app_t::app_t app, type val) final { }
 #include "std/config_std.hpp"
 
 	private:

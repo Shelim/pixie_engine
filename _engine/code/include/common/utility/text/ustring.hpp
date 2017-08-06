@@ -21,6 +21,7 @@
 #include <cereal/access.hpp>
 #include "utility/vfs/filesystem.hpp"
 #include "utility/renderer/color.hpp"
+#include "utility/pattern/fourcc.hpp"
 
 /**
  * @page ustring_format UString formatting
@@ -1560,6 +1561,18 @@ namespace engine
 		return ustring_t(ss.str());
 	}
 
+	template<> inline ustring_t to_string<id_t>(const id_t & item)
+	{
+		char buffer[5];
+		buffer[0] = ((item >> 24) & 0xff);
+		buffer[1] = ((item >> 16) & 0xff);
+		buffer[2] = ((item >> 8) & 0xff);
+		buffer[3] = ((item >> 0) & 0xff);
+		buffer[4] = '\0';
+
+		return ustring_t::from_ascii(buffer);
+	}
+
 	//////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -1729,6 +1742,24 @@ namespace engine
 				}
 			}
 		}
+		return ret;
+	}
+
+	template<> inline id_t from_string(const ustring_t & str)
+	{
+		uint32_t ret = 0;
+		const std::string & str_internal = str.to_utf8();
+		auto iter = str_internal.begin();
+		int pos = 0;
+		while (iter != str_internal.end() && pos < 4)
+		{
+			ret = (ret << 8) | (*iter & 0xff);
+			pos++;
+			iter++;
+		}
+		while (pos < 4)
+			ret <<= 8;
+
 		return ret;
 	}
 

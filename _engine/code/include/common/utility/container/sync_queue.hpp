@@ -31,7 +31,7 @@ namespace engine
 		{
 			std::lock_guard<std::recursive_mutex> guard(mutex);
 
-			T front = queue.front();
+			T front = std::move(queue.front());
 			queue.pop();
 
 			return front;

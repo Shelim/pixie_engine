@@ -1,6 +1,16 @@
 #include "component/terminal_writer.hpp"
 #include "platform/terminal.hpp"
 
+const engine::id_t engine::parser::token_terminal_escape_t::id = engine::make_id_t<'t', 'e', 's', 'c'>::value;
+const engine::id_t engine::parser::token_terminal_eof_t::id = engine::make_id_t<'t', 'e', 'o', 'f'>::value;
+const engine::id_t engine::parser::token_terminal_format_t::id = engine::make_id_t<'t', 'f', 'r', 'm'>::value;
+
+engine::terminal_writer_real_t::terminal_writer_real_t(std::shared_ptr<messenger_t> messenger, std::unique_ptr<settings_t<terminal_writer_colors_t>> terminal_writer_colors) : current_window_state(window_state_t::close), terminal_writer_colors(std::move(terminal_writer_colors)), messenger(messenger), callbacks_container(messenger, this)
+{
+	update_window(window_state_t::close);
+
+	callbacks_container.attach(msg_config_updated_t::type, [this](msg_base_t * msg) { on_config_update(msg); });
+}
 
 void engine::terminal_writer_real_t::write(const terminal_writer_string_t & terminal_string)
 {
@@ -15,16 +25,13 @@ void engine::terminal_writer_real_t::on_config_update(msg_base_t * msg)
 	if (msg->get_type() == msg_config_updated_t::type)
 	{
 		msg_config_updated_t* cfg_updated_msg = static_cast<msg_config_updated_t*>(msg);
-		if (cfg_updated_msg->get_item() == config_t::item_t::game_has_console)
+		if (cfg_updated_msg->get_item() == config_t::item_t::cfg_has_terminal)
 		{
-			std::shared_ptr<config_t> config = cfg_updated_msg->get_config().lock();
-			if (config)
-			{
-				if (config->get_game_has_console())
-					update_window(window_state_t::open);
-				else
-					update_window(window_state_t::close);
-			}
+			config_t * config = cfg_updated_msg->get_config();
+			if (config->get_cfg_has_terminal(manifest_app_t::get_local_app()))
+				update_window(window_state_t::open);
+			else
+				update_window(window_state_t::close);
 		}
 	}
 }

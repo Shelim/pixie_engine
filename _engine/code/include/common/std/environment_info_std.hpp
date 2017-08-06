@@ -6,7 +6,7 @@
 #define ENGINE_ENVIRONMENT_INFO_STATUS_STD(...)
 #endif
 
-ENGINE_ENVIRONMENT_INFO_STD(full_name, "Game Name"_u)
+ENGINE_ENVIRONMENT_INFO_STD(full_name, "Full Name"_u)
 ENGINE_ENVIRONMENT_INFO_STD(app_name, "App Name"_u)
 ENGINE_ENVIRONMENT_INFO_STD(app_type, "App Type"_u)
 ENGINE_ENVIRONMENT_INFO_STD(app_version, "Game version"_u)

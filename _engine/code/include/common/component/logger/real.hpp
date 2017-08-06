@@ -108,7 +108,7 @@ namespace engine
 		SETTINGS_TABLE_ENTRY(ustring_t, terminal_start)
 		SETTINGS_TABLE_ENTRY(ustring_t, terminal_end)
 
-#define ENGINE_LOGGER_LEVEL_STD(level, file_pattern, terminal_pattern) SETTINGS_TABLE_ENTRY(ustring_t, format_file_##level) SETTINGS_TABLE_ENTRY(ustring_t, format_terminal_##level)
+#define ENGINE_LOGGER_LEVEL_STD(level) SETTINGS_TABLE_ENTRY(ustring_t, format_file_##level) SETTINGS_TABLE_ENTRY(ustring_t, format_terminal_##level)
 #include "std/logger_std.hpp"
 
 	SETTINGS_TABLE_END()

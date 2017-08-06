@@ -100,13 +100,6 @@ for(var item in manifestCommonFinal)
 	output_hpp += '\t\tstatic ustring_t get_manifest_' + item + '() { return "' + manifestCommonFinal[item] + '"_u; }\n';
 }
 
-output_hpp += '\n\n\t\tenum class app_t\n\t\t{';
-for(var proj in projectsManifests)
-{
-	output_hpp += '\n\t\t\t' + proj + ',';
-}
-output_hpp += '\n\t\t};';
-
 output_hpp += '\n\n\t\tstatic ustring_t get_app_name(app_t app)\n\t\t{\n\t\t\tswitch(app)\n\t\t\t{';
 for(var proj in projectsManifests)
 {
