@@ -71,6 +71,8 @@ namespace engine
 		std::unique_ptr<holder_t<config_t> > config_provider;
 		std::shared_ptr<logger_t> logger;
 
+		callback_container_t callbacks_container;
+
 	};
 }
 

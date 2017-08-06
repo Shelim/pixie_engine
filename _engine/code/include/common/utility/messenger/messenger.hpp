@@ -127,20 +127,14 @@ namespace engine
 
 		typedef std::map<uint32_t, callbacks_by_msg_type_t> callbacks_by_msg_types_t;
 
-		uint32_t attach(uint32_t msg_type, callback_func_t callback, void * owning_ptr = nullptr)
+		uint32_t attach(uint32_t msg_type, callback_func_t callback)
 		{
-			return callbacks[msg_type].attach(callback, owning_ptr);
+			return callbacks[msg_type].attach(callback);
 		}
 
 		void deatach(uint32_t msg_type, uint32_t key)
 		{
 			callbacks[msg_type].deatach(key);
-		}
-
-		void deatach_all(void * owning_ptr)
-		{
-			for (auto & callback : callbacks)
-				callback.second.deatach_all(owning_ptr);
 		}
 
 		void deatach_all(uint32_t msg_type)
@@ -155,6 +149,19 @@ namespace engine
 
 	private:
 
+		uint32_t attach(uint32_t msg_type, callback_func_t callback, void * owning_ptr)
+		{
+			return callbacks[msg_type].attach(callback, owning_ptr);
+		}
+
+		void deatach_all(void * owning_ptr)
+		{
+			for (auto & callback : callbacks)
+				callback.second.deatach_all(owning_ptr);
+		}
+
+		friend class callback_container_t;
+
 		concurrent_queue_t<std::unique_ptr<msg_base_t> > messages;
 		std::thread messages_thread;
 
@@ -165,6 +172,42 @@ namespace engine
 		callbacks_by_msg_types_t callbacks;
 	};
 
+
+	class callback_container_t
+	{
+
+	public:
+
+		callback_container_t(std::shared_ptr<messenger_t> messager, void * this_ptr) : messager(messager), owning_ptr(this_ptr)
+		{
+
+		}
+
+		~callback_container_t()
+		{
+			deatach_all();
+		}
+
+		uint32_t attach(uint32_t msg_type, messenger_t::callback_func_t callback)
+		{
+			return messager->attach(msg_type, callback, owning_ptr);
+		}
+
+		void deatach(uint32_t msg_type, uint32_t key)
+		{
+			messager->deatach(msg_type, key);
+		}
+
+		void deatach_all()
+		{
+			if (owning_ptr) messager->deatach_all(owning_ptr);
+		}
+
+	private:
+
+		void *owning_ptr;
+		std::shared_ptr<messenger_t> messager;
+	};
 }
 
 #endif

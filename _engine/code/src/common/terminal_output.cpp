@@ -5,11 +5,11 @@ const engine::id_t engine::parser::token_terminal_escape_t::id = engine::make_id
 const engine::id_t engine::parser::token_terminal_eof_t::id = engine::make_id_t<'t', 'e', 'o', 'f'>::value;
 const engine::id_t engine::parser::token_terminal_format_t::id = engine::make_id_t<'t', 'f', 'r', 'm'>::value;
 
-engine::terminal_writer_real_t::terminal_writer_real_t(std::shared_ptr<messenger_t> messenger, std::unique_ptr<settings_t<terminal_writer_colors_t>> terminal_writer_colors) : current_window_state(window_state_t::close), terminal_writer_colors(std::move(terminal_writer_colors)), messenger(messenger)
+engine::terminal_writer_real_t::terminal_writer_real_t(std::shared_ptr<messenger_t> messenger, std::unique_ptr<settings_t<terminal_writer_colors_t>> terminal_writer_colors) : current_window_state(window_state_t::close), terminal_writer_colors(std::move(terminal_writer_colors)), messenger(messenger), callbacks_container(messenger, this)
 {
 	update_window(window_state_t::close);
 
-	messenger->attach(msg_config_updated_t::type, [this](msg_base_t * msg) { on_config_update(msg); }, this);
+	callbacks_container.attach(msg_config_updated_t::type, [this](msg_base_t * msg) { on_config_update(msg); });
 }
 
 void engine::terminal_writer_real_t::write(const terminal_writer_string_t & terminal_string)

@@ -19,6 +19,7 @@
 #include "utility/pattern/flags.hpp"
 #include "component/tasks/task.hpp"
 #include "utility/text/parser.hpp"
+#include "utility/container/sync_queue.hpp"
 #include <cereal/cereal.hpp>
 #include <cereal/access.hpp>
 #include <vlc/vlc.h>
@@ -26,6 +27,34 @@
 
 namespace engine
 {
+
+	class tasks_t
+	{
+
+	public:
+
+
+	private:
+		
+		class runner_t
+		{
+
+		public:
+
+			void execute_one()
+			{
+				if (tasks.is_empty()) return;
+				std::unique_ptr<task_base_t> task = std::move(tasks.pop());
+			}
+			
+		private:
+
+			sync_queue_t<std::unique_ptr<task_base_t>> tasks;
+
+		};
+
+
+	};
 
 }
 

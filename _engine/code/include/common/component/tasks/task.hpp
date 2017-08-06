@@ -52,7 +52,7 @@ namespace engine
 
 	protected:
 
-		task_base_t() : result(result_t::running), next_thread(task_thread_t::force_sync)
+		task_base_t() : result(result_t::running), next_thread(task_thread_t::force_sync), next_step(make_id_t<'i','n','i','t'>::value)
 		{
 
 		}
@@ -65,6 +65,7 @@ namespace engine
 	private:
 
 		result_t result;
+		id_t next_step;
 		task_thread_t next_thread;
 
 		virtual result_t execute(task_thread_t current_thread) = 0;

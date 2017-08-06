@@ -19,7 +19,7 @@ namespace engine
 
 		~terminal_writer_real_t()
 		{
-			messenger->deatach_all(this);
+
 		}
 
 		void write(const terminal_writer_string_t & terminal_string) final;
@@ -41,6 +41,7 @@ namespace engine
 		std::unique_ptr<settings_t<terminal_writer_colors_t>> terminal_writer_colors;
 		std::shared_ptr<messenger_t> messenger;
 
+		callback_container_t callbacks_container;
 	};
 }
 
