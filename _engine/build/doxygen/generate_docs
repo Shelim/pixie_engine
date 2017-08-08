@@ -9,7 +9,13 @@ cd ..
 rm -rf docs
 mkdir docs
 
-cd build/doxygen/os_x
+cd build/doxygen/unix
 
-./../../../depedency/doxygen/os_x/Doxygen doxyfile
+platform="$(uname -s)"
+
+case "${platform}" in
+    Darwin*) ./../../../depedency/doxygen/os_x/Doxygen doxyfile
+	*) 
+esac
+
 
