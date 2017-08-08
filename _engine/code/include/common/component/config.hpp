@@ -23,6 +23,7 @@
 #include "manifest_app.hpp"
 #include <cereal/cereal.hpp>
 #include <cereal/access.hpp>
+#include "utility/pattern/enum.hpp"
 #include <vlc/vlc.h>
 #include <bitset>
 

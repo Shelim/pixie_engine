@@ -20,7 +20,7 @@
 #include "settings/default_config.hpp"
 #include "settings/default_environment_info.hpp"
 #include "utility/text/parser.hpp"
-#include "utility/container/thread_pool.hpp"
+#include "utility/concurrention/thread_pool.hpp"
 #include "manifest_app.hpp"
 
 class sample_job_t final : public engine::thread_pool_job_t
@@ -39,12 +39,18 @@ public:
 		return engine::format_string("Sample job #1#"_u, cur_id);
 	}
 
-	void run() final
+	void run(engine::thread_pool_token_t * token) final
 	{
 		for (int i = 0; i < 5; i++)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(750));
-			logger->log_msg(core, "Simulating execution #1#: #2#..."_u, cur_id, i);
+			token->get_logger()->log_msg(core, "Simulating execution #1#: #2#..."_u, cur_id, i);
+
+			if (token->is_shutdown_requested())
+			{
+				token->get_logger()->log_msg(core, "Requested #1# termination before completion!"_u, cur_id);
+				return;
+			}
 		}
 
 	}

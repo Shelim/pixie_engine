@@ -5,26 +5,23 @@
 #include <unordered_map>
 #include <bitset>
 #include <type_traits>
+#include "utility/pattern/enum.hpp"
 
 namespace engine
 {
 	template<class flag_t> class flags_t final
 	{
 
-	private:
-
-		typedef typename std::underlying_type<flag_t>::type utype_t;
-
 	public:
 
-		void set_flag(flag_t flag, bool value = true)
+		void set_flag(flag_t flag, bool val = true)
 		{
-			flags.set(static_cast<utype_t>(flag), value);
+			flags.set(to_value(flag), val);
 		}
 
 		bool is_flag(flag_t flag) const
 		{
-			return flags.test(static_cast<utype_t>(flag));
+			return flags.test(to_value(flag));
 		}
 
 		void clear_all()
@@ -34,7 +31,7 @@ namespace engine
 
 	private:
 
-		std::bitset<static_cast<utype_t>(flag_t::count)> flags;
+		std::bitset<to_value(flag_t::count)> flags;
 	};
 
 }

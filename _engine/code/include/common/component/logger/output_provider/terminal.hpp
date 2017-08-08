@@ -25,7 +25,7 @@ namespace engine
 
 		terminal_writer_string_t start_text;
 		terminal_writer_string_t end_text;
-		std::array<formattable_string_t, static_cast<std::underlying_type<logger_item_t::level_t>::type>(logger_item_t::level_t::count)> formattable_string;
+		std::array<formattable_string_t, to_value(logger_item_t::level_t::count)> formattable_string;
 
 
 		std::shared_ptr<terminal_writer_t> terminal_writer;

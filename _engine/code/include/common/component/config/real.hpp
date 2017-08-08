@@ -8,6 +8,7 @@
 #include "utility/messenger/messenger.hpp"
 #include "utility/messenger/msg_config_updated.hpp"
 #include "utility/pattern/flags.hpp"
+#include "utility/pattern/enum.hpp"
 
 namespace engine
 {

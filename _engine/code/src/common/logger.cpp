@@ -8,7 +8,8 @@
 #include "pugixml.hpp"
 #include "component/logger.hpp"
 #include "utility/vfs/virtual_path.hpp"
-#include "utility/pattern/compilation.hpp"
+#include "utility/platform/compilation.hpp"
+#include "platform/debug.hpp"
 #include "platform/terminal.hpp"
 
 engine::logger_output_provider_file_t::logger_output_provider_file_t(std::shared_ptr<log_file_writer_t> log_file_writer, std::unique_ptr<settings_t<logger_output_t>> settings) : log_file_writer(log_file_writer), settings(std::move(settings))
@@ -29,6 +30,7 @@ void engine::logger_output_provider_file_t::output_start() const
 {
 	log_file_writer->write(start_text);
 }
+
 
 void engine::logger_output_provider_file_t::output(const logger_item_t & item) const
 {
@@ -91,35 +93,6 @@ void engine::logger_output_provider_terminal_t::output(const logger_item_t & ite
 void engine::logger_output_provider_terminal_t::output_end() const
 {
 	terminal_writer->write(end_text);
-}
-
-void engine::logger_item_t::parse_file()
-{
-
-#if defined _MSC_VER
-
-	static std::string engine_tag = "_engine/code/";
-	static std::string app_tag = engine::compilation_t::app_unix_name(); app_tag += "/code/";
-
-	std::string file_tmp = file_raw.get_cstring();
-	std::replace(file_tmp.begin(), file_tmp.end(), '\\', '/');
-
-	std::size_t index = file_tmp.find(engine_tag);
-	if (index != std::string::npos)
-		file_tmp = file_tmp.substr(index);
-
-	index = file_tmp.find(app_tag);
-	if (index != std::string::npos)
-		file_tmp = file_tmp.substr(index);
-
-	file = ustring_t::from_utf8(file_tmp.c_str());
-
-#else 
-
-#error "Specify parsing function for logger item t filename!"
-
-#endif
-
 }
 
 engine::logger_real_t::logger_real_t(std::shared_ptr<engine::frame_notifier_t> frame_notifier, std::shared_ptr<engine::environment_info_t> environment_info, std::unique_ptr<holder_t<logger_output_t> > logger_output_providers) : frame_notifier(frame_notifier), logger_output_providers(std::move(logger_output_providers))

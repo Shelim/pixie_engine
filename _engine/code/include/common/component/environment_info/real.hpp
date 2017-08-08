@@ -40,21 +40,21 @@ namespace engine
 
 		const ustring_t & get(key_t key) const final
 		{
-			return items[static_cast<std::underlying_type<logger_item_t::level_t>::type>(key)].get_value();
+			return items[to_value(key)].get_value();
 		}
 
 		status_t get_status(key_t key) const final
 		{
-			return items[static_cast<std::underlying_type<logger_item_t::level_t>::type>(key)].get_status();
+			return items[to_value(key)].get_status();
 		}
 
 	private:
 
 		std::unique_ptr<holder_t<environment_info_output_t> > environment_info_output_providers;
 
-		void set_info(key_t key, const ustring_t & value, status_t status = status_t::normal)
+		void set_info(key_t key, const ustring_t & val, status_t status = status_t::normal)
 		{
-			items[static_cast<std::underlying_type<logger_item_t::level_t>::type>(key)].set(value, status);
+			items[to_value(key)].set(val, status);
 		}
 
 		void gather_info();
@@ -95,7 +95,7 @@ namespace engine
 			ustring_t value;
 		};
 
-		std::array<item_t, static_cast<std::underlying_type<logger_item_t::level_t>::type>(key_t::count)> items;
+		std::array<item_t, to_value(key_t::count)> items;
 	};
 
 

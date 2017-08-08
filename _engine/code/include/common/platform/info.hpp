@@ -2,7 +2,7 @@
 #define ENGINE_COMMON_PLATFORM_INFO_HPP
 
 #include "utility/text/ustring.hpp"
-#include "utility/pattern/compilation.hpp"
+#include "utility/platform/compilation.hpp"
 
 namespace engine
 {

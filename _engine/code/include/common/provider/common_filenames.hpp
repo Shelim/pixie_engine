@@ -4,7 +4,7 @@
 
 #include "utility/pattern/class_settings.hpp"
 #include "utility/vfs/filesystem.hpp"
-#include "utility/pattern/compilation.hpp"
+#include "utility/platform/compilation.hpp"
 
 namespace engine
 {

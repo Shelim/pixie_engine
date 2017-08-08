@@ -9,12 +9,18 @@ cd ..
 rm -rf docs
 mkdir docs
 
-cd build/doxygen/unix
+
 
 platform="$(uname -s)"
 
 case "${platform}" in
-    Darwin*) ./../../../depedency/doxygen/os_x/Doxygen doxyfile
+    Darwin*)
+	
+	cd build/doxygen/os_x
+	./../../../depedency/doxygen/os_x/Doxygen doxyfile
+	
+	;;
+	
 	*) 
 esac
 

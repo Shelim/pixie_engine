@@ -3,6 +3,7 @@
 #pragma once
 
 #include "component/config.hpp"
+#include "utility/pattern/enum.hpp"
 
 namespace engine
 {

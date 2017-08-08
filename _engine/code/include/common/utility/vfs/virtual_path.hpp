@@ -6,7 +6,7 @@
 #include <vector>
 #include "utility/text/ustring.hpp"
 #include "utility/pattern/class_settings.hpp"
-#include "utility/pattern/compilation.hpp"
+#include "utility/platform/compilation.hpp"
 #include "manifest_app.hpp"
 #include "platform/path.hpp"
 

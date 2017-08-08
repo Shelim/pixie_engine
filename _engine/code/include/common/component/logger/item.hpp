@@ -17,6 +17,8 @@
 #include "utility/text/ustring.hpp"
 #include "component/frame_notifier.hpp"
 #include "utility/pattern/flags.hpp"
+#include "platform/debug.hpp"
+#include "utility/debug/callstack.hpp"
 #include <cereal/cereal.hpp>
 #include <cereal/access.hpp>
 #include <vlc/vlc.h>
@@ -73,7 +75,7 @@ namespace engine
 		logger_item_t(std::size_t id, level_t level, module_t module, const ustring_t & message, const ustring_t & function, bool raport, const ustring_t & file, uint32_t line, uint64_t frame, std::chrono::seconds time, std::thread::id thread, std::size_t link = -1) :
 			id(id), level(level), module(module), message(message), function(function), file_raw(file), line(line), frame(frame), time(time), thread(thread), link(link)
 		{
-			parse_file();
+			this->file = platform::canonize_debug_filename(file_raw);
 			flags.set_flag(flag_t::raport, raport);
 		}
 		std::size_t get_id() const
@@ -147,8 +149,6 @@ namespace engine
 
 	private:
 
-		void parse_file();
-
 		std::size_t id; // 1 for formatting
 		level_t level;
 		module_t module; // 2 for formatting
@@ -162,7 +162,6 @@ namespace engine
 		std::chrono::seconds time; // 8 for formatting
 		std::thread::id thread; // 9 for formatting
 		std::size_t link; // 10 for formatting
-
 	};
 
 	typedef std::vector<logger_item_t> logger_items_t;
