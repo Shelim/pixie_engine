@@ -79,7 +79,7 @@ namespace engine
 			void add_provider_actual(std::unique_ptr<provider_actual_t> provider)
 			{
 				virtual_path_t path = provider->get_virtual_path();
-				auto & iter = providers.find(path);
+				auto iter = providers.find(path);
 				if (iter == providers.end())
 				{
 					providers[path] = std::make_unique<provider_t>();

@@ -8,6 +8,14 @@
 #include "utility/pattern/instance_lifetime_guard.hpp"
 #include "utility/pattern/provider.hpp"
 #include "utility/pattern/class_settings.hpp"
+#include "component/logger.hpp"
+#include "component/frame_notifier.hpp"
+#include "component/terminal_writer.hpp"
+#include "component/config.hpp"
+#include "component/log_file_writer.hpp"
+#include "component/data_provider.hpp"
+#include "component/environment_info.hpp"
+#include "component/tasks.hpp"
 
 namespace engine
 {

@@ -8,6 +8,7 @@ ENGINE_COMPONENT_STD(environment_info)
 ENGINE_COMPONENT_STD(frame_notifier)
 ENGINE_COMPONENT_STD(log_file_writer)
 ENGINE_COMPONENT_STD(logger)
+ENGINE_COMPONENT_STD(tasks)
 ENGINE_COMPONENT_STD(terminal_writer)
 
 #undef ENGINE_COMPONENT_STD

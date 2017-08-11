@@ -33,26 +33,32 @@ namespace engine
 
 	public:
 
+		virtual ~tasks_t()
+		{
 
-	private:
-		
+		}
+
+		virtual void start_task(std::unique_ptr<task_base_t> task) = 0;
+
 		class runner_t
 		{
 
 		public:
 
-			void execute_one()
+			virtual ~runner_t()
 			{
-				if (tasks.is_empty()) return;
-				std::unique_ptr<task_base_t> task = std::move(tasks.pop());
+
 			}
-			
-		private:
 
-			sync_queue_t<std::unique_ptr<task_base_t>> tasks;
-
+			virtual void update_top_task() = 0;
+			virtual void update_tasks(std::chrono::duration<double> min_available_time) = 0;
 		};
 
+		virtual std::unique_ptr<runner_t> construct_runner(task_base_t::runner_t runner) = 0;
+
+	private:
+		
+		
 
 	};
 

@@ -644,7 +644,7 @@ namespace engine
 		resolve_token(token, output, resolvers...);
 	}
 
-	template<class... resolvers_t> inline void resolve(const tokens_t & tokens, parser::resolver_output_t * output, resolvers_t&... resolvers)
+	template<class... resolvers_t> inline void resolve(const tokens_t & tokens, parser::resolver_output_t * output, resolvers_t... resolvers)
 	{
 		for (const auto & iter : tokens)
 		{

@@ -4,73 +4,79 @@
 
 #include <cstdint>
 #include "utility/container/concurrent_queue.hpp"
+#include "utility/pattern/flags.hpp"
 
 namespace engine
 {
-	enum class task_thread_t
-	{
-		force_sync,
-#define ENGINE_TASK_THREAD_CALLER_STD(type) std_##type,
-#define ENGINE_TASK_THREAD_CALLER_CUSTOM_STD(type) thread_##type,
-#include "std/task_std.hpp"
-		use_thread_from_pool,
-		kill_task,
-		count
-	};
 
 	class task_base_t
 	{
 
 	public:
 
+		enum class runner_t
+		{
+			force_sync,
+#define ENGINE_TASK_THREAD_CALLER_STD(type) std_##type,
+#define ENGINE_TASK_THREAD_CALLER_CUSTOM_STD(type) thread_##type,
+#include "std/task_std.hpp"
+			use_thread_from_pool,
+			kill_task,
+			count
+		};
+
 		virtual ~task_base_t()
 		{
 
 		}
 
-		enum class result_t
+		enum class flag_t
 		{
 			running,
-			success,
-			error,
-		};
+			requested_shutdown,
 
-		bool is_completed()
+			count
+		};		
+
+		bool has_completed()
 		{
-			return result != result_t::running;
+			return !flags.is_flag(flag_t::running);
 		}
 
-		result_t get_result() const
+		bool is_requested_shutdown()
 		{
-			return result;
+			return flags.is_flag(flag_t::requested_shutdown);
 		}
 
-		task_thread_t get_next_thread() const
+		runner_t get_next_runner() const
 		{
-			return next_thread;
+			return next_runner;
 		}
 
 	protected:
 
-		task_base_t() : result(result_t::running), next_thread(task_thread_t::force_sync), next_step(make_id_t<'i','n','i','t'>::value)
+		task_base_t() : next_runner(runner_t::force_sync)
 		{
-
+			flags.set_flag(flag_t::running, true);
 		}
 
-		void set_next_thread(task_thread_t new_next_thread)
+		void request_shutdown()
 		{
-			next_thread = new_next_thread;
+			flags.set_flag(flag_t::requested_shutdown, true);
+		}
+
+		void set_next_runner(runner_t runner)
+		{
+			next_runner = runner;
 		}
 
 	private:
 
-		result_t result;
-		id_t next_step;
-		task_thread_t next_thread;
+		flags_t<flag_t> flags;
+		runner_t next_runner;
 
-		virtual result_t execute(task_thread_t current_thread) = 0;
+		virtual bool execute(runner_t current_thread) = 0;
 	};
-	
 }
 
 #endif

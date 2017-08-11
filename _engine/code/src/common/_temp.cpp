@@ -4,13 +4,6 @@
 #include <thread>
 #include <chrono>
 #include "bootstrapper.hpp"
-#include "component/logger.hpp"
-#include "component/frame_notifier.hpp"
-#include "component/terminal_writer.hpp"
-#include "component/config.hpp"
-#include "component/log_file_writer.hpp"
-#include "component/data_provider.hpp"
-#include "component/environment_info.hpp"
 #include "utility/vfs/filesystem.hpp"
 #include "utility/text/ustring.hpp"
 #include "utility/vfs/virtual_path.hpp"
@@ -62,6 +55,18 @@ private:
 	std::shared_ptr<engine::logger_t> logger;
 };
 
+class sample_task_t : public engine::task_base_t
+{
+
+public:
+
+
+private:
+
+
+
+};
+
 uint32_t sample_job_t::id;
 
 int main(int arg, char * argv[])
@@ -75,6 +80,7 @@ int main(int arg, char * argv[])
 		engine::register_as<engine::environment_info_real_t, engine::environment_info_t>,
 		engine::register_as<engine::log_file_writer_real_t, engine::log_file_writer_t>,
 		engine::register_as<engine::data_provider_real_t, engine::data_provider_t>,
+		engine::register_as<engine::tasks_real_t, engine::tasks_t>,
 
 #if PIXIE_IS_PORTABLE_BUILD
 		USE_SETTINGS(save_location_resolver_t, windows_portable),
