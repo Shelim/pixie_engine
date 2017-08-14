@@ -8,7 +8,7 @@
 
 namespace engine
 {
-	template<class enum_t> constexpr auto to_value(enum_t val) -> typename std::underlying_type<enum_t>::type
+	template<class enum_t> constexpr auto value_of(enum_t val) -> typename std::underlying_type<enum_t>::type
 	{
 		return static_cast<typename std::underlying_type<enum_t>::type>(val);
 	}

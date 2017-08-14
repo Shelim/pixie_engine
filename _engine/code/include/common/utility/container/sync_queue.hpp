@@ -37,6 +37,18 @@ namespace engine
 			return front;
 		}
 
+		T pop_check(const T && if_empty)
+		{
+			std::lock_guard<std::recursive_mutex> guard(mutex);
+
+			if (queue.empty()) return if_empty;
+
+			T front = std::move(queue.front());
+			queue.pop();
+
+			return front;
+		}
+
 		void push(const T & value)
 		{
 			std::lock_guard<std::recursive_mutex> guard(mutex);

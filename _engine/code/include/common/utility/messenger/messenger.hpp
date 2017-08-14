@@ -8,6 +8,7 @@
 #include <functional>
 #include "utility/messenger/msg_base.hpp"
 #include "utility/messenger/msg_kill_messanger.hpp"
+#include "utility/messenger/msg_shutdown.hpp"
 #include "utility/container/concurrent_queue.hpp"
 
 namespace engine

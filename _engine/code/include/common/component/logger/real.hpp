@@ -67,7 +67,7 @@ namespace engine
 
 	private:
 		
-		std::array<logger_items_t, to_value(logger_item_t::module_t::count)> items_cache;
+		std::array<logger_items_t, value_of(logger_item_t::module_t::count)> items_cache;
 
 		mutable std::recursive_mutex items_cache_mutex;
 
@@ -87,12 +87,12 @@ namespace engine
 
 		const logger_items_t & get_cache(logger_item_t::module_t module) const
 		{
-			return items_cache[to_value(module)];
+			return items_cache[value_of(module)];
 		}
 
 		logger_items_t & get_cache(logger_item_t::module_t module)
 		{
-			return items_cache[to_value(module)];
+			return items_cache[value_of(module)];
 		}
 
 		item_id_t log_local(logger_item_t::level_t level, logger_item_t::module_t module, bool raport, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message) final;

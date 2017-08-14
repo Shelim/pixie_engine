@@ -11,16 +11,34 @@ namespace engine
 
 	public:
 
-		id_t(const uint32_t value) : value(value)
+		typedef uint32_t underlying_type;
+
+		id_t(const underlying_type value) : value(value)
 		{
 
 		}
 
-		operator uint32_t() const { return value; }
+		id_t(const id_t & other) : value(other.value)
+		{
+
+		}
+
+		operator underlying_type() const { return value; }
+
+		id_t & operator= (const id_t & other)
+		{
+			value = other.value;
+			return (*this);
+		}
+		id_t & operator= (id_t && other)
+		{
+			std::swap(value, other.value);
+			return (*this);
+		}
 
 	private:
 
-		const uint32_t value;
+		underlying_type value;
 
 	};
 

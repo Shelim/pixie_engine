@@ -16,12 +16,12 @@ namespace engine
 
 		void set_flag(flag_t flag, bool val = true)
 		{
-			flags.set(to_value(flag), val);
+			flags.set(value_of(flag), val);
 		}
 
 		bool is_flag(flag_t flag) const
 		{
-			return flags.test(to_value(flag));
+			return flags.test(value_of(flag));
 		}
 
 		void clear_all()
@@ -31,7 +31,7 @@ namespace engine
 
 	private:
 
-		std::bitset<to_value(flag_t::count)> flags;
+		std::bitset<value_of(flag_t::count)> flags;
 	};
 
 }

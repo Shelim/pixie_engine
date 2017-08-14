@@ -40,12 +40,12 @@ namespace engine
 
 		const ustring_t & get(key_t key) const final
 		{
-			return items[to_value(key)].get_value();
+			return items[value_of(key)].get_value();
 		}
 
 		status_t get_status(key_t key) const final
 		{
-			return items[to_value(key)].get_status();
+			return items[value_of(key)].get_status();
 		}
 
 	private:
@@ -54,7 +54,7 @@ namespace engine
 
 		void set_info(key_t key, const ustring_t & val, status_t status = status_t::normal)
 		{
-			items[to_value(key)].set(val, status);
+			items[value_of(key)].set(val, status);
 		}
 
 		void gather_info();
@@ -95,7 +95,7 @@ namespace engine
 			ustring_t value;
 		};
 
-		std::array<item_t, to_value(key_t::count)> items;
+		std::array<item_t, value_of(key_t::count)> items;
 	};
 
 

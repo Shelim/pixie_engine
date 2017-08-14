@@ -28,7 +28,7 @@ namespace engine
 	private:
 		ustring_t start_text;
 		ustring_t end_text;
-		std::array<formattable_string_t, to_value(environment_info_t::key_t::count)> formattable_string;
+		std::array<formattable_string_t, value_of(environment_info_t::key_t::count)> formattable_string;
 		
 		std::shared_ptr<log_file_writer_t> log_file_writer;
 

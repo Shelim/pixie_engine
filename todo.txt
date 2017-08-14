@@ -1,5 +1,10 @@
-Tasks
- - ConcurrentTasks
+Process
+ - Made default runners (runner_sync, runner_spawn, runner_pool)
+	into custom class and instance it in processes_t
+		-> additional thread inside processes for spawn/pool
+ - More verbose logs!
+ - Debug!
+ - Runners should be registered with tags (to ease passing their names)
 
 DataItems	
  - Actual items

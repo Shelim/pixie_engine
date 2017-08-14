@@ -29,7 +29,7 @@ namespace engine
 
 		ustring_t start_text;
 		ustring_t end_text;
-		std::array<formattable_string_t, to_value(logger_item_t::level_t::count)> formattable_string;
+		std::array<formattable_string_t, value_of(logger_item_t::level_t::count)> formattable_string;
 
 		std::shared_ptr<log_file_writer_t> log_file_writer;
 
