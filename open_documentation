@@ -8,26 +8,25 @@ if [ -z "$1" ]
     cd "$(dirname "$1")"
 fi
 
-if [ -d "./engine/depedency" ]; then
-   
-echo "Use download_dependencies to download required depedencies before doing anything else!"
+if [ -d "./_engine/depedency" ]; then
 
+	cd ./_engine/build/doxygen
+
+	if [ -f ../../docs/index.html ]; then
+		chmod +x ./view_docs
+		./view_docs
+	else
+
+	echo "Documentation does not exists, regeneraing now... Please allow a few seconds to complete"
+	   
+		chmod +x ./generate_docs
+		chmod +x ./view_docs
+		./generate_docs
+		./view_docs
+
+	fi
 else
-
-cd ./_engine/build/doxygen
-
-if [ -f ../../docs/index.html ]; then
-    chmod +x ./view_docs
-    ./view_docs
-else
-
-echo "Documentation does not exists, regeneraing now... Please allow a few seconds to complete"
-   
-    chmod +x ./generate_docs
-    chmod +x ./view_docs
-    ./generate_docs
-    ./view_docs
-
-fi
+  
+	echo "Use download_dependencies to download required depedencies before doing anything else!"
 
 fi
