@@ -1,0 +1,1 @@
+do shell script "bash ./open_documentation"
