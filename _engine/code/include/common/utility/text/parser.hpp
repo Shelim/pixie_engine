@@ -5,6 +5,7 @@
 #include "utility/text/ustring.hpp"
 #include "utility/text/expand.hpp"
 #include "utility/pattern/fourcc.hpp"
+#include <cstddef>
 #include <deque>
 
 namespace engine
