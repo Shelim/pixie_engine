@@ -33,3 +33,13 @@ TEST(utility_text_parser, formatting_escape)
 	EXPECT_EQ("a#"_u, format_string("#1##"_u, "a"_u, "b"_u));
 	EXPECT_EQ("b#"_u, format_string("#2:test###"_u, "a"_u, "b"_u));
 }
+
+
+TEST(utility_text_parser, formatting_escape)
+{
+	EXPECT_EQ("#"_u, format_string("##"_u, "a"_u));
+	EXPECT_EQ("#1#"_u, format_string("##1##"_u, "a"_u));
+	EXPECT_EQ("#b"_u, format_string("###2#"_u, "a"_u, "b"_u));
+	EXPECT_EQ("a#"_u, format_string("#1##"_u, "a"_u, "b"_u));
+	EXPECT_EQ("b#"_u, format_string("#2:test###"_u, "a"_u, "b"_u));
+}
