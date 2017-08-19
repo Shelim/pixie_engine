@@ -27,14 +27,53 @@
 *     Written in modern C++. Powerful, flexible and extendable. And completely stand-alone!
 *
 * @section pixie_features Features
-* @subsection pixie_features_lo_system System (low level)
-*     - @ref engine::ustring_t "Portable UTF-8 strings"
-*     - @ref engine::logger_t "Advanced logger" with @ref engine::environment_info_t "plenty of environmental information"
-*     - Crash dumper, if something goes wrong (allowing post-mortem debugging on Windows)
-*     - @ref engine::crc32_t "CRC32 calculator"
-*     - @ref engine::config_t "Configuration class"
+* @subsection pixie_features_component Components
+*     - @ref components "Build based on components". Each can be disabled, replacing core functionality with dummy class
+*     - Major components
+*         - @ref engine::config_t "Configuration component" with real-time config update notfiications
+*         - @ref engine::data_provider_t "Data provider" monitoring VFS for real-time data files changes
+*         - @ref engine::logger_t "Logger" allowing multiple logging outputs, formatting and raporting to user
+*         - @ref engine::terminal_writer_t "Terminal writer" to standard output (usually the system console)
+*     - Minor components
+*         - @ref engine::environment_info_t "Environmnet info" provider for logging purpouses
+*         - @ref engine::frame_notifier_t "Frame Notifier" allowing querying data for renderer status
+*         - @ref engine::log_file_writer_t "Log file writer" for quick and robust log output, available even when full @ref engine::data_provieder_t "data provider" is unavailable
+* @subsection pixie_features_provider Information providers
+*     - @ref engine::common_filenames_provider_t "Common filenames" on given platform (like logger output filename)
+*     - @ref engine::save_location_provider_t "Save location" for given platform (full path)
+*     - @ref engine::scanners_provider_t "Scanner provider" for @ref virtual_path VFS on given platform
+* @subsection pixie_features_utilities Utilities
+*     - Concurrention
+*         - @ref engine::thread_pool_t "Thread pool"
+*     - Containers
+*         - @ref engine::compile_time_map_t "Compile-time key-value map"
+*         - @ref engine::concurrent_queue_t "Concurrent queue"
+*         - @ref engine::sync_queue_t "Sync queue"
+*         - @ref engine::sync_vector_t "Sync vector"
+*     - @ref data "Data input/output utilities"
+*     - Debugging tools
+*         - @ref engine::platform::dump_callstack "Callstack dumps"
+*     - @ref messenger "Multithreaded messenger" for internal components communication
+*     - Design patterns
+*         - @ref settings "Compile-time engine-wide settings"
+*         - @ref engine::factory_t "Abstract Factory"
+*         - @ref engine::flags_t "Flags" (based on enum classes)
+*         - @ref engine::id_t "FourCC IDs"
+*         - @ref engine::instance_lifetime_guard "Lifetime guards" (for platforms that cannot handle stack unwinding during exceptions)
+*         - @ref components_provider "Providers subsystem for components"
+*     - Platform
+*         - @ref engine::compilation_t "Compilation-time switches"
+*     - Renderer helpers
+*         - @ref engine::color_t "sRGB color class"
+*     - Security helpers
+*         - @ref engine::crc32_t "Fast CRC32 calculator"
+*     - Text utilities
+*         - @ref engine::ustring_t "UTF-8 strings"
+*         - @ref ustring_format "Text formatters"
+* @subsection pixie_features_other Other features
+*     - @ref settings "Compile-time engine settings"
+*     - @ref bootstrapper "Bootstrapper for initialization"
 *     - ~10,000 LoC as of August, 1st, 2017
-* @todo Expand the @ref pixie_features "features" section
 *
 * @section pixie_platforms Supported Platforms
 * @subsection pixie_platforms_win Windows XP/Vista/7/8/8.1/10
@@ -46,21 +85,34 @@
 * @subsection pixie_platforms_osx OS X
 *    (Expected, not yet working)
 *
-* @section pixe_libraries Libraries
-*    (Click on any name to see full licence text)
-*     - @ref license_angelcode "AngelCode"
-*     - @ref license_anttweakbar "AntTweakBar"
-*     - @ref license_apacheant "Apache Ant"
-*     - @ref license_blowfish "Blowfish"
-*     - @ref license_di "Boost Dependency Injection"
-*     - @ref license_cereal "cereal"
-*     - @ref license_enum_flags "enum_flags"
-*     - @ref license_glew "glew"
-*     - @ref license_gsl "gsl"
-*     - @ref license_librocket "libRocket"
-*     - @ref license_vlc "libVLC"
-*     - @ref license_nsis "NSIS
-*     - @ref license_pugixml "pugixml"
+* @section pixe_depedencies Depedencies
+*     - @ref depedency_angelcode "AngelCode"
+*     - @ref depedency_anttweakbar "AntTweakBar"
+*     - @ref depedency_apacheant "Apache Ant"
+*     - @ref depedency_blowfish "Blowfish"
+*     - @ref depedency_di "Boost Dependency Injection"
+*     - @ref depedency_cereal "cereal"
+*     - @ref depedency_cg "cg"
+*     - @ref depedency_debugbreak "debugbreak"
+*     - @ref depedency_directx "directx"
+*     - @ref depedency_doxygen "doxygen"
+*     - @ref depedency_git "git"
+*     - @ref depedency_glew "glew"
+*     - @ref depedency_googletest "Google Test"
+*     - @ref depedency_html_help_workshop "HTML Help Workshop"
+*     - @ref depedency_jdk "JDK 1.8"
+*     - @ref depedency_librocket "libRocket"
+*     - @ref depedency_vlc "libVLC"
+*     - @ref depedency_nsis "NSIS"
+*     - @ref depedency_openal_soft "OpenAL (Software)"
+*     - @ref depedency_pugixml "pugixml"
+*     - @ref depedency_sdl "SDL 2.0"
+*     - @ref depedency_sdl_net "SDL NET 2.0"
+*     - @ref depedency_stackwalker "Stackwalker"
+*     - @ref depedency_stb "stb"
+*     - @ref depedency_thttpd "thttpd"
+*     - @ref depedency_upx "UPX"
+*     - @ref depedency_wxwidgets "wxWidgets"
 *
 * @section pixe_copyrights Copyrights
 *    This engine is written and maintained by Kosek.com

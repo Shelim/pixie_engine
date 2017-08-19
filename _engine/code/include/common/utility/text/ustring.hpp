@@ -23,52 +23,6 @@
 #include "utility/renderer/color.hpp"
 #include "utility/pattern/fourcc.hpp"
 
-/**
- * @page ustring_format UString formatting
- * @tableofcontents
- * @section ustring_format_intro Introduction
- *		Pixie uses custom way to format unicode string.
- *		This way is much more flexible than original formatting.
- *		It can be extended in next versions, but will be always kept
- *		backward compatible.
- *
- *		The most important change done to standard C-like `printf` is
- *		the ability to change order of arguments, as needed for translations.
- *		Other changes includes full unicode support and ability to repeat
- *		some arguments more then once.
- * @section ustring_format_tutorial How to use it? (Quick Start)
- *		@code{.cpp}
- *			engine::format_string("Hello my #2# #1# world!"_u, "nice"_u, "really"_u);
- *			// Outputs: "Hello my really nice world!"
- *
- *			engine::format_string("You can have #1:what?# in tags too!"_u, "comments"_u);
- *			// Outputs: "You can have comments in tags too!"
- *
- *			engine::format_string("Argument type is detected on compile time: #1# (#3#)"_u, true, 1.0F, "As you can see you can skip the numbers!"_u);
- *			// Outputs: "Argument type is detected on compile time: True (As you can see you can skip the numbers!)"
- *		@endcode
- * @section ustring_format_reference Full Reference
- *		@subsection ustring_format_reference_structure Structure
- *			@code
- *				#order#
- *				#order:comment#
- *			@endcode
- *		@subsection ustring_format_reference_order Order
- *			Order is a positive number starting from `1`. Can span more than one character (ie `26`).
- *			Can be repeated (ie the same argument used more than once with the same or different key)
- *			@warning There must be no spaces between # and order!
- *		@subsection ustring_format_reference_comment Comment
- *			Comment starts with `:` then span till ending `#` is reached. It will be completely
- *			ignored by parser, but can give hint to the translators what will be substituted
- *			during formatting pass. Can contain any unicode characters
- *		@subsection ustring_format_reference_escape Escape hash
- *			You can use ## every time you wish to escape given hash (## will be replaced by single # and ignored by parser)
- *		@subsection ustring_format_reference_error Error handling
- *			Formatting is safe for arguments having incorect value (ie. 0 or higher then number of arguments)
- *			In such case the formatting code will be safely substituted for empty string
- * @see engine::ustring_t, engine::ustring_t::format_string
- */
-
 namespace engine
 {
 	class ustring_t;

@@ -10,39 +10,6 @@
 #include "manifest_app.hpp"
 #include "platform/path.hpp"
 
-/**
-* @page virtual_path Virtual File System (VFS)
-* @tableofcontents
-* @section virtual_path_intro Introduction
-*		Pixie (as many other game engines) uses VFS (Virtual File System).
-*		VFS allows layer of abstraction of asset path over physical file system.
-*		This feature is composed out of a few features described below.
-*
-*		The Pixie's VFS serve not only input, but allows modyfing of any asset
-*		effectivly serving as game-consumer and editor-producer at the same time.
-*		The assets are reloaded dynamically during execution and can be updated
-*		by any of Pixie application as well as physically by user.
-*
-* @section virtual_path_vpath Virtual path
-*		Virtual path (vpath) represents asset inside VFS. Vpath is composed
-*		out of two elements: @ref engine::virtual_path_t::type_t "type" and address.
-*		Type represent search target for physical file, while address represents
-*		simplified name of the file.
-*
-*		In general Vpath may represent more than one physical file, or even
-*		no file at all (when it comes outside of @ref engine::data::database_state_t "data state database").
-*
-*		Vpath will always resolve to the newest file satisfying requirenments. For input
-*		the requirenment is to be readable. For output the requirenment is to be both readable and writable.
-*
-*		Because of that, input and output may point to different files on target machine.
-*		After saving, the newly saved file will usually have the highest modification date,
-*		and will be noted to reload for input operation.
-*
-* @todo Complete this page!
-*
-* @see engine::virtual_path_t
-*/
 
 namespace engine
 {
@@ -175,7 +142,7 @@ namespace engine
 			path_t p = path;
 			if (p.last_ascii() != '/')
 				p.append('/');
-			p.append(item);
+			p.append(canonize_path(item.get_cstring()));
 
 			return virtual_path_t(p, type);
 		}

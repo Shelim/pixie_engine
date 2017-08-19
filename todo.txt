@@ -5,7 +5,16 @@ Process
  - More verbose logs!
  - Debug!
  - Runners should be registered with tags (to ease passing their names)
-
+ - Remove std::thread usage outside of process_t
+ 
+Docs
+ - Document code
+ - Add Engine Architecture page
+ - Add Terminal Output page
+ 
+Scripts error checking
+ - Add error checking to Windows Batch scripts
+ 
 DataItems	
  - Actual items
 
