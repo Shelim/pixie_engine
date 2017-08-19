@@ -6,7 +6,7 @@ if [ -z "$1" ]
   else
     cd "$(dirname "$1")"
 fi
-cd _engine/build/dependency
+cd _engine/build/depedency
 chmod +x ./download
 chmod +x ./pack_and_upload
 
