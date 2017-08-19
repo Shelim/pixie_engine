@@ -16,8 +16,8 @@ else
 
 echo "Documentation does not exists, regeneraing now... Please allow a few seconds to complete"
 
-    ./generate_docs.command
-    ./view_docs.command
+    ./generate_docs
+    ./view_docs
 
 fi
 
