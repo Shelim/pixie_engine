@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 cd "$(dirname "$0")"
 cd ../..
 read -p "This will wipe out existing depedencies and re-download them all. IT WILL TAKE SOME TIME, maybe even a few hours! Are you sure to proceed? y/(n)" -n 1 -r
