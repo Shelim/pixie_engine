@@ -11,13 +11,13 @@ else
 cd ./_engine/build/doxygen
 
 if [ -f ../../docs/index.html ]; then
-    ./view_docs    
+    ./view_docs.sh  
 else
 
 echo "Documentation does not exists, regeneraing now... Please allow a few seconds to complete"
 
-    ./generate_docs
-    ./view_docs
+    ./generate_docs.sh
+    ./view_docs.sh
 
 fi
 

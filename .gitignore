@@ -3,11 +3,13 @@
 !/.gitattributes
 !/.gitignore
 !/_config.yml
+!/download_dependencies.sh
 !/download_dependencies.bat
 !/INSTALL
 !/LICENSE
 !/new_project.bat
 !/open_documentation.bat
+!/open_documentation.sh
 !/README.md
 !/todo.txt
 **/.DS_Store

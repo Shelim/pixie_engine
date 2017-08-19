@@ -1,4 +1,4 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 cd _engine/build/depedency
-./download
+./download.sh
