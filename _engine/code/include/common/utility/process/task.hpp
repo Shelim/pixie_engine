@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_UTILITY_PROCESS_RUNNER_HPP
-#define ENGINE_COMMON_UTILITY_PROCESS_RUNNER_HPP
+#ifndef ENGINE_COMMON_UTILITY_PROCESS_TASK_HPP
+#define ENGINE_COMMON_UTILITY_PROCESS_TASK_HPP
 
 #pragma once
 
@@ -12,12 +12,13 @@ namespace engine
 	namespace process
 	{
 
-		class runner_base_t
+		class task_base_t
 		{
 
 		};
 
 	}
+
 }
 
 #endif

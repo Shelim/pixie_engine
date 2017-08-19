@@ -14,8 +14,6 @@
 #include "settings/default_environment_info.hpp"
 #include "utility/text/parser.hpp"
 #include "utility/concurrention/thread_pool.hpp"
-#include "utility/process/processes.hpp"
-#include "utility/process/process.hpp"
 #include "manifest_app.hpp"
 
 class sample_job_t final : public engine::thread_pool_job_t
@@ -59,35 +57,6 @@ private:
 
 uint32_t sample_job_t::id;
 
-class sample_process_t : public engine::process_t
-{
-public:
-
-	sample_process_t(std::shared_ptr<engine::logger_t> logger) : logger(logger), engine::process_t(engine::make_id_t<'s','y','n','c'>::value)
-	{
-	}
-
-	engine::ustring_t get_name() const final
-	{
-		return "Sample long-runing process"_u;
-	}
-
-private:
-
-	return_t execute_local(engine::id_t runner) final
-	{
-		while (!has_requested_shutdown())
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-			logger->log_msg(core, "Simulating execution process '#1#'..."_u, get_name());
-		}
-
-		return return_t::completed;
-	}
-
-	std::shared_ptr<engine::logger_t> logger;
-};
-
 int main(int arg, char * argv[])
 {
 
@@ -129,7 +98,6 @@ int main(int arg, char * argv[])
 	std::shared_ptr<engine::environment_info_t> environment_info = bootstrapper.construct_component<engine::environment_info_t>();
 	std::shared_ptr<engine::data_provider_t> data_provider = bootstrapper.construct_component<engine::data_provider_t>();
 	std::shared_ptr<engine::thread_pool_t<4>> thread_pool = bootstrapper.construct_component<engine::thread_pool_t<4>>();
-	std::shared_ptr<engine::processes_t> processes = bootstrapper.construct_component<engine::processes_t>();
 
 	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
 	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
@@ -140,9 +108,7 @@ int main(int arg, char * argv[])
 	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
 	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
 	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
-
-	processes->start_process(std::make_unique<sample_process_t>(logger));
-
+	
 	int i = 0;
 
 	auto task = logger->log_task_start(core, "Calculating"_u);
