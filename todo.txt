@@ -10,7 +10,6 @@ Process
 Docs
  - Document code
  - Add Engine Architecture page
- - Add Terminal Output page
  
 Scripts error checking
  - Add error checking to Windows Batch scripts
