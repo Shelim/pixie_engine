@@ -10,6 +10,10 @@ fi
 
 if [ -d "./_engine/depedency" ]; then
 
+	echo "Use download_dependencies to download required depedencies before doing anything else!"
+
+else
+  
 	cd ./_engine/build/doxygen
 
 	if [ -f ../../docs/index.html ]; then
@@ -25,8 +29,4 @@ if [ -d "./_engine/depedency" ]; then
 		./view_docs
 
 	fi
-else
-  
-	echo "Use download_dependencies to download required depedencies before doing anything else!"
-
 fi
