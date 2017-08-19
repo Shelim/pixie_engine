@@ -1,0 +1,4 @@
+CFBundleName = "download_dependencies.app";
+CFBundleShortVersionString = "1.0";
+CFBundleGetInfoString = "download_dependencies.app version 1.0 Copyright 2017 Shelim";
+NSHumanReadableCopyright = "Copyright 2017 Shelim.";

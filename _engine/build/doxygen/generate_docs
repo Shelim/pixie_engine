@@ -17,6 +17,9 @@ case "${platform}" in
     Darwin*)
 	
 	cd build/doxygen/unix
+
+        chmod +x ./../../../depedency/doxygen/os_x/Doxygen 
+
 	./../../../depedency/doxygen/os_x/Doxygen doxyfile
 	
 	;;

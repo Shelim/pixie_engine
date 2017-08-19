@@ -1,0 +1,4 @@
+CFBundleName = "open_documentation.app";
+CFBundleShortVersionString = "1.0";
+CFBundleGetInfoString = "open_documentation.app version 1.0 Copyright 2017 Shelim";
+NSHumanReadableCopyright = "Copyright 2017 Shelim.";
