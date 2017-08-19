@@ -1,6 +1,11 @@
 #!/bin/sh
 
-cd "$(dirname "$0")"
+if [ -z "$1" ]
+  then
+    cd "$(dirname "$0")"
+  else
+    cd "$1"
+fi
 
 if [ -d "./engine/depedency" ]; then
    

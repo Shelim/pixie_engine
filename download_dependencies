@@ -1,4 +1,9 @@
 #!/bin/sh
-cd "$(dirname "$0")"
+if [ -z "$1" ]
+  then
+    cd "$(dirname "$0")"
+  else
+    cd "$1"
+fi
 cd _engine/build/depedency
 ./download
