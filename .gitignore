@@ -4,13 +4,11 @@
 !/.gitignore
 !/_config.yml
 !/download_dependencies
-!/download_dependencies.AppleScript
 !/download_dependencies.bat
 !/INSTALL
 !/LICENSE
 !/new_project.bat
 !/open_documentation
-!/open_documentation.AppleScript
 !/open_documentation.bat
 !/README.md
 !/todo.txt
