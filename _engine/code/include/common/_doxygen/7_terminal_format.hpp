@@ -25,8 +25,8 @@
 * $0$
 *			@endcode
 *		@subsection terminal_format_reference_tag Tag
-*           One of predefined tags or your own (defined in std file)
-*           For current list of tags see _engine/code/include/common/std/terminal_writer_std.hpp
+*           One of predefined tags or your own (defined in `std` file)
+*           For current list of tags see `_engine/code/include/common/std/terminal_writer_std.hpp`
 *           
 *           Tags replace each other. Therefore only one tag can be active at given time.
 *   
@@ -35,7 +35,5 @@
 *
 *           The special `0` tag, cancels the effect and returns to console default.
 *
-*           @note Terminal tags *does not* count for column position (when using in conjunction with
-*           @note @ref ustring_format utsring formatting), therefore tags for ustring and terminal
-*           @note *can be* safely mixed up.
+*           @note Terminal tags *does not* count for column position (when using in conjunction with @ref ustring_format utsring formatting), therefore tags for ustring and terminal *can be* safely mixed up.
 */

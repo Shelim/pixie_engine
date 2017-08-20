@@ -10,10 +10,7 @@ Process
 Docs
  - Document code
  - Add Engine Architecture page
- 
-Scripts error checking
- - Add error checking to Windows Batch scripts
- 
+  
 DataItems	
  - Actual items
 
