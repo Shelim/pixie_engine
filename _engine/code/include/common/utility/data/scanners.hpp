@@ -11,7 +11,7 @@ namespace engine
 {
 	namespace data
 	{
-		class state_t;
+		class results_t;
 
 		class scanners_t final
 		{
@@ -25,11 +25,9 @@ namespace engine
 
 			}
 
-			void scan(state_t * results);
+			void scan(results_t * results);
 
 		private:
-
-			void add_results(state_t * results, scanner_t * scanner);
 
 			std::unique_ptr<collection_t> scanners;
 

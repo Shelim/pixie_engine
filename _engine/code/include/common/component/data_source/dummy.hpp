@@ -2,31 +2,26 @@
 #define ENGINE_COMPONENT_DATA_PROVIDER_DUMMY_HPP
 #pragma once
 
-#include "component/data_provider.hpp"
+#include "component/data_source.hpp"
 
 namespace engine
 {
-	class data_provider_dummy_t : public data_provider_t
+	class data_source_dummy_t : public data_source_t
 	{
 
 	public:
 
-		data_provider_dummy_t()
+		data_source_dummy_t()
 		{
 		}
 
-		~data_provider_dummy_t()
+		~data_source_dummy_t()
 		{
 		}
 
 		const data::changes_t & get_changes() const final
 		{
 			return data::changes_t();
-		}
-
-		void update() final
-		{
-
 		}
 
 		void delete_item(const virtual_path_t & filename) final

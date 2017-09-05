@@ -3,31 +3,32 @@
 
 #pragma once
 
-#include "utility/pattern/flags.hpp"
-#include "utility/pattern/enum.hpp"
 #include "utility/text/ustring.hpp"
-#include "utility/process/runner.hpp"
 
 namespace engine
 {
-	
+
 	class process_base_t
 	{
 
 	public:
 
+		process_base_t()
+		{
+			
+		}
+		
 		virtual ~process_base_t()
 		{
 
 		}
 
-	protected:
-
-
+		virtual ustring_t get_name() const
+		{
+			return "Generic process"_u;
+		}
 
 	private:
-
-
 
 	};
 

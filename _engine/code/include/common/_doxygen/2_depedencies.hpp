@@ -22,6 +22,7 @@
 * <tr><td>@ref depedency_jdk "JDK 1.8"<td>Required by @ref depedency_apacheant "Apache Ant"<td>Sun License<td>Oracle Corporation
 * <tr><td>@ref depedency_librocket "libRocket"<td>HTML/CSS GUI-in-renderer<td>MIT/X11<td>CodePoint Ltd, Shift Technology Ltd, and contributors
 * <tr><td>@ref depedency_vlc "libVLC"<td>Movie playback<td>GNU LGPL 2<td>VideoLAN
+* <tr><td>@ref depedency_minizip "miniZip"<td>Archive compression/deompression<td>BSD Variant<td>Nathan Moinvaziri
 * <tr><td>@ref depedency_nsis "NSIS"<td>Setup on Windows platform<td>zlib/libpng<td>Open Source Contributors
 * <tr><td>@ref depedency_openal_soft "OpenAL (Software)"<td>Sound support module<td>GNU LPGL<td>kcat
 * <tr><td>@ref depedency_pugixml "pugixml"<td>Fast XML loader and parser<td>MIT/X11<td>Arseny Kapoulkine
@@ -124,6 +125,9 @@
 *
 * The libVLC media framework is already used by several applications; see who uses libVLC?
 *
+* @section depedency_minizip miniZip
+* Contains the latest bug fixes that having been found all over the internet including the old minizip forum and zlib developer's mailing list along with some additional features. Based on the original work of Gilles Vollant and contributed to by many people over the years.
+*
 * @section depedency_nsis NSIS
 * NSIS (Nullsoft Scriptable Install System) is a professional open source system to create Windows installers. It is designed to be as small and flexible as possible and is therefore very suitable for internet distribution.
 * 
@@ -185,4 +189,4 @@
 *
 * @section depedency_wxwidgets wxWidgets
 * wxWidgets is a C++ library that lets developers create applications for Windows, Mac OS X, Linux and other platforms with a single code base. It has popular language bindings for Python, Perl, Ruby and many other languages, and unlike other cross-platform toolkits, wxWidgets gives applications a truly native look and feel because it uses the platform's native API rather than emulating the GUI. It's also extensive, free, open-source and mature.
-*/
+**/

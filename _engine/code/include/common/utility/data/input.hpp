@@ -18,10 +18,13 @@ namespace engine
 
 		public:
 
+			virtual void jump_to_begin() = 0;
+			virtual void jump_to_end() = 0;
 			virtual void skip(int32_t pos) = 0;
 			virtual void go_back(int32_t pos) = 0;
 			virtual uint32_t read(uint8_t * buffer, uint32_t size) = 0;
 			virtual bool is_eof() = 0;
+			virtual uint32_t position() = 0;
 
 			virtual ~input_t() { }
 			
@@ -75,7 +78,7 @@ namespace engine
 
 		protected:
 
-			input_t(virtual_path_t path)
+			input_t(virtual_path_t path) : path(path)
 			{
 
 			}
@@ -95,15 +98,24 @@ namespace engine
 			{
 
 			}
+			void jump_to_begin() final
+			{
+				this->pos = 0;
+			}
+
+			void jump_to_end() final
+			{
+				this->pos = static_cast<int32_t>(buffer.size()) - 1;
+			}
 
 			void skip(int32_t pos) final
 			{
-				this->pos = std::max(0, std::min(static_cast<int32_t>(buffer.size()), this->pos + pos));
+				this->pos = std::max(0, std::min(static_cast<int32_t>(buffer.size()) - 1, this->pos + pos));
 			}
 
 			void go_back(int32_t pos) final
 			{
-				this->pos = std::max(0, std::min(static_cast<int32_t>(buffer.size()), this->pos - pos));
+				this->pos = std::max(0, std::min(static_cast<int32_t>(buffer.size()) - 1, this->pos - pos));
 			}
 
 			uint32_t read(uint8_t * buffer, uint32_t size) final
@@ -118,6 +130,10 @@ namespace engine
 				return pos >= buffer.size();
 			}
 
+			uint32_t position() final
+			{
+				return pos;
+			}
 
 		private:
 
@@ -177,6 +193,24 @@ namespace engine
 			std::streamsize xsgetn(char* s, std::streamsize n) final
 			{
 				return input->read(reinterpret_cast<uint8_t*>(s), n);
+			}
+
+			pos_type seekoff(off_type off, std::ios_base::seekdir dir, std::ios_base::openmode which = std::ios_base::in | std::ios_base::out) final
+			{
+				if (dir == std::ios_base::cur)
+					input->skip(off);
+				else if (dir == std::ios_base::beg)
+				{
+					input->jump_to_begin();
+					input->skip(off);
+				}
+				else if (dir == std::ios_base::end)
+				{
+					input->jump_to_end();
+					input->go_back(-off);
+				}
+				
+				return input->position();
 			}
 
 			input_t * input;

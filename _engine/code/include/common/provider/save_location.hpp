@@ -31,7 +31,13 @@ namespace engine
 
 		}
 
-		ustring_t get_save_path(const virtual_path_t & path, bool ensure_it_exists = true);
+		enum class ensure_path_exists_t
+		{
+			no,
+			yes
+		};
+
+		ustring_t get_save_path(const virtual_path_t & path, ensure_path_exists_t ensure_it_exists = ensure_path_exists_t::yes);
 
 	private:
 

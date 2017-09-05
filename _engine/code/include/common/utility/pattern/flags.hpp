@@ -6,6 +6,7 @@
 #include <bitset>
 #include <type_traits>
 #include "utility/pattern/enum.hpp"
+#include <mutex>
 
 namespace engine
 {

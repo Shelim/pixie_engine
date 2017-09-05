@@ -32,6 +32,11 @@ namespace engine
 			dispatch_message(message.get());
 		}
 
+		void post_message_sync(msg_base_t * message)
+		{
+			dispatch_message(message);
+		}
+
 		typedef std::function<void(msg_base_t*)> callback_func_t;
 
 		class callback_t

@@ -10,6 +10,8 @@ namespace engine
 {
 	namespace data
 	{
+		class results_t;
+
 		class scanner_t
 		{
 
@@ -25,20 +27,12 @@ namespace engine
 			scanner_t& operator=(scanner_t const&) = delete;
 			scanner_t& operator=(scanner_t &&) = default;
 
-			typedef std::map<virtual_path_t, std::unique_ptr<provider_actual_t> > results_t;
-
-			void scan()
+			void scan(results_t  * results)
 			{
-				results.clear();
-				scan_local();
+				scan_local(results);
 			}
 
 		protected:
-
-			void add_result(std::unique_ptr<provider_actual_t> result)
-			{
-				results[result->get_virtual_path()] = std::move(result);
-			}
 
 			scanner_t()
 			{
@@ -49,12 +43,10 @@ namespace engine
 			
 			friend class scanners_t;
 
-			virtual void scan_local()
+			virtual void scan_local(results_t  * results)
 			{
 
 			}
-
-			results_t results;
 
 		};
 	}

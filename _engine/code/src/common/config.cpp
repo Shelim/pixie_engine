@@ -5,21 +5,21 @@
 
 namespace engine
 {
-#define ENGINE_CONFIG_GLOBAL_STD(type_t, name) type_t config_provider_base_t::get_default_global_##name() const { return configuration->get()->global_##name(); }
-#define ENGINE_CONFIG_LOCAL_STD(type_t, app, name) type_t config_provider_base_t::get_default_local_##app##_##name() const { return configuration->get()->app_##app##_##name();  }
-#define ENGINE_CONFIG_STD(type_t, name) type_t config_provider_base_t::get_default_cfg_##name(manifest_app_t::app_t app) const { return configuration->get()->cfg_##name(); }
+#define ENGINE_CONFIG_GLOBAL_STD(type_t, name) type_t config_provider_base_t::provider_default_t::get_default_global_##name() const { return configuration->get()->global_##name(); }
+#define ENGINE_CONFIG_LOCAL_STD(type_t, app, name) type_t config_provider_base_t::provider_default_t::get_default_local_##app##_##name() const { return configuration->get()->app_##app##_##name();  }
+#define ENGINE_CONFIG_STD(type_t, name) type_t config_provider_base_t::provider_default_t::get_default_cfg_##name(manifest_app_t::app_t app) const { return configuration->get()->cfg_##name(); }
 #include "std/config_std.hpp"
 
-	void config_provider_storage_t::rescan()
+	void config_provider_storage_actual_t::rescan()
 	{
 
-#define ENGINE_CONFIG_GLOBAL_STD(type_t, name) vals.val_for_global_##name = platform::retrieve("global_" #name ##_u, get_default_global_##name());
-#define ENGINE_CONFIG_LOCAL_STD(type_t, app, name) vals.val_for_app_##app##_##name = platform::retrieve("local_" #app "_" #name ##_u, get_default_local_##app##_##name());
-#define ENGINE_CONFIG_STD(type_t, name) for(auto i = 0; i < static_cast<std::underlying_type<manifest_app_t::app_t>::type>(manifest_app_t::app_t::count); i++) { vals.val_for_cfg_##name[i] = platform::retrieve(format_string("cfg_#1#_" #name ##_u, manifest_app_t::get_app_name(static_cast<manifest_app_t::app_t>(i))), get_default_cfg_##name(static_cast<manifest_app_t::app_t>(i))); }
+#define ENGINE_CONFIG_GLOBAL_STD(type_t, name) vals.val_for_global_##name = platform::retrieve("global_" #name ##_u, defaults->get_default_global_##name());
+#define ENGINE_CONFIG_LOCAL_STD(type_t, app, name) vals.val_for_app_##app##_##name = platform::retrieve("local_" #app "_" #name ##_u, defaults->get_default_local_##app##_##name());
+#define ENGINE_CONFIG_STD(type_t, name) for(auto i = 0; i < static_cast<std::underlying_type<manifest_app_t::app_t>::type>(manifest_app_t::app_t::count); i++) { vals.val_for_cfg_##name[i] = platform::retrieve(format_string("cfg_#1#_" #name ##_u, manifest_app_t::get_app_name(static_cast<manifest_app_t::app_t>(i))), defaults->get_default_cfg_##name(static_cast<manifest_app_t::app_t>(i))); }
 #include "std/config_std.hpp"
 	}
 
-	void config_provider_storage_t::notify_on_differences()
+	void config_provider_storage_actual_t::notify_on_differences()
 	{
 #define ENGINE_CONFIG_GLOBAL_STD(type_t, name) if(vals.val_for_global_##name != old_vals.val_for_global_##name) { std::lock_guard<std::recursive_mutex> guard(ready_mutex); rdy_vals.val_for_global_##name = vals.val_for_global_##name; messenger->post_message(std::make_unique<msg_config_provider_updated_t>(config_t::item_t::global_##name)); }
 #define ENGINE_CONFIG_LOCAL_STD(type_t, app, name) if(vals.val_for_app_##app##_##name != old_vals.val_for_app_##app##_##name) { std::lock_guard<std::recursive_mutex> guard(ready_mutex); rdy_vals.val_for_app_##app##_##name = vals.val_for_app_##app##_##name; messenger->post_message(std::make_unique<msg_config_provider_updated_t>(config_t::item_t::app_##app##_##name)); }

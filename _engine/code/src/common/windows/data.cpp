@@ -30,7 +30,7 @@
 
 std::unique_ptr<engine::data::output_t> engine::platform::create_new(const virtual_path_t & path, std::shared_ptr<save_location_provider_t> save_location_provider)
 {
-	ustring_t physical_path = save_location_provider->get_save_path(path, true);
+	ustring_t physical_path = save_location_provider->get_save_path(path, save_location_provider_t::ensure_path_exists_t::yes);
 
 	return std::move(std::make_unique<engine::data::output_file_safe_t>(path, physical_path.get_cstring()));
 }

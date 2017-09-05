@@ -5,6 +5,7 @@
 #include "utility/data/output.hpp"
 #include "utility/vfs/filesystem.hpp"
 #include "utility/vfs/virtual_path.hpp"
+#include "platform/filesystem.hpp"
 
 #include <fstream>
 #include <system_error>
@@ -28,35 +29,27 @@ namespace engine
 				if(!is_directory(dir, ec))
 					create_directories(dir, ec);
 
-				stream.open(physical_path, std::ios_base::out | std::ios_base::binary);
+				file = platform::fopen(physical_path, platform::file_mode_t::write);
 			}
 
 			~output_file_t()
 			{
-				stream.close();
+				platform::fclose(file);
 			}
 
 			uint32_t write(const uint8_t * buffer, uint32_t size) final
 			{
-				std::ofstream::pos_type pos1 = stream.tellp();
-				if (pos1 < 0) return 0;
-
-				stream.write(reinterpret_cast<const char *>(buffer), size);
-					
-				std::ofstream::pos_type pos2 = stream.tellp();
-				if (pos1 < 0) return 0;
-
-				return pos2 - pos1;
+				return platform::fwrite(buffer, size, file);
 			}
 			
 			void force_flush() final
 			{
-				stream.flush();
+				platform::fflush(file);
 			}
 
 		private:
 
-			std::ofstream stream;
+			platform::file_t file;
 
 			std::filesystem::path physical_path;
 		};

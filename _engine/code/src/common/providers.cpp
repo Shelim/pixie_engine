@@ -1,8 +1,9 @@
 #include "provider/save_location.hpp"
 #include "provider/scanners.hpp"
+#include "utility/data/provider_actual/file.hpp"
 #include "platform/path.hpp"
 
-engine::ustring_t engine::save_location_provider_t::get_save_path(const virtual_path_t & path, bool ensure_it_exists)
+engine::ustring_t engine::save_location_provider_t::get_save_path(const virtual_path_t & path, ensure_path_exists_t ensure_it_exists)
 {
 	ustring_t ret = platform::get_self_path();
 
@@ -13,7 +14,7 @@ engine::ustring_t engine::save_location_provider_t::get_save_path(const virtual_
 	
 	ret = virtual_path_t::canonize_path(virtual_path_t::resolve_path(ret));
 
-	if (ensure_it_exists)
+	if (ensure_it_exists == ensure_path_exists_t::yes)
 	{ 
 		std::filesystem::path path = ret.get_cstring();
 		if (path.has_filename())
@@ -29,10 +30,10 @@ std::unique_ptr<engine::data::scanners_t::collection_t > engine::scanners_provid
 {
 	std::unique_ptr<engine::data::scanners_t::collection_t > ret = std::make_unique<engine::data::scanners_t::collection_t >();
 
-#define ENGINE_VIRTUAL_PATH_STD(name) { ustring_collection_t collection = scanners->get()->path_fullaccess_for_##name(); for(auto & iter : collection) { ret->push_back(std::make_unique<engine::data::scanner_directory_t>(engine::virtual_path_t(""_u, engine::virtual_path_t::type_t::name), virtual_path_t::canonize_path(virtual_path_t::resolve_path(iter)), false)); } }
+#define ENGINE_VIRTUAL_PATH_STD(name) { ustring_collection_t collection = scanners->get()->path_fullaccess_for_##name(); for(auto & iter : collection) { ret->push_back(std::make_unique<engine::data::scanner_directory_t>(engine::virtual_path_t(""_u, engine::virtual_path_t::type_t::name), virtual_path_t::canonize_path(virtual_path_t::resolve_path(iter)), data::provider_actual_file_t::read_only_t::no)); } }
 #include "std/virtual_path_std.hpp"
 
-#define ENGINE_VIRTUAL_PATH_STD(name) { ustring_collection_t collection = scanners->get()->path_readonly_for_##name(); for(auto & iter : collection) { ret->push_back(std::make_unique<engine::data::scanner_directory_t>(engine::virtual_path_t(""_u, engine::virtual_path_t::type_t::name), virtual_path_t::canonize_path(virtual_path_t::resolve_path(iter)), true)); } }
+#define ENGINE_VIRTUAL_PATH_STD(name) { ustring_collection_t collection = scanners->get()->path_readonly_for_##name(); for(auto & iter : collection) { ret->push_back(std::make_unique<engine::data::scanner_directory_t>(engine::virtual_path_t(""_u, engine::virtual_path_t::type_t::name), virtual_path_t::canonize_path(virtual_path_t::resolve_path(iter)), data::provider_actual_file_t::read_only_t::yes)); } }
 #include "std/virtual_path_std.hpp"
 
 	return std::move(ret);

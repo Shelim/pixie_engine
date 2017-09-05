@@ -1,18 +1,16 @@
-Process
- - Made default runners (runner_sync, runner_spawn, runner_pool)
-	into custom class and instance it in processes_t
-		-> additional thread inside processes for spawn/pool
- - More verbose logs!
- - Debug!
- - Runners should be registered with tags (to ease passing their names)
- - Remove std::thread usage outside of process_t
- 
 Docs
  - Document code
  - Add Engine Architecture page
   
+Packs
+ - Zip (output)
+	- Save pack of items
+ - Encrypted
+	- Custom archive based on encryption key
+	- The same rules apply
+  
 DataItems	
- - Actual items
+ - Actual items loading/saving
 
 Modules
  - Manifests

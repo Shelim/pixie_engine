@@ -1,6 +1,9 @@
 #include "utility/data/input.hpp"
 #include "utility/data/state.hpp"
-#include "component/data_provider.hpp"
+#include "utility/data/results.hpp"
+#include "utility/data/scanner/directory.hpp"
+#include "utility/data/provider_actual/archive.hpp"
+#include "component/data_source.hpp"
 #include "utility/data/changes.hpp"
 
 std::unique_ptr<engine::data::input_t> engine::data::input_t::spawn_partial(int32_t size)
@@ -12,25 +15,15 @@ std::unique_ptr<engine::data::input_t> engine::data::input_t::spawn_partial(int3
 	return std::move(std::make_unique<input_partial_t>(path, std::move(buff)));
 }
 
-void engine::data::scanners_t::scan(state_t * results)
+void engine::data::scanners_t::scan(results_t * results)
 {
 	if (!results) return;
-
-	results->clear();
+	results->begin_scanning();
 	for (auto & scanner : *scanners)
 	{
-		scanner->scan();
-		add_results(results, scanner.get());
+		scanner->scan(results);
 	}
-	results->calculate_directories();
-}
-
-void engine::data::scanners_t::add_results(state_t * results, scanner_t * scanner)
-{
-	for (auto & result : scanner->results)
-	{
-		results->add_provider_actual(std::move(result.second));
-	}
+	results->end_scanning();
 }
 
 void engine::data::state_t::mark_changed_directories(const virtual_path_t & path, changes_t * output, changed_directories_t * directories)
@@ -60,8 +53,6 @@ engine::data::changes_t engine::data::state_t::calculate_changes(state_t & curre
 
 	for (auto & iter_prev : previous.providers)
 	{
-		if (iter_prev.first.get_type() == virtual_path_t::type_t::log) continue;
-
 		auto iter_cur = current.providers.find(iter_prev.first);
 
 		bool deleted = (iter_cur == current.providers.end());
@@ -94,8 +85,6 @@ engine::data::changes_t engine::data::state_t::calculate_changes(state_t & curre
 
 	for (auto & iter_cur : current.providers)
 	{
-		if (iter_cur.first.get_type() == virtual_path_t::type_t::log) continue;
-
 		auto iter_prev = previous.providers.find(iter_cur.first);
 
 		if (iter_prev == previous.providers.end())
@@ -110,7 +99,7 @@ engine::data::changes_t engine::data::state_t::calculate_changes(state_t & curre
 }
 
 
-void engine::data_provider_real_t::refresh_virtual_path_type_changes()
+void engine::data_source_real_actual_t::refresh_virtual_path_type_changes()
 {
 	type_changes.clear();
 
@@ -121,13 +110,66 @@ void engine::data_provider_real_t::refresh_virtual_path_type_changes()
 	}
 }
 
-void engine::data_provider_real_t::rescan()
+void engine::data_source_real_actual_t::rescan()
 {
 	std::lock_guard<std::recursive_mutex> guard(mutex_database_next);
 	if (requested_rescan)
 	{
 		data::scanners_t scanner(std::move(scanners_provider->construct_scanners_collection()));
-		scanner.scan(&next);
+		data::results_t results(&next, messenger);
+		scanner.scan(&results);
 		requested_rescan = false;
 	}
+}
+
+void engine::data::scanner_directory_t::scan_local(results_t  * results) 
+{
+	std::size_t len = base_physical_path.native().size();
+	if (base_physical_path.native()[len - 1] != '/' && base_physical_path.native()[len - 1] != '\\')
+		len++;
+
+	std::error_code ec;
+
+	for (auto & file : std::filesystem::recursive_directory_iterator(base_physical_path))
+	{
+		if (is_regular_file(file, ec))
+		{
+			virtual_path_t virtual_path;
+			virtual_path.set_type(base_virtual_path.get_type());
+
+			virtual_path_t::path_t path = base_virtual_path.get_path();
+			if (!path.is_empty() && path.last_ascii() != '/')
+				path.append_utf8(u8"/");
+
+			std::string path_regular = file.path().u8string().substr(len);
+			std::replace(path_regular.begin(), path_regular.end(), '\\', '/');
+			path.append_utf8(path_regular.c_str());
+
+			virtual_path.set_path(path);
+
+			results->add_result(std::make_unique<provider_actual_file_t>(virtual_path, file.path(), read_only));
+		}
+	}
+}
+
+
+
+bool engine::data::provider_t::add_provider_actual(std::unique_ptr<provider_actual_t> provider)
+{
+	if (!provider) return false;
+
+	if (providers.empty())
+		virtual_path = provider->get_virtual_path();
+
+	if (virtual_path == provider->get_virtual_path())
+	{
+		providers.insert(std::move(provider));
+		return true;
+	}
+	return false;
+}
+
+std::unique_ptr<engine::data::input_t> engine::data::provider_actual_archive_t::construct_input_local()
+{
+	return std::make_unique<engine::data::input_buffer_t> (get_virtual_path(), zip_input->unpack_file(archive_path));
 }

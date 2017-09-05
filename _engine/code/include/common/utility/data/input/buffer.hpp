@@ -29,23 +29,39 @@ namespace engine
 
 			}
 
+			void jump_to_begin() final
+			{
+				this->pos = 0;
+			}
+
+			void jump_to_end() final
+			{
+				this->pos = static_cast<int32_t>(data.size()) - 1;
+			}
+
 			void skip(int32_t pos) final
 			{
-				this->pos = std::max(0, std::min(static_cast<int32_t>(data.size()), this->pos + pos));
+				this->pos = std::max(0, std::min(static_cast<int32_t>(data.size()) - 1, this->pos + pos));
 			}
 			void go_back(int32_t pos) final
 			{
-				this->pos = std::max(0, std::min(static_cast<int32_t>(data.size()), this->pos - pos));
+				this->pos = std::max(0, std::min(static_cast<int32_t>(data.size()) - 1, this->pos - pos));
 			}
 			uint32_t read(uint8_t * buffer, uint32_t size) final
 			{
 				uint32_t len = std::min(data.size(), this->pos + size) - this->pos;
-				memcpy(buffer, &data[0] + this->pos, len);
+				memcpy(buffer, &data[this->pos], len);
+				this->pos += len;
 				return len;
 			}
 			bool is_eof() final
 			{
 				return pos >= data.size();
+			}
+
+			uint32_t position() final
+			{
+				return pos;
 			}
 
 		private:

@@ -7,6 +7,7 @@
 #include "utility/vfs/filesystem.hpp"
 #include "utility/text/ustring.hpp"
 #include "utility/vfs/virtual_path.hpp"
+#include "settings/default_archive.hpp"
 #include "settings/default_paths.hpp"
 #include "settings/default_terminal.hpp"
 #include "settings/default_logger.hpp"
@@ -62,12 +63,13 @@ int main(int arg, char * argv[])
 
 	engine::bootstrapper_t< 
 
-		engine::register_as<engine::logger_real_t, engine::logger_t>,
-		engine::register_as<engine::terminal_writer_real_t, engine::terminal_writer_t>,
-		engine::register_as<engine::config_real_t, engine::config_t>,
-		engine::register_as<engine::environment_info_real_t, engine::environment_info_t>,
-		engine::register_as<engine::log_file_writer_real_t, engine::log_file_writer_t>,
-		engine::register_as<engine::data_provider_real_t, engine::data_provider_t>,
+		ENABLE_COMPONENT(logger),
+		ENABLE_COMPONENT(terminal_writer),
+		ENABLE_COMPONENT(config),
+		ENABLE_COMPONENT(environment_info),
+		ENABLE_COMPONENT(log_file_writer),
+		ENABLE_COMPONENT(data_source),
+		ENABLE_COMPONENT(data_archives),
 
 #if PIXIE_IS_PORTABLE_BUILD
 		USE_SETTINGS(save_location_resolver_t, windows_portable),
@@ -81,14 +83,16 @@ int main(int arg, char * argv[])
 #else
 		USE_SETTINGS(config_t, release),
 #endif
+		USE_SETTINGS(data_archives_t, normal),
 		USE_SETTINGS(common_filenames_t, normal),
 		USE_SETTINGS(terminal_writer_colors_t, normal),
 		USE_SETTINGS(logger_output_t, normal),
 		USE_SETTINGS(environment_info_output_t, normal),
 
-		engine::register_providers_for<engine::environment_info_output_t, engine::environment_info_output_provider_terminal_t, engine::environment_info_output_provider_file_t>,
-		engine::register_providers_for<engine::logger_output_t, engine::logger_output_provider_terminal_t, engine::logger_output_provider_file_t>,
-		engine::register_provider_for<engine::config_t, engine::config_provider_storage_t>
+		USE_PROVIDER_FOR(config, storage),
+		
+		USE_PROVIDERS_FOR(environment_info_output, terminal, file),
+		USE_PROVIDERS_FOR(logger_output, terminal, file)
 	
 	> bootstrapper;
 
@@ -96,10 +100,10 @@ int main(int arg, char * argv[])
 	std::shared_ptr<engine::logger_t> logger = bootstrapper.construct_component<engine::logger_t>();
 	std::shared_ptr<engine::config_t> config = bootstrapper.construct_component<engine::config_t>();
 	std::shared_ptr<engine::environment_info_t> environment_info = bootstrapper.construct_component<engine::environment_info_t>();
-	std::shared_ptr<engine::data_provider_t> data_provider = bootstrapper.construct_component<engine::data_provider_t>();
+	std::shared_ptr<engine::data_source_t> data_source = bootstrapper.construct_component<engine::data_source_t>();
 	std::shared_ptr<engine::thread_pool_t<4>> thread_pool = bootstrapper.construct_component<engine::thread_pool_t<4>>();
+	std::shared_ptr<engine::process::runner_engine_thread_t<engine::process::runner_thread_t::engine_update> > runner_update = bootstrapper.construct_component<engine::process::runner_engine_thread_t<engine::process::runner_thread_t::engine_update> >();
 
-	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
 	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
 	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
 	thread_pool->enqueue_job(std::make_unique<sample_job_t>(logger));
@@ -128,9 +132,7 @@ int main(int arg, char * argv[])
 	
 	for (;;)
 	{
-		break;
-
-		data_provider->update();
+		runner_update->run_all_available_once();
 		
 		/*
 		if (i == 250000) config->set_game_has_console(false);
@@ -140,7 +142,7 @@ int main(int arg, char * argv[])
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		i++;
-		if (i == 10000) break;
+//		if (i == 10000) break;
 		
 
 		/*
@@ -149,6 +151,8 @@ int main(int arg, char * argv[])
 			logger->log_err(core, "Critical failure!"_u);
 			*/
 	}
+
+	runner_update->run_on_shutdown();
 
 	return 0;
 }

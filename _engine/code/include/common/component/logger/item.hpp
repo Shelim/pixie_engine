@@ -67,16 +67,22 @@ namespace engine
 
 		};
 
+		enum class raport_t
+		{
+			enabled,
+			none
+		};
+
 		logger_item_t(finished_t) : id(-1), level(level_t::finished), link(-1)
 		{
 
 		}
 
-		logger_item_t(std::size_t id, level_t level, module_t module, const ustring_t & message, const ustring_t & function, bool raport, const ustring_t & file, uint32_t line, uint64_t frame, std::chrono::seconds time, std::thread::id thread, std::size_t link = -1) :
+		logger_item_t(std::size_t id, level_t level, module_t module, const ustring_t & message, const ustring_t & function, raport_t raport, const ustring_t & file, uint32_t line, uint64_t frame, std::chrono::seconds time, std::thread::id thread, std::size_t link = -1) :
 			id(id), level(level), module(module), message(message), function(function), file_raw(file), line(line), frame(frame), time(time), thread(thread), link(link)
 		{
 			this->file = platform::canonize_debug_filename(file_raw);
-			flags.set_flag(flag_t::raport, raport);
+			flags.set_flag(flag_t::raport, (raport == raport_t::enabled));
 		}
 		std::size_t get_id() const
 		{

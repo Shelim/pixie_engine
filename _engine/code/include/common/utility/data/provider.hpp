@@ -110,20 +110,7 @@ namespace engine
 				return (*providers.begin())->get_time_last_mod();
 			}
 
-			bool add_provider_actual(std::unique_ptr<provider_actual_t> provider)
-			{
-				if(!provider) return false;
-				
-				if (providers.empty())
-					virtual_path = provider->get_virtual_path();
-
-				if (virtual_path == provider->get_virtual_path())
-				{
-					providers.insert(std::move(provider));
-					return true;
-				}
-				return false;
-			}
+			bool add_provider_actual(std::unique_ptr<provider_actual_t> provider);
 
 		private:
 

@@ -11,7 +11,6 @@ namespace engine
 	{
 
 		ustring_t get_self_path();
-		void ensure_directory_exits(std::filesystem::path path);
 
 		enum class directory_special_t
 		{
@@ -20,7 +19,7 @@ namespace engine
 			saves
 		};
 
-		ustring_t resolve_directory(directory_special_t directory);
+		ustring_t resolve_path(directory_special_t directory);
 	}
 
 }

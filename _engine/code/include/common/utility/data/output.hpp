@@ -17,16 +17,26 @@ namespace engine
 
 			virtual uint32_t write(const uint8_t * buffer, uint32_t size) = 0;
 
-			bool write_ustring(const ustring_t & str)
+			enum result_t
 			{
-				return write(reinterpret_cast<const uint8_t*>(str.get_cstring()), str.len()) == str.len();
+				ok,
+				error
+			};
+
+			result_t write_ustring(const ustring_t & str)
+			{
+				if (write(reinterpret_cast<const uint8_t*>(str.get_cstring()), str.len()) == str.len())
+					return result_t::ok;
+				return result_t::error;
 			}
 
 			typedef std::vector<uint8_t> buffer_t;
 
-			bool write_buffer(const buffer_t & buffer)
+			result_t write_buffer(const buffer_t & buffer)
 			{
-				return write(&buffer[0], buffer.size()) == buffer.size();
+				if (write(&buffer[0], buffer.size()) == buffer.size())
+					return result_t::ok;
+				return result_t::error;
 			}
 
 			virtual void force_flush()

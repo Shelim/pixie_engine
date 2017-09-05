@@ -27,6 +27,16 @@ namespace engine
 
 			}
 
+			void jump_to_begin() final
+			{
+
+			}
+
+			void jump_to_end() final
+			{
+
+			}
+
 			void skip(int32_t pos) final
 			{
 				
@@ -42,6 +52,11 @@ namespace engine
 			bool is_eof() final
 			{
 				return true;
+			}
+
+			uint32_t position() final
+			{
+				return 0;
 			}
 
 		private:

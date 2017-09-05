@@ -34,19 +34,19 @@ namespace engine
 			T front = std::move(queue.front());
 			queue.pop();
 
-			return front;
+			return std::move(front);
 		}
 
 		T pop_check(const T && if_empty)
 		{
 			std::lock_guard<std::recursive_mutex> guard(mutex);
 
-			if (queue.empty()) return if_empty;
+			if (queue.empty()) return std::move(if_empty);
 
 			T front = std::move(queue.front());
 			queue.pop();
 
-			return front;
+			return std::move(front);
 		}
 
 		void push(const T & value)

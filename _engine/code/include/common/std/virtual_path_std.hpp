@@ -25,9 +25,9 @@ ENGINE_ASSET_PATH_STD(common)
 ENGINE_ASSET_PATH_STD(modules)
 ENGINE_ASSET_PATH_STD(submodules)
 
-ENGINE_PATH_RESOLVE_STD("*local_app_data*"_u, platform::resolve_directory(platform::directory_special_t::local_app_data))
-ENGINE_PATH_RESOLVE_STD("*roaming_app_data*"_u, platform::resolve_directory(platform::directory_special_t::roaming_app_data))
-ENGINE_PATH_RESOLVE_STD("*saves*"_u, platform::resolve_directory(platform::directory_special_t::saves))
+ENGINE_PATH_RESOLVE_STD("*local_app_data*"_u, platform::resolve_path(platform::directory_special_t::local_app_data))
+ENGINE_PATH_RESOLVE_STD("*roaming_app_data*"_u, platform::resolve_path(platform::directory_special_t::roaming_app_data))
+ENGINE_PATH_RESOLVE_STD("*saves*"_u, platform::resolve_path(platform::directory_special_t::saves))
 ENGINE_PATH_RESOLVE_STD("*exe_path*"_u, platform::get_self_path())
 
 #undef ENGINE_PATH_RESOLVE_STD

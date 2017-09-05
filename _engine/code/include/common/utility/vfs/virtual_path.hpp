@@ -44,6 +44,11 @@ namespace engine
 			set_path(path);
 		}
 
+		const ustring_t & get_ext_lower() const
+		{
+			return ext_lower;
+		}
+
 		const path_t & get_path() const
 		{
 			return path;
@@ -112,6 +117,13 @@ namespace engine
 		void set_path(const std::filesystem::path & value)
 		{
 			this->path = canonize_path(value);
+			int index = this->path.last_index_of_ascii(".");
+
+			if (index == -1)
+				this->ext_lower = ""_u;
+			else
+				this->ext_lower = this->path.substr(index);
+
 			path_calculate_lower();
 		}
 
@@ -156,6 +168,7 @@ namespace engine
 
 		path_t path;
 		path_t path_lower;
+		ustring_t ext_lower;
 		type_t type;
 	};
 

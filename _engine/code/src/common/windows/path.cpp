@@ -40,13 +40,7 @@ engine::ustring_t engine::platform::get_self_path()
 	return ustring_t::from_utf8(path_utf8.c_str());
 }
 
-void engine::platform::ensure_directory_exits(std::filesystem::path path)
-{
-	std::error_code ec;
-	std::filesystem::create_directories(path, ec);
-}
-
-engine::ustring_t engine::platform::resolve_directory(engine::platform::directory_special_t directory)
+engine::ustring_t engine::platform::resolve_path(engine::platform::directory_special_t directory)
 {
 	engine::ustring_t ret;
 

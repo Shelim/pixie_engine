@@ -65,7 +65,7 @@
 * @section vfs_scanners Scanners
 *       Scanner is a small class that constantly search for modification date of content. The process is completely
 *       automatic and executed at small time interval.
-*       Changes found from previous update called are available in @ref engine::data_provider_t::get_changes data_provider_t::get_changes
+*       Changes found from previous update called are available in @ref engine::data_source_t::get_changes data_source_t::get_changes
 *       method. `Data` subsystem will reload them on the fly without any action required, using new Input created from new provider.
 *       List of scanners is provided via @ref settings settings to bootstrapper. Usually includes @ref engine::data::scanner_directory_t scanner_directory_t
 *       that recursivly checks physical filesystem.

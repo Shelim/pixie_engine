@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_PLATFORM_FILESYSTEM_HPP
-#define ENGINE_COMMON_PLATFORM_FILESYSTEM_HPP
+#ifndef ENGINE_COMMON_PLATFORM_DATA_HPP
+#define ENGINE_COMMON_PLATFORM_DATA_HPP
 
 #include "utility/vfs/virtual_path.hpp"
 #include "provider/save_location.hpp"

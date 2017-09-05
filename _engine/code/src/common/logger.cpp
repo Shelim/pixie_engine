@@ -181,7 +181,7 @@ void engine::logger_real_t::output_thread_func()
 	}
 }
 
-engine::logger_real_t::item_id_t engine::logger_real_t::log_local(logger_item_t::level_t level, logger_item_t::module_t module, bool raport, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message)
+engine::logger_real_t::item_id_t engine::logger_real_t::log_local(logger_item_t::level_t level, logger_item_t::module_t module, logger_item_t::raport_t raport, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message)
 {
 	size_t item_id;
 	{

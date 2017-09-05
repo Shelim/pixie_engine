@@ -8,13 +8,35 @@
 #include "utility/pattern/instance_lifetime_guard.hpp"
 #include "utility/pattern/provider.hpp"
 #include "utility/pattern/class_settings.hpp"
+#include "component/data_archives.hpp"
 #include "component/logger.hpp"
 #include "component/frame_notifier.hpp"
 #include "component/terminal_writer.hpp"
 #include "component/config.hpp"
 #include "component/log_file_writer.hpp"
-#include "component/data_provider.hpp"
+#include "component/data_source.hpp"
 #include "component/environment_info.hpp"
+
+
+#define INTERNAL_PROVIDER_INIT(provider_type, ...) engine::register_providers_for<engine::provider_type##_t 
+#define INTERNAL_PROVIDER_0(provider_type) 
+#define INTERNAL_PROVIDER_1(provider_type, p1) , engine::provider_type##_provider_##p1##_t
+#define INTERNAL_PROVIDER_2(provider_type, p1, ...) INTERNAL_PROVIDER_1(provider_type, p1) EXPAND(INTERNAL_PROVIDER_1(provider_type, __VA_ARGS__))
+#define INTERNAL_PROVIDER_3(provider_type, p1, ...) INTERNAL_PROVIDER_1(provider_type, p1) EXPAND(INTERNAL_PROVIDER_2(provider_type, __VA_ARGS__))
+#define INTERNAL_PROVIDER_4(provider_type, p1, ...) INTERNAL_PROVIDER_1(provider_type, p1) EXPAND(INTERNAL_PROVIDER_3(provider_type, __VA_ARGS__))
+#define INTERNAL_PROVIDER_5(provider_type, p1, ...) INTERNAL_PROVIDER_1(provider_type, p1) EXPAND(INTERNAL_PROVIDER_4(provider_type, __VA_ARGS__))
+#define INTERNAL_PROVIDER_6(provider_type, p1, ...) INTERNAL_PROVIDER_1(provider_type, p1) EXPAND(INTERNAL_PROVIDER_5(provider_type, __VA_ARGS__))
+#define INTERNAL_PROVIDER_7(provider_type, p1, ...) INTERNAL_PROVIDER_1(provider_type, p1) EXPAND(INTERNAL_PROVIDER_6(provider_type, __VA_ARGS__))
+#define INTERNAL_PROVIDER_8(provider_type, p1, ...) INTERNAL_PROVIDER_1(provider_type, p1) EXPAND(INTERNAL_PROVIDER_7(provider_type, __VA_ARGS__))
+#define INTERNAL_PROVIDER_9(provider_type, p1, ...) INTERNAL_PROVIDER_1(provider_type, p1) EXPAND(INTERNAL_PROVIDER_8(provider_type, __VA_ARGS__))
+
+#define EXPAND( x ) x
+#define _GET_NTH_ARG(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...) N
+
+#define ENABLE_COMPONENT(component) engine::register_as<engine::component##_real_t, engine::component##_t>
+#define USE_PROVIDER_FOR(provider_type, provider) engine::register_provider_for<engine::provider_type##_t INTERNAL_PROVIDER_1(provider_type, provider)>
+#define USE_PROVIDERS_FOR(...) EXPAND(INTERNAL_PROVIDER_INIT(__VA_ARGS__)) EXPAND(EXPAND(_GET_NTH_ARG(__VA_ARGS__, INTERNAL_PROVIDER_9, INTERNAL_PROVIDER_8, INTERNAL_PROVIDER_7, INTERNAL_PROVIDER_6, INTERNAL_PROVIDER_5, INTERNAL_PROVIDER_4, INTERNAL_PROVIDER_3, INTERNAL_PROVIDER_2, INTERNAL_PROVIDER_1, INTERNAL_PROVIDER_0))(__VA_ARGS__)) >
+
 
 namespace engine
 {

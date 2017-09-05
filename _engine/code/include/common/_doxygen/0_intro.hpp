@@ -31,7 +31,7 @@
 *     - @ref components "Build based on components". Each can be disabled, replacing core functionality with dummy class
 *     - Major components
 *         - @ref engine::config_t "Configuration component" with real-time config update notfiications
-*         - @ref engine::data_provider_t "Data provider" monitoring VFS for real-time data files changes
+*         - @ref engine::data_source_t "Data provider" monitoring VFS for real-time data files changes
 *         - @ref engine::logger_t "Logger" allowing multiple logging outputs, formatting and raporting to user
 *         - @ref engine::terminal_writer_t "Terminal writer" to standard output (usually the system console)
 *     - Minor components

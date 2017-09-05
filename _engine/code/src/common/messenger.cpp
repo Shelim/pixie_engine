@@ -2,11 +2,13 @@
 #include "utility/messenger/msg_config_updated.hpp"
 #include "utility/messenger/msg_shutdown.hpp"
 #include "utility/messenger/msg_kill_messanger.hpp"
+#include "utility/messenger/msg_scanner_found_item.hpp"
 
 const engine::id_t engine::msg_config_provider_updated_t::type = engine::make_id_t<'c', 'f', 'g', 'p'>::value;
 const engine::id_t engine::msg_config_updated_t::type = engine::make_id_t<'c', 'f', 'g', 'u'>::value;
 const engine::id_t engine::msg_shutdown_t::type = engine::make_id_t<'s', 'h', 'u', 't'>::value;
 const engine::id_t engine::msg_kill_messanger_t::type = engine::make_id_t<'k', 'i', 'l', 'l'>::value;
+const engine::id_t engine::msg_scanner_found_item_t::type = engine::make_id_t<'s', 'f', 'i', 't'>::value;
 
 
 engine::messenger_t::messenger_t()

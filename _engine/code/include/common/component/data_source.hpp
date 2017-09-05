@@ -22,24 +22,22 @@
 namespace engine
 {
 
-	class data_provider_t
+	class data_source_t
 	{
 
 	public:
 
-		data_provider_t()
+		data_source_t()
 		{
 
 		}
 
-		virtual ~data_provider_t()
+		virtual ~data_source_t()
 		{
 
 		}
 
 		virtual const data::changes_t & get_changes() const = 0;
-
-		virtual void update() = 0;
 
 		virtual void delete_item(const virtual_path_t & filename) = 0;
 
@@ -64,7 +62,7 @@ namespace engine
 	};
 }
 
-#include "component/data_provider/dummy.hpp"
-#include "component/data_provider/real.hpp"
+#include "component/data_source/dummy.hpp"
+#include "component/data_source/real.hpp"
 
 #endif

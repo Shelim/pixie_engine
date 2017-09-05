@@ -3,7 +3,8 @@
 #endif
 
 ENGINE_COMPONENT_STD(config)
-ENGINE_COMPONENT_STD(data_provider)
+ENGINE_COMPONENT_STD(data_archives)
+ENGINE_COMPONENT_STD(data_source)
 ENGINE_COMPONENT_STD(environment_info)
 ENGINE_COMPONENT_STD(frame_notifier)
 ENGINE_COMPONENT_STD(log_file_writer)

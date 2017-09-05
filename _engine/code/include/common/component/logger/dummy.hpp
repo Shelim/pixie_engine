@@ -29,7 +29,7 @@ namespace engine
 
 	private:
 
-		item_id_t log_local(logger_item_t::level_t level, logger_item_t::module_t module, bool raport, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message) final
+		item_id_t log_local(logger_item_t::level_t level, logger_item_t::module_t module, logger_item_t::raport_t raport, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message) final
 		{
 			return 0;
 		}
