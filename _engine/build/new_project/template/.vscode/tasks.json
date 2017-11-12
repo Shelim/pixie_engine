@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [ 
+        {
+            "label": "Build debug",
+            "type": "shell",
+            "windows": {
+                "command": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/command/windows/build_vscode.bat"
+            },
+            "args": [ ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        }
+    ]
+}

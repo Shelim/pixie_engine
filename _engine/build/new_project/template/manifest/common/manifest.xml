@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<manifest_common>
+	<!-- Common -->
+	<full_name>$FULL_PROJECT_NAME$</full_name>
+</manifest_common>

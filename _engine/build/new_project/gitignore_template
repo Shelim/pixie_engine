@@ -1,0 +1,5 @@
+/_build
+/output
+/upload
+/private
+!/private/readme.txt

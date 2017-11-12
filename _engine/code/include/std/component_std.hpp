@@ -1,0 +1,19 @@
+#ifndef ENGINE_COMPONENT_STD
+#define ENGINE_COMPONENT_STD(...)
+#endif
+
+// ENGINE_COMPONENT_STD(config)
+// ENGINE_COMPONENT_STD(config_monitor)
+ENGINE_COMPONENT_STD(config_storage)
+// ENGINE_COMPONENT_STD(data_archives)
+// ENGINE_COMPONENT_STD(data_creator)
+// ENGINE_COMPONENT_STD(data_monitor)
+// ENGINE_COMPONENT_STD(data_source)
+// ENGINE_COMPONENT_STD(environment_info)
+ENGINE_COMPONENT_STD(filesystem)
+ENGINE_COMPONENT_STD(logger)
+// ENGINE_COMPONENT_STD(path_resolver)
+ENGINE_COMPONENT_STD(renderer_status)
+// ENGINE_COMPONENT_STD(terminal)
+
+#undef ENGINE_COMPONENT_STD

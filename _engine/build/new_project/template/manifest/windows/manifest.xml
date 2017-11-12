@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<manifest_windows>
+	<!-- Windows -->
+	<installer_filename>$FULL_PROJECT_NAME$ (installer).exe</installer_filename>
+	<portable_filename>$FULL_PROJECT_NAME$ (portable).zip</portable_filename>
+	<executable_filename>$FULL_PROJECT_NAME$.exe</executable_filename>
+	<resources_company>Kosek.com</resources_company>
+	<resources_internal>$UNIX_PROJECT_NAME$</resources_internal>
+	<resources_copyrights>Copyright (c) by Kosek.com</resources_copyrights>
+	<resources_product>$FULL_PROJECT_NAME$</resources_product>
+	<install_dir>$FULL_PROJECT_NAME$</install_dir>
+	<install_shortcut>$FULL_PROJECT_NAME$.lnk</install_shortcut>
+	<install_registry>$FULL_PROJECT_NAME$</install_registry>
+	<game_app_dir>$FULL_PROJECT_NAME$</game_app_dir>
+	<storage_registry>$FULL_PROJECT_NAME$</storage_registry>
+</manifest_windows>

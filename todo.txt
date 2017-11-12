@@ -1,3 +1,22 @@
+ - Work on components:
+	 - config
+	 - config_monitor
++	 - config_storage
++        - XML (?) inside game directory (for portable!)
+			 - Requires: XML
+	 - data_archives
+	 - data_creator
+	 - data_monitor
+	 - data_source
+	 - environment_info
+v	 - filesystem
+v		 - Windows implementation
+v	 - logger
+	 - path_resolver
+v	 - renderer_status
++	 - terminal
+ - Utility / XML
+
 Docs
  - Document code
  - Add Engine Architecture page
@@ -10,7 +29,9 @@ Packs
 	- The same rules apply
   
 DataItems	
- - Actual items loading/saving
+ - Basic item loading/saving (data item should only load data for parsing after that!)
+ - Softlinks
+ - Digital Sign-ing datafiles
 
 Modules
  - Manifests
@@ -19,8 +40,3 @@ Modules
 
 Asset Manager
  - Map asset_path_t -> virtual_path_t
-
-BuildSystem
- - Build changelog
- - Update changelog
- - Remove comments from XML

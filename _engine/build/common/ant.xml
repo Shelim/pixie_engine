@@ -1,172 +1,121 @@
 <project name="common" basedir="../..">
-
-<!-- Loading manifests... -->
+<!--
+ *******************************************************************
+ * This is common support build script for Apache Ant. It handles build 
+ *     events that are platform-indepdent to remove redundancy in 
+ *     You should never call this file directly, it is already done in
+ *     platform's ant.xml
+ * 
+ * REQUIRES:
+ *     - '\_engine\build\windows\build_project_msvc_actual.js' for creating msvc project
+ *     - Javascript engine
+ *     - Apache ANT
+ *     - Base path '\_engine'
+ * INPUT:
+ *     (None)
+ * AUTHOR:
+ *     Piotr Kosek <piotr@kosek.com>
+ * LICENSE:
+ *     MIT/X11 License
+ * CHANGELOG:
+ *     0.1 [September, 7th 2017]: 
+ *         - Initial version
+ *******************************************************************
+ * CONSTRAINS:
+ *     - Drop non-0 return code on error
+ *     - Configurable at the top of file
+ *     - All config variables tamperable
+ *     - No redudancy
+ *******************************************************************
+ * Copyright (c) 2017 Piotr Kosek
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR
+ * A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *******************************************************************
+-->
 	
-	<xmlproperty file="${build_app_path}manifest/${output_unix_name}/common/manifest_${build_configuration}.xml" />
-	<xmlproperty file="${build_app_path}manifest/${output_unix_name}/common/manifest.xml" />
-	<xmlproperty file="${build_app_path}manifest/_common/common/manifest_${build_configuration}.xml" />
-	<xmlproperty file="${build_app_path}manifest/_common/common/manifest.xml" />
-	<xmlproperty file="${build_app_path}changelog/version.xml" />
+<!-- Apply dir name into paths -->
+	<property name="platform_fullname" value="${platform_name}_${platform_ver}" />
 	
-<!-- Designating default platform fullname -->
+<!-- Build output path full name -->
 	
-	<property name="platform_fullname" value="${platform_name} - ${platform_ver} - ${build_configuration}" />
-	
-<!-- These generate dir name for project -->
-
-	<property name="platform_base_dir" value="${platform_name}_${platform_ver}" />
-	
-	<condition property="platform_dir_configuration_1" value="_debug" else="">
-		<and>
-			<equals arg1="${build_configuration}" arg2="debug" />
-			<isfalse value="${is_ready_build}" />
-		</and>
+	<property name="build_dirname" value="${platform_fullname}_${build_typename}" />
+	<property name="project_dirname" value="../${project_to_build}/" />
+	<property name="code_engine" value="code" />
+	<property name="code_engine_include" value="${code_engine}/include/" />
+	<property name="code_engine_src" value="${code_engine}/src/" />
+	<property name="code_project" value="${project_dirname}/code" />
+	<property name="code_project_include" value="${code_project}/include/" />
+	<property name="code_project_src" value="${code_project}/src/" />
+	<property name="code_depedency" value="depedency/library" />
+	<property name="code_depedency_include" value="${code_depedency}/*/include" />
+	<condition property="code_depedency_lib" value="${code_depedency}/*/lib/${platform_fullname}/debug" else="${code_depedency}/*/lib/${platform_fullname}/release">
+		<istrue value="${build_is_debug}" />
 	</condition>
-	<condition property="platform_dir_configuration_2" value="_debug_hybrid" else="">
-		<and>
-			<equals arg1="${build_configuration}" arg2="debug" />
-			<istrue value="${is_ready_build}" />
-		</and>
-	</condition>
-	<condition property="platform_dir_configuration_3" value="_final" else="">
-		<and>
-			<equals arg1="${build_configuration}" arg2="release" />
-			<istrue value="${is_ready_build}" />
-		</and>
-	</condition>
-	<condition property="platform_dir_configuration_4" value="_hybrid" else="">
-		<and>
-			<equals arg1="${build_configuration}" arg2="release" />
-			<isfalse value="${is_ready_build}" />
-		</and>
-	</condition>
-	<condition property="platform_dir_portable" value="_portable" else="">
-		<istrue value="${is_portable_build}" />
-	</condition>
-	<condition property="platform_dir_deploy" value="_deploy" else="">
-		<istrue value="${is_deploy_build}" />
-	</condition>
-	
-	<condition property="platform_dir" value="${platform_base_dir}_test" else="${platform_base_dir}${platform_dir_configuration_1}${platform_dir_configuration_2}${platform_dir_configuration_3}${platform_dir_configuration_4}${platform_dir_portable}${platform_dir_deploy}">
-		<equals arg1="${output_type}" arg2="test"/> 
-	</condition>
-	
-	
-<!-- Apply above dir name into paths -->
-	
-	<property name="build_path" value="${build_app_path}/_build/${platform_dir}_${output_unix_name}/" />
-	<property name="build_common_path" value="${build_app_path}/_build/${platform_dir}_common/" />
-	<property name="output_path" value="${build_app_path}/output/${platform_dir}/" />
-	<property name="deploy_output_path" value="${build_app_path}/output/${platform_dir}_ready/" />
-	<property name="build_installer_path" value="${build_app_path}/_build/${platform_dir}_installer/" />
-	<property name="autogen_path_relative" value="_autogen/${platform_base_dir}/${output_unix_name}/" />
-	<property name="autogen_path" value="${build_app_path}code/include/${autogen_path_relative}" />
-	<property name="autogen_app_list_script" location="build/common/app_list_builder.js" />
-	<property name="autogen_manifest_app_script" location="build/common/manifest_app_builder.js" />
-	
-	<condition property="autogen_manifest_app_hpp_path" value="${autogen_path}/manifest_app_${build_configuration}_portable.hpp" else="${autogen_path}/manifest_app_${build_configuration}.hpp">
-		<istrue value="${is_portable_build}"/> 
-	</condition>
-	<condition property="autogen_app_list_path" value="${autogen_path}/app_list_std_${build_configuration}_portable.hpp" else="${autogen_path}/app_list_std_${build_configuration}.hpp">
-		<istrue value="${is_portable_build}"/> 
-	</condition>
-	
-<!-- This is perfectly safe to do here, because only prebuild will change this variable -->
-	<property file="${build_common_path}/build_number.ant" />
-	
-<!-- Apply above build number into ready dir -->
-
-	<property name="ready_path" value="${build_app_path}/ready/build_${build.number}${platform_dir_portable}/" />
-	<property name="ready_path_binary" value="${ready_path}/bin/" />
-	
-<!-- Generate even more paths (this time for upload) -->
-
-	<property name="upload_base_path" value="${build_app_path}/upload/" />
-	<condition property="upload_base_dir" value="${platform_base_dir}${platform_dir_portable}_debug/" else="${platform_base_dir}${platform_dir_portable}/">
-		<equals arg1="${build_configuration}" arg2="debug" />
-	</condition>
-	
-	<property name="upload_deploy_path" value="${upload_base_path}${manifest.windows_deploy_upload_path}${upload_base_dir}" />
-	<property name="upload_updater_path" value="${upload_base_path}${manifest.windows_updater_upload_path}${upload_base_dir}" />
-	
-	<property name="upload_updater_manifest" value="${upload_updater_path}updater_manifest.xml" />
-	<property name="url_updater_manifest" value="${manifest.updater_url}${manifest.windows_updater_upload_path}${upload_base_dir}updater_manifest.xml" />
-	
-	<property name="upload_updater_changelog" value="${upload_updater_path}${upload_base_dir}changelog.xml" />
-	<property name="url_updater_changelog" value="${manifest.updater_url}${upload_base_dir}changelog.xml" />
-	
-<!-- End of initalization -->
-		
-<!-- Increment and store new build version (storing in build_path is because we may run concurrent builds...) -->
-	<target name="increment_build_number">
-		<buildnumber file="${build_app_path}changelog/build_number.ant" />
-		<copy file="${build_app_path}changelog/build_number.ant" tofile="${build_common_path}/build_number.ant" />
-	</target>
-	
-<!-- Clean output directory for given build -->
-	<target name="clean_output">
-		<mkdir dir="${output_path}"/>
-		<mkdir dir="${build_path}"/>
-		<delete includeemptydirs="true">
-			<fileset dir="${output_path}" includes="**/*" />
-		</delete>
-		<mkdir dir="${output_path}"/>
-	</target>
-	
-<!-- Clean _build directory for given build -->
-	<target name="clean_build">
-		<mkdir dir="${build_path}"/>
-		<delete includeemptydirs="true">
-			<fileset dir="${build_path}" includes="**/*" />
-		</delete>
-		<mkdir dir="${build_path}"/>
-		<mkdir dir="${build_path}bin"/>
-		<mkdir dir="${build_path}obj"/>
-	</target>
-	
-<!-- Clean upload directory for given build -->
-	<target name="clean_upload">
-	
-		<delete includeemptydirs="true" failonerror="false">
-			<fileset dir="${upload_deploy_path}" includes="**/*" />
-		</delete>
-		
-		<delete includeemptydirs="true" failonerror="false">
-			<fileset dir="${upload_updater_path}" includes="**/*" />
-		</delete>
-		
-	</target>
-	
-<!-- Copy content to target directory -->
-	<target name="content_base">
-		<copy todir="${content_base.output_path}" preservelastmodified="true" overwrite="true" force="true" includeEmptyDirs="true">
-			<fileset dir="content" />
-			<fileset dir="${build_app_path}content" />
-		</copy>
-	</target>
+	<property name="code_depedency_src" value="${code_depedency}/*/src" />
+	<property name="compiler_cmd_debug" value="-D_MT -D_DLL -g -gcodeview -O0 -D_DEBUG -DPIXIE_IS_DEBUG_BUILD=1" />
+	<property name="compiler_cmd_ndebug" value="-D_MT -D_DLL -s -O2 -fexpensive-optimizations -DNDEBUG -DPIXIE_IS_DEBUG_BUILD=0" />
+	<property name="compiler_cmd_platform_windows" value="-ffunction-sections -DPIXIE_WINDOWS=1 -DWINDOWS -D_MSC_VER=1900 -DWIN32_LEAN_AND_MEAN -DVC_EXTRALEAN -D_USING_V110_SDK71_ -DWXUSINGDLL -D__WXMSW__" />
+	<property name="compiler_cmd_final" value="-DPIXIE_IS_FINAL_BUILD=1" />
+	<property name="compiler_cmd_nfinal" value="-DPIXIE_IS_FINAL_BUILD=0" />
+	<property name="compiler_cmd_deploy" value="-DPIXIE_IS_DEPLOY_BUILD=1" />
+	<property name="compiler_cmd_ndeploy" value="-DPIXIE_IS_DEPLOY_BUILD=0" />
+	<property name="compiler_cmd_portable" value="-DPIXIE_IS_PORTABLE_BUILD=1" />
+	<property name="compiler_cmd_nportable" value="-DPIXIE_IS_PORTABLE_BUILD=0" />
+	<property name="compiler_cmd_common" value="-nostdinc -nostdinc++ -w -fno-strict-aliasing -std=gnu++14 -DGLEW_STATIC -DAS_USE_FLOAT=0 -DSTATIC_LIB -DUNICODE -D_UNICODE" />
+	<property name="compiler_cmd_cereal_xml_string_value" value="pixie" />
+	<property name="build_path" value="${project_dirname}_build/${build_dirname}/" />
+	<property name="build_path_installer" value="${project_dirname}_build/${build_dirname}_installer/" />
+	<property name="build_path_binary" value="${build_path}bin" />
+	<property name="build_path_map" value="${build_path}map" />
+	<property name="build_path_common" value="${build_path}common" />
+	<property name="build_path_obj" value="${build_path}obj/" />
+	<property name="build_path_obj_engine" value="${build_path_obj}/engine" />
+	<property name="build_path_obj_project" value="${build_path_obj}/project" />
+	<property name="build_path_obj_depedency" value="${build_path_obj}/depedency" />
+	<property name="build_path_build_number" value="${build_path_common}/build_number.ant" />
+	<property name="build_path_changelog" value="${project_dirname}/changelog/" />
+	<property name="build_path_source_build_number" value="${build_path_changelog}/build_number.ant" />
+	<property name="build_path_autogen" value="${project_dirname}_build/autogen" />
+	<property name="build_path_autogen_file" value="${build_path_autogen}/autogen_${build_dirname}.cc" />
+	<property name="populate_autogen_script_path" location="build/common/populate_autogen_actual.js" />
+	<property name="binary_filename_raw" value="pixie_${build_typename}${executable_extension}" />
+	<property name="output_path" value="${project_dirname}output/${build_dirname}" />
+	<property name="output_path_ready" value="${project_dirname}output/${build_dirname}_ready" />
+	<property name="path_manifest_platform" value="${project_dirname}manifest/${platform_name}" />
+	<property name="path_manifest_common" value="${project_dirname}manifest/common" />
+	<property file="${build_path_build_number}" />
+	<xmlproperty file="${build_path_changelog}/version.xml" />
+	<xmlproperty file="${path_manifest_platform}/manifest.xml" />
+	<xmlproperty file="${path_manifest_common}/manifest.xml" />
 	
 <!-- Replaces tags inside given file (platform may include more of them!) -->
 	<target name="replace_variables_common">
-	
 		<condition property="is_debug_build_num" value="1" else="0">
-			<equals arg1="${build_configuration}" arg2="debug"/> 
+			<istrue value="${build_is_debug}" /> 
 		</condition>
 		<condition property="is_portable_build_num" value="1" else="0">
-			<istrue value="${is_portable_build}"/> 
+			<istrue value="${build_is_portable}"/> 
 		</condition>
 		<condition property="is_deploy_build_num" value="1" else="0">
-			<istrue value="${is_deploy_build}"/> 
-		</condition>
-		<condition property="is_ready_build_num" value="1" else="0">
-			<istrue value="${is_ready_build}"/> 
+			<istrue value="${build_is_deploy}"/> 
 		</condition>
 	
-		<replace file="${replace_variables.file}" token="$OUTPUT_UNIX_NAME$" value="${output_unix_name}" />
 		<replace file="${replace_variables.file}" token="$IS_DEBUG_BUILD$" value="${is_debug_build_num}" />
 		<replace file="${replace_variables.file}" token="$IS_PORTABLE_BUILD$" value="${is_portable_build_num}" />
 		<replace file="${replace_variables.file}" token="$IS_DEPLOY_BUILD$" value="${is_deploy_build_num}" />
-		<replace file="${replace_variables.file}" token="$IS_READY_BUILD$" value="${is_ready_build_num}" />
-		<replace file="${replace_variables.file}" token="$AUTOGEN_PATH_RELATIVE$" value="${autogen_path_relative}" />
 		
 		<replace file="${replace_variables.file}" token="$VERSION_MAJOR$" value="${version.major}" />
 		<replace file="${replace_variables.file}" token="$VERSION_MINOR$" value="${version.minor}" />
@@ -175,74 +124,155 @@
 		
 		<replace file="${replace_variables.file}" token="$PLATFORM_FULLNAME$" value="${platform_fullname}" />
 		
-		<replace file="${replace_variables.file}" token="$BINARY_FILENAME$" value="${manifest.windows_binary_filename}" />
-		<replace file="${replace_variables.file}" token="$BINARY_EXTENSION$" value="${binary_filename_ext_raw}" />
-		<replace file="${replace_variables.file}" token="$INSTALLER_FILENAME$" value="${manifest.windows_installer_filename}" />
-		<replace file="${replace_variables.file}" token="$PORTABLE_FILENAME$" value="${manifest.windows_portable_filename}" />
-		
-		<replace file="${replace_variables.file}" token="$NAME$" value="${manifest.name}" />
-		<replace file="${replace_variables.file}" token="$UNIX_NAME$" value="${app_unix_name}" />
-
-		<replace file="${replace_variables.file}" token="$WEBSITE_URL$" value="${manifest.website_url}" />
-		<replace file="${replace_variables.file}" token="$SUPPORT_PAGE_URL$" value="${manifest.support_page_url}" />
-		<replace file="${replace_variables.file}" token="$DOWNLOAD_URL$" value="${url_updater_binary}" />
-		<replace file="${replace_variables.file}" token="$CHANGELOG_URL$" value="${url_updater_changelog}" />
-		<replace file="${replace_variables.file}" token="$UPDATER_MANIFEST_URL$" value="${url_updater_manifest}" />
-
-		<!-- ToDo: replace variable '$CHANGELOG_TEXT$' with plaintext changelog! -->
+		<replace file="${replace_variables.file}" token="$FULL_NAME$" value="${manifest_common.full_name}" />
+		<replace file="${replace_variables.file}" token="$UNIX_NAME$" value="${project_to_build}" />
 	</target>
 	
-<!-- Autogen header for compilation -->
-	<target name="autogen_common">
-		<mkdir dir="${autogen_path}" />
-		
-		<copy file="build/common/manifest_app_base.hpp" tofile="${autogen_manifest_app_hpp_path}" preservelastmodified="true" overwrite="true" />
-		<antcall target="replace_variables">
-			<param name="replace_variables.file" value="${autogen_manifest_app_hpp_path}" />
-		</antcall>
-		<script language="javascript" src="${autogen_manifest_app_script}" />
-		
-		<copy file="build/common/app_list_std.hpp" tofile="${autogen_app_list_path}" preservelastmodified="true" overwrite="true" />
-		<script language="javascript" src="${autogen_app_list_script}" />
-		
+<!-- Increment and store new build version (storing in build_path because we may run concurrent builds...) -->
+	<target name="increment_build_number">
+		<buildnumber file="${build_path_source_build_number}" />
+		<copy file="${build_path_source_build_number}" tofile="${build_path_build_number}" />
 	</target>
-		
-<!-- Helper target for below; Build upload directory if we're deploying... -->
-	<target name="check_if_build_upload">
-		<condition property="can_build_upload">
-			<istrue value="${is_deploy_build}" />
-		</condition>
-	</target>
-		
-<!-- Build upload directory... -->
-	<target name="build_upload" depends="check_if_build_upload" if="can_build_upload">
-		
-		<copy file="${deploy_output_path}${deploy_filename}" tofile="${upload_updater_binary}" preservelastmodified="true" overwrite="true" />
-		<copy file="build/common/updater_manifest.xml" tofile="${upload_updater_manifest}" preservelastmodified="true" overwrite="true" />
-		
-		<antcall target="replace_variables">
-			<param name="replace_variables.file" value="${upload_updater_manifest}" />
-		</antcall>
-		
-		<!-- ToDo: create changelog.xml and store it there for upload: '${upload_updater_changelog}' -->
-		
-	</target>
-		
-<!-- Helper target for below; Build ready directory if we're building final... -->
-	<target name="check_if_build_ready">
-		<condition property="can_build_ready">
-			<istrue value="${is_ready_build}" />
-		</condition>
-	</target>
-		
-<!-- Build ready directory... -->
-	<target name="build_ready" depends="check_if_build_ready" if="can_build_ready">
 	
-		<mkdir dir="${ready_path}" />
-		<mkdir dir="${ready_path_binary}" />
+<!-- Populate autogen file and store it in build_path so it is accessible for include inside /code/src/autogen.cpp -->
+	<target name="populate_autogen">
+		<mkdir dir="${build_path_autogen}" />
+		<copy file="build/common/autogen.cc" tofile="${build_path_autogen_file}" preservelastmodified="true" overwrite="true" />
+		<antcall target="replace_variables">
+			<param name="replace_variables.file" value="${build_path_autogen_file}" />
+		</antcall>
+		<script language="javascript" src="${populate_autogen_script_path}" />
+	</target>
+	
+<!-- Compile all sources in given directory and store results in target obj dir -->
+	<target name="compile_directory">
+		<condition property="compile_directory.debug_arg" value="${compiler_cmd_debug}" else="${compiler_cmd_ndebug}">
+			<istrue value="${build_is_debug}" />
+		</condition>
+		<switch value="${platform_name}">
+			<case value="windows">
+				<property name="compile_directory.platform" value="${compiler_cmd_platform_windows}" />
+			</case>
+			<default>
+				<fail message="Missing platform for this compiler run!"/>
+			</default>
+		</switch>
+		<condition property="compile_directory.final_arg" value="${compiler_cmd_final}" else="${compiler_cmd_nfinal}">
+			<istrue value="${build_is_final}" />
+		</condition>
+		<condition property="compile_directory.deploy_arg" value="${compiler_cmd_deploy}" else="${compiler_cmd_ndeploy}">
+			<istrue value="${build_is_deploy}" />
+		</condition>
+		<condition property="compile_directory.portable_arg" value="${compiler_cmd_portable}" else="${compiler_cmd_nportable}">
+			<istrue value="${build_is_portable}" />
+		</condition>
+			
+		<dirset dir="${basedir}" id="compile_directory.includes">
+			<include name="${code_depedency_include}" />
+			<include name="${code_depedency_src}" />
+		</dirset>
 		
-		<copy file="${deploy_output_path}${deploy_filename}" tofile="${ready_path_binary}${deploy_filename}" preservelastmodified="true" overwrite="true" />
+		<pathconvert property="compile_directory.includes" refid="compile_directory.includes" pathsep="&quot; &quot;-I" />
+	
+		<apply executable="${compiler_binary}" relative="false" dest="${compile_directory.destination}" failonerror="true" failifexecutionfails="true" skipemptyfilesets="false" parallel="false" type="file" addsourcefile="true" verbose="true">
+			<mapper type="regexp" from="^(.*)\.(c|cpp)$$" to="\1.o"/>
+			<fileset dir="${compile_directory.source}" casesensitive="true">
+				<include name="**/*.cpp" />
+				<include name="**/*.c" />
+			</fileset>
+			<arg value="-DCEREAL_XML_STRING_VALUE=\&quot;${compiler_cmd_cereal_xml_string_value}\&quot;" />
+			<arg value="-DPIXIE_PROJECT_NAME=\&quot;${project_to_build}\&quot;" />
+			<arg line="${compiler_cmd_common}" />
+			<arg line="${compile_directory.debug_arg}" />
+			<arg line="${compile_directory.platform}" />
+			<arg line="${compile_directory.final_arg}" />
+			<arg line="${compile_directory.deploy_arg}" />
+			<arg line="${compile_directory.portable_arg}" />
+			<arg value="-I${basedir}/${code_engine_include}" />
+			<arg value="-I${basedir}/${code_project_include}" />
+			<arg value="-I${basedir}/${build_path_autogen}" />
+			<arg line="&quot;-I${compile_directory.includes}&quot;" />
+			<arg value="-c" />
+			<srcfile />
+			<arg value="-o" />
+			<targetfile />
+		</apply>
+	</target>
+	
+	<target name="prepare_obj_directories">
+		<mkdir dir="${build_path_obj}" />
+		
+		<mkdir dir="${build_path_obj_engine}" />
+		<copy todir="${build_path_obj_engine}" includeEmptyDirs="true"> 
+			<fileset dir="${code_engine_src}"> 
+				<include name="**" /> 
+				<type type="dir" />
+			</fileset> 
+		</copy>
+		
+		<mkdir dir="${build_path_obj_project}" />
+		<copy todir="${build_path_obj_project}" includeEmptyDirs="true"> 
+			<fileset dir="${code_project_src}"> 
+				<include name="**" /> 
+				<type type="dir" />
+			</fileset> 
+		</copy>
+		
+		<mkdir dir="${build_path_obj_depedency}" />
+		<copy todir="${build_path_obj_depedency}" includeEmptyDirs="true"> 
+			<fileset dir="${code_depedency}"> 
+				<include name="**" /> 
+				<type type="dir" />
+			</fileset> 
+		</copy>
+		
+		<mkdir dir="${build_path_binary}" />
+	</target>
+	
+<!-- Do the actual compilation -->
+	<target name="compile">
+		
+		<antcall target="compile_directory">
+			<param name="compile_directory.source" value="${code_engine_src}" />
+			<param name="compile_directory.destination" value="${build_path_obj_engine}" />
+		</antcall>
+		<antcall target="compile_directory">
+			<param name="compile_directory.source" value="${code_project_src}" />
+			<param name="compile_directory.destination" value="${build_path_obj_project}" />
+		</antcall>
+		<antcall target="compile_directory">
+			<param name="compile_directory.source" value="${code_depedency}" />
+			<param name="compile_directory.destination" value="${build_path_obj_depedency}" />
+		</antcall>
 		
 	</target>
+	
+<!-- Copy content to target directory -->
+	<target name="content_base">
+		<mkdir dir="${content_base.output_path}/content" />
+		<copy todir="${content_base.output_path}/content" preservelastmodified="true" overwrite="true" force="true" includeEmptyDirs="true">
+			<fileset dir="content" />
+			<fileset dir="${project_dirname}content" />
+		</copy>
+	</target>
+	
+<!-- Clean output directory for given build -->
+	<target name="clean_output">
+		<mkdir dir="${output_path}"/>
+		<delete includeemptydirs="true">
+			<fileset dir="${output_path}" includes="**/*" />
+		</delete>
+		<mkdir dir="${output_path}"/>
+	</target>
+	
+<!-- Clean build directory for given build -->
+	<target name="clean_build">
+		<mkdir dir="${build_path}"/>
+		<delete includeemptydirs="true">
+			<fileset dir="${build_path}" includes="**/*" />
+		</delete>
+		<mkdir dir="${build_path}"/>
+	</target>
+	
 	
 </project>

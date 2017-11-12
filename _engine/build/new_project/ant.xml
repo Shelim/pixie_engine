@@ -1,0 +1,98 @@
+<project name="common" basedir="../..">
+<!--
+ *******************************************************************
+ * This is new project support build script for Apache Ant. It creates
+ *     new project in an platform-indepdent way. It is usually called
+ *     from build_new_project script of given platform
+ * 
+ * REQUIRES:
+ *     - Apache ANT
+ *     - Base path '\_engine'
+ * INPUT:
+ *     (None)
+ * AUTHOR:
+ *     Piotr Kosek <piotr@kosek.com>
+ * LICENSE:
+ *     MIT/X11 License
+ * CHANGELOG:
+ *     0.1 [October, 7th 2017]: 
+ *         - Initial version
+ *******************************************************************
+ * CONSTRAINS:
+ *     - Drop non-0 return code on error
+ *     - Configurable at the top of file
+ *     - All config variables tamperable
+ *     - No redudancy
+ *******************************************************************
+ * Copyright (c) 2017 Piotr Kosek
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR
+ * A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *******************************************************************
+-->
+
+<!-- START OF INPUT SECTION -->
+
+	<!-- Unix new project name -->
+	<property name="unix_project_name" value="missing_unix_name" />
+	<!-- Full new project name -->
+	<property name="full_project_name" value="Missing Full Project Name" />
+	
+<!-- END OF INPUT SECTION -->
+<!-- START OF CONFIGURATION SECTION -->
+
+	<!-- Where are template files used to build? We are at '\_engine' -->
+	<property name="build_new_project_template_path" value="build/new_project/template" />
+	
+	<!-- Where to store results of build? We are at '\_engine' -->
+	<property name="build_new_project_output_path" value="../${unix_project_name}" />
+	
+	<!-- Where is the template file for git ignore? We are at '\_engine' -->
+	<property name="build_new_project_gitignore_path" value="build/new_project/gitignore_template" />
+	
+<!-- END OF CONFIGURATION SECTION -->
+<!-- START OF HELPER SECTION -->
+
+	<!-- Replaces tags inside given dir (recursively) -->
+	<target name="replace_variables">
+		<replace token="$UNIX_PROJECT_NAME$" value="${unix_project_name}"><fileset dir="${replace_variables.dir}" /></replace>
+		<replace token="$FULL_PROJECT_NAME$" value="${full_project_name}"><fileset dir="${replace_variables.dir}" /></replace>
+	</target>
+	
+<!-- END OF HELPER SECTION -->
+<!-- START OF CALLABLE SECTION -->
+
+	<!-- Create new project -->
+	<target name="new_project">
+	
+		<copy todir="${build_new_project_output_path}" includeEmptyDirs="true"> 
+			<fileset dir="${build_new_project_template_path}" defaultexcludes="no" /> 
+			
+			<mapper>
+				<mapper type="regexp" from="(.*)\$UNIX_PROJECT_NAME\$(.*)" to="\1${unix_project_name}\2"/>
+				<mapper type="regexp" from="(.*)\$FULL_PROJECT_NAME\$(.*)" to="\1${full_project_name}\2"/>
+				<mapper type="identity"/>
+			</mapper>
+		</copy>
+		<copy file="${build_new_project_gitignore_path}" tofile="${build_new_project_output_path}/.gitignore" />
+		
+		<antcall target="replace_variables">
+			<param name="replace_variables.dir" value="${build_new_project_output_path}" />
+		</antcall>
+	</target>
+	
+<!-- END OF CALLABLE SECTION -->
+	
+</project>

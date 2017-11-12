@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<manifest>
-	<!-- Changing this variable will require re-creation of VS projects -->
-	<output_type>$EMPTY_TYPE$</output_type>
-</manifest>

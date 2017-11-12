@@ -1,0 +1,16 @@
+#ifndef ENGINE_VIRTUAL_PATH_STD
+#define ENGINE_VIRTUAL_PATH_STD(...)
+#endif
+
+#ifndef ENGINE_ASSET_PATH_STD
+#define ENGINE_ASSET_PATH_STD(...)
+#endif
+
+ENGINE_VIRTUAL_PATH_STD(common)
+ENGINE_VIRTUAL_PATH_STD(crash_dumps)
+#define ENGINE_APP_STD(app) ENGINE_VIRTUAL_PATH_STD(app_##app)
+#include "std/app_std.hpp"
+ENGINE_VIRTUAL_PATH_STD(saves)
+
+#undef ENGINE_ASSET_PATH_STD
+#undef ENGINE_VIRTUAL_PATH_STD

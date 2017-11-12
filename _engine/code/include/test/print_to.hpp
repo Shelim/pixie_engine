@@ -1,10 +1,10 @@
-/// USING Google Test engine
+// USING Google Test engine
 
 #include <gtest/gtest.h>
 #include <sstream>
 #include <string>
 #include "utility/text/ustring.hpp"
-#include "utility/vfs/virtual_path.hpp"
+#include "core/vfs/virtual_path.hpp"
 
 namespace engine
 {

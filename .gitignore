@@ -3,14 +3,12 @@
 !/.gitattributes
 !/.gitignore
 !/_config.yml
-!/download_dependencies
-!/download_dependencies.app
+!/build_engine.bat
+!/CMakeLists.txt
 !/download_dependencies.bat
 !/INSTALL
 !/LICENSE
 !/new_project.bat
-!/open_documentation
-!/open_documentation.app
 !/open_documentation.bat
 !/README.md
 !/todo.txt

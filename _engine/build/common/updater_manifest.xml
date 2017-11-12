@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<manifest_update>
-	<build_latest>$VERSION_BUILD$</build_latest>
-	<url_download>$DOWNLOAD_URL$</url_download>
-	<url_changelog>$CHANGELOG_URL$</url_changelog>
-</manifest_update>

@@ -1,0 +1,84 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name" : "Debug Windows",
+            "type": "windbg",
+            "request": "launch",
+            "workingDir": "${workspaceRoot}",
+            "windbgpath": "${workspaceRoot}/../_engine/depedency/other/windbg/dbgeng.dll",
+            "target": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/_build/windows_x86_debug/bin/pixie_debug.exe",
+            "sources": [ 
+                "${workspaceRoot}../_engine/code"
+            ]
+        }
+        /*
+        ,
+        {
+            "name" : "Debug LLDB",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/_build/windows_x86_debug/bin/pixie_debug.exe",
+            "args": [],
+            "terminal":"integrated",
+            "cwd": "${workspaceFolder}",
+            "windows":{
+                "program": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/_build/windows_x86_debug/bin/pixie_debug.exe"
+            }
+        },
+        {
+            "name": "Debug MSV (GDB)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/_build/windows_x86_debug/bin/pixie_debug.exe",
+            "externalConsole": false,
+            "stopAtEntry": false,
+            "args": [ ],
+            "cwd": "${workspaceFolder}",
+            "MIMode": "gdb",
+            "windows": {
+                "miDebuggerPath": "${workspaceRoot}/../_engine/depedency/other/mingw/windows/bin/gdb.exe",
+                "program": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/_build/windows_x86_debug/bin/pixie_debug.exe",
+                "additionalSOLibSearchPath": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/_build/windows_x86_debug/bin/",
+                "targetArchitecture": "x86",
+                "environment": [
+                    {
+                        "name":"path",
+                        "value": "${workspaceRoot}/../_engine/depedency/other/texlive/bin/win32;${workspaceRoot}/../_engine/depedency/other/jdk1.8.0_131/bin;${workspaceRoot}/../_engine/depedency/other/llvm/windows/bin;${workspaceRoot}/../_engine/depedency/other/python-3.5/windows;${workspaceRoot}/../_engine/depedency/other/mingw/windows/bin;${workspaceRoot}/../_engine/depedency/other/apache_ant/bin;${workspaceRoot}/../_engine/depedency/other/doxygen/windows;${workspaceRoot}/../_engine/depedency/other/dot/windows"
+                    },
+                    {
+                        "name":"JAVA_HOME",
+                        "value": "${workspaceRoot}/../_engine/depedency/other/jdk1.8.0_131/windows"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Debug MSV",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/_build/windows_x86_debug/bin/pixie_debug.exe",
+            "externalConsole": false,
+            "stopAtEntry": false,
+            "args": [ ],
+            "cwd": "${workspaceFolder}",
+            "MIMode": "lldb",
+            "windows": {
+                "miDebuggerPath": "${workspaceRoot}/../_engine/depedency/other/llvm/windows/bin/lldb-mi.exe",
+                "program": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/_build/windows_x86_debug/bin/pixie_debug.exe",
+                "additionalSOLibSearchPath": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/_build/windows_x86_debug/bin/",
+                "targetArchitecture": "x86",
+                "environment": [
+                    {
+                        "name":"path",
+                        "value": "${workspaceRoot}/../_engine/depedency/other/texlive/bin/win32;${workspaceRoot}/../_engine/depedency/other/jdk1.8.0_131/bin;${workspaceRoot}/../_engine/depedency/other/llvm/windows/bin;${workspaceRoot}/../_engine/depedency/other/python-3.5/windows;${workspaceRoot}/../_engine/depedency/other/mingw/windows/bin;${workspaceRoot}/../_engine/depedency/other/apache_ant/bin;${workspaceRoot}/../_engine/depedency/other/doxygen/windows;${workspaceRoot}/../_engine/depedency/other/dot/windows"
+                    },
+                    {
+                        "name":"JAVA_HOME",
+                        "value": "${workspaceRoot}/../_engine/depedency/other/jdk1.8.0_131/windows"
+                    }
+                ]
+            }
+        }*/
+    ]
+}
