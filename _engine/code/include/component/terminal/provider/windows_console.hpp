@@ -50,7 +50,7 @@ namespace engine
             DWORD color_to_foreground(terminal_t::color_t color);
             DWORD color_to_background(terminal_t::color_t color);
 
-            std::mutex mutex;
+            std::recursive_mutex recursive_mutex;
             terminal_t::color_t background;
             terminal_t::closing_callback_t on_closing;
             flags_t<flag_t> flags;

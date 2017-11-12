@@ -16,7 +16,7 @@ engine::terminal_provider_windows_console_t::instance_t::~instance_t()
 
 bool engine::terminal_provider_windows_console_t::instance_t::is_closed()
 {
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::recursive_mutex> guard(recursive_mutex);
     return flags.is_flag(flag_t::is_closed);
 }
 
@@ -27,20 +27,20 @@ void engine::terminal_provider_windows_console_t::instance_t::write(const ustrin
 
 void engine::terminal_provider_windows_console_t::instance_t::write(const ustring_t & text, terminal_t::color_t foreground, terminal_t::color_t background)
 {
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::recursive_mutex> guard(recursive_mutex);
     if(console.cprintf(color_to_foreground(foreground) | color_to_background(background), "%s", text.get_cstring()) < 0)
         close();
 }
 void engine::terminal_provider_windows_console_t::instance_t::write_new_line()
 {
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::recursive_mutex> guard(recursive_mutex);
     if(console.print("\n") < 0)
         close();
 }
 
 void engine::terminal_provider_windows_console_t::instance_t::close()
 {
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::recursive_mutex> guard(recursive_mutex);
     if(!flags.is_flag(flag_t::is_closed))
     {
         flags.set_flag(flag_t::is_closed, true);
