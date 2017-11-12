@@ -23,7 +23,11 @@ namespace engine
 			{
 				return false;
 			}
-			void write(const ustring_t & text, terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background) final
+			void write(const ustring_t & text, terminal_t::color_t foreground) final
+			{
+
+			}
+			void write(const ustring_t & text, terminal_t::color_t foreground, terminal_t::color_t background) final
 			{
 
 			}
@@ -36,7 +40,7 @@ namespace engine
 
 		};
 
-		std::shared_ptr<instance_t> open(terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background, closing_callback_t on_closing = [](instance_t*){}) final
+		std::shared_ptr<instance_t> open(const ustring_t & name, terminal_t::color_t background, closing_callback_t on_closing = [](instance_t*){}) final
 		{
 			return std::make_shared<instance_dummy_t>();
 		}

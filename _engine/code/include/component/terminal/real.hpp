@@ -20,7 +20,7 @@ namespace engine
 
 		}
 
-		virtual std::shared_ptr<terminal_t::instance_t> open(terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background, terminal_t::closing_callback_t on_closing = [](terminal_t::instance_t*){}) = 0;
+		virtual std::shared_ptr<terminal_t::instance_t> open(const ustring_t & name, terminal_t::color_t background, terminal_t::closing_callback_t on_closing = [](terminal_t::instance_t*){}) = 0;
 
 	private:
 	};
@@ -37,9 +37,9 @@ namespace engine
 			
 		}
 
-		std::shared_ptr<instance_t> open(terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background, closing_callback_t on_closing = [](instance_t*){}) final
+		std::shared_ptr<instance_t> open(const ustring_t & name, terminal_t::color_t background, closing_callback_t on_closing = [](instance_t*){}) final
 		{
-			return terminal_provider->get_provider()->open(foreground, background, on_closing);
+			return terminal_provider->get_provider()->open(name, background, on_closing);
 		}
 
 	private:

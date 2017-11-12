@@ -44,14 +44,14 @@ void engine::terminal_real_t::update_window(instance_t instance, window_state_t 
 	else if (next_window_state == window_state_t::close && terminals[value_of(instance)])
 		terminals[value_of(instance)].reset();
 }
-void engine::terminal_real_t::set_terminal_colors(instance_t instance, platform::terminal_t::terminal_color_t foreground, platform::terminal_t::terminal_color_t background)
+void engine::terminal_real_t::set_terminal_colors(instance_t instance, platform::terminal_t::color_t foreground, platform::terminal_t::color_t background)
 {
 	if (terminals[value_of(instance)])
 		terminals[value_of(instance)]->set_terminal_colors(foreground, background);
 
 	terminals_metadata[value_of(instance)].set_colors(foreground, background);
 }
-void engine::terminal_real_t::output_terminal_text(instance_t instance, const ustring_t & text, platform::terminal_t::terminal_color_t foreground, platform::terminal_t::terminal_color_t background)
+void engine::terminal_real_t::output_terminal_text(instance_t instance, const ustring_t & text, platform::terminal_t::color_t foreground, platform::terminal_t::color_t background)
 {
 	terminals[value_of(instance)]->output_terminal_text(text, foreground, background);
 }
@@ -80,8 +80,8 @@ void engine::terminal_writer_t::write_local(writer_t writer, const terminal_writ
 
 	resolve(terminal_string.get(), &terminal_writer, parser::resolver_terminal_t([this](const ustring_t & str, terminal_writer_tag_t tag) {
 
-		platform::terminal_t::terminal_color_t fore = terminal_writer_colors->get()->foreground_default();
-		platform::terminal_t::terminal_color_t back = terminal_writer_colors->get()->background_default();
+		platform::terminal_t::color_t fore = terminal_writer_colors->get()->foreground_default();
+		platform::terminal_t::color_t back = terminal_writer_colors->get()->background_default();
 #define ENGINE_CONSOLE_OUTPUT_TAG_STD(tag_type) if (tag == terminal_writer_tag_t::tag_type) { fore = terminal_writer_colors->get()->foreground_##tag_type(); back = terminal_writer_colors->get()->background_##tag_type(); }
 #include "std/terminal_writer_std.hpp"
 

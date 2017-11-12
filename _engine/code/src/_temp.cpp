@@ -42,12 +42,29 @@ int main(int arg, char * argv[])
 
 		USE_PROVIDER_FOR(config_storage, windows_registry),
 		USE_PROVIDER_FOR(filesystem, generic),
-		USE_PROVIDERS_FOR(logger, console)
+		USE_PROVIDERS_FOR(logger, console),
+		USE_PROVIDER_FOR(terminal, windows_console)
 
 	> bootstrapper;
 
 	std::shared_ptr<engine::config_storage_t> config_storage = bootstrapper.construct_component<engine::config_storage_t>();
 	std::shared_ptr<engine::filesystem_t> filesystem = bootstrapper.construct_component<engine::filesystem_t>();
+	std::shared_ptr<engine::terminal_t> terminal = bootstrapper.construct_component<engine::terminal_t>();
+
+	auto term = terminal->open("Errors"_u, engine::terminal_t::color_t::red_dark);
+	term->write("Hello world!"_u, engine::terminal_t::color_t::white, engine::terminal_t::color_t::green_dark);
+	term->write_new_line();
+	term->write("Test!"_u, engine::terminal_t::color_t::black, engine::terminal_t::color_t::red_light);
+
+	auto term2 = terminal->open("Messages"_u, engine::terminal_t::color_t::blue_dark);
+	term2->write("Hello world!"_u, engine::terminal_t::color_t::white, engine::terminal_t::color_t::green_dark);
+	term2->write_new_line();
+	term2->write("Test!"_u, engine::terminal_t::color_t::black, engine::terminal_t::color_t::red_light);
+
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+	term.reset();
+	term2->write_new_line();
+	term2->write("After being dead!"_u, engine::terminal_t::color_t::black, engine::terminal_t::color_t::pink_light);
 
 	config_storage->store("Test"_u, "Value!"_u);
 	engine::paths_t files = filesystem->iterate_files_in_directory("C:\\!Lost Empire");
@@ -102,7 +119,7 @@ int main(int arg, char * argv[])
 	std::thread thread3([&sign](){printf("Starting 2... %d\n", std::time(nullptr)); sign.get_waiter().wait_for_signal(); printf("Completed 2! %d\n", std::time(nullptr));});
 	std::thread thread4([&sign](){printf("Starting 3... %d\n", std::time(nullptr)); sign.get_waiter().wait_for_signal(); printf("Completed 3! %d\n", std::time(nullptr));});
 
-	std::this_thread::sleep_for(std::chrono::seconds(4));
+	std::this_thread::sleep_for(std::chrono::seconds(5));
 	std::thread thread5([&sign](){printf("Starting 4... %d\n", std::time(nullptr)); sign.get_waiter().wait_for_signal(); printf("Completed 4! %d\n", std::time(nullptr));});
 
 	thread1.join();

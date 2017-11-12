@@ -6,6 +6,7 @@
 
 #include "component/terminal/real.hpp"
 #include "utility/pattern/flags.hpp"
+#include <multiple_consoles.h>
 
 namespace engine
 {
@@ -14,9 +15,9 @@ namespace engine
 
 	public:
 
-        std::shared_ptr<terminal_t::instance_t> open(terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background, terminal_t::closing_callback_t on_closing = [](terminal_t::instance_t*){}) final
+        std::shared_ptr<terminal_t::instance_t> open(const ustring_t & name, terminal_t::color_t background, terminal_t::closing_callback_t on_closing = [](terminal_t::instance_t*){}) final
         {
-            return std::make_shared<instance_t>(foreground, background, on_closing);
+            return std::make_shared<instance_t>(name, background, on_closing);
         }
 
     private:
@@ -26,11 +27,12 @@ namespace engine
 			
 		public:
 
-            instance_t(terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background, terminal_t::closing_callback_t on_closing = [](terminal_t::instance_t*){});
+            instance_t(const ustring_t & name, terminal_t::color_t background, terminal_t::closing_callback_t on_closing = [](terminal_t::instance_t*){});
             ~instance_t();
 
 			bool is_closed() final;
-			void write(const ustring_t & text, terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background) final;
+			void write(const ustring_t & text, terminal_t::color_t foreground) final;
+			void write(const ustring_t & text, terminal_t::color_t foreground, terminal_t::color_t background) final;
 			void write_new_line() final;
 
             enum class flag_t
@@ -41,6 +43,13 @@ namespace engine
 
 		private:
 
+            CConsoleLoggerEx console;
+
+            DWORD color_to_foreground(terminal_t::color_t color);
+            DWORD color_to_background(terminal_t::color_t color);
+
+            terminal_t::color_t background;
+            terminal_t::closing_callback_t on_closing;
             flags_t<flag_t> flags;
 
 		};

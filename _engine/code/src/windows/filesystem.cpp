@@ -126,6 +126,11 @@ std::filesystem::file_time_type engine::filesystem_provider_windows_t::filetime_
     return tp;
 }
 
+engine::filesystem_provider_windows_t::filesystem_provider_windows_t() : tmp_item(0)
+{
+
+}
+
 std::filesystem::file_time_type engine::filesystem_provider_windows_t::get_mod_time(std::filesystem::path path)
 {
     std::wstring filename = path.wstring();

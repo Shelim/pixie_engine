@@ -23,7 +23,7 @@ namespace engine
 
 		}
 
-		enum class terminal_color_t
+		enum class color_t
 		{
 #define ENGINE_TERMINAL_COLOR_STD(color) color,
 #include "std/terminal_std.hpp"
@@ -45,7 +45,9 @@ namespace engine
 			{
 				return false;
 			}
-			virtual void write(const ustring_t & text, terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background) = 0;
+
+			virtual void write(const ustring_t & text, terminal_t::color_t foreground) = 0;
+			virtual void write(const ustring_t & text, terminal_t::color_t foreground, terminal_t::color_t background) = 0;
 			virtual void write_new_line() = 0;
 
 		private:
@@ -54,7 +56,7 @@ namespace engine
 
 		typedef std::function<void(instance_t*)> closing_callback_t;
 
-		virtual std::shared_ptr<instance_t> open(terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background, closing_callback_t on_closing = [](instance_t*){}) = 0;
+		virtual std::shared_ptr<instance_t> open(const ustring_t & name, terminal_t::color_t background, closing_callback_t on_closing = [](instance_t*){}) = 0;
 
 	private:
 
