@@ -23,14 +23,6 @@ namespace engine
 
 		}
 
-		enum class provider_t
-		{
-#define ENGINE_TERMINAL_PROVIDER_STD(provider) provider,
-#include "std/terminal_std.hpp"
-			any,
-			count = any
-		};
-
 		enum class terminal_color_t
 		{
 #define ENGINE_TERMINAL_COLOR_STD(color) color,
@@ -49,14 +41,20 @@ namespace engine
 
 			}
 
-			virtual void set_terminal_colors(terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background) = 0;
-			virtual void output_terminal_text(const ustring_t & text, terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background) = 0;
-			virtual void output_terminal_new_line() = 0;
+			virtual bool is_closed() 
+			{
+				return false;
+			}
+			virtual void write(const ustring_t & text, terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background) = 0;
+			virtual void write_new_line() = 0;
+
+		private:
 
 		};
 
-		virtual bool is_provider_available(provider_t provider) = 0;
-		virtual std::shared_ptr<instance_t> open(provider_t provider, bool fallback_to_any_if_not_available = false) = 0;
+		typedef std::function<void(instance_t*)> closing_callback_t;
+
+		virtual std::shared_ptr<instance_t> open(terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background, closing_callback_t on_closing = [](instance_t*){}) = 0;
 
 	private:
 
@@ -64,7 +62,7 @@ namespace engine
 
 }
 
-//#include "component/terminal/dummy.hpp"
-//#include "component/terminal/real.hpp"
+#include "component/terminal/dummy.hpp"
+#include "component/terminal/real.hpp"
 
 #endif

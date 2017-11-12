@@ -38,9 +38,11 @@ int main(int arg, char * argv[])
 		ENABLE_COMPONENT(config_storage),
 		ENABLE_COMPONENT(filesystem),
 		ENABLE_COMPONENT(logger),
+		ENABLE_COMPONENT(terminal),
 
 		USE_PROVIDER_FOR(config_storage, windows_registry),
-		USE_PROVIDER_FOR(filesystem, generic)
+		USE_PROVIDER_FOR(filesystem, generic),
+		USE_PROVIDERS_FOR(logger, console)
 
 	> bootstrapper;
 
@@ -53,32 +55,9 @@ int main(int arg, char * argv[])
 	engine::paths_t subfiles = filesystem->iterate_files_in_subdirectories("C:\\!Lost Empire", "*.cs"_u);
 	engine::paths_t subdirs = filesystem->iterate_subdirectories("C:\\!Lost Empire");
 
-	int a = 5;
+	std::shared_ptr<engine::messenger_console_t> console = bootstrapper.construct_component<engine::messenger_console_t>();
 
-	engine::bootstrapper_t <
-
-		APP(game),
-
-		ENABLE_COMPONENT(config_storage),
-		ENABLE_COMPONENT(filesystem),
-		ENABLE_COMPONENT(logger),
-
-		USE_PROVIDER_FOR(config_storage, windows_registry),
-		USE_PROVIDER_FOR(filesystem, generic),
-		USE_PROVIDER_FOR(logger, console)
-
-	> bootstrapper2;
-
-	std::shared_ptr<engine::filesystem_t> filesystem2 = bootstrapper2.construct_component<engine::filesystem_t>();
-
-	engine::paths_t files2 = filesystem2->iterate_files_in_directory("C:\\!Lost Empire");
-	engine::paths_t dirs2 = filesystem2->iterate_directories("C:\\!Lost Empire");
-	engine::paths_t subfiles2 = filesystem2->iterate_files_in_subdirectories("C:\\!Lost Empire", "*.cs"_u);
-	engine::paths_t subdirs2 = filesystem2->iterate_subdirectories("C:\\!Lost Empire");
-
-	std::shared_ptr<engine::messenger_console_t> console = bootstrapper2.construct_component<engine::messenger_console_t>();
-
-	std::shared_ptr<engine::logger_t> logger = bootstrapper2.construct_component<engine::logger_t>();
+	std::shared_ptr<engine::logger_t> logger = bootstrapper.construct_component<engine::logger_t>();
 
 	logger->log_msg(core, "Hello world!"_u);
 	logger->log_msg(core, "Hello world number #1#!"_u, 2);

@@ -13,22 +13,32 @@ namespace engine
 
 	public:
 
-		void set_terminal_colors(instance_t instance, platform::terminal_t::terminal_color_t foreground, platform::terminal_t::terminal_color_t background) final
+
+		class instance_dummy_t : public terminal_t::instance_t
 		{
+			
+		public:
 
-		}
-		void output_terminal_text(instance_t instance, const ustring_t & text, platform::terminal_t::terminal_color_t foreground, platform::terminal_t::terminal_color_t background) final
+			bool is_closed()  final
+			{
+				return false;
+			}
+			void write(const ustring_t & text, terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background) final
+			{
+
+			}
+			void write_new_line() final
+			{
+				
+			}
+
+		private:
+
+		};
+
+		std::shared_ptr<instance_t> open(terminal_t::terminal_color_t foreground, terminal_t::terminal_color_t background, closing_callback_t on_closing = [](instance_t*){}) final
 		{
-
-		}
-		void output_terminal_new_line(instance_t instance) final
-		{
-
-		}
-
-		void force_reopen_terminals() final
-		{
-
+			return std::make_shared<instance_dummy_t>();
 		}
 
 	};
