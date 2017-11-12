@@ -45,9 +45,12 @@ namespace engine
 
             CConsoleLoggerEx console;
 
+            void close();
+
             DWORD color_to_foreground(terminal_t::color_t color);
             DWORD color_to_background(terminal_t::color_t color);
 
+            std::mutex mutex;
             terminal_t::color_t background;
             terminal_t::closing_callback_t on_closing;
             flags_t<flag_t> flags;
