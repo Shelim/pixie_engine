@@ -41,7 +41,7 @@ int main(int arg, char * argv[])
 		ENABLE_COMPONENT(terminal),
 
 		USE_PROVIDER_FOR(config_storage, windows_registry),
-		USE_PROVIDER_FOR(filesystem, generic),
+		USE_PROVIDER_FOR(filesystem, windows),
 		USE_PROVIDERS_FOR(logger, console),
 		USE_PROVIDER_FOR(terminal, windows_console)
 

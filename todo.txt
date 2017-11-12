@@ -14,7 +14,7 @@ v		 - Windows implementation
 v	 - logger
 	 - path_resolver
 v	 - renderer_status
-+	 - terminal
+v	 - terminal
  - Utility / XML
 
 Docs
