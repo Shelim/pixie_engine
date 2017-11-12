@@ -63,7 +63,7 @@ engine::logger_provider_console_t::logger_provider_console_t(std::shared_ptr<eng
 
 void engine::logger_provider_console_t::output_start() const
 {
-	console_writer->write(std::make_unique<engine::console::meta_item_t>(engine::console::meta_item_t::meta_type_t::output_start));
+	console_writer->write(std::make_unique<engine::console::meta_item_t>(engine::console::meta_item_t::meta_type_t::output_start, engine::console::meta_item_t::type_t::logger));
 }
 void engine::logger_provider_console_t::output(const engine::console::logger_item_t & item) const
 {
@@ -71,5 +71,5 @@ void engine::logger_provider_console_t::output(const engine::console::logger_ite
 }
 void engine::logger_provider_console_t::output_end() const
 {
-	console_writer->write(std::make_unique<engine::console::meta_item_t>(engine::console::meta_item_t::meta_type_t::output_end));
+	console_writer->write(std::make_unique<engine::console::meta_item_t>(engine::console::meta_item_t::meta_type_t::output_end, engine::console::meta_item_t::type_t::logger));
 }
