@@ -55,7 +55,7 @@ rem * Ask for confirmation (we will download gigabytes of data!)
 set /P AREYOUSURE=This will wipe out existing depedencies and re-download them all. IT WILL TAKE SOME TIME, maybe even a few hours! Are you sure to proceed? y/N: 
 
 rem * Should we fail here...
-if /I "%AREYOUSURE%" EQ "Y" goto ok1
+if /I "%AREYOUSURE%" == "Y" goto ok1
 
 	rem * ... display error
     echo Cancelled by user!
