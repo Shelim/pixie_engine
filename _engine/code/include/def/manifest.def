@@ -16,7 +16,7 @@
 
 ENGINE_MANIFEST_TYPE_STD(common)
 #define ENGINE_OS_STD(platform) ENGINE_MANIFEST_TYPE_STD(platform)
-#include "std/os_std.hpp"
+#include "def/os.def"
 
 ENGINE_MANIFEST_START_STD(common)
 ENGINE_MANIFEST_STD(common, full_name)

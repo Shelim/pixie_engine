@@ -53,6 +53,8 @@ int main(int arg, char * argv[])
 	std::shared_ptr<engine::terminal_t> terminal = bootstrapper.construct_component<engine::terminal_t>();
 
 	logger->log_msg(core, "Test"_u);
+	logger->log_msg(core, "Hello world!"_u);
+	logger->log_msg(core, "Hello world number #1#!"_u, 2);
 
 	auto term = terminal->open("Errors"_u, engine::terminal_t::color_t::red_dark);
 	term->write("Hello world!"_u, engine::terminal_t::color_t::white, engine::terminal_t::color_t::green_dark);
@@ -76,11 +78,6 @@ int main(int arg, char * argv[])
 	engine::paths_t subdirs = filesystem->iterate_subdirectories("C:\\!Lost Empire");
 
 	std::shared_ptr<engine::messenger_console_t> console = bootstrapper.construct_component<engine::messenger_console_t>();
-
-	std::shared_ptr<engine::logger_t> logger = bootstrapper.construct_component<engine::logger_t>();
-
-	logger->log_msg(core, "Hello world!"_u);
-	logger->log_msg(core, "Hello world number #1#!"_u, 2);
 
 	printf("Start1\n");
 

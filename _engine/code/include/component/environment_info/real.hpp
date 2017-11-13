@@ -112,7 +112,7 @@ namespace engine
 		SETTINGS_TABLE_ENTRY(ustring_t, terminal_end)
 
 #define ENGINE_ENVIRONMENT_INFO_STATUS_STD(status) SETTINGS_TABLE_ENTRY(ustring_t, format_file_##status) SETTINGS_TABLE_ENTRY(ustring_t, format_terminal_##status)
-#include "std/environment_info_std.hpp"
+#include "def/environment_info.def"
 
 	SETTINGS_TABLE_END()
 }

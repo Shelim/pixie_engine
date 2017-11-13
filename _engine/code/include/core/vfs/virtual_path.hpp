@@ -21,7 +21,7 @@ namespace engine
 		{
 			unknown,
 #define ENGINE_VIRTUAL_PATH_STD(name) name,
-#include "std/virtual_path_std.hpp"
+#include "def/virtual_path.def"
 			count
 		};
 
@@ -187,7 +187,7 @@ namespace engine
 
 		ss << path.get_cstring() << " [";
 #define ENGINE_VIRTUAL_PATH_STD(name) if(item.get_type() == virtual_path_t::type_t::name) { ss << #name; }
-#include "std/virtual_path_std.hpp"
+#include "def/virtual_path.def"
 
 		ss << "]";
 

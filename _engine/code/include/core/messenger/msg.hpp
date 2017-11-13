@@ -32,7 +32,7 @@ namespace engine
 			enum class type_t
 			{
 	#define ENGINE_MESSENGER_MSG_BASE_TYPE_STD(msg) msg,
-	#include "std/messenger_std.hpp"
+	#include "def/messenger.def"
 				count
 			};
 
@@ -188,7 +188,7 @@ namespace engine
 		}
 
 #define ENGINE_MESSENGER_QUEUE_STD(name) class msg_##name##_t; template<> ustring_t get_msg_type(msg_##name##_t * msg) { return #name##_u; };
-#include "std/messenger_std.hpp"
+#include "def/messenger.def"
 
 	}
 }

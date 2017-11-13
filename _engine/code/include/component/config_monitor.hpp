@@ -50,14 +50,14 @@ namespace engine
 #define ENGINE_CONFIG_GLOBAL_STD(type, name) virtual type get_global_##name() const = 0;  virtual void set_global_##name(type val) = 0;
 #define ENGINE_CONFIG_LOCAL_STD(type, app, name) virtual type get_app_##app##_##name() const = 0;  virtual void set_app_##app##_##name(type val) = 0;
 #define ENGINE_CONFIG_STD(type, name) virtual type get_cfg_##name(manifest_app_t::app_t app) const = 0;  virtual void set_cfg_##name(manifest_app_t::app_t app, type val) = 0; type get_cfg_##name() const { return get_cfg_##name(manifest_app->get_local_app()); } void set_cfg_##name(type val) { set_cfg_##name(manifest_app->get_local_app(), val); }
-#include "std/config_std.hpp"
+#include "def/config.def"
 
 		enum class item_t
 		{
 #define ENGINE_CONFIG_GLOBAL_STD(type, name) global_##name,
 #define ENGINE_CONFIG_LOCAL_STD(type, app, name) app_##app##_##name,
 #define ENGINE_CONFIG_STD(type, name) cfg_##name,
-#include "std/config_std.hpp"
+#include "def/config.def"
 			count
 		};
 
@@ -66,7 +66,7 @@ namespace engine
 #define ENGINE_CONFIG_GLOBAL_STD(type, name) if(item == item_t::global_##name) return "global_" #name##_u;
 #define ENGINE_CONFIG_LOCAL_STD(type, app, name) if(item == item_t::app_##app##_##name) return "local_" #app "_" #name##_u;
 #define ENGINE_CONFIG_STD(type, name) if(item == item_t::cfg_##name) return "cfg_" #name##_u;
-#include "std/config_std.hpp"
+#include "def/config.def"
 			return "Unknown"_u;
 		}
 
@@ -81,7 +81,7 @@ namespace engine
 #define ENGINE_CONFIG_GLOBAL_STD(type, name) SETTINGS_TABLE_ENTRY(type, global_##name)
 #define ENGINE_CONFIG_LOCAL_STD(type, app, name) SETTINGS_TABLE_ENTRY(type, app_##app##_##name)
 #define ENGINE_CONFIG_STD(type, name) SETTINGS_TABLE_ENTRY(type, cfg_##name)
-#include "std/config_std.hpp"
+#include "def/config.def"
 
 	SETTINGS_TABLE_END()
 }

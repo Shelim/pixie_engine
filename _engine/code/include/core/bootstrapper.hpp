@@ -126,7 +126,7 @@ namespace engine
 		{
 			return boost::di::make_injector(
 #define ENGINE_COMPONENT_STD(component)	boost::di::bind<component##_t>().in(scoped).to <component##_dummy_t>(),
-#include "std/component_std.hpp"
+#include "def/component.def"
 				boost::di::make_injector()
 			);
 		}

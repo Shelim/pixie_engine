@@ -11,7 +11,7 @@ namespace engine
 	SETTINGS_TABLE_START(data_archives_t)
 
 #define ENGINE_ARCHIVE_READABLE_STD(archive) SETTINGS_TABLE_ENTRY(ustring_collection_t, allowed_extensions_for_##archive)
-#include "std/archive_std.hpp"
+#include "def/archive.def"
 
 	SETTINGS_TABLE_END()
 

@@ -11,7 +11,7 @@ namespace engine
 #define ENGINE_MANIFEST_START_STD(manifest_type) class manifest_##manifest_type##_t { public:
 #define ENGINE_MANIFEST_STD(manifest_type, name) ustring_t get_##name() const;
 #define ENGINE_MANIFEST_END_STD() };
-#include "std/manifest_std.hpp"
+#include "def/manifest.def"
 
 }
 

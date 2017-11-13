@@ -21,7 +21,7 @@ namespace engine
             enum meta_type_t
             {
     #define ENGINE_CONSOLE_META_TYPE_STD(meta) meta,
-    #include "std/console_std.hpp"
+    #include "def/console.def"
                 count
             };
 

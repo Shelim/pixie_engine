@@ -16,7 +16,7 @@ namespace engine
 		enum class app_t
 		{
 #define ENGINE_APP_STD(app) app,
-#include "std/app_std.hpp"
+#include "def/app.def"
 			count
 		};
 
@@ -25,7 +25,7 @@ namespace engine
 			switch (app)
 			{
 #define ENGINE_APP_STD(app) case app_t::app: return #app##_u;
-#include "std/app_std.hpp"
+#include "def/app.def"
 			}
 			return "unknown"_u;
 		}

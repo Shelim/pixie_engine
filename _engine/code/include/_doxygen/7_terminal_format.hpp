@@ -26,7 +26,7 @@
 *			@endcode
 *		@subsection terminal_format_reference_tag Tag
 *           One of predefined tags or your own (defined in `std` file)
-*           For current list of tags see `_engine/code/include/common/std/terminal_writer_std.hpp`
+*           For current list of tags see `_engine/code/include/common/def/terminal_writer.def`
 *           
 *           Tags replace each other. Therefore only one tag can be active at given time.
 *   

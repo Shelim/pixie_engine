@@ -15,7 +15,7 @@ namespace engine
 		{
 #define ENGINE_TASK_THREAD_CALLER_STD(name) engine_##name,
 #define ENGINE_TASK_THREAD_CALLER_CUSTOM_STD(name) custom_##name,
-#include "std/process_runner_std.hpp"
+#include "def/process_runner.def"
 			count
 		};
 
@@ -28,7 +28,7 @@ namespace engine
 			{
 #define ENGINE_TASK_THREAD_CALLER_STD(name) if(runner == runner_thread_t::engine_##name) return "Internal " #name##_u;
 #define ENGINE_TASK_THREAD_CALLER_CUSTOM_STD(name) if(runner == runner_thread_t::custom_##name) return "Thread " #name##_u;
-#include "std/process_runner_std.hpp"
+#include "def/process_runner.def"
 				return "Unknown"_u;
 			}
 

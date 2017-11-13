@@ -41,7 +41,7 @@ engine::environment_info_output_provider_file_t::environment_info_output_provide
 	end_text = this->settings->get()->file_end();
 
 #define ENGINE_ENVIRONMENT_INFO_STATUS_STD(status_id) formattable_string[value_of(environment_info_t::status_t::status_id)] = this->settings->get()->format_file_##status_id ();
-#include "std/environment_info_std.hpp"
+#include "def/environment_info.def"
 }
 engine::environment_info_output_provider_file_t::~environment_info_output_provider_file_t()
 {
@@ -69,7 +69,7 @@ engine::environment_info_output_provider_terminal_t::environment_info_output_pro
 	end_text = this->settings->get()->terminal_end();
 
 #define ENGINE_ENVIRONMENT_INFO_STATUS_STD(status_id) formattable_string[value_of(environment_info_t::status_t::status_id)] = this->settings->get()->format_terminal_##status_id ();
-#include "std/environment_info_std.hpp"
+#include "def/environment_info.def"
 }
 
 void engine::environment_info_output_provider_terminal_t::output_start() const

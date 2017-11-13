@@ -9,7 +9,7 @@
 ENGINE_VIRTUAL_PATH_STD(common)
 ENGINE_VIRTUAL_PATH_STD(crash_dumps)
 #define ENGINE_APP_STD(app) ENGINE_VIRTUAL_PATH_STD(app_##app)
-#include "std/app_std.hpp"
+#include "def/app.def"
 ENGINE_VIRTUAL_PATH_STD(saves)
 
 #undef ENGINE_ASSET_PATH_STD

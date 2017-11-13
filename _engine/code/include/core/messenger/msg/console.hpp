@@ -31,7 +31,7 @@ namespace engine
 				enum kind_t
 				{
 #define ENGINE_CONSOLE_OUTPUT_KIND_STD(kind) kind,
-#include "std/console_std.hpp"
+#include "def/console.def"
 					count
 				};
 			
@@ -39,35 +39,35 @@ namespace engine
 				{
 					unknown,
 #define ENGINE_CONSOLE_SOURCE_STD(source) source,
-#include "std/console_std.hpp"
+#include "def/console.def"
 					count
 				};
 
 				enum class type_t
 				{
 #define ENGINE_CONSOLE_MSG_TYPE_STD(type) type,
-#include "std/console_std.hpp"
+#include "def/console.def"
 					count
 				};
 
 				static ustring_t get_kind_name(kind_t val)
 				{
 #define ENGINE_CONSOLE_OUTPUT_KIND_STD(kind) if(val == kind_t::kind) return #kind##_u;
-#include "std/console_std.hpp"
+#include "def/console.def"
 					return "unknown"_u;
 				}
 
 				static ustring_t get_source_name(source_t val)
 				{
 #define ENGINE_CONSOLE_SOURCE_STD(source) if(val == source_t::source) return #source##_u;
-#include "std/console_std.hpp"
+#include "def/console.def"
 					return "unknown"_u;
 				}
 
 				static ustring_t get_type_name(type_t val)
 				{
 #define ENGINE_CONSOLE_MSG_TYPE_STD(type) if(val == type_t::type) return #type##_u;
-#include "std/console_std.hpp"
+#include "def/console.def"
 					return "unknown"_u;
 				}
 

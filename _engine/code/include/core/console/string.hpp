@@ -13,7 +13,7 @@ namespace engine
 	enum class console_tag_t
 	{
 #define ENGINE_CONSOLE_OUTPUT_TAG_STD(tag) tag,
-#include "std/console_std.hpp"
+#include "def/console.def"
 		def,
 		count = def
 	};
@@ -120,7 +120,7 @@ namespace engine
 
 						if (key == "0"_u) return std::make_unique<token_console_format_t>(console_tag_t::def);
 #define ENGINE_CONSOLE_OUTPUT_TAG_STD(tag) if (key == #tag##_u) return std::make_unique<token_console_format_t>(console_tag_t::tag);
-#include "std/console_std.hpp"
+#include "def/console.def"
 
 					}
 				}

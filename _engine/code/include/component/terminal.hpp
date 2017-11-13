@@ -19,7 +19,7 @@ namespace engine
 		enum class color_t
 		{
 #define ENGINE_TERMINAL_COLOR_STD(color) color,
-#include "std/terminal_std.hpp"
+#include "def/terminal.def"
 			count
 		};
 
