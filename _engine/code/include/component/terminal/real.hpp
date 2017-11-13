@@ -15,10 +15,7 @@ namespace engine
 
 	public:
 
-		virtual ~terminal_provider_base_t()
-		{
-
-		}
+		virtual ~terminal_provider_base_t();
 
 		virtual std::shared_ptr<terminal_t::instance_t> open(const ustring_t & name, terminal_t::color_t background, terminal_t::closing_callback_t on_closing = [](terminal_t::instance_t*){}) = 0;
 
@@ -32,15 +29,8 @@ namespace engine
 
 	public:
 
-		terminal_real_t(std::unique_ptr<holder_t<terminal_t> > terminal_provider) : terminal_provider(std::move(terminal_provider))
-		{
-			
-		}
-
-		std::shared_ptr<instance_t> open(const ustring_t & name, terminal_t::color_t background, closing_callback_t on_closing = [](instance_t*){}) final
-		{
-			return terminal_provider->get_provider()->open(name, background, on_closing);
-		}
+		terminal_real_t(std::unique_ptr<holder_t<terminal_t> > terminal_provider);
+		std::shared_ptr<instance_t> open(const ustring_t & name, terminal_t::color_t background, closing_callback_t on_closing = [](instance_t*){}) final;
 
 	private:
 
@@ -50,6 +40,6 @@ namespace engine
 }
 
 #include "component/terminal/provider/mockup.hpp"
-#include "component/terminal/provider/windows_console.hpp"
+#include "component/terminal/provider/windows.hpp"
 
 #endif

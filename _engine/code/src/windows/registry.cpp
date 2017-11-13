@@ -23,6 +23,11 @@
 #include <io.h>
 #include <fcntl.h>
 
+engine::config_storage_provider_windows_registry_t::config_storage_provider_windows_registry_t(std::shared_ptr<manifest_windows_t> manifest_windows) : manifest_windows(manifest_windows)
+{
+
+}
+
 void engine::config_storage_provider_windows_registry_t::store(const ustring_t & key, bool val)
 {
 	HKEY hkey;

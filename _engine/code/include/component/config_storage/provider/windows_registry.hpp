@@ -15,10 +15,7 @@ namespace engine
 
 	public:
 
-		config_storage_provider_windows_registry_t(std::shared_ptr<manifest_windows_t> manifest_windows) : manifest_windows(manifest_windows)
-		{
-
-		}
+		config_storage_provider_windows_registry_t(std::shared_ptr<manifest_windows_t> manifest_windows);
 
 		void store(const ustring_t & key, bool val) final;
 		void store(const ustring_t & key, uint8_t val) final;

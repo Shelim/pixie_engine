@@ -43,13 +43,16 @@ int main(int arg, char * argv[])
 		USE_PROVIDER_FOR(config_storage, windows_registry),
 		USE_PROVIDER_FOR(filesystem, windows),
 		USE_PROVIDERS_FOR(logger, console),
-		USE_PROVIDER_FOR(terminal, windows_console)
+		USE_PROVIDER_FOR(terminal, windows)
 
 	> bootstrapper;
 
 	std::shared_ptr<engine::config_storage_t> config_storage = bootstrapper.construct_component<engine::config_storage_t>();
 	std::shared_ptr<engine::filesystem_t> filesystem = bootstrapper.construct_component<engine::filesystem_t>();
+	std::shared_ptr<engine::logger_t> logger = bootstrapper.construct_component<engine::logger_t>();
 	std::shared_ptr<engine::terminal_t> terminal = bootstrapper.construct_component<engine::terminal_t>();
+
+	logger->log_msg(core, "Test"_u);
 
 	auto term = terminal->open("Errors"_u, engine::terminal_t::color_t::red_dark);
 	term->write("Hello world!"_u, engine::terminal_t::color_t::white, engine::terminal_t::color_t::green_dark);

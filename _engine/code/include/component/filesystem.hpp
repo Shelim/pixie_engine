@@ -12,10 +12,7 @@ namespace engine
 
 	public:
 
-		virtual ~filesystem_t()
-		{
-
-		}
+		virtual ~filesystem_t();
 
 		enum class file_seek_origin_t
 		{
@@ -29,20 +26,13 @@ namespace engine
 
 		public:
 
-			virtual ~file_output_t()
-			{
-
-			}
-
+			virtual ~file_output_t();
 			virtual uint32_t write(const uint8_t * buffer, uint32_t size) = 0;
 			virtual void flush() = 0;
 
 		protected:
 
-			file_output_t()
-			{
-
-			}
+			file_output_t() = default;
 
 		};
 
@@ -51,10 +41,7 @@ namespace engine
 
 		public:
 
-			virtual ~file_input_t()
-			{
-
-			}
+			virtual ~file_input_t();
 
 			virtual void seek(int32_t position, file_seek_origin_t origin) = 0;
 			virtual bool is_eof() const = 0;
@@ -63,10 +50,7 @@ namespace engine
 
 		protected:
 
-			file_input_t()
-			{
-
-			}
+			file_input_t() = default;
 
 		};
 
@@ -91,16 +75,8 @@ namespace engine
 		virtual void delete_file(std::filesystem::path path) = 0;
 		virtual void delete_directory(std::filesystem::path path) = 0;
 
-		virtual void move_file(std::filesystem::path src, std::filesystem::path trg)
-		{
-			copy_file(src, trg);
-			delete_file(src);
-		}
-		virtual void move_directory(std::filesystem::path src, std::filesystem::path trg)
-		{
-			copy_directory(src, trg);
-			delete_directory(src);
-		}
+		virtual void move_file(std::filesystem::path src, std::filesystem::path trg);
+		virtual void move_directory(std::filesystem::path src, std::filesystem::path trg);
 	};
 
 }

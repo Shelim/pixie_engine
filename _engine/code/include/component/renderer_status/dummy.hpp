@@ -12,10 +12,7 @@ namespace engine
 
 	public:
 
-		uint64_t get_frame() const final
-		{
-			return 0;
-		}
+		uint64_t get_frame() const final;
 
 	};
 }

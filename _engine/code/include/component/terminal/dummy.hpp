@@ -19,31 +19,16 @@ namespace engine
 			
 		public:
 
-			bool is_closed()  final
-			{
-				return false;
-			}
-			void write(const ustring_t & text, terminal_t::color_t foreground) final
-			{
-
-			}
-			void write(const ustring_t & text, terminal_t::color_t foreground, terminal_t::color_t background) final
-			{
-
-			}
-			void write_new_line() final
-			{
-				
-			}
+			bool is_closed()  final;
+			void write(const ustring_t & text, terminal_t::color_t foreground) final;
+			void write(const ustring_t & text, terminal_t::color_t foreground, terminal_t::color_t background) final;
+			void write_new_line() final;
 
 		private:
 
 		};
 
-		std::shared_ptr<instance_t> open(const ustring_t & name, terminal_t::color_t background, closing_callback_t on_closing = [](instance_t*){}) final
-		{
-			return std::make_shared<instance_dummy_t>();
-		}
+		std::shared_ptr<instance_t> open(const ustring_t & name, terminal_t::color_t background, closing_callback_t on_closing = [](instance_t*){}) final;
 
 	};
 }

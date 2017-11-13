@@ -18,10 +18,7 @@ namespace engine
 
 	public:
 
-		virtual ~logger_provider_base_t()
-		{
-
-		}
+		virtual ~logger_provider_base_t();
 
 		virtual void output_start() const = 0;
 		virtual void output(const engine::console::logger_item_t & item) const = 0;
@@ -38,13 +35,9 @@ namespace engine
 	public:
 
 		logger_real_t(std::shared_ptr<engine::renderer_status_t> renderer_status, std::shared_ptr<engine::environment_info_t> environment_info, std::unique_ptr<holder_t<logger_t> > logger_providers);
-
 		~logger_real_t();
 
-		const engine::console::logger_items_t & get_cache() const final
-		{
-			return cache;
-		}
+		const engine::console::logger_items_t & get_cache() const final;
 
 	private:
 

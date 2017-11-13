@@ -21,16 +21,8 @@ namespace engine
 			return log_local(kind, source, file, line, function, link, format_string(message, args...));
 		}
 
-		logger_t()
-		{
-
-		}
-
-		virtual ~logger_t()
-		{
-
-		}
-
+		logger_t();
+		virtual ~logger_t();
 		virtual const engine::console::logger_items_t & get_cache() const = 0;
 
 	private:

@@ -1,44 +1,49 @@
-#include "component/terminal/provider/windows_console.hpp"
+#include "component/terminal/provider/windows.hpp"
 
 #if PIXIE_WINDOWS
 
-engine::terminal_provider_windows_console_t::instance_t::instance_t(const ustring_t & name, terminal_t::color_t background, terminal_t::closing_callback_t on_closing)
+std::shared_ptr<engine::terminal_t::instance_t> engine::terminal_provider_windows_t::open(const ustring_t & name, terminal_t::color_t background, terminal_t::closing_callback_t on_closing)
+{
+    return std::make_shared<instance_t>(name, background, on_closing);
+}
+
+engine::terminal_provider_windows_t::instance_t::instance_t(const ustring_t & name, terminal_t::color_t background, terminal_t::closing_callback_t on_closing)
     : on_closing(on_closing), background(background)
 {
     console.Create(name.get_cstring());
     console.cls(color_to_background(background));
 }
 
-engine::terminal_provider_windows_console_t::instance_t::~instance_t()
+engine::terminal_provider_windows_t::instance_t::~instance_t()
 {
     close();
 }
 
-bool engine::terminal_provider_windows_console_t::instance_t::is_closed()
+bool engine::terminal_provider_windows_t::instance_t::is_closed()
 {
     std::lock_guard<std::recursive_mutex> guard(recursive_mutex);
     return flags.is_flag(flag_t::is_closed);
 }
 
-void engine::terminal_provider_windows_console_t::instance_t::write(const ustring_t & text, terminal_t::color_t foreground)
+void engine::terminal_provider_windows_t::instance_t::write(const ustring_t & text, terminal_t::color_t foreground)
 {
     write(text, foreground, this->background);
 }
 
-void engine::terminal_provider_windows_console_t::instance_t::write(const ustring_t & text, terminal_t::color_t foreground, terminal_t::color_t background)
+void engine::terminal_provider_windows_t::instance_t::write(const ustring_t & text, terminal_t::color_t foreground, terminal_t::color_t background)
 {
     std::lock_guard<std::recursive_mutex> guard(recursive_mutex);
     if(console.cprintf(color_to_foreground(foreground) | color_to_background(background), "%s", text.get_cstring()) < 0)
         close();
 }
-void engine::terminal_provider_windows_console_t::instance_t::write_new_line()
+void engine::terminal_provider_windows_t::instance_t::write_new_line()
 {
     std::lock_guard<std::recursive_mutex> guard(recursive_mutex);
     if(console.print("\n") < 0)
         close();
 }
 
-void engine::terminal_provider_windows_console_t::instance_t::close()
+void engine::terminal_provider_windows_t::instance_t::close()
 {
     std::lock_guard<std::recursive_mutex> guard(recursive_mutex);
     if(!flags.is_flag(flag_t::is_closed))
@@ -49,7 +54,7 @@ void engine::terminal_provider_windows_console_t::instance_t::close()
     }
 }
 
-DWORD engine::terminal_provider_windows_console_t::instance_t::color_to_foreground(terminal_t::color_t color)
+DWORD engine::terminal_provider_windows_t::instance_t::color_to_foreground(terminal_t::color_t color)
 {
     switch(color)
     {
@@ -73,7 +78,7 @@ DWORD engine::terminal_provider_windows_console_t::instance_t::color_to_foregrou
     return 0;
 }
 
-DWORD engine::terminal_provider_windows_console_t::instance_t::color_to_background(terminal_t::color_t color)
+DWORD engine::terminal_provider_windows_t::instance_t::color_to_background(terminal_t::color_t color)
 {
     switch(color)
     {

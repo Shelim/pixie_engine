@@ -4,6 +4,8 @@
 +	 - config_storage
 +        - XML (?) inside game directory (for portable!)
 			 - Requires: XML
+     - console_output
++        - filters
 	 - data_archives
 	 - data_creator
 	 - data_monitor

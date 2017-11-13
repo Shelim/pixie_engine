@@ -1,3 +1,62 @@
+#include "component/terminal.hpp"
+
+engine::terminal_t::terminal_t()
+{
+
+}
+
+engine::terminal_t::~terminal_t()
+{
+	
+}
+
+engine::terminal_t::instance_t::~instance_t()
+{
+
+}
+
+bool engine::terminal_t::instance_t::is_closed() 
+{
+	return false;
+}
+
+bool engine::terminal_dummy_t::instance_dummy_t::is_closed()
+{
+	return false;
+}
+void engine::terminal_dummy_t::instance_dummy_t::write(const ustring_t & text, terminal_t::color_t foreground)
+{
+
+}
+void engine::terminal_dummy_t::instance_dummy_t::write(const ustring_t & text, terminal_t::color_t foreground, terminal_t::color_t background)
+{
+
+}
+void engine::terminal_dummy_t::instance_dummy_t::write_new_line()
+{
+	
+}
+
+std::shared_ptr<engine::terminal_t::instance_t> engine::terminal_dummy_t::open(const ustring_t & name, terminal_t::color_t background, closing_callback_t on_closing)
+{
+	return std::make_shared<instance_dummy_t>();
+}
+
+engine::terminal_provider_base_t::~terminal_provider_base_t()
+{
+
+}
+
+engine::terminal_real_t::terminal_real_t(std::unique_ptr<holder_t<terminal_t> > terminal_provider) : terminal_provider(std::move(terminal_provider))
+{
+	
+}
+
+std::shared_ptr<engine::terminal_t::instance_t> engine::terminal_real_t::open(const ustring_t & name, terminal_t::color_t background, closing_callback_t on_closing)
+{
+	return terminal_provider->get_provider()->open(name, background, on_closing);
+}
+
 /*
 
 #include "component/terminal.hpp"

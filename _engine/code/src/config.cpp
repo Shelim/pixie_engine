@@ -1,3 +1,192 @@
+#include "component/config_storage.hpp"
+
+engine::config_storage_t::~config_storage_t()
+{
+			
+}
+
+void engine::config_storage_t::store(const ustring_t & key, bool val)
+{
+	store(key, to_string(val));
+}
+void engine::config_storage_t::store(const ustring_t & key, uint8_t val)
+{
+	store(key, to_string(val));
+}
+void engine::config_storage_t::store(const ustring_t & key, uint16_t val)
+{
+	store(key, to_string(val));
+}
+void engine::config_storage_t::store(const ustring_t & key, uint32_t val)
+{
+	store(key, to_string(val));
+}
+void engine::config_storage_t::store(const ustring_t & key, uint64_t val)
+{
+	store(key, to_string(val));
+}
+void engine::config_storage_t::store(const ustring_t & key, int8_t val)
+{
+	store(key, to_string(val));
+}
+void engine::config_storage_t::store(const ustring_t & key, int16_t val)
+{
+	store(key, to_string(val));
+}
+void engine::config_storage_t::store(const ustring_t & key, int32_t val)
+{
+	store(key, to_string(val));
+}
+void engine::config_storage_t::store(const ustring_t & key, int64_t val)
+{
+	store(key, to_string(val));
+}
+
+bool engine::config_storage_t::retrieve(const ustring_t & key, bool def_val)
+{
+	return from_string<bool>(retrieve(key, to_string(def_val)));
+}
+uint8_t engine::config_storage_t::retrieve(const ustring_t & key, uint8_t def_val)
+{
+	return from_string<uint8_t>(retrieve(key, to_string(def_val)));
+}
+uint16_t engine::config_storage_t::retrieve(const ustring_t & key, uint16_t def_val)
+{
+	return from_string<uint16_t>(retrieve(key, to_string(def_val)));
+}
+uint32_t engine::config_storage_t::retrieve(const ustring_t & key, uint32_t def_val)
+{
+	return from_string<uint32_t>(retrieve(key, to_string(def_val)));
+}
+uint64_t engine::config_storage_t::retrieve(const ustring_t & key, uint64_t def_val)
+{
+	return from_string<uint64_t>(retrieve(key, to_string(def_val)));
+}
+int8_t engine::config_storage_t::retrieve(const ustring_t & key, int8_t def_val)
+{
+	return from_string<int8_t>(retrieve(key, to_string(def_val)));
+}
+int16_t engine::config_storage_t::retrieve(const ustring_t & key, int16_t def_val)
+{
+	return from_string<int16_t>(retrieve(key, to_string(def_val)));
+}
+int32_t engine::config_storage_t::retrieve(const ustring_t & key, int32_t def_val)
+{
+	return from_string<int32_t>(retrieve(key, to_string(def_val)));
+}
+int64_t engine::config_storage_t::retrieve(const ustring_t & key, int64_t def_val)
+{
+	return from_string<int64_t>(retrieve(key, to_string(def_val)));
+}
+
+engine::config_storage_dummy_t::config_storage_dummy_t()
+{
+	
+}
+
+void engine::config_storage_dummy_t::store(const ustring_t & key, const ustring_t & val)
+{
+	values[key] = val;
+}
+
+engine::ustring_t engine::config_storage_dummy_t::retrieve(const ustring_t & key, const ustring_t & def_val)
+{
+	auto iter = values.find(key);
+	if (iter == values.end())
+	{
+		return def_val;
+	}
+	return iter->second;
+}
+
+engine::config_storage_real_t::config_storage_real_t(std::unique_ptr<holder_t<config_storage_t> > config_storage_provider) : config_storage_provider(std::move(config_storage_provider))
+{
+
+}
+
+void engine::config_storage_real_t::store(const ustring_t & key, bool val)
+{
+	config_storage_provider->get_provider()->store(key, val);
+}
+void engine::config_storage_real_t::store(const ustring_t & key, uint8_t val)
+{
+	config_storage_provider->get_provider()->store(key, val);
+}
+void engine::config_storage_real_t::store(const ustring_t & key, uint16_t val)
+{
+	config_storage_provider->get_provider()->store(key, val);
+}
+void engine::config_storage_real_t::store(const ustring_t & key, uint32_t val)
+{
+	config_storage_provider->get_provider()->store(key, val);
+}
+void engine::config_storage_real_t::store(const ustring_t & key, uint64_t val)
+{
+	config_storage_provider->get_provider()->store(key, val);
+}
+void engine::config_storage_real_t::store(const ustring_t & key, int8_t val)
+{
+	config_storage_provider->get_provider()->store(key, val);
+}
+void engine::config_storage_real_t::store(const ustring_t & key, int16_t val)
+{
+	config_storage_provider->get_provider()->store(key, val);
+}
+void engine::config_storage_real_t::store(const ustring_t & key, int32_t val)
+{
+	config_storage_provider->get_provider()->store(key, val);
+}
+void engine::config_storage_real_t::store(const ustring_t & key, int64_t val)
+{
+	config_storage_provider->get_provider()->store(key, val);
+}
+void engine::config_storage_real_t::store(const ustring_t & key, const ustring_t & val)
+{
+	config_storage_provider->get_provider()->store(key, val);
+}
+
+bool engine::config_storage_real_t::retrieve(const ustring_t & key, bool def_val)
+{
+	return config_storage_provider->get_provider()->retrieve(key, def_val);
+}
+uint8_t engine::config_storage_real_t::retrieve(const ustring_t & key, uint8_t def_val)
+{ 
+	return config_storage_provider->get_provider()->retrieve(key, def_val);
+}
+uint16_t engine::config_storage_real_t::retrieve(const ustring_t & key, uint16_t def_val)
+{
+	return config_storage_provider->get_provider()->retrieve(key, def_val);
+}
+uint32_t engine::config_storage_real_t::retrieve(const ustring_t & key, uint32_t def_val)
+{
+	return config_storage_provider->get_provider()->retrieve(key, def_val);
+}
+uint64_t engine::config_storage_real_t::retrieve(const ustring_t & key, uint64_t def_val)
+{
+	return config_storage_provider->get_provider()->retrieve(key, def_val);
+}
+int8_t engine::config_storage_real_t::retrieve(const ustring_t & key, int8_t def_val)
+{
+	return config_storage_provider->get_provider()->retrieve(key, def_val);
+}
+int16_t engine::config_storage_real_t::retrieve(const ustring_t & key, int16_t def_val)
+{
+	return config_storage_provider->get_provider()->retrieve(key, def_val);
+}
+int32_t engine::config_storage_real_t::retrieve(const ustring_t & key, int32_t def_val)
+{
+	return config_storage_provider->get_provider()->retrieve(key, def_val);
+}
+int64_t engine::config_storage_real_t::retrieve(const ustring_t & key, int64_t def_val)
+{
+	return config_storage_provider->get_provider()->retrieve(key, def_val);
+}
+engine::ustring_t engine::config_storage_real_t::retrieve(const ustring_t & key, const ustring_t & def_val)
+{
+	return config_storage_provider->get_provider()->retrieve(key, def_val);
+}
+
+
 /*
 
 #include "component/config.hpp"

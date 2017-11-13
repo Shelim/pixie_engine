@@ -3,6 +3,31 @@
 #include "core/vfs/virtual_path.hpp"
 #include "core/console/msg/meta.hpp"
 
+engine::logger_t::logger_t()
+{
+
+}
+
+engine::logger_t::~logger_t()
+{
+
+}
+
+engine::logger_t::item_id_t engine::logger_dummy_t::log_local(engine::console::logger_item_t::kind_t kind, engine::console::logger_item_t::source_t source, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message)
+{
+	return 0;
+}
+
+const engine::console::logger_items_t & engine::logger_dummy_t::get_cache() const
+{
+	return engine::console::logger_items_t{};
+}
+
+engine::logger_provider_base_t::~logger_provider_base_t()
+{
+
+}
+
 engine::logger_real_t::logger_real_t(std::shared_ptr<engine::renderer_status_t> renderer_status, std::shared_ptr<engine::environment_info_t> environment_info, std::unique_ptr<holder_t<logger_t> > logger_providers)
  : renderer_status(renderer_status), logger_providers(std::move(logger_providers))
 {
@@ -13,6 +38,11 @@ engine::logger_real_t::logger_real_t(std::shared_ptr<engine::renderer_status_t> 
 engine::logger_real_t::~logger_real_t()
 {
 	output_end();
+}
+
+const engine::console::logger_items_t & engine::logger_real_t::get_cache() const
+{
+	return cache;
 }
 
 void engine::logger_real_t::output_start()

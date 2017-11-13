@@ -29,9 +29,9 @@ namespace engine
 
 	public:
 
-		virtual uint64_t get_frame() const = 0;
+		virtual ~renderer_status_t();
 
-		virtual ~renderer_status_t() { }
+		virtual uint64_t get_frame() const = 0;
 	};
 }
 

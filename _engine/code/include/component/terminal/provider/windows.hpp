@@ -10,15 +10,12 @@
 
 namespace engine
 {
-    class terminal_provider_windows_console_t : public terminal_provider_base_t
+    class terminal_provider_windows_t : public terminal_provider_base_t
 	{
 
 	public:
 
-        std::shared_ptr<terminal_t::instance_t> open(const ustring_t & name, terminal_t::color_t background, terminal_t::closing_callback_t on_closing = [](terminal_t::instance_t*){}) final
-        {
-            return std::make_shared<instance_t>(name, background, on_closing);
-        }
+        std::shared_ptr<terminal_t::instance_t> open(const ustring_t & name, terminal_t::color_t background, terminal_t::closing_callback_t on_closing = [](terminal_t::instance_t*){}) final;
 
     private:
 

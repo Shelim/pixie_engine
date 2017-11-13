@@ -13,25 +13,10 @@ namespace engine
 
 	public:
 
-		config_storage_dummy_t()
-		{
-			
-		}
+		config_storage_dummy_t();
 
-		void store(const ustring_t & key, const ustring_t & val) final
-		{
-			values[key] = val;
-		}
-
-		ustring_t retrieve(const ustring_t & key, const ustring_t & def_val) final
-		{
-			auto iter = values.find(key);
-			if (iter == values.end())
-			{
-				return def_val;
-			}
-			return iter->second;
-		}
+		void store(const ustring_t & key, const ustring_t & val) final;
+		ustring_t retrieve(const ustring_t & key, const ustring_t & def_val) final;
 
 	private:
 
