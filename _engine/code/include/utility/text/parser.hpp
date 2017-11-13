@@ -86,6 +86,14 @@ namespace engine
 				return ret;
 			}
 
+			void advance_whitespaces()
+			{
+				while(!is_eof() && peek_is_whitespace())
+				{
+					++iter;
+				}
+			}
+
 			bool peek_is_number()
 			{
 				usymbol_t num = peek();
@@ -93,6 +101,11 @@ namespace engine
 					return true;
 
 				return false;
+			}
+
+			bool peek_is_whitespace()
+			{
+				return is_whitespace_ascii(peek());
 			}
 
 			usymbol_t peek(std::size_t ahead)
