@@ -48,6 +48,7 @@ namespace engine
 
 		typedef std::vector<change_t> changes_t;
 	}
+	
 }
 
 #endif

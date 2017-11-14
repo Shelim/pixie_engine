@@ -125,7 +125,7 @@ namespace engine
 		static auto provide_di(obj<>)
 		{
 			return boost::di::make_injector(
-#define ENGINE_COMPONENT_STD(component)	boost::di::bind<component##_t>().in(scoped).to <component##_dummy_t>(),
+#define ENGINE_COMPONENT_DEF(component)	boost::di::bind<component##_t>().in(scoped).to <component##_dummy_t>(),
 #include "def/component.def"
 				boost::di::make_injector()
 			);

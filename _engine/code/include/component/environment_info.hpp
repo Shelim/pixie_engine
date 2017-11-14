@@ -51,14 +51,14 @@ namespace engine
 
 		enum class key_t
 		{
-#define ENGINE_ENVIRONMENT_INFO_STD(key, name) key,
+#define ENGINE_ENVIRONMENT_INFO_DEF(key, name) key,
 #include "def/environment_info.def"
 			count
 		};
 
 		enum class status_t
 		{
-#define ENGINE_ENVIRONMENT_INFO_STATUS_STD(status) status,
+#define ENGINE_ENVIRONMENT_INFO_STATUS_DEF(status) status,
 #include "def/environment_info.def"
 			count
 		};
@@ -78,7 +78,7 @@ namespace engine
 		
 		static const ustring_t key_to_name(key_t key)
 		{
-#define ENGINE_ENVIRONMENT_INFO_STD(key_name, name) if(key == key_t::key_name) return name;
+#define ENGINE_ENVIRONMENT_INFO_DEF(key_name, name) if(key == key_t::key_name) return name;
 #include "def/environment_info.def"
 
 			return  ""_u;

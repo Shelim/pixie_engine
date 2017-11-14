@@ -4,7 +4,6 @@
 #pragma once
 
 #include "utility/pattern/flags.hpp"
-#include "utility/pattern/enum.hpp"
 #include "utility/text/ustring.hpp"
 #include <functional>
 

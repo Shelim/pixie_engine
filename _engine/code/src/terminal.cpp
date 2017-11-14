@@ -126,7 +126,7 @@ void engine::terminal_real_t::on_config_update(msg_base_t * msg)
 		msg_config_updated_t* cfg_updated_msg = static_cast<msg_config_updated_t*>(msg);
 		config_t * config = cfg_updated_msg->get_config();
 		
-#define ENGINE_TERMINAL_STD(terminal) if (cfg_updated_msg->get_item() == config_t::item_t::cfg_has_##terminal##_terminal) { if (config->get_cfg_has_##terminal##_terminal()) update_window(instance_t::terminal, window_state_t::open); else update_window(instance_t::terminal, window_state_t::close); }
+#define ENGINE_TERMINAL_DEF(terminal) if (cfg_updated_msg->get_item() == config_t::item_t::cfg_has_##terminal##_terminal) { if (config->get_cfg_has_##terminal##_terminal()) update_window(instance_t::terminal, window_state_t::open); else update_window(instance_t::terminal, window_state_t::close); }
 #include "def/terminal.def"
 	}
 }
@@ -141,17 +141,17 @@ void engine::terminal_writer_t::write_local(writer_t writer, const terminal_writ
 
 		platform::terminal_t::color_t fore = terminal_writer_colors->get()->foreground_default();
 		platform::terminal_t::color_t back = terminal_writer_colors->get()->background_default();
-#define ENGINE_CONSOLE_OUTPUT_TAG_STD(tag_type) if (tag == terminal_writer_tag_t::tag_type) { fore = terminal_writer_colors->get()->foreground_##tag_type(); back = terminal_writer_colors->get()->background_##tag_type(); }
+#define ENGINE_CONSOLE_OUTPUT_TAG_DEF(tag_type) if (tag == terminal_writer_tag_t::tag_type) { fore = terminal_writer_colors->get()->foreground_##tag_type(); back = terminal_writer_colors->get()->background_##tag_type(); }
 #include "def/terminal_writer.def"
 
 
-#define ENGINE_CONSOLE_SOURCE_STD(writer) SETTINGS_TABLE_ENTRY(engine::terminal_t::instance_t, instance_for_#writer)
+#define ENGINE_CONSOLE_SOURCE_DEF(writer) SETTINGS_TABLE_ENTRY(engine::terminal_t::instance_t, instance_for_#writer)
 #include "def/terminal_writer.def"
 
 		terminal_t::instance_t instance = static_cast<terminal_t::instance_t>(0);
 
 
-#define ENGINE_CONSOLE_SOURCE_STD(writer_real) if(writer == writer_t::writer_real) instance = terminal_writer_output->get()->instance_for_##writer_real();
+#define ENGINE_CONSOLE_SOURCE_DEF(writer_real) if(writer == writer_t::writer_real) instance = terminal_writer_output->get()->instance_for_##writer_real();
 #include "def/terminal_writer.def"
 
 		terminal->output_terminal_text(instance, str, fore, back);

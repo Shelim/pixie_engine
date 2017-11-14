@@ -43,22 +43,22 @@ namespace engine
 			}
 		}
 
-#define ENGINE_CONFIG_GLOBAL_STD(type_t, name) type_t get_global_##name() const { std::lock_guard<std::recursive_mutex> guard(ready_mutex); return rdy_vals.val_for_global_##name; };
-#define ENGINE_CONFIG_LOCAL_STD(type_t, app, name) type_t get_app_##app##_##name() const { std::lock_guard<std::recursive_mutex> guard(ready_mutex); return rdy_vals.val_for_app_##app##_##name; };
-#define ENGINE_CONFIG_STD(type_t, name) type_t get_cfg_##name(manifest_app_t::app_t app) const { std::lock_guard<std::recursive_mutex> guard(ready_mutex); return rdy_vals.val_for_cfg_##name[value_of(app)]; };
+#define ENGINE_CONFIG_GLOBAL_DEF(type_t, name) type_t get_global_##name() const { std::lock_guard<std::recursive_mutex> guard(ready_mutex); return rdy_vals.val_for_global_##name; };
+#define ENGINE_CONFIG_LOCAL_DEF(type_t, app, name) type_t get_app_##app##_##name() const { std::lock_guard<std::recursive_mutex> guard(ready_mutex); return rdy_vals.val_for_app_##app##_##name; };
+#define ENGINE_CONFIG_DEF(type_t, name) type_t get_cfg_##name(manifest_app_t::app_t app) const { std::lock_guard<std::recursive_mutex> guard(ready_mutex); return rdy_vals.val_for_cfg_##name[value_of(app)]; };
 #include "def/config.def"
-#define ENGINE_CONFIG_GLOBAL_STD(type_t, name) config_provider_base_t::set_result_t set_global_##name(const type_t & val) { std::lock_guard<std::recursive_mutex> guard(ready_mutex); if(rdy_vals.val_for_global_##name != val) { std::lock_guard<std::recursive_mutex> guard(scanner_mutex); rdy_vals.val_for_global_##name = val; old_vals.val_for_global_##name = val; config_storage->store("global_" #name ##_u, val); return config_provider_base_t::set_result_t::success; } return config_provider_base_t::set_result_t::no_change; };
-#define ENGINE_CONFIG_LOCAL_STD(type_t, app, name) config_provider_base_t::set_result_t set_app_##app##_##name(const type_t & val) { std::lock_guard<std::recursive_mutex> guard(ready_mutex); if(rdy_vals.val_for_app_##app##_##name != val) { std::lock_guard<std::recursive_mutex> guard(scanner_mutex); rdy_vals.val_for_app_##app##_##name = val; old_vals.val_for_app_##app##_##name = val; config_storage->store("local_" #app "_" #name ##_u, val); return config_provider_base_t::set_result_t::success; } return config_provider_base_t::set_result_t::no_change; };
-#define ENGINE_CONFIG_STD(type_t, name) config_provider_base_t::set_result_t set_cfg_##name(manifest_app_t::app_t app, const type_t & val) { std::lock_guard<std::recursive_mutex> guard(ready_mutex); if(rdy_vals.val_for_cfg_##name[value_of(app)] != val) { std::lock_guard<std::recursive_mutex> guard(scanner_mutex); rdy_vals.val_for_cfg_##name[value_of(app)] = val; old_vals.val_for_cfg_##name[value_of(app)] = val; config_storage->store(format_string("cfg_#1#_" #name ##_u, manifest_app_t::get_app_name(app)), val); return config_provider_base_t::set_result_t::success; } return config_provider_base_t::set_result_t::no_change; };
+#define ENGINE_CONFIG_GLOBAL_DEF(type_t, name) config_provider_base_t::set_result_t set_global_##name(const type_t & val) { std::lock_guard<std::recursive_mutex> guard(ready_mutex); if(rdy_vals.val_for_global_##name != val) { std::lock_guard<std::recursive_mutex> guard(scanner_mutex); rdy_vals.val_for_global_##name = val; old_vals.val_for_global_##name = val; config_storage->store("global_" #name ##_u, val); return config_provider_base_t::set_result_t::success; } return config_provider_base_t::set_result_t::no_change; };
+#define ENGINE_CONFIG_LOCAL_DEF(type_t, app, name) config_provider_base_t::set_result_t set_app_##app##_##name(const type_t & val) { std::lock_guard<std::recursive_mutex> guard(ready_mutex); if(rdy_vals.val_for_app_##app##_##name != val) { std::lock_guard<std::recursive_mutex> guard(scanner_mutex); rdy_vals.val_for_app_##app##_##name = val; old_vals.val_for_app_##app##_##name = val; config_storage->store("local_" #app "_" #name ##_u, val); return config_provider_base_t::set_result_t::success; } return config_provider_base_t::set_result_t::no_change; };
+#define ENGINE_CONFIG_DEF(type_t, name) config_provider_base_t::set_result_t set_cfg_##name(manifest_app_t::app_t app, const type_t & val) { std::lock_guard<std::recursive_mutex> guard(ready_mutex); if(rdy_vals.val_for_cfg_##name[value_of(app)] != val) { std::lock_guard<std::recursive_mutex> guard(scanner_mutex); rdy_vals.val_for_cfg_##name[value_of(app)] = val; old_vals.val_for_cfg_##name[value_of(app)] = val; config_storage->store(format_string("cfg_#1#_" #name ##_u, manifest_app_t::get_app_name(app)), val); return config_provider_base_t::set_result_t::success; } return config_provider_base_t::set_result_t::no_change; };
 #include "def/config.def"
 
 	private:
 
 		struct values_t
 		{
-#define ENGINE_CONFIG_GLOBAL_STD(type_t, name) type_t val_for_global_##name;
-#define ENGINE_CONFIG_LOCAL_STD(type_t, app, name) type_t val_for_app_##app##_##name;
-#define ENGINE_CONFIG_STD(type_t, name) std::array<type_t, value_of(manifest_app_t::app_t::count)> val_for_cfg_##name;
+#define ENGINE_CONFIG_GLOBAL_DEF(type_t, name) type_t val_for_global_##name;
+#define ENGINE_CONFIG_LOCAL_DEF(type_t, app, name) type_t val_for_app_##app##_##name;
+#define ENGINE_CONFIG_DEF(type_t, name) std::array<type_t, value_of(manifest_app_t::app_t::count)> val_for_cfg_##name;
 #include "def/config.def"
 		};
 
@@ -131,13 +131,13 @@ namespace engine
 			this->service->end();
 		}
 
-#define ENGINE_CONFIG_GLOBAL_STD(type_t, name) type_t get_global_##name() const final { return actual->get_global_##name(); };
-#define ENGINE_CONFIG_LOCAL_STD(type_t, app, name) type_t get_app_##app##_##name() const final { return actual->get_app_##app##_##name(); };
-#define ENGINE_CONFIG_STD(type_t, name) type_t get_cfg_##name(manifest_app_t::app_t app) const final { return actual->get_cfg_##name(app); };
+#define ENGINE_CONFIG_GLOBAL_DEF(type_t, name) type_t get_global_##name() const final { return actual->get_global_##name(); };
+#define ENGINE_CONFIG_LOCAL_DEF(type_t, app, name) type_t get_app_##app##_##name() const final { return actual->get_app_##app##_##name(); };
+#define ENGINE_CONFIG_DEF(type_t, name) type_t get_cfg_##name(manifest_app_t::app_t app) const final { return actual->get_cfg_##name(app); };
 #include "def/config.def"
-#define ENGINE_CONFIG_GLOBAL_STD(type_t, name) config_provider_base_t::set_result_t set_global_##name(const type_t & val) final { return actual->set_global_##name(val); };
-#define ENGINE_CONFIG_LOCAL_STD(type_t, app, name) config_provider_base_t::set_result_t set_app_##app##_##name(const type_t & val) final { return actual->set_app_##app##_##name(val); };
-#define ENGINE_CONFIG_STD(type_t, name) config_provider_base_t::set_result_t set_cfg_##name(manifest_app_t::app_t app, const type_t & val) final { return actual->set_cfg_##name(app, val); };
+#define ENGINE_CONFIG_GLOBAL_DEF(type_t, name) config_provider_base_t::set_result_t set_global_##name(const type_t & val) final { return actual->set_global_##name(val); };
+#define ENGINE_CONFIG_LOCAL_DEF(type_t, app, name) config_provider_base_t::set_result_t set_app_##app##_##name(const type_t & val) final { return actual->set_app_##app##_##name(val); };
+#define ENGINE_CONFIG_DEF(type_t, name) config_provider_base_t::set_result_t set_cfg_##name(manifest_app_t::app_t app, const type_t & val) final { return actual->set_cfg_##name(app, val); };
 #include "def/config.def"
 
 	private:

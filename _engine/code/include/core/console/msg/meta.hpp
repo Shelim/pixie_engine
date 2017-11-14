@@ -20,7 +20,7 @@ namespace engine
 
             enum meta_type_t
             {
-    #define ENGINE_CONSOLE_META_TYPE_STD(meta) meta,
+    #define ENGINE_CONSOLE_META_TYPE_DEF(meta) meta,
     #include "def/console.def"
                 count
             };
@@ -49,6 +49,12 @@ namespace engine
         };
 
     }
+
+#define STRINGIFY_ENUM_TYPE console::meta_item_t::meta_type_t
+#define ENGINE_CONSOLE_META_TYPE_DEF STRINGIFY_DEF_NAME
+#define STRINGIFY_DEF_INCLUDE "def/console.def"
+#include "core/utility/stringify_def.hpp"
+
 }
 
 #endif

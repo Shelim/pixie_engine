@@ -230,7 +230,7 @@ namespace engine
 
     }
 
-#define ENGINE_MESSENGER_QUEUE_STD(name) typedef messenger::queue_t<messenger::msg_##name##_t> messenger_##name##_t;
+#define ENGINE_MESSENGER_QUEUE_DEF(name) typedef messenger::queue_t<messenger::msg_##name##_t> messenger_##name##_t;
 #include "def/messenger.def"
 
 }

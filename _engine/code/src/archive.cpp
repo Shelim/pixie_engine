@@ -21,7 +21,7 @@ void engine::data_archives_real_t::on_scanner_found_item(msg_base_t * msg)
 		
 		ustring_t ext = found_item_message->get_provider()->get_virtual_path().get_ext_lower();
 		
-#define ENGINE_ARCHIVE_READABLE_STD(archive_t) { bool is_found = false; for(auto & iter : settings->get()->allowed_extensions_for_zip()) { if(iter == ext) is_found = true; break; } if(is_found) { std::shared_ptr<engine::archive::archive_t##_input_t> item = std::make_shared<engine::archive::archive_t##_input_t>(found_item_message->get_provider()); item->iterate_files_to_scanning_results(found_item_message->get_results()); found_item_message->reject(); }  }
+#define ENGINE_ARCHIVE_READABLE_DEF(archive_t) { bool is_found = false; for(auto & iter : settings->get()->allowed_extensions_for_zip()) { if(iter == ext) is_found = true; break; } if(is_found) { std::shared_ptr<engine::archive::archive_t##_input_t> item = std::make_shared<engine::archive::archive_t##_input_t>(found_item_message->get_provider()); item->iterate_files_to_scanning_results(found_item_message->get_results()); found_item_message->reject(); }  }
 #include "def/archive.def"
 	}
 }

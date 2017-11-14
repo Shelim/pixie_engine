@@ -15,20 +15,10 @@ namespace engine
 
 		enum class app_t
 		{
-#define ENGINE_APP_STD(app) app,
+#define ENGINE_APP_DEF(app) app,
 #include "def/app.def"
 			count
 		};
-
-		static const ustring_t & get_app_name(app_t app)
-		{
-			switch (app)
-			{
-#define ENGINE_APP_STD(app) case app_t::app: return #app##_u;
-#include "def/app.def"
-			}
-			return "unknown"_u;
-		}
 
 		app_t get_local_app()
 		{
@@ -45,6 +35,11 @@ namespace engine
 		app_t local_app;
 
 	};
+	
+#define STRINGIFY_ENUM_TYPE manifest_app_t::app_t
+#define ENGINE_APP_DEF STRINGIFY_DEF_NAME
+#define STRINGIFY_DEF_INCLUDE "def/app.def"
+#include "core/utility/stringify_def.hpp"
 
 }
 

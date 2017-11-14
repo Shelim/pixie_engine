@@ -1,43 +1,43 @@
-#ifndef ENGINE_MANIFEST_TYPE_STD
-#define ENGINE_MANIFEST_TYPE_STD(...)
+#ifndef ENGINE_MANIFEST_TYPE_DEF
+#define ENGINE_MANIFEST_TYPE_DEF(...)
 #endif
 
-#ifndef ENGINE_MANIFEST_START_STD
-#define ENGINE_MANIFEST_START_STD(...)
+#ifndef ENGINE_MANIFEST_START_DEF
+#define ENGINE_MANIFEST_START_DEF(...)
 #endif
 
-#ifndef ENGINE_MANIFEST_STD
-#define ENGINE_MANIFEST_STD(...)
+#ifndef ENGINE_MANIFEST_DEF
+#define ENGINE_MANIFEST_DEF(...)
 #endif
 
-#ifndef ENGINE_MANIFEST_END_STD
-#define ENGINE_MANIFEST_END_STD(...)
+#ifndef ENGINE_MANIFEST_END_DEF
+#define ENGINE_MANIFEST_END_DEF(...)
 #endif
 
-ENGINE_MANIFEST_TYPE_STD(common)
-#define ENGINE_OS_STD(platform) ENGINE_MANIFEST_TYPE_STD(platform)
+ENGINE_MANIFEST_TYPE_DEF(common)
+#define ENGINE_OS_DEF(platform) ENGINE_MANIFEST_TYPE_DEF(platform)
 #include "def/os.def"
 
-ENGINE_MANIFEST_START_STD(common)
-ENGINE_MANIFEST_STD(common, full_name)
-ENGINE_MANIFEST_END_STD()
+ENGINE_MANIFEST_START_DEF(common)
+ENGINE_MANIFEST_DEF(common, full_name)
+ENGINE_MANIFEST_END_DEF()
 
-ENGINE_MANIFEST_START_STD(windows)
-ENGINE_MANIFEST_STD(windows, installer_filename)
-ENGINE_MANIFEST_STD(windows, portable_filename)
-ENGINE_MANIFEST_STD(windows, executable_filename)
-ENGINE_MANIFEST_STD(windows, resources_company)
-ENGINE_MANIFEST_STD(windows, resources_internal)
-ENGINE_MANIFEST_STD(windows, resources_copyrights)
-ENGINE_MANIFEST_STD(windows, resources_product)
-ENGINE_MANIFEST_STD(windows, install_dir)
-ENGINE_MANIFEST_STD(windows, install_shortcut)
-ENGINE_MANIFEST_STD(windows, install_registry)
-ENGINE_MANIFEST_STD(windows, game_app_dir)
-ENGINE_MANIFEST_STD(windows, storage_registry)
-ENGINE_MANIFEST_END_STD()
+ENGINE_MANIFEST_START_DEF(windows)
+ENGINE_MANIFEST_DEF(windows, installer_filename)
+ENGINE_MANIFEST_DEF(windows, portable_filename)
+ENGINE_MANIFEST_DEF(windows, executable_filename)
+ENGINE_MANIFEST_DEF(windows, resources_company)
+ENGINE_MANIFEST_DEF(windows, resources_internal)
+ENGINE_MANIFEST_DEF(windows, resources_copyrights)
+ENGINE_MANIFEST_DEF(windows, resources_product)
+ENGINE_MANIFEST_DEF(windows, install_dir)
+ENGINE_MANIFEST_DEF(windows, install_shortcut)
+ENGINE_MANIFEST_DEF(windows, install_registry)
+ENGINE_MANIFEST_DEF(windows, game_app_dir)
+ENGINE_MANIFEST_DEF(windows, storage_registry)
+ENGINE_MANIFEST_END_DEF()
 
-#undef ENGINE_MANIFEST_END_STD
-#undef ENGINE_MANIFEST_STD
-#undef ENGINE_MANIFEST_START_STD
-#undef ENGINE_MANIFEST_TYPE_STD
+#undef ENGINE_MANIFEST_END_DEF
+#undef ENGINE_MANIFEST_DEF
+#undef ENGINE_MANIFEST_START_DEF
+#undef ENGINE_MANIFEST_TYPE_DEF

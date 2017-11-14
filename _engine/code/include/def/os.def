@@ -1,7 +1,7 @@
-#ifndef ENGINE_OS_STD
-#define ENGINE_OS_STD(...)
+#ifndef ENGINE_OS_DEF
+#define ENGINE_OS_DEF(...)
 #endif
 
-ENGINE_OS_STD(windows)
+ENGINE_OS_DEF(windows)
 
-#undef ENGINE_OS_STD
+#undef ENGINE_OS_DEF

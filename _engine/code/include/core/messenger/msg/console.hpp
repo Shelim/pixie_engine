@@ -28,9 +28,9 @@ namespace engine
 
 			public:
 
-				enum kind_t
+				enum class kind_t
 				{
-#define ENGINE_CONSOLE_OUTPUT_KIND_STD(kind) kind,
+#define ENGINE_CONSOLE_OUTPUT_KIND_DEF(kind) kind,
 #include "def/console.def"
 					count
 				};
@@ -38,38 +38,17 @@ namespace engine
 				enum class source_t
 				{
 					unknown,
-#define ENGINE_CONSOLE_SOURCE_STD(source) source,
+#define ENGINE_CONSOLE_SOURCE_DEF(source) source,
 #include "def/console.def"
 					count
 				};
 
 				enum class type_t
 				{
-#define ENGINE_CONSOLE_MSG_TYPE_STD(type) type,
+#define ENGINE_CONSOLE_MSG_TYPE_DEF(type) type,
 #include "def/console.def"
 					count
 				};
-
-				static ustring_t get_kind_name(kind_t val)
-				{
-#define ENGINE_CONSOLE_OUTPUT_KIND_STD(kind) if(val == kind_t::kind) return #kind##_u;
-#include "def/console.def"
-					return "unknown"_u;
-				}
-
-				static ustring_t get_source_name(source_t val)
-				{
-#define ENGINE_CONSOLE_SOURCE_STD(source) if(val == source_t::source) return #source##_u;
-#include "def/console.def"
-					return "unknown"_u;
-				}
-
-				static ustring_t get_type_name(type_t val)
-				{
-#define ENGINE_CONSOLE_MSG_TYPE_STD(type) if(val == type_t::type) return #type##_u;
-#include "def/console.def"
-					return "unknown"_u;
-				}
 
 				virtual ~actual_t()
 				{
@@ -123,6 +102,22 @@ namespace engine
 		};
 
 	}
+
+#define STRINGIFY_ENUM_TYPE messenger::msg_console_t::actual_t::kind_t
+#define ENGINE_CONSOLE_OUTPUT_KIND_DEF STRINGIFY_DEF_NAME
+#define STRINGIFY_DEF_INCLUDE "def/console.def"
+#include "core/utility/stringify_def.hpp"
+
+#define STRINGIFY_ENUM_TYPE messenger::msg_console_t::actual_t::source_t
+#define ENGINE_CONSOLE_SOURCE_DEF STRINGIFY_DEF_NAME
+#define STRINGIFY_DEF_INCLUDE "def/console.def"
+#include "core/utility/stringify_def.hpp"
+
+#define STRINGIFY_ENUM_TYPE messenger::msg_console_t::actual_t::type_t
+#define ENGINE_CONSOLE_MSG_TYPE_DEF STRINGIFY_DEF_NAME
+#define STRINGIFY_DEF_INCLUDE "def/console.def"
+#include "core/utility/stringify_def.hpp"
+
 }
 
 #endif

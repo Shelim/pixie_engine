@@ -5,6 +5,7 @@
 #include "core/vfs/filesystem.hpp"
 #include <vector>
 #include "utility/text/ustring.hpp"
+#include "utility/text/parser.hpp"
 
 
 namespace engine
@@ -20,7 +21,7 @@ namespace engine
 		enum class type_t : uint8_t
 		{
 			unknown,
-#define ENGINE_VIRTUAL_PATH_STD(name) name,
+#define ENGINE_VIRTUAL_PATH_DEF(name) name,
 #include "def/virtual_path.def"
 			count
 		};
@@ -172,6 +173,11 @@ namespace engine
 		return left.get_path_lower() == right.get_path_lower();
 	}
 
+#define STRINGIFY_ENUM_TYPE virtual_path_t::type_t
+#define ENGINE_VIRTUAL_PATH_DEF STRINGIFY_DEF_NAME
+#define STRINGIFY_DEF_INCLUDE "def/virtual_path.def"
+#include "core/utility/stringify_def.hpp"
+
 	/**
 	* @brief Converts `virtual_path_t` into ustring_t
 	*
@@ -181,17 +187,9 @@ namespace engine
 	*/
 	template<> inline ustring_t to_string<virtual_path_t>(const virtual_path_t & item)
 	{
-		std::stringstream ss;
-
 		virtual_path_t::path_t path = item.get_path();
 
-		ss << path.get_cstring() << " [";
-#define ENGINE_VIRTUAL_PATH_STD(name) if(item.get_type() == virtual_path_t::type_t::name) { ss << #name; }
-#include "def/virtual_path.def"
-
-		ss << "]";
-
-		return ustring_t(ss.str());
+		return format_string("#1# [#2#]"_u, path, item.get_type());
 	}
 }
 

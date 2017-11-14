@@ -29,7 +29,7 @@ namespace engine
 			}
 			ustring_t get_source_as_string() const
 			{
-				return get_source_name(get_source());
+				return to_string(get_source());
 			}
 			const ustring_t & get_message() const
 			{

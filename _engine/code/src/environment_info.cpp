@@ -40,7 +40,7 @@ engine::environment_info_output_provider_file_t::environment_info_output_provide
 	start_text = this->settings->get()->file_start();
 	end_text = this->settings->get()->file_end();
 
-#define ENGINE_ENVIRONMENT_INFO_STATUS_STD(status_id) formattable_string[value_of(environment_info_t::status_t::status_id)] = this->settings->get()->format_file_##status_id ();
+#define ENGINE_ENVIRONMENT_INFO_STATUS_DEF(status_id) formattable_string[value_of(environment_info_t::status_t::status_id)] = this->settings->get()->format_file_##status_id ();
 #include "def/environment_info.def"
 }
 engine::environment_info_output_provider_file_t::~environment_info_output_provider_file_t()
@@ -68,7 +68,7 @@ engine::environment_info_output_provider_terminal_t::environment_info_output_pro
 	start_text = this->settings->get()->terminal_start();
 	end_text = this->settings->get()->terminal_end();
 
-#define ENGINE_ENVIRONMENT_INFO_STATUS_STD(status_id) formattable_string[value_of(environment_info_t::status_t::status_id)] = this->settings->get()->format_terminal_##status_id ();
+#define ENGINE_ENVIRONMENT_INFO_STATUS_DEF(status_id) formattable_string[value_of(environment_info_t::status_t::status_id)] = this->settings->get()->format_terminal_##status_id ();
 #include "def/environment_info.def"
 }
 

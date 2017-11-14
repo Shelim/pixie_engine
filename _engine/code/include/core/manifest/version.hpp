@@ -19,14 +19,14 @@ namespace engine
 		uint32_t get_revision() const;
 		uint32_t get_build() const;
 
-		ustring_t get_string() const
-		{
-			return format_string("#1#.#2#.#3#.#4#"_u, get_major(), get_minor(), get_revision(), get_build());
-		}
-
 	private:
 
 	};
+
+	template<> inline ustring_t to_string<manifest_version_t>(const manifest_version_t & item)
+	{
+		return format_string("#1#.#2#.#3#.#4#"_u, item.get_major(), item.get_minor(), item.get_revision(), item.get_build());
+	}
 
 }
 

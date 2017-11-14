@@ -12,11 +12,16 @@ namespace engine
 
 	enum class console_tag_t
 	{
-#define ENGINE_CONSOLE_OUTPUT_TAG_STD(tag) tag,
+#define ENGINE_CONSOLE_OUTPUT_TAG_DEF(tag) tag,
 #include "def/console.def"
 		def,
 		count = def
 	};
+	
+#define STRINGIFY_ENUM_TYPE console_tag_t
+#define ENGINE_CONSOLE_OUTPUT_TAG_DEF STRINGIFY_DEF_NAME
+#define STRINGIFY_DEF_INCLUDE "def/console.def"
+#include "core/utility/stringify_def.hpp"
 
 	class console_t;
 
@@ -119,8 +124,10 @@ namespace engine
 						stream.advance();
 
 						if (key == "0"_u) return std::make_unique<token_console_format_t>(console_tag_t::def);
-#define ENGINE_CONSOLE_OUTPUT_TAG_STD(tag) if (key == #tag##_u) return std::make_unique<token_console_format_t>(console_tag_t::tag);
-#include "def/console.def"
+					
+						console_tag_t tag = from_string<console_tag_t>(key);
+						if(tag != console_tag_t::count)
+							return std::make_unique<token_console_format_t>(tag);
 
 					}
 				}

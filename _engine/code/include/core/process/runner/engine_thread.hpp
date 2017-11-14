@@ -13,8 +13,7 @@ namespace engine
 
 		enum class runner_thread_t
 		{
-#define ENGINE_TASK_THREAD_CALLER_STD(name) engine_##name,
-#define ENGINE_TASK_THREAD_CALLER_CUSTOM_STD(name) custom_##name,
+#define ENGINE_TASK_THREAD_CALLER_DEF(name) name,
 #include "def/process_runner.def"
 			count
 		};
@@ -23,14 +22,6 @@ namespace engine
 		{
 
 		public:
-
-			static ustring_t to_string(runner_thread_t runner)
-			{
-#define ENGINE_TASK_THREAD_CALLER_STD(name) if(runner == runner_thread_t::engine_##name) return "Internal " #name##_u;
-#define ENGINE_TASK_THREAD_CALLER_CUSTOM_STD(name) if(runner == runner_thread_t::custom_##name) return "Thread " #name##_u;
-#include "def/process_runner.def"
-				return "Unknown"_u;
-			}
 
 			runner_engine_thread_t() : runner_base_t()
 			{
@@ -120,6 +111,12 @@ namespace engine
 		};
 
 	}
+
+#define STRINGIFY_ENUM_TYPE process::runner_thread_t
+#define ENGINE_TASK_THREAD_CALLER_DEF STRINGIFY_DEF_NAME
+#define STRINGIFY_DEF_INCLUDE "def/process_runner.def"
+#include "core/utility/stringify_def.hpp"
+
 }
 
 #endif
