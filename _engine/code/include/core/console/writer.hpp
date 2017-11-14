@@ -13,19 +13,13 @@ namespace engine
 
 	public:
 
-		console_writer_t(std::shared_ptr<messenger_console_t> console) : console(console)
-		{
-
-		}
+		console_writer_t(std::shared_ptr<messenger_console_t> console);
 
 	private:
 
 		std::shared_ptr<messenger_console_t> console;
 
-		void write_local(std::unique_ptr<messenger::msg_console_t::actual_t> msg) final
-		{
-			console->write(std::make_shared<messenger::msg_console_t>(std::move(msg)));
-		}
+		void write_local(std::unique_ptr<messenger::msg_console_t::actual_t> msg) final;
 
 	};
 

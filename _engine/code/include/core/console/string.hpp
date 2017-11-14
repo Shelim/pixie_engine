@@ -35,30 +35,11 @@ namespace engine
 
 			static const id_t id;
 
-			static std::unique_ptr<token_base_t> create(stream_t & stream)
-			{
-				if (stream.peek() == '$')
-				{
-					stream.advance();
-					if (stream.peek() == '$')
-					{
-						stream.advance();
-						return std::make_unique<token_console_escape_t>();
-					}
-				}
+			token_console_escape_t();
 
-				return nullptr;
-			}
+			static std::unique_ptr<token_base_t> create(stream_t & stream);
 
-			std::unique_ptr<token_base_t> clone() const final
-			{
-				return std::make_unique<token_console_escape_t>(*this);
-			}
-
-			token_console_escape_t() : token_base_t(id)
-			{
-
-			}
+			std::unique_ptr<token_base_t> clone() const final;
 
 		private:
 
@@ -72,25 +53,11 @@ namespace engine
 
 			static const id_t id;
 
-			token_console_eof_t() : token_base_t(id)
-			{
+			token_console_eof_t();
 
-			}
+			std::unique_ptr<token_base_t> clone() const;
 
-			std::unique_ptr<token_base_t> clone() const final
-			{
-				return std::make_unique<token_console_eof_t>(*this);
-			}
-
-			static std::unique_ptr<token_base_t> create(stream_t & stream)
-			{
-				if (stream.is_eof())
-				{
-					return std::make_unique<token_console_eof_t>();
-				}
-
-				return nullptr;
-			}
+			static std::unique_ptr<token_base_t> create(stream_t & stream);
 		};
 
 		class token_console_format_t : public token_base_t
@@ -100,50 +67,13 @@ namespace engine
 
 			static const id_t id;
 
-			console_tag_t get_console_tag() const
-			{
-				return console_tag;
-			}
+			token_console_format_t(console_tag_t console_tag);
 
-			static std::unique_ptr<token_base_t> create(stream_t & stream)
-			{
-				if (stream.peek() == '$')
-				{
-					ustring_t key;
+			console_tag_t get_console_tag() const;
 
-					stream.advance();
+			static std::unique_ptr<token_base_t> create(stream_t & stream);
 
-					while (stream.peek() != '$' && !stream.is_eof())
-					{
-						key.append(stream.peek());
-						stream.advance();
-					}
-
-					if (!stream.is_eof())
-					{
-						stream.advance();
-
-						if (key == "0"_u) return std::make_unique<token_console_format_t>(console_tag_t::def);
-					
-						console_tag_t tag = from_string<console_tag_t>(key);
-						if(tag != console_tag_t::count)
-							return std::make_unique<token_console_format_t>(tag);
-
-					}
-				}
-
-				return nullptr;
-			}
-
-			std::unique_ptr<token_base_t> clone() const final
-			{
-				return std::make_unique<token_console_format_t>(*this);
-			}
-
-			token_console_format_t(console_tag_t console_tag) : token_base_t(id), console_tag(console_tag)
-			{
-
-			}
+			std::unique_ptr<token_base_t> clone() const final;
 
 		private:
 
@@ -155,34 +85,9 @@ namespace engine
 
 		public:
 
-			resolver_console_t(std::function<void(const ustring_t &, console_tag_t)> output_text) : output_text(output_text)
-			{
-				output_tag = engine::console_tag_t::def;
-			}
+			resolver_console_t(std::function<void(const ustring_t &, console_tag_t)> output_text);
 
-			void resolve(const token_base_t * token, resolver_output_t * output)
-			{
-				if (token->get_id() == token_console_escape_t::id)
-				{
-					output->append('$');
-				}
-				else if (token->get_id() == token_console_format_t::id)
-				{
-					engine::console_tag_t new_tag = static_cast<const token_console_format_t*>(token)->get_console_tag();
-
-					if (new_tag != output_tag && output->non_empty_since_last_truncate())
-						output_text(output->get_result(), output_tag);
-
-					output->truncate_result();
-
-					output_tag = new_tag;
-				}
-				else if (token->get_id() == token_console_eof_t::id)
-				{
-					if (output->non_empty_since_last_truncate())
-						output_text(output->get_result(), output_tag);
-				}
-			}
+			void resolve(const token_base_t * token, resolver_output_t * output);
 
 		private:
 

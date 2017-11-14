@@ -25,22 +25,11 @@ namespace engine
                 count
             };
 
-            meta_item_t(meta_type_t meta_type, type_t type) :
-                actual_t(type_t::meta, source_t::core, kind_t::meta), meta_type(meta_type), type(type)
-            {
+            meta_item_t(meta_type_t meta_type, type_t type);
 
-            }
-
-            meta_type_t get_meta_type() const
-            {
-                return meta_type;
-            }
-
-            type_t get_meta_type_type() const
-            {
-                return type;
-            }
-
+            meta_type_t get_meta_type() const;
+            type_t get_meta_type_type() const;
+            
         private:
 
             meta_type_t meta_type;

@@ -18,61 +18,19 @@ namespace engine
 		{
 		public:
 
-			logger_item_t(std::size_t id, kind_t kind, source_t source, const ustring_t & message, const ustring_t & function, const ustring_t & file, uint32_t line, uint64_t frame, std::chrono::seconds time, std::thread::id thread, std::size_t link = -1) :
-				actual_t(type_t::logger, source, kind), id(id), message(message), function(function), file_raw(file), line(line), frame(frame), time(time), thread(thread), link(link)
-			{
-				this->file = platform::canonize_debug_filename(file_raw);
-			}
-			std::size_t get_id() const
-			{
-				return id;
-			}
-			ustring_t get_source_as_string() const
-			{
-				return to_string(get_source());
-			}
-			const ustring_t & get_message() const
-			{
-				return message;
-			}
-			const ustring_t & get_function() const
-			{
-				return function;
-			}
-			const ustring_t & get_file() const
-			{
-				return file;
-			}
-			const ustring_t & get_file_raw() const
-			{
-				return file_raw;
-			}
-			uint32_t get_line() const
-			{
-				return line;
-			}
-			uint64_t get_frame() const
-			{
-				return frame;
-			}
-			std::chrono::seconds get_time() const
-			{
-				return time;
-			}
-			std::thread::id get_thread() const
-			{
-				return thread;
-			}
-
-			std::size_t get_link() const
-			{
-				return link;
-			}
-
-			bool is_linked() const
-			{
-				return link != -1;
-			}
+			logger_item_t(std::size_t id, kind_t kind, source_t source, const ustring_t & message, const ustring_t & function, const ustring_t & file, uint32_t line, uint64_t frame, std::chrono::seconds time, std::thread::id thread, std::size_t link = -1);
+			std::size_t get_id() const;
+			ustring_t get_source_as_string() const;
+			const ustring_t & get_message() const;
+			const ustring_t & get_function() const;
+			const ustring_t & get_file() const;
+			const ustring_t & get_file_raw() const;
+			uint32_t get_line() const;
+			uint64_t get_frame() const;
+			std::chrono::seconds get_time() const;
+			std::thread::id get_thread() const;
+			std::size_t get_link() const;
+			bool is_linked() const;
 
 		private:
 
