@@ -19,9 +19,54 @@ namespace engine
 		virtual ~ifactory_base() noexcept = default;
 	};
 
+	/**
+	 * @brief Abstract factory for given object T.
+	 * 
+	 * You can request factory for given object in constructor of any classes
+	 * by using following code:
+	 * 
+	 * @code{.cpp}
+	 * class example_t
+	 * {
+	 *   public:
+	 *     example_t(std::shared_ptr<ifactory<requested>> factory)
+	 *     {
+	 *       std::unique_ptr<requested> obj = factory.create();
+	 *     }
+	 * };
+	 * @endcode
+	 * 
+	 * @note This class is bound by @ref bootstrapper to concrete factory.
+	 * 
+	 * @warning To make object factorable you will need to mark it inside @c def/factorable.def file
+	 * 
+	 * You can use this factory for assisted creation (ie. when you need to pass a few custom arguments besides default ones):
+	 * 
+	 * @code{.cpp}
+	 * class example2_t
+	 * {
+	 *    public:
+	 *      example2_t(std::shared_ptr<ifactory<requested, int, float>> factory)
+	 *      {
+	 * 	      // requested constructor will recieve 5 and 7.5f for their non-injected arguments
+	 *         std::unique_ptr<requested> obj = factory.create(5, 7.5f);
+	 * 	    }
+	 * };
+	 * @endcode
+	 * 
+	 * @tparam T Object to construct (can be interface)
+	 * @tparam TArgs Optional non-injectable by default arguments for constructor
+	 */
 	template <class T, class... TArgs>
 	struct ifactory : ifactory_base {
 		virtual ~ifactory() noexcept = default;
+		/**
+		 * @brief Creates new instance of T by using injected arguments
+		 * 
+		 * @param[in] TArgs Optional non-injectable by default arguments for constructor
+		 * @return Constructed object
+		 * @see ifactory
+		 */
 		virtual std::unique_ptr<T> create(TArgs&&...) const = 0;
 	};
 

@@ -109,6 +109,11 @@ namespace engine
 
 		friend class iterator_t;
 
+		/**
+		 * @brief Class for iterating @c UTF-8 string
+		 * 
+		 * @see ustring_t
+		 */
 		class iterator_t
 		{
 
@@ -120,16 +125,27 @@ namespace engine
 			typedef const usymbol_t * pointer;
 			typedef std::forward_iterator_tag iterator_category;
 
+			/**
+			 * @brief Constuct iterator from other iterator
+			 */
 			iterator_t(const iterator_t& other) : str(other.str), decoded_symbol(other.decoded_symbol), pos(other.pos)
 			{
 
 			}
 
+			/**
+			 * @brief Destructor
+			 */
 			~iterator_t()
 			{
 
 			}
 
+			/**
+			 * @brief Copy-assign iterator from other iterator
+			 * 
+			 * @param[in] other iterator to copy
+			 */
 			iterator_t& operator=(const iterator_t& other)
 			{
 				str = other.str;
@@ -139,6 +155,9 @@ namespace engine
 				return (*this);
 			}
 
+			/**
+			 * @brief Go to the next usymbol_t in @c UTF-8 string
+			 */
 			iterator_t& operator++()
 			{
 				pos += _symbol_size(pos);
@@ -148,11 +167,20 @@ namespace engine
 
 				return (*this);
 			}
+
+			/**
+			 * @brief Get current usymbol_t in @c UTF-8 string
+			 */
 			reference operator*() const
 			{
 				return decoded_symbol;
 			}
 
+			/**
+			 * @brief Swap two iterators
+			 * 
+			 * @param[in] other iterator to swap
+			 */
 			void swap(iterator_t & other)
 			{
 				std::swap(str, other.str);
@@ -160,6 +188,9 @@ namespace engine
 				std::swap(pos, other.pos);
 			}
 
+			/**
+			 * @brief Go to the next usymbol_t in @c UTF-8 string
+			 */
 			iterator_t operator++(int)
 			{
 				iterator_t ret = *this;
@@ -167,15 +198,29 @@ namespace engine
 
 				return ret;
 			}
+
+			/**
+			 * @brief Get current usymbol_t in @c UTF-8 string
+			 */
 			value_type operator*()
 			{
 				return decoded_symbol;
 			}
+
+			/**
+			 * @brief Get current usymbol_t in @c UTF-8 string
+			 */
 			pointer operator->() const
 			{
 				return &decoded_symbol;
 			}
 
+			/**
+			 * @brief Compare two iterators
+			 * 
+			 * @param[in] other iterator to compare
+			 * @return true for equality, false otherwise
+			 */
 			inline bool equals(const iterator_t& other) const
 			{
 				return pos == other.pos;
@@ -248,21 +293,41 @@ namespace engine
 
 		//////////////////////////////////////////////////////////////////////////
 
+		/**
+		 * @brief Get iterator to first usymbol_t in given @c UTF-8 string
+		 * 
+		 * @return iterator to first usymbol_t
+		 */
 		iterator_t begin()
 		{
 			return iterator_t(this);
 		}
 
+		/**
+		 * @brief Get iterator to one-past-end usymbol_t in given @c UTF-8 string
+		 * 
+		 * @return iterator to one-past-end usymbol_t
+		 */
 		iterator_t end()
 		{
 			return iterator_t(this, iterator_t::end_t{});
 		}
 
+		/**
+		 * @brief Get constant iterator to first usymbol_t in given @c UTF-8 string
+		 * 
+		 * @return constant iterator to first usymbol_t
+		 */
 		const_iterator_t begin() const
 		{
 			return iterator_t(this);
 		}
 
+		/**
+		 * @brief Get constant iterator to one-past-end usymbol_t in given @c UTF-8 string
+		 * 
+		 * @return constant iterator to one-past-end usymbol_t
+		 */
 		const_iterator_t end() const
 		{
 			return iterator_t(this, iterator_t::end_t{});
@@ -1754,11 +1819,25 @@ namespace engine
 		obj = from_string<ustring_collection_t>(engine::ustring_t::from_utf8(value.c_str()));
 	}
 
+	/**
+	 * @brief Compare two ustring_t::iterator_t for equality
+	 * 
+	 * @param[in] lhs First iterator_t
+	 * @param[in] rhs Second iterator_t
+	 * @return @c true if both arguments are equal, @c false otherwise
+	 */
 	inline bool operator==(const ustring_t::iterator_t& lhs, const ustring_t::iterator_t& rhs)
 	{
 		return lhs.equals(rhs);
 	}
 
+	/**
+	 * @brief Compare two ustring_t::iterator_t for equality
+	 * 
+	 * @param[in] lhs First iterator_t
+	 * @param[in] rhs Second iterator_t
+	 * @return @c true if both arguments are not equal, @c false otherwise
+	 */
 	inline bool operator!=(const ustring_t::iterator_t& lhs, const ustring_t::iterator_t& rhs)
 	{
 		return !lhs.equals(rhs);
@@ -1787,6 +1866,12 @@ namespace std
 	};
 
 
+	/**
+	 * @brief Swaps two string iterators
+	 * 
+	 * @param[in] lhs First iterator_t
+	 * @param[in] rhs Second iterator_t
+	 */
 	inline void swap(engine::ustring_t::iterator_t& lhs, engine::ustring_t::iterator_t& rhs)
 	{
 		lhs.swap(rhs);
