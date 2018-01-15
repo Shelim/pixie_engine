@@ -59,15 +59,20 @@
 	<property name="code_project" value="${project_dirname}/code" />
 	<property name="code_project_include" value="${code_project}/include/" />
 	<property name="code_project_src" value="${code_project}/src/" />
-	<property name="code_depedency" value="depedency/library" />
-	<property name="code_depedency_include" value="${code_depedency}/*/include" />
-	<condition property="code_depedency_lib" value="${code_depedency}/*/lib/${platform_fullname}/debug" else="${code_depedency}/*/lib/${platform_fullname}/release">
+	<property name="code_dependency" value="dependency/library" />
+	<property name="code_dependency_include" value="${code_dependency}/*/include" />
+	<condition property="code_dependency_lib" value="${code_dependency}/*/lib/${platform_fullname}/debug" else="${code_dependency}/*/lib/${platform_fullname}/release">
 		<istrue value="${build_is_debug}" />
 	</condition>
-	<property name="code_depedency_src" value="${code_depedency}/*/src" />
-	<property name="compiler_cmd_debug" value="-D_MT -D_DLL -g -gcodeview -O0 -D_DEBUG -DPIXIE_IS_DEBUG_BUILD=1" />
+	<property name="code_dependency_src" value="${code_dependency}/*/src" />
+	<property name="compiler_cmd_iterative" value="-DPIXIE_IS_ITERATIVE_BUILD=1" />
+	<property name="compiler_cmd_niterative" value="-DPIXIE_IS_ITERATIVE_BUILD=0" />
+	<property name="compiler_cmd_debug" value="-D_MT -D_DLL -g -fstandalone-debug -glldb -O0 -D_DEBUG -DPIXIE_IS_DEBUG_BUILD=1" />
+	<!--
+	<property name="compiler_cmd_debug" value="-D_MT -D_DLL -g -fstandalone-debug -gcodeview -O0 -D_DEBUG -DPIXIE_IS_DEBUG_BUILD=1" />
+	-->
 	<property name="compiler_cmd_ndebug" value="-D_MT -D_DLL -s -O2 -fexpensive-optimizations -DNDEBUG -DPIXIE_IS_DEBUG_BUILD=0" />
-	<property name="compiler_cmd_platform_windows" value="-ffunction-sections -DPIXIE_WINDOWS=1 -DWINDOWS -D_MSC_VER=1900 -DWIN32_LEAN_AND_MEAN -DVC_EXTRALEAN -D_USING_V110_SDK71_ -DWXUSINGDLL -D__WXMSW__" />
+	<property name="compiler_cmd_platform_windows" value="-ffunction-sections -DPIXIE_WINDOWS=1 -DWINDOWS -D_MSC_VER=1910 -D_MSC_FULL_VER=191025019 -DWIN32_LEAN_AND_MEAN -DVC_EXTRALEAN -D_USING_V110_SDK71_ -DWXUSINGDLL -D__WXMSW__" />
 	<property name="compiler_cmd_final" value="-DPIXIE_IS_FINAL_BUILD=1" />
 	<property name="compiler_cmd_nfinal" value="-DPIXIE_IS_FINAL_BUILD=0" />
 	<property name="compiler_cmd_deploy" value="-DPIXIE_IS_DEPLOY_BUILD=1" />
@@ -76,24 +81,24 @@
 	<property name="compiler_cmd_nportable" value="-DPIXIE_IS_PORTABLE_BUILD=0" />
 	<property name="compiler_cmd_common" value="-nostdinc -nostdinc++ -w -fno-strict-aliasing -std=gnu++14 -DGLEW_STATIC -DAS_USE_FLOAT=0 -DSTATIC_LIB -DUNICODE -D_UNICODE" />
 	<property name="compiler_cmd_cereal_xml_string_value" value="pixie" />
-	<property name="build_path" value="${project_dirname}_build/${build_dirname}/" />
-	<property name="build_path_installer" value="${project_dirname}_build/${build_dirname}_installer/" />
+	<property name="build_path" value="${project_dirname}!build/${build_dirname}/" />
+	<property name="build_path_installer" value="${project_dirname}!build/${build_dirname}_installer/" />
 	<property name="build_path_binary" value="${build_path}bin" />
 	<property name="build_path_map" value="${build_path}map" />
 	<property name="build_path_common" value="${build_path}common" />
 	<property name="build_path_obj" value="${build_path}obj/" />
 	<property name="build_path_obj_engine" value="${build_path_obj}/engine" />
 	<property name="build_path_obj_project" value="${build_path_obj}/project" />
-	<property name="build_path_obj_depedency" value="${build_path_obj}/depedency" />
+	<property name="build_path_obj_dependency" value="${build_path_obj}/dependency" />
 	<property name="build_path_build_number" value="${build_path_common}/build_number.ant" />
-	<property name="build_path_changelog" value="${project_dirname}/changelog/" />
+	<property name="build_path_changelog" value="${project_dirname}/_changelog/" />
 	<property name="build_path_source_build_number" value="${build_path_changelog}/build_number.ant" />
-	<property name="build_path_autogen" value="${project_dirname}_build/autogen" />
+	<property name="build_path_autogen" value="${project_dirname}!build/autogen" />
 	<property name="build_path_autogen_file" value="${build_path_autogen}/autogen_${build_dirname}.cc" />
 	<property name="populate_autogen_script_path" location="build/common/populate_autogen_actual.js" />
 	<property name="binary_filename_raw" value="pixie_${build_typename}${executable_extension}" />
-	<property name="output_path" value="${project_dirname}output/${build_dirname}" />
-	<property name="output_path_ready" value="${project_dirname}output/${build_dirname}_ready" />
+	<property name="output_path" value="${project_dirname}!output/${build_dirname}" />
+	<property name="output_path_ready" value="${project_dirname}!output/${build_dirname}_ready" />
 	<property name="path_manifest_platform" value="${project_dirname}manifest/${platform_name}" />
 	<property name="path_manifest_common" value="${project_dirname}manifest/common" />
 	<property file="${build_path_build_number}" />
@@ -103,6 +108,9 @@
 	
 <!-- Replaces tags inside given file (platform may include more of them!) -->
 	<target name="replace_variables_common">
+		<condition property="is_iterative_build_num" value="1" else="0">
+			<istrue value="${build_is_iterative}" /> 
+		</condition>
 		<condition property="is_debug_build_num" value="1" else="0">
 			<istrue value="${build_is_debug}" /> 
 		</condition>
@@ -113,6 +121,7 @@
 			<istrue value="${build_is_deploy}"/> 
 		</condition>
 	
+		<replace file="${replace_variables.file}" token="$IS_ITERATIVE_BUILD$" value="${is_iterative_build_num}" />
 		<replace file="${replace_variables.file}" token="$IS_DEBUG_BUILD$" value="${is_debug_build_num}" />
 		<replace file="${replace_variables.file}" token="$IS_PORTABLE_BUILD$" value="${is_portable_build_num}" />
 		<replace file="${replace_variables.file}" token="$IS_DEPLOY_BUILD$" value="${is_deploy_build_num}" />
@@ -144,59 +153,97 @@
 		<script language="javascript" src="${populate_autogen_script_path}" />
 	</target>
 	
-<!-- Compile all sources in given directory and store results in target obj dir -->
-	<target name="compile_directory">
-		<condition property="compile_directory.debug_arg" value="${compiler_cmd_debug}" else="${compiler_cmd_ndebug}">
+<!-- Compile single source file and store results in target obj dir -->
+	<target name="compile_file">
+		<condition property="compile_file.iterative_arg" value="${compiler_cmd_iterative}" else="${compiler_cmd_niterative}">
+			<istrue value="${build_is_iterative}" />
+		</condition>
+		<condition property="compile_file.debug_arg" value="${compiler_cmd_debug}" else="${compiler_cmd_ndebug}">
 			<istrue value="${build_is_debug}" />
 		</condition>
 		<switch value="${platform_name}">
 			<case value="windows">
-				<property name="compile_directory.platform" value="${compiler_cmd_platform_windows}" />
+				<property name="compile_file.platform" value="${compiler_cmd_platform_windows}" />
 			</case>
 			<default>
 				<fail message="Missing platform for this compiler run!"/>
 			</default>
 		</switch>
-		<condition property="compile_directory.final_arg" value="${compiler_cmd_final}" else="${compiler_cmd_nfinal}">
+		<condition property="compile_file.final_arg" value="${compiler_cmd_final}" else="${compiler_cmd_nfinal}">
 			<istrue value="${build_is_final}" />
 		</condition>
-		<condition property="compile_directory.deploy_arg" value="${compiler_cmd_deploy}" else="${compiler_cmd_ndeploy}">
+		<condition property="compile_file.deploy_arg" value="${compiler_cmd_deploy}" else="${compiler_cmd_ndeploy}">
 			<istrue value="${build_is_deploy}" />
 		</condition>
-		<condition property="compile_directory.portable_arg" value="${compiler_cmd_portable}" else="${compiler_cmd_nportable}">
+		<condition property="compile_file.portable_arg" value="${compiler_cmd_portable}" else="${compiler_cmd_nportable}">
 			<istrue value="${build_is_portable}" />
 		</condition>
 			
-		<dirset dir="${basedir}" id="compile_directory.includes">
-			<include name="${code_depedency_include}" />
-			<include name="${code_depedency_src}" />
+		<dirset dir="${basedir}" id="compile_file.includes">
+			<include name="${code_dependency_include}" />
+			<include name="${code_dependency_src}" />
 		</dirset>
 		
-		<pathconvert property="compile_directory.includes" refid="compile_directory.includes" pathsep="&quot; &quot;-I" />
+		<pathconvert property="compile_file.includes" refid="compile_file.includes" pathsep="&quot; &quot;-I" />
 	
+		<property name="compile_file.source_file_rel" value="${compile_file.source_file}" relative="yes" basedir="${basedir}/${compile_directory.source}" />
+		
+		<echo message="Compilling ${compile_file.source_file_rel}..." />
+		
 		<apply executable="${compiler_binary}" relative="false" dest="${compile_directory.destination}" failonerror="true" failifexecutionfails="true" skipemptyfilesets="false" parallel="false" type="file" addsourcefile="true" verbose="true">
 			<mapper type="regexp" from="^(.*)\.(c|cpp)$$" to="\1.o"/>
-			<fileset dir="${compile_directory.source}" casesensitive="true">
-				<include name="**/*.cpp" />
-				<include name="**/*.c" />
+			<fileset dir="${compile_directory.source}">
+				<include name="${compile_file.source_file_rel}" />
 			</fileset>
 			<arg value="-DCEREAL_XML_STRING_VALUE=\&quot;${compiler_cmd_cereal_xml_string_value}\&quot;" />
 			<arg value="-DPIXIE_PROJECT_NAME=\&quot;${project_to_build}\&quot;" />
 			<arg line="${compiler_cmd_common}" />
-			<arg line="${compile_directory.debug_arg}" />
-			<arg line="${compile_directory.platform}" />
-			<arg line="${compile_directory.final_arg}" />
-			<arg line="${compile_directory.deploy_arg}" />
-			<arg line="${compile_directory.portable_arg}" />
+			<arg line="${compile_file.iterative_arg}" />
+			<arg line="${compile_file.debug_arg}" />
+			<arg line="${compile_file.platform}" />
+			<arg line="${compile_file.final_arg}" />
+			<arg line="${compile_file.deploy_arg}" />
+			<arg line="${compile_file.portable_arg}" />
 			<arg value="-I${basedir}/${code_engine_include}" />
 			<arg value="-I${basedir}/${code_project_include}" />
 			<arg value="-I${basedir}/${build_path_autogen}" />
-			<arg line="&quot;-I${compile_directory.includes}&quot;" />
+			<arg line="&quot;-I${compile_file.includes}&quot;" />
 			<arg value="-c" />
 			<srcfile />
 			<arg value="-o" />
 			<targetfile />
 		</apply>
+
+		<echo message="Compilling ${compile_file.source_file_rel}... [DONE!]" />
+	</target>
+	
+<!-- Calculate number of CPU cores on given platform -->
+	<target name="get_cores">
+		<property environment="env"/>
+		<!-- support for Windows -->
+		<condition property="cores.count" value="${env.NUMBER_OF_PROCESSORS}">
+			<os family="windows" />
+		</condition>
+		<!-- support for Linux and Solaris (package SUNWgnu-coreutils is required) -->
+		<exec executable="nproc" outputproperty="cores.count" os="Linux,SunOS,Solaris">
+			<arg value="--all"/>
+		</exec>
+		<!-- support for Mac OS X -->
+		<exec executable="sysctl" outputproperty="cores.count" os="Mac OS X">
+			<arg value="-n"/>
+			<arg value="hw.ncpu"/>
+		</exec>
+		<echo message="Number of cores: ${cores.count}"/>
+	</target>
+	
+<!-- Compile all sources in given directory and store results in target obj dir -->
+	<target name="compile_directory" depends="get_cores">
+		<foreach target="compile_file" param="compile_file.source_file" inheritall="true" inheritrefs="true" parallel="true" maxThreads="${cores.count}">
+			<fileset dir="${compile_directory.source}" casesensitive="true">
+				<include name="${compile_directory.source_matcher}/*.cpp" />
+				<include name="${compile_directory.source_matcher}/*.c" />
+			</fileset>
+		</foreach>
 	</target>
 	
 	<target name="prepare_obj_directories">
@@ -218,10 +265,10 @@
 			</fileset> 
 		</copy>
 		
-		<mkdir dir="${build_path_obj_depedency}" />
-		<copy todir="${build_path_obj_depedency}" includeEmptyDirs="true"> 
-			<fileset dir="${code_depedency}"> 
-				<include name="**" /> 
+		<mkdir dir="${build_path_obj_dependency}" />
+		<copy todir="${build_path_obj_dependency}" includeEmptyDirs="true"> 
+			<fileset dir="${code_dependency}"> 
+				<include name="*/src/**" /> 
 				<type type="dir" />
 			</fileset> 
 		</copy>
@@ -234,17 +281,19 @@
 		
 		<antcall target="compile_directory">
 			<param name="compile_directory.source" value="${code_engine_src}" />
+			<param name="compile_directory.source_matcher" value="**" />
 			<param name="compile_directory.destination" value="${build_path_obj_engine}" />
 		</antcall>
 		<antcall target="compile_directory">
 			<param name="compile_directory.source" value="${code_project_src}" />
+			<param name="compile_directory.source_matcher" value="**" />
 			<param name="compile_directory.destination" value="${build_path_obj_project}" />
 		</antcall>
 		<antcall target="compile_directory">
-			<param name="compile_directory.source" value="${code_depedency}" />
-			<param name="compile_directory.destination" value="${build_path_obj_depedency}" />
+			<param name="compile_directory.source" value="${code_dependency}" />
+			<param name="compile_directory.source_matcher" value="*/src/**" />
+			<param name="compile_directory.destination" value="${build_path_obj_dependency}" />
 		</antcall>
-		
 	</target>
 	
 <!-- Copy content to target directory -->

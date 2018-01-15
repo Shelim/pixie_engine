@@ -23,9 +23,9 @@
 #include <io.h>
 #include <fcntl.h>
 
-engine::config_storage_provider_windows_registry_t::config_storage_provider_windows_registry_t(std::shared_ptr<manifest_windows_t> manifest_windows) : manifest_windows(manifest_windows)
+engine::config_storage_provider_windows_registry_t::config_storage_provider_windows_registry_t(std::shared_ptr<manifest_windows_t> manifest_windows, std::unique_ptr<service_t<config_storage_provider_windows_registry_rescan_service_t> > config_storage_provider_windows_registry_rescan_service) : manifest_windows(manifest_windows), config_storage_provider_windows_registry_rescan_service(std::move(config_storage_provider_windows_registry_rescan_service))
 {
-
+	this->config_storage_provider_windows_registry_rescan_service->start();
 }
 
 void engine::config_storage_provider_windows_registry_t::store(const ustring_t & key, bool val)
@@ -422,5 +422,6 @@ engine::ustring_t engine::config_storage_provider_windows_registry_t::retrieve(c
 	}
 	return def_val;
 }
+
 
 #endif

@@ -1,0 +1,20 @@
+#ifndef ENGINE_ENUM_START
+#define ENGINE_ENUM_START(namespace, name) enum class name {
+#endif
+
+#ifndef ENGINE_ENUM_VALUE
+#define ENGINE_ENUM_VALUE(val, str) val,
+#endif
+
+#ifndef ENGINE_ENUM_END
+#define ENGINE_ENUM_END() count };
+#endif
+
+ENGINE_ENUM_START(engine::messenger::msg_base_t, type_t)
+#define ENGINE_MESSENGER_MSG_BASE_TYPE_DEF(x) ENGINE_ENUM_VALUE(x, #x##_u)
+#include "def/messenger.def"
+ENGINE_ENUM_END()
+
+#undef ENGINE_ENUM_END
+#undef ENGINE_ENUM_VALUE
+#undef ENGINE_ENUM_START

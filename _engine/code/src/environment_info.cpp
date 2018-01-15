@@ -3,7 +3,7 @@
 #include "component/environment_info.hpp"
 #include "utility/platform/compilation.hpp"
 #include "utility/platform/info.hpp"
-#include "utility/text/parser.hpp"
+#include "utility/text/ustring.hpp"
 
 engine::environment_info_real_t::environment_info_real_t(std::shared_ptr<platform::info_t> platform_info, std::shared_ptr<manifest_version_t> manifest_version, std::unique_ptr<holder_t<environment_info_output_t> > environment_info_output_providers) : environment_info_output_providers(std::move(environment_info_output_providers)), manifest_version(manifest_version), platform_info(platform_info)
 {

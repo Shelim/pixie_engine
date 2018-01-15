@@ -73,129 +73,9 @@ engine::console::meta_item_t::meta_type_t engine::console::meta_item_t::get_meta
     return meta_type;
 }
 
-messenger::msg_console_t::actual_t::type_t engine::console::meta_item_t::get_meta_type_type() const
+engine::messenger::msg_console_t::actual_t::type_t engine::console::meta_item_t::get_meta_type_type() const
 {
     return type;
-}
-
-engine::parser::token_console_escape_t::token_console_escape_t() : token_base_t(id)
-{
-
-}
-
-std::unique_ptr<engine::parser::token_base_t> engine::parser::token_console_escape_t::create(stream_t & stream)
-{
-    if (stream.peek() == '$')
-    {
-        stream.advance();
-        if (stream.peek() == '$')
-        {
-            stream.advance();
-            return std::make_unique<token_console_escape_t>();
-        }
-    }
-
-    return nullptr;
-}
-
-std::unique_ptr<engine::parser::token_base_t> engine::parser::token_console_escape_t::clone() const
-{
-    return std::make_unique<token_console_escape_t>(*this);
-}
-
-
-engine::parser::token_console_eof_t::token_console_eof_t() : token_base_t(id)
-{
-
-}
-
-std::unique_ptr<engine::parser::token_base_t> engine::parser::token_console_eof_t::clone() const
-{
-    return std::make_unique<token_console_eof_t>(*this);
-}
-
-std::unique_ptr<engine::parser::token_base_t> engine::parser::token_console_eof_t::create(stream_t & stream)
-{
-    if (stream.is_eof())
-    {
-        return std::make_unique<token_console_eof_t>();
-    }
-
-    return nullptr;
-}
-
-engine::parser::token_console_format_t::token_console_format_t(console_tag_t console_tag) : token_base_t(id), console_tag(console_tag)
-{
-
-}
-
-engine::parser::token_console_format_t::console_tag_t engine::parser::token_console_format_t::get_console_tag() const
-{
-    return console_tag;
-}
-
-std::unique_ptr<engine::parser::token_base_t> engine::parser::token_console_format_t::create(stream_t & stream)
-{
-    if (stream.peek() == '$')
-    {
-        ustring_t key;
-
-        stream.advance();
-
-        while (stream.peek() != '$' && !stream.is_eof())
-        {
-            key.append(stream.peek());
-            stream.advance();
-        }
-
-        if (!stream.is_eof())
-        {
-            stream.advance();
-
-            if (key == "0"_u) return std::make_unique<token_console_format_t>(console_tag_t::def);
-        
-            console_tag_t tag = from_string<console_tag_t>(key);
-            if(tag != console_tag_t::count)
-                return std::make_unique<token_console_format_t>(tag);
-
-        }
-    }
-
-    return nullptr;
-}
-
-std::unique_ptr<engine::parser::token_base_t> engine::parser::token_console_format_t::clone() const
-{
-    return std::make_unique<token_console_format_t>(*this);
-}
-
-engine::parser::resolver_console_t::resolver_console_t(std::function<void(const ustring_t &, console_tag_t)> output_text) : output_text(output_text)
-{
-    output_tag = engine::console_tag_t::def;
-}
-
-void engine::parser::resolver_console_t::resolve(const token_base_t * token, resolver_output_t * output)
-{
-    if (token->get_id() == token_console_escape_t::id)
-    {
-        output->append('$');
-    }
-    else if (token->get_id() == token_console_format_t::id)
-    {
-        engine::console_tag_t new_tag = static_cast<const token_console_format_t*>(token)->get_console_tag();
-
-        if (new_tag != output_tag && output->non_empty_since_last_truncate())
-            output_text(output->get_result(), output_tag);
-
-        output->truncate_result();
-
-        output_tag = new_tag;
-    }
-    else if (token->get_id() == token_console_eof_t::id)
-    {
-        if (output->non_empty_since_last_truncate())
-            output_text(output->get_result(), output_tag);
-    }
 }
 
 engine::console_writer_t::console_writer_t(std::shared_ptr<messenger_console_t> console) : console(console)
@@ -203,7 +83,7 @@ engine::console_writer_t::console_writer_t(std::shared_ptr<messenger_console_t> 
 
 }
 
-void engine::console_writer_t::write_local(std::unique_ptr<messenger::msg_console_t::actual_t> msg) final
+void engine::console_writer_t::write_local(std::unique_ptr<messenger::msg_console_t::actual_t> msg)
 {
     console->write(std::make_shared<messenger::msg_console_t>(std::move(msg)));
 }

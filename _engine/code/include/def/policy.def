@@ -1,0 +1,9 @@
+#ifndef ENGINE_POLICY_DEF
+#define ENGINE_POLICY_DEF(...)
+#endif
+
+ENGINE_POLICY_DEF(instances_application)
+ENGINE_POLICY_DEF(instances_program)
+ENGINE_POLICY_DEF(renderer_thread)
+
+#undef ENGINE_POLICY_DEF

@@ -35,7 +35,7 @@ namespace engine
 #include "component/renderer_status.hpp"
 #include "utility/pattern/flags.hpp"
 #include "component/logger/item.hpp"
-#include "utility/text/parser.hpp"
+#include "utility/text/ustring.hpp"
 #include "utility/platform/info.hpp"
 #include <cereal/cereal.hpp>
 #include <cereal/access.hpp>

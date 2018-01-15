@@ -11,12 +11,7 @@ namespace engine
 	namespace process
 	{
 
-		enum class runner_thread_t
-		{
-#define ENGINE_TASK_THREAD_CALLER_DEF(name) name,
-#include "def/process_runner.def"
-			count
-		};
+#include "def/enum/process_runner.def"
 
 		template<runner_thread_t thread> class runner_engine_thread_t : public runner_base_t
 		{
@@ -112,11 +107,10 @@ namespace engine
 
 	}
 
-#define STRINGIFY_ENUM_TYPE process::runner_thread_t
-#define ENGINE_TASK_THREAD_CALLER_DEF STRINGIFY_DEF_NAME
-#define STRINGIFY_DEF_INCLUDE "def/process_runner.def"
-#include "core/utility/stringify_def.hpp"
 
 }
+
+#define ENGINE_ENUM_HEADER_TO_USE "def/enum/process_runner.def"
+#include "core/utility/enum_to_string.hpp"
 
 #endif

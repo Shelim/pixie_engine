@@ -2,12 +2,11 @@
 <!--
  *******************************************************************
  * This is main build script for Apache Ant. It handles build commands
- *     from MSVC project (and MSVC project creation as well).
+ *     from VS Code project (and VS Code project creation as well).
  *     You should never call this file directly, it is already done in
  *     various scripts inside engine.
  * 
  * REQUIRES:
- *     - '\_engine\build\windows\build_project_msvc_actual.js' for creating msvc project
  *     - Javascript engine
  *     - Windows platform
  *     - Apache ANT
@@ -19,6 +18,8 @@
  * LICENSE:
  *     MIT/X11 License
  * CHANGELOG:
+ *     0.2 [November, 16th 2017]:
+ *         - Linker is now able to produce DWARF symbols
  *     0.1 [September, 7th 2017]: 
  *         - Initial version
  *******************************************************************
@@ -62,6 +63,7 @@
 	
 	<!-- Build variables -->
 	<property name="build_typename" value="debug" />
+	<property name="build_is_iterative" value="false" />
 	<property name="build_is_debug" value="true" />
 	<property name="build_is_portable" value="false" />
 	<property name="build_is_deploy" value="false" />
@@ -71,21 +73,14 @@
 <!-- END OF INPUT SECTION -->
 <!-- START OF CONFIGURATION SECTION -->
 
-	<!-- Where to store results of build? -->
-	<property name="build_project_msvc_result_path" value="../${project_to_build}/project/msvc_2015" />
-	<!-- Where obtain templates for build -->
-	<property name="build_project_msvc_source_path" value="build/windows/project_msvc" />
-	<!-- Where is the build script? -->
-	<property name="build_project_msvc_script_path" location="build/windows/build_project_msvc_actual.js" />
-
 	<!-- Where can we upload depedencies? -->
 	<property name="dependencies_ftp_port" value="21" />
 	<property name="dependencies_ftp_remote_directory" value="pixie_engine" />
 	
-	<!-- Where we should store depedency for upload -->
-	<property name="dependencies_ftp_build_path" value="_build/depedency_for_upload/" />
+	<!-- Where we should store dependency for upload -->
+	<property name="dependencies_ftp_build_path" value="!build/dependency_for_upload/" />
 	<!-- Which directory we should pack for depedencies -->
-	<property name="dependencies_ftp_source_path" value="depedency/" />
+	<property name="dependencies_ftp_source_path" value="dependency/" />
 	<!-- What is the name of zip file? If you change it here, remember to update download_dependencies.bat as well! -->
 	<property name="dependencies_ftp_zip_filename" value="depedencies.zip" />
 	
@@ -99,12 +94,14 @@
 	<property name="platform_ver" value="x86" />
 	<property name="executable_extension" value=".exe" />
 	<property name="binary_filename_raw_pdb" value="pixie_${build_typename}.pdb" />
-    <property name="compiler_cmd_linker" value="/SUBSYSTEM:windows" />
+    <property name="compiler_cmd_linker" value="/Subsystem:Windows /NODEFAULTLIB /MANIFEST:EMBED" />
 	<property name="compiler_cmd_linker_debug" value="/debug" />
 	<property name="compiler_cmd_linker_ndebug" value="" />
+	<property name="resources_cmd_iterative" value="-DPIXIE_IS_ITERATIVE_BUILD=1" />
+	<property name="resources_cmd_niterative" value="-DPIXIE_IS_ITERATIVE_BUILD=0" />
 	<property name="resources_cmd_debug" value="-D_MT -D_DLL -D_DEBUG -DPIXIE_IS_DEBUG_BUILD=1" />
 	<property name="resources_cmd_ndebug" value="-D_MT -D_DLL -DNDEBUG -DPIXIE_IS_DEBUG_BUILD=0" />
-	<property name="resources_cmd_platform_windows" value="-DPIXIE_WINDOWS=1 -DWINDOWS -D_MSC_VER=1900 -DWIN32_LEAN_AND_MEAN -DVC_EXTRALEAN -D_USING_V110_SDK71_ -DWXUSINGDLL -D__WXMSW__" />
+	<property name="resources_cmd_platform_windows" value="-DPIXIE_WINDOWS=1 -DWINDOWS -D_MSC_VER=1910 -D_MSC_FULL_VER=191025019 -DWIN32_LEAN_AND_MEAN -DVC_EXTRALEAN -D_USING_V110_SDK71_ -DWXUSINGDLL -D__WXMSW__" />
 	<property name="resources_cmd_final" value="-DPIXIE_IS_FINAL_BUILD=1" />
 	<property name="resources_cmd_nfinal" value="-DPIXIE_IS_FINAL_BUILD=0" />
 	<property name="resources_cmd_deploy" value="-DPIXIE_IS_DEPLOY_BUILD=1" />
@@ -130,8 +127,8 @@
 
 	<taskdef name="ftp" classname="org.apache.tools.ant.taskdefs.optional.net.FTP">
 	  <classpath>
-		<pathelement location="${basedir}/depedency/apache_ant/lib/commons-net-2.0.jar"/>
-		<pathelement location="${basedir}/depedency/apache_ant/lib/ant-commons-net-1.9.3.jar"/>
+		<pathelement location="${basedir}/dependency/apache_ant/lib/commons-net-2.0.jar"/>
+		<pathelement location="${basedir}/dependency/apache_ant/lib/ant-commons-net-1.9.3.jar"/>
 	  </classpath>
 	</taskdef>
 	
@@ -162,7 +159,7 @@
 		</condition>
 		
 		<pathconvert property="binary_base_depedencies" pathsep=",">
-			<dirset dir="depedency/library" includes="*/lib/${platform_fullname}/${binary_base.debug}" />
+			<dirset dir="dependency/library" includes="*/lib/${platform_fullname}/${binary_base.debug}" />
 		</pathconvert>
 		
 		<copy todir="${binary_base.output_path}" preservelastmodified="true" overwrite="true">
@@ -188,6 +185,9 @@
 	
 <!-- Builds resources file *.rc into *.res -->
 	<target name="build_resources">
+		<condition property="build_resources.iterative_arg" value="${resources_cmd_iterative}" else="${resources_cmd_niterative}">
+			<istrue value="${build_is_iterative}" />
+		</condition>
 		<condition property="build_resources.debug_arg" value="${resources_cmd_debug}" else="${resources_cmd_ndebug}">
 			<istrue value="${build_is_debug}" />
 		</condition>
@@ -210,8 +210,8 @@
 		</condition>
 			
 		<dirset dir="${basedir}" id="build_resources.includes">
-			<include name="${code_depedency_include}" />
-			<include name="${code_depedency_src}" />
+			<include name="${code_dependency_include}" />
+			<include name="${code_dependency_src}" />
 		</dirset>
 		
 		<pathconvert property="build_resources.includes" refid="build_resources.includes" pathsep="&quot; &quot;-I" />
@@ -224,6 +224,7 @@
 			<arg value="-DCEREAL_XML_STRING_VALUE=\&quot;${resources_cmd_cereal_xml_string_value}\&quot;" />
 			<arg value="-DPIXIE_PROJECT_NAME=\&quot;${project_to_build}\&quot;" />
 			<arg line="${resources_cmd_common}" />
+			<arg line="${build_resources.iterative_arg}" />
 			<arg line="${build_resources.debug_arg}" />
 			<arg line="${build_resources.platform}" />
 			<arg line="${build_resources.final_arg}" />
@@ -247,7 +248,7 @@
 <!-- Link all *.o in given directory and store results as executable -->
 	<target name="link_all">
 		<dirset dir="${basedir}" id="compile.libraries_path">
-			<include name="${code_depedency_lib}" />
+			<include name="${code_dependency_lib}" />
 		</dirset>
 		
 		<pathconvert property="compile.libraries_path" refid="compile.libraries_path" pathsep="&quot; /LIBPATH:&quot;" />
@@ -255,10 +256,8 @@
 		<mkdir dir="${build_path_map}" />
 		
 		<fileset dir="${basedir}" id="compile.libraries"> 
-			<!-- Workaround: SDL2main.lib has to be included before SDL2.lib -->
-			<exclude name="${code_depedency_lib}/SDL2main.lib" /> 
-			<include name="${code_depedency_lib}/lib*.a" /> 
-			<include name="${code_depedency_lib}/*.lib" /> 
+			<include name="${code_dependency_lib}/lib*.a" /> 
+			<include name="${code_dependency_lib}/*.lib" /> 
 		</fileset> 
 		
 		<pathconvert property="compile.libraries" refid="compile.libraries" pathsep="&quot; &quot;">
@@ -275,16 +274,16 @@
 		<apply executable="${linker_binary}" relative="false" failonerror="true" failifexecutionfails="true" skipemptyfilesets="false" parallel="true" type="file" addsourcefile="true" verbose="true">
 			<fileset dir="${build_path_obj}" casesensitive="true">
 				<include name="**/*.o" />
+				<include name="**/*.obj" />
 				<include name="**/*.res" />
 			</fileset>
-			<arg line="${link_all.debug_arg}" />
 			<arg line="${compiler_cmd_linker}" />
-            <arg line="/NODEFAULTLIB" />
+			<arg line="${link_all.debug_arg}" />
 			<arg line="/LIBPATH:&quot;${compile.libraries_path}&quot;" />
 			<arg line="/OUT:&quot;${basedir}/${build_path_binary}/${binary_filename_raw}&quot;" />
-			<srcfile />
 			<!-- Workaround: SDL2main.lib has to be included before SDL2.lib -->
-			<arg line="/DYNAMICBASE &quot;SDL2main.lib&quot;" />
+			<srcfile />
+			<arg line="&quot;SDL2main.lib&quot;" />
 			<arg line="&quot;${compile.libraries}&quot;" />
 		</apply>
        
@@ -304,7 +303,7 @@
 	
 <!-- Pack executable with UPX, greatly reducing its size -->
 	<target name="pack_executable" depends="check_if_can_pack_executable" if="can_pack_executable">		
-		<exec executable="${basedir}/depedency/other/upxw/${platform_name}/upx.exe" failonerror="false">
+		<exec executable="${basedir}/dependency/other/upxw/${platform_name}/upx.exe" failonerror="false">
 			<arg value="--ultra-brute"/>
 			<arg value="${basedir}/${output_path}/${manifest_windows.executable_filename}"/>
 		</exec>
@@ -359,7 +358,7 @@
 			<param name="replace_variables.file" value="${build_path_installer}/installer.nsi" />
 		</antcall>
 		
-		<exec executable="${basedir}/depedency/other/nsis/makensis.exe" failonerror="true">
+		<exec executable="${basedir}/dependency/other/nsis/makensis.exe" failonerror="true">
 			<arg value="${build_path_installer}/installer.nsi"/>
 		</exec>
 				
@@ -398,13 +397,13 @@
 			</fileset>
 		</ftp>
 	
-		<!-- Delete old depedency packed directory (do not fail on error, the project may be not here!) -->
+		<!-- Delete old dependency packed directory (do not fail on error, the project may be not here!) -->
 		<delete dir="${dependencies_ftp_build_path}" failonerror="false" />
-		<!-- Create new depedency packed directory -->
+		<!-- Create new dependency packed directory -->
 		<mkdir dir="${dependencies_ftp_build_path}"/>
 	
 		<!-- Compress depedencies -->
-		<zip destfile="${dependencies_ftp_build_path}/${dependencies_ftp_zip_filename}" basedir="${dependencies_ftp_source_path}" update="true" compress="true" whenempty="create" comment="Unpack this to '_engine/depedency'" level="7" />
+		<zip destfile="${dependencies_ftp_build_path}/${dependencies_ftp_zip_filename}" basedir="${dependencies_ftp_source_path}" update="true" compress="true" whenempty="create" comment="Unpack this to '_engine/dependency'" level="7" />
 		
 		<!-- ... and upload them to server -->
 		<ftp server="${dependencies_ftp_server}" port="${dependencies_ftp_port}" remotedir="${dependencies_ftp_remote_directory}" userid="${dependencies_ftp_login}"  password="${dependencies_ftp_password}" passive="yes"  depends="no"  binary="yes"  action="send">
@@ -414,14 +413,14 @@
 		</ftp>
 	</target>
 
-	<!-- Build step from Microsoft Visual Studio (executed once on build starting up) -->
-	<target name="prebuild" depends="clean_build, clean_output, increment_build_number" />
+	<!-- Prebuild step for iterative build -->
+	<target name="prebuild_iterative" depends="clean_build, clean_output, increment_build_number, populate_autogen, populate_resources, prepare_obj_directories, build_resources" />
 	
-	<!-- Build step from Microsoft Visual Studio (executed once for each project on build) -->
-	<target name="build" depends="populate_autogen, populate_resources, prepare_obj_directories, build_resources, compile, link_all, copy_executable_to_output, pack_executable" />
+	<!-- Build full -->
+	<target name="build_full" depends="clean_build, clean_output, increment_build_number, populate_autogen, populate_resources, prepare_obj_directories, build_resources, compile, link_all, copy_executable_to_output, pack_executable, content, build_installer, build_portable" />
 	
-	<!-- Build step from Microsoft Visual Studio (executed once on build completed) -->
-	<target name="postbuild" depends="content, build_installer, build_portable" />
+	<!-- Postbuild step for iterative build -->
+	<target name="postbuild_iterative" depends="link_all, copy_executable_to_output, content" />
 	
 <!-- END OF CALLABLE SECTION -->
 	

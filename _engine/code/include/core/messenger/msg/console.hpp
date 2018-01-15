@@ -6,7 +6,6 @@
 #include <memory>
 #include "core/messenger/msg.hpp"
 #include "utility/pattern/fourcc.hpp"
-#include "component/config.hpp"
 
 namespace engine
 {
@@ -28,54 +27,17 @@ namespace engine
 
 			public:
 
-				enum class kind_t
-				{
-#define ENGINE_CONSOLE_OUTPUT_KIND_DEF(kind) kind,
-#include "def/console.def"
-					count
-				};
-			
-				enum class source_t
-				{
-					unknown,
-#define ENGINE_CONSOLE_SOURCE_DEF(source) source,
-#include "def/console.def"
-					count
-				};
+#include "def/enum/console_msg.def"
 
-				enum class type_t
-				{
-#define ENGINE_CONSOLE_MSG_TYPE_DEF(type) type,
-#include "def/console.def"
-					count
-				};
-
-				virtual ~actual_t()
-				{
+				virtual ~actual_t();
 		
-				}
-		
-				type_t get_type() const
-				{
-					return type;
-				}
-		
-				source_t get_source() const
-				{
-					return source;
-				}
-		
-				kind_t get_kind() const
-				{
-					return kind;
-				}
+				type_t get_type() const;
+				source_t get_source() const;
+				kind_t get_kind() const;
 				
 			protected:
 		
-				actual_t(type_t type, source_t source, kind_t kind) : type(type), source(source), kind(kind)
-				{
-		
-				}
+				actual_t(type_t type, source_t source, kind_t kind);
 				
 			private:
 		
@@ -84,15 +46,9 @@ namespace engine
 				kind_t kind;
 			};
 
-			msg_console_t(std::unique_ptr<actual_t> actual) : actual(std::move(actual))
-			{
+			msg_console_t(std::unique_ptr<actual_t> actual);
 
-			}
-
-			actual_t * get()
-			{
-				return actual.get();
-			}
+			actual_t * get();
 			
 
 		private:
@@ -103,21 +59,9 @@ namespace engine
 
 	}
 
-#define STRINGIFY_ENUM_TYPE messenger::msg_console_t::actual_t::kind_t
-#define ENGINE_CONSOLE_OUTPUT_KIND_DEF STRINGIFY_DEF_NAME
-#define STRINGIFY_DEF_INCLUDE "def/console.def"
-#include "core/utility/stringify_def.hpp"
-
-#define STRINGIFY_ENUM_TYPE messenger::msg_console_t::actual_t::source_t
-#define ENGINE_CONSOLE_SOURCE_DEF STRINGIFY_DEF_NAME
-#define STRINGIFY_DEF_INCLUDE "def/console.def"
-#include "core/utility/stringify_def.hpp"
-
-#define STRINGIFY_ENUM_TYPE messenger::msg_console_t::actual_t::type_t
-#define ENGINE_CONSOLE_MSG_TYPE_DEF STRINGIFY_DEF_NAME
-#define STRINGIFY_DEF_INCLUDE "def/console.def"
-#include "core/utility/stringify_def.hpp"
-
 }
+
+#define ENGINE_ENUM_HEADER_TO_USE "def/enum/console_msg.def"
+#include "core/utility/enum_to_string.hpp"
 
 #endif

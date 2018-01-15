@@ -47,13 +47,19 @@ engine::terminal_provider_base_t::~terminal_provider_base_t()
 
 }
 
-engine::terminal_real_t::terminal_real_t(std::unique_ptr<holder_t<terminal_t> > terminal_provider) : terminal_provider(std::move(terminal_provider))
+engine::terminal_real_t::terminal_real_t(std::shared_ptr<logger_t> logger, std::unique_ptr<holder_t<terminal_t> > terminal_provider) : logger(logger), terminal_provider(std::move(terminal_provider))
 {
-	
+	logger->log_msg(terminal, "Terminal component has started"_u);
+}
+
+engine::terminal_real_t::~terminal_real_t()
+{
+	logger->log_msg(terminal, "Terminal component has been disposed"_u);
 }
 
 std::shared_ptr<engine::terminal_t::instance_t> engine::terminal_real_t::open(const ustring_t & name, terminal_t::color_t background, closing_callback_t on_closing)
 {
+	logger->log_msg(terminal, "Terminal '#1#' is being opened"_u, name);
 	return terminal_provider->get_provider()->open(name, background, on_closing);
 }
 

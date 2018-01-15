@@ -18,12 +18,7 @@ namespace engine
         {
         public:
 
-            enum meta_type_t
-            {
-    #define ENGINE_CONSOLE_META_TYPE_DEF(meta) meta,
-    #include "def/console.def"
-                count
-            };
+#include "def/enum/console_meta.def"
 
             meta_item_t(meta_type_t meta_type, type_t type);
 
@@ -39,11 +34,10 @@ namespace engine
 
     }
 
-#define STRINGIFY_ENUM_TYPE console::meta_item_t::meta_type_t
-#define ENGINE_CONSOLE_META_TYPE_DEF STRINGIFY_DEF_NAME
-#define STRINGIFY_DEF_INCLUDE "def/console.def"
-#include "core/utility/stringify_def.hpp"
-
 }
+
+
+#define ENGINE_ENUM_HEADER_TO_USE "def/enum/console_meta.def"
+#include "core/utility/enum_to_string.hpp"
 
 #endif

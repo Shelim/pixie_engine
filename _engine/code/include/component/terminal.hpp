@@ -16,12 +16,7 @@ namespace engine
 		terminal_t();
 		virtual ~terminal_t();
 
-		enum class color_t
-		{
-#define ENGINE_TERMINAL_COLOR_DEF(color) color,
-#include "def/terminal.def"
-			count
-		};
+#include "def/enum/terminal.def"
 
 		class instance_t
 		{
@@ -47,12 +42,9 @@ namespace engine
 
 	};
 
-#define STRINGIFY_ENUM_TYPE terminal_t::color_t
-#define ENGINE_TERMINAL_COLOR_DEF STRINGIFY_DEF_NAME
-#define STRINGIFY_DEF_INCLUDE "def/terminal.def"
-#include "core/utility/stringify_def.hpp"
-
 }
+#define ENGINE_ENUM_HEADER_TO_USE "def/enum/terminal.def"
+#include "core/utility/enum_to_string.hpp"
 
 #include "component/terminal/dummy.hpp"
 #include "component/terminal/real.hpp"

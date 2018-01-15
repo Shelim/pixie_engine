@@ -15,11 +15,15 @@
 namespace engine
 {
 	SETTINGS_START(config_t, debug)
-		SETTINGS_SET(bool, cfg_has_terminal, true)
+		SETTINGS_SET(bool, local_test_setting, true)
 	SETTINGS_END()
 
 	SETTINGS_START(config_t, release)
-		SETTINGS_SET(bool, cfg_has_terminal, false)
+		SETTINGS_SET(bool, local_test_setting, false)
+	SETTINGS_END()
+
+	SETTINGS_START(config_storage_t, normal)
+		SETTINGS_SET(ustring_t, key_for_local_test_setting, "app_#1#_test_setting"_u)
 	SETTINGS_END()
 }
 

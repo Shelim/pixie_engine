@@ -23,6 +23,14 @@ bool engine::is_path_separator_ascii(char ch)
 {
 	return ch == '/' || ch == '\\';
 }
+bool engine::is_numeric(char ch)
+{
+	return ch >= '0' && ch <= '9';
+}
+bool engine::is_character_ascii(char ch)
+{
+	return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+}
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -541,7 +549,7 @@ void engine::ustring_t::_encode(engine::usymbol_t symbol)
 engine::usymbol_t engine::ustring_t::_decode(const char *& pos)
 {
 	const int size = _symbol_size(pos);
-	register usymbol_t symbol = 0;
+	usymbol_t symbol = 0;
 
 	if (size == 1)
 	{
@@ -588,7 +596,7 @@ engine::usymbol_t engine::ustring_t::_decode(const char *& pos)
 
 uint_fast32_t engine::ustring_t::_symbol_size(const char * pos)
 {
-	register uint_fast32_t symbol = (unsigned char)*pos;
+	uint_fast32_t symbol = (unsigned char)*pos;
 
 	if (symbol < 0xC0) return 1;
 	if (symbol < 0xE0) return 2;

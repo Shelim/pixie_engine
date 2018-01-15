@@ -70,11 +70,11 @@ rem * Ok, we did not fail!
 rem * Output some info
 echo Deleting existing depedencies...
 
-rem * If depedency directory existed, wipe it out...
-if exist "depedency" rmdir "depedency" /s /q
+rem * If dependency directory existed, wipe it out...
+if exist "dependency" rmdir "dependency" /s /q
 
 rem * ... and create anew (should be empty folder after this point)
-mkdir "depedency"
+mkdir "dependency"
 
 rem * Output some info
 echo Done!
@@ -82,14 +82,14 @@ echo Done!
 rem * Output some info
 echo Downloading depedencies (warning: THIS WILL TAKE SOME TIME!)...
 
-rem * Make sure the _build directory exists
-if not exist _build mkdir _build
+rem * Make sure the !build directory exists
+if not exist !build mkdir !build
 
-rem * Make sure the _build\depedency directory exists
-if not exist "_build\depedency" mkdir "_build\depedency"
+rem * Make sure the !build\dependency directory exists
+if not exist "!build\dependency" mkdir "!build\dependency"
 
 rem * I actually don't like powershell here (used to download depedencies)... Maybe we could use something else..?
-powershell -Command "(New-Object Net.WebClient).DownloadFile('http://open-source.kosek.com/pixie_engine/depedencies.zip', '_build/depedency/depedencies.zip')"
+powershell -Command "(New-Object Net.WebClient).DownloadFile('http://open-source.kosek.com/pixie_engine/depedencies.zip', '!build/dependency/depedencies.zip')"
 
 rem * Should we fail here...
 if %ERRORLEVEL% == 0 goto ok2
@@ -112,13 +112,13 @@ echo ... like several minutes (or even few hours). Please, wait patiently...
 echo ... you have been warned.
 
 rem * Unpack zip archive!
-call build\windows\zipjs.bat unzip -source %CD%\_build\depedency\depedencies.zip -destination %CD%\depedency
+call build\windows\zipjs.bat unzip -source %CD%\!build\dependency\depedencies.zip -destination %CD%\dependency
 
 rem * Should we fail here...
 if %ERRORLEVEL% == 0 goto ok3 
 
 	rem * Output some info
-	echo Failed to unzip downloads. Use your favorite zip program to unpack '%CD%\_build\depedency\depedencies.zip' into '%CD%\depedency'!
+	echo Failed to unzip downloads. Use your favorite zip program to unpack '%CD%\!build\dependency\depedencies.zip' into '%CD%\dependency'!
 
 	rem * Fail execution
 	goto failed
@@ -131,7 +131,7 @@ echo Done!
 echo Deleting depedencies zip file...
 
 rem * Remove temporary directory
-rmdir "_build/depedency" /s /q
+rmdir "!build/dependency" /s /q
 
 rem * Output some info
 echo Done!

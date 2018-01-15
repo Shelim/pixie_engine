@@ -1,5 +1,9 @@
 #if PIXIE_WINDOWS
 
+#if PIXIE_IS_ITERATIVE_BUILD
+#include "resources_windows_x86_iterative.hpp"
+#else
+
 #if PIXIE_IS_DEBUG_BUILD
 
 #if PIXIE_IS_PORTABLE_BUILD
@@ -28,6 +32,7 @@
 #endif
 #endif
 
+#endif
 #endif
 
 #else

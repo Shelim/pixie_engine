@@ -59,7 +59,7 @@ namespace engine
 				flags.set_flag(flag_t::is_running, true);
 				get_object()->on_start();
 				if (!flags.is_flag(flag_t::requested_shutdown_not_yet_handled))
-					runner->add_looped_task(std::make_unique<task_t>(this), 0, get_object()->get_sleep_after());
+					runner->add_looped_task(std::make_unique<task_t>(this), {}, 0, get_object()->get_sleep_after());
 			}
 		}
 

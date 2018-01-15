@@ -3,6 +3,7 @@
 #pragma once
 
 #include "component/terminal.hpp"
+#include "component/logger.hpp"
 #include "utility/pattern/provider.hpp"
 #include "utility/pattern/enum.hpp"
 #include "utility/pattern/class_settings.hpp"
@@ -29,12 +30,14 @@ namespace engine
 
 	public:
 
-		terminal_real_t(std::unique_ptr<holder_t<terminal_t> > terminal_provider);
+		terminal_real_t(std::shared_ptr<logger_t> logger, std::unique_ptr<holder_t<terminal_t> > terminal_provider);
+		~terminal_real_t();
 		std::shared_ptr<instance_t> open(const ustring_t & name, terminal_t::color_t background, closing_callback_t on_closing = [](instance_t*){}) final;
 
 	private:
 
-	std::unique_ptr<holder_t<terminal_t> > terminal_provider;
+		std::shared_ptr<logger_t> logger;
+		std::unique_ptr<holder_t<terminal_t> > terminal_provider;
 
 	};
 }

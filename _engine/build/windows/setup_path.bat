@@ -42,11 +42,11 @@ rem * Jump '\_engine\build\windows' -> '\_engine'
 cd ..\..
 
 rem * Set path
-set path=%cd%\depedency\other\texlive\bin\win32;%cd%\depedency\other\jdk1.8.0_131\bin;%cd%\depedency\other\llvm\windows\bin;%cd%\depedency\other\python-3.5\windows;%cd%\depedency\other\mingw\windows\bin;%cd%\depedency\other\apache_ant\bin;%cd%\depedency\other\doxygen\windows;%cd%\depedency\other\dot\windows;%cd%\depedency\other\windbg
-set JAVA_HOME=%cd%\depedency\other\jdk1.8.0_131\windows
-set PYTHONPATH=%cd%\depedency\other\python-3.5\windows;%cd%\depedency\other\python-3.5\windows\Lib;%cd%\depedency\other\python-3.5\windows\Lib\site-packages
-set PYTHONHOME=%cd%\depedency\other\python-3.5\windows
-set PYTHON_HOME=%cd%\depedency\other\python-3.5\windows
+set path=%cd%\dependency\other\texlive\bin\win32;%cd%\dependency\other\jdk1.8.0_131\bin;%cd%\dependency\other\llvm\windows\bin;%cd%\dependency\other\llvm\windows\bin-current;%cd%\dependency\other\python-3.5\windows;%cd%\dependency\other\mingw\windows\bin;%cd%\dependency\other\apache_ant\bin;%cd%\dependency\other\doxygen\windows;%cd%\dependency\other\dot\windows;%cd%\dependency\other\fastbuild\windows;%cd%\dependency\other\cppcheck\windows
+set JAVA_HOME=%cd%\dependency\other\jdk1.8.0_131\windows
+set PYTHONPATH=%cd%\dependency\other\python-3.5\windows;%cd%\dependency\other\python-3.5\windows\Lib;%cd%\dependency\other\python-3.5\windows\Lib\site-packages
+set PYTHONHOME=%cd%\dependency\other\python-3.5\windows
+set PYTHON_HOME=%cd%\dependency\other\python-3.5\windows
 
 rem * Get back current directory
 popd

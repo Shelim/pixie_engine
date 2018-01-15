@@ -6,7 +6,8 @@ rem * REQUIRES:
 rem *     - Doxygen
 rem *     - Commented code
 rem * INPUT:
-rem *     1. Language - currently one of 'Polish', 'English'
+rem *     1. Language - currently one of 'polish', 'english'
+rem *     2. Format - currently either 'chm' and 'pdf'
 rem * AUTHOR:
 rem *     Piotr Kosek <piotr@kosek.com>
 rem * LICENSE:
@@ -16,7 +17,7 @@ rem *     0.1 [September, 6th 2017]:
 rem *         - Initial version
 rem *******************************************************************
 rem * CONSTRAINS:
-rem *     - Does not write outside subdirectory of docs (results) and _build (temporaries)
+rem *     - Does not write outside subdirectory of docs (results) and !build (temporaries)
 rem *     - Wipe out both results and temporaries directories (subdirectory of results and temporaries)
 rem *     - Uses Doxygen
 rem *******************************************************************
@@ -50,11 +51,23 @@ set language=%~1
 rem * Or to default language if omitted
 if "%~1"=="" set language=english
 
-rem * Make sure the _build directory exists
-IF NOT EXIST _build mkdir _build
+rem * Set default variables
+set generate_pdf=NO
+set generate_chm=NO
 
-rem * Jump '\_engine' -> '\_engine\_build'
-cd _build
+rem * Set format and reset to default if needed
+set format=%~2
+if NOT "%~2"=="chm" if NOT "%~2"=="pdf" set format=chm
+
+rem * Set given format for generation
+if "%format%"=="chm" set generate_chm=YES
+if "%format%"=="pdf" set generate_pdf=YES
+
+rem * Make sure the !build directory exists
+IF NOT EXIST !build mkdir !build
+
+rem * Jump '\_engine' -> '\_engine\!build'
+cd !build
 
 rem * If doxygen directory existed, wipe it out...
 IF EXIST doxygen_%language% rmdir "doxygen_%language%" /s /q
@@ -62,11 +75,11 @@ IF EXIST doxygen_%language% rmdir "doxygen_%language%" /s /q
 rem * ... and create anew (should be empty folder after this point)
 mkdir doxygen_%language%
 
-rem * Jump '\_engine\_build' -> '\_engine'
+rem * Jump '\_engine\!build' -> '\_engine'
 cd ..
 
 rem * If docs directory does not exists, create it
-IF NOT EXIST docs mkdir docs
+IF NOT EXIST "!docs" mkdir "!docs"
 
 rem * Register all standard paths form build system
 call build\windows\setup_path.bat
@@ -96,7 +109,7 @@ rem * Jump '\_engine\build\windows' -> '\_engine'
 cd ..\..
 
 rem * Build actual PDF
-call _build\doxygen_%language%\latex\make.bat
+if "%format%"=="pdf" call !build\doxygen_%language%\latex\make.bat
 
 rem * Should we fail here...
 if %ERRORLEVEL% == 0 goto ok2 
@@ -110,7 +123,7 @@ if %ERRORLEVEL% == 0 goto ok2
 rem * Ok, we did not fail!
 :ok2
 
-copy /Y _build\doxygen_%language%\latex\refman.pdf docs\pdf_%language%.pdf
+if "%format%"=="pdf" copy /Y !build\doxygen_%language%\latex\refman.pdf !docs\book_%language%.pdf
 
 rem * Finalize successfully
 goto ok

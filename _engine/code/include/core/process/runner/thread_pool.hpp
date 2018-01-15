@@ -18,7 +18,7 @@ namespace engine
 
 		public:
 
-			runner_thread_pool_t(std::unique_ptr<thread_pool_t<count> > pool) : pool(std::move(pool)), runner_base_t()
+			runner_thread_pool_t() : pool(std::make_unique<std::unique_ptr<thread_pool_t<count> >>()), runner_base_t()
 			{
 				
 			}

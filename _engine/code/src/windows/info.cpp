@@ -3,7 +3,7 @@
 #if PIXIE_WINDOWS
 
 #include "utility/text/ustring.hpp"
-#include "utility/text/parser.hpp"
+#include "utility/text/ustring.hpp"
 
 #include <clocale>
 #include <string>

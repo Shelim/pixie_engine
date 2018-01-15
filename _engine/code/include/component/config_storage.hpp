@@ -3,6 +3,8 @@
 #pragma once
 
 #include "utility/text/ustring.hpp"
+#include "component/config_common/enum.hpp"
+#include "utility/pattern/class_settings.hpp"
 
 namespace engine
 {
@@ -38,6 +40,14 @@ namespace engine
 
 	};
 
+SETTINGS_TABLE_START(config_storage_t)
+
+#define ENGINE_CONFIG_GLOBAL(type, name) SETTINGS_TABLE_ENTRY(ustring_t, key_for_global_##name)
+#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) SETTINGS_TABLE_ENTRY(ustring_t, key_for_app_##app##_##name)
+#define ENGINE_CONFIG_LOCAL(type, name) SETTINGS_TABLE_ENTRY(ustring_t, key_for_local_##name)
+#include "def/config.def"
+
+SETTINGS_TABLE_END()
 
 }
 

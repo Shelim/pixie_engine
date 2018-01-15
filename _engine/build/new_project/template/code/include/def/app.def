@@ -1,0 +1,10 @@
+#ifndef GAME_APP_DEF
+#define GAME_APP_DEF(...)
+#endif
+
+// GAME_APP_DEF(launcher)
+GAME_APP_DEF(game)
+// GAME_APP_DEF(editor)
+GAME_APP_DEF($UNIX_PROJECT_NAME$)
+
+#undef GAME_APP_DEF

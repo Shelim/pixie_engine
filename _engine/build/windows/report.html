@@ -1,0 +1,158 @@
+<!doctype html>
+<style type="text/css">
+body{
+font-family:arial;
+width:1000px;
+margin:0 auto;
+font-size:13px
+}
+th{
+background-color:#e0e0e0;
+padding:4px;
+height:15px;
+text-align:left;
+border-top-left-radius:5px;
+-moz-border-radius-topleft:5px;
+border-top-right-radius:5px;
+-moz-border-radius-topright:5px;
+font-weight:bold;
+}
+tr:nth-child(odd){
+background-color:#f0f0f0;
+}
+h1{
+background-color:#b0b0b0;
+border-radius:5px;
+padding:4px;
+height:40px;
+text-align:left;
+font-weight:bold;
+}
+h2{
+background-color:#d0d0d0;
+border-radius:5px;
+padding:4px;
+height:27px;
+text-align:left;
+font-weight:bold;
+}
+table{
+  padding-left:10px;
+}
+td
+word-break:break-all;
+padding:3px;
+}
+.perc{
+color:#aaaaaa;
+font-size:10px
+}
+</style>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>FASTBuild Report</title>
+</head>
+<body>
+<script type="text/javascript">
+function getTotal(data)
+{
+ var total = 0;
+ for (var j = 0; j < data.length; j++)
+ {
+  total += (typeof data[j] == 'number') ? data[j] : 0;
+ }
+ return total;
+}
+function plotData(canvasName,myData,myLabels,myColor, units)
+{
+ var canvas;
+ var ctx;
+ var lastend = 0;
+ var myTotal = getTotal(myData);
+ canvas = document.getElementById(canvasName);
+ ctx = canvas.getContext("2d");
+ ctx.clearRect(0, 0, canvas.width, canvas.height);
+ ctx.fillStyle = "black";
+ ctx.beginPath();
+ ctx.moveTo(70,70);
+ ctx.arc(70,70,66,0,(Math.PI*2),false);
+ ctx.lineTo(70,70);
+ ctx.fill();
+ for (var i = 0; i < myData.length; i++)
+ {
+  ctx.fillStyle = myColor[i];
+  ctx.beginPath();
+  ctx.moveTo(70,70);
+  ctx.arc(70,70,65,lastend,lastend+(Math.PI*2*(myData[i]/myTotal)),false);
+  ctx.lineTo(70,70);
+  ctx.fill();
+  lastend += Math.PI*2*(myData[i]/myTotal);
+ }
+ for (var i = 0; i < myData.length; i++)
+ {
+  var y = 20 + ( i * 25 );
+  ctx.fillStyle="#888888";
+  ctx.fillRect(200-1,y-15-1,22,22)
+  ctx.fillStyle=myColor[ i ];
+  ctx.fillRect(200,y-15,20,20)
+  ctx.fillStyle = "black";
+  ctx.font = "16px Arial";
+  ctx.fillText(myLabels[ i ], 230, y );
+  var perc = ( 100.0 * myData[ i ] / myTotal ).toFixed(1);
+  ctx.fillText( perc + "% (" + myData[ i ] + units + ")", 330, y );
+ }
+}
+function toggleTable(tableName)
+{
+ var table = document.getElementById(tableName);
+ table.style.display = (table.style.display == "table") ? "none" : "table";
+}
+</script>
+<h1>FASTBuild Report</h1>
+<h2 id="overview">Overview</h2>
+<table width=990>
+<tr><th width=150>Item</th><th>Details</th></tr>
+<tr><td width=80>Cmd Line Options</td><td>fbuild.exe  -cache -fastcancel -summary -report</td></tr><tr><td>Target(s)</td><td>all</td></tr>
+<tr><td>Result</td><td>FAILED</td></tr>
+<tr><td>Time</td><td>0.007s</td></tr>
+<tr><td>CPU Time</td><td>0.000s (0.0:1)</td></tr>
+<tr><td>Version</td><td>v0.94o x64</td></tr>
+<tr><td>Report Generated</td><td>0.001s                       - Thu 14-Dec-2017 - 18:48:11</td></tr>
+</table>
+<h2 id="cpuTimeByNodeType">CPU Time by Node Type</h2>
+<section>
+<div>
+<canvas id="canvas1" width="500" height="140">
+HTML5 Canvas support required.
+</canvas>
+</div>
+<script type="text/javascript">
+    var myData = [0.000,0.000,0.000,0.000];
+    var myLabels = ["Directory","Alias","Compiler","ObjectList"];
+    var myColors = ["#aaaaaa","#228b22","#dda0dd","#444444"];
+    plotData("canvas1",myData,myLabels,myColors," s");
+</script>
+</section>
+<table width=990>
+<tr><th width=80>Type</th><th width=80>Time</th><th width=80>Processed</th><th width=80>Built</th><th width=80>Cache Hits</th></tr>
+<tr><td>Directory</td><td>0.000s</td><td>3</td><td>3</td><td>-</td></tr>
+<tr><td>Alias</td><td>0.000s</td><td>1</td><td>0</td><td>-</td></tr>
+<tr><td>Compiler</td><td>0.000s</td><td>1</td><td>0</td><td>-</td></tr>
+<tr><td>ObjectList</td><td>0.000s</td><td>3</td><td>0</td><td>-</td></tr>
+</table>
+<h2 id="cacheStats">Cache Stats</h2>
+No cacheable items were built.
+<h2 id="cpuTimeByLibrary">CPU Time by Library</h2>
+<table width=990>
+No libraries built.
+<h2 id="cpuTimeByItem">CPU Time by Item</h2>
+<table width=990>
+<tr><th style="width:100px;">Time</th><th style="width:100px;">Type</th><th>Name</th></tr>
+</table>
+<h2 id="includes">Includes</h2>
+</table>
+No libraries built.
+<br><br><br>
+</body>
+</html>

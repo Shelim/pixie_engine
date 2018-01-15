@@ -1,100 +1,256 @@
-#ifndef ENGINE_COMPONENT_CONFIG_REAL_HPP
-#define ENGINE_COMPONENT_CONFIG_REAL_HPP
+#ifndef ENGINE_COMPONENT_CONFIG_MONITOR_REAL_HPP
+#define ENGINE_COMPONENT_CONFIG_MONITOR_REAL_HPP
 #pragma once
 
 #include "component/config.hpp"
 #include "component/logger.hpp"
-#include "utility/pattern/provider.hpp"
-#include "utility/messenger/messenger.hpp"
-#include "component/config/msg_config_updated.hpp"
-#include "utility/pattern/flags.hpp"
-#include "utility/pattern/enum.hpp"
+#include "component/config_monitor.hpp"
+#include "core/messenger/messenger.hpp"
+#include "core/process/service.hpp"
+#include "utility/pattern/factory.hpp"
+#include "utility/container/concurrent_queue.hpp"
 
 namespace engine
 {
-	class config_provider_base_t
+	class config_monitor_actual_t
 	{
 
 	public:
 
-		virtual ~config_provider_base_t()
+		config_monitor_actual_t(std::shared_ptr<config_t> config, std::shared_ptr<messenger_config_t> messenger_config, std::unique_ptr<holder_t<config_changed_t> > config_changed_provider) : 
+			config(config), messenger_config(messenger_config), config_changed_provider(std::move(config_changed_provider))
+		{
+			std::lock_guard<std::mutex> guard(mutex);
+
+#define ENGINE_CONFIG_GLOBAL(type, name) set_global_##name(config->get_global_##name());
+#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) set_app_##app##_##name(config->get_app_##app##_##name());
+#define ENGINE_CONFIG_LOCAL(type, name) for(std::size_t app = 0; app < value_of(manifest_app_t::app_t::count); app++) set_local_##name(static_cast<manifest_app_t::app_t>(app), config->get_local_##name(static_cast<manifest_app_t::app_t>(app)));
+#include "def/config.def"
+
+			messenger_instance = messenger_config->register_callback([this](engine::messenger::msg_config_t* msg){on_config_changed(msg);});
+		}
+
+		void rescan()
+		{
+#define ENGINE_CONFIG_GLOBAL(type, name) if(set_global_##name(config->get_global_##name()) == result_t::changed) notify_on_change(engine::config_global_t::name, to_string(global_##name));
+#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) if(set_app_##app##_##name(config->get_app_##app##_##name()) == result_t::changed) notify_on_change(engine::config_app_specific_t::##app##_##name, to_string(app_##app##_##name));
+#define ENGINE_CONFIG_LOCAL(type, name) for(std::size_t app = 0; app < value_of(manifest_app_t::app_t::count); app++) { if(set_local_##name(static_cast<manifest_app_t::app_t>(app), config->get_local_##name(static_cast<manifest_app_t::app_t>(app))) == result_t::changed) notify_on_change(static_cast<manifest_app_t::app_t>(app), engine::config_local_t::name, to_string(local_##name[app])); }
+#include "def/config.def"
+		}
+
+	private:
+
+		void notify_on_change(engine::config_global_t global, ustring_t val)
+		{
+			for(int i = 0; i < config_changed_provider->get_providers_count(); i++)
+			{
+				config_changed_provider->get_provider(i)->notify_on_change(global, val, messenger::msg_config_t::source_t::external);
+			}
+		}
+		void notify_on_change(engine::config_app_specific_t app_specific, ustring_t val)
+		{
+			for(int i = 0; i < config_changed_provider->get_providers_count(); i++)
+			{
+				config_changed_provider->get_provider(i)->notify_on_change(app_specific, val, messenger::msg_config_t::source_t::external);
+			}
+		}
+		void notify_on_change(engine::manifest_app_t::app_t app, engine::config_local_t local, ustring_t val)
+		{
+			for(int i = 0; i < config_changed_provider->get_providers_count(); i++)
+			{
+				config_changed_provider->get_provider(i)->notify_on_change(app, local, val, messenger::msg_config_t::source_t::external);
+			}
+		}
+
+		void on_config_changed(engine::messenger::msg_config_t* msg)
+		{
+			std::lock_guard<std::mutex> guard(mutex);
+			switch(msg->get_type())
+			{
+				case engine::messenger::msg_config_t::type_t::global:
+					switch(msg->get_global()->global)
+					{
+#define ENGINE_CONFIG_GLOBAL(type, name) case engine::config_global_t::name: set_global_##name(config->get_global_##name()); break;
+#include "def/config.def"
+					}
+				break;
+				case engine::messenger::msg_config_t::type_t::app_specific:
+					switch(msg->get_app_specific()->app_specific)
+					{
+#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) case engine::config_app_specific_t::##app##_##name: set_app_##app##_##name(config->get_app_##app##_##name()); break;
+#include "def/config.def"
+					}
+				break;
+				case engine::messenger::msg_config_t::type_t::local:
+					switch(msg->get_local()->local)
+					{
+#define ENGINE_CONFIG_LOCAL(type, name) case engine::config_local_t::name: set_local_##name(msg->get_local()->app, config->get_local_##name(msg->get_local()->app)); break;
+#include "def/config.def"
+					}
+				break;
+			}
+		}
+
+		std::mutex mutex;
+
+#define ENGINE_CONFIG_GLOBAL(type, name) type global_##name;
+#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) type app_##app##_##name;
+#define ENGINE_CONFIG_LOCAL(type, name) type local_##name[value_of(manifest_app_t::app_t::count)];
+#include "def/config.def"
+
+		enum class result_t
+		{
+			no_change,
+			changed
+		};
+
+#define ENGINE_CONFIG_GLOBAL(type, name) \
+		result_t set_global_##name(type val) \
+		{ result_t ret = result_t::no_change; \
+		if(global_##name != val) ret = result_t::changed; \
+		global_##name = val; \
+		return ret; }
+		
+#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) \
+		result_t set_app_##app##_##name(type val) \
+		{ result_t ret = result_t::no_change; \
+		if(app_##app##_##name != val) ret = result_t::changed; \
+		app_##app##_##name = val; \
+		return ret; }
+
+#define ENGINE_CONFIG_LOCAL(type, name) \
+		result_t set_local_##name(manifest_app_t::app_t app, type val) \
+		{ result_t ret = result_t::no_change; \
+		if(local_##name[value_of(app)] != val) ret = result_t::changed; \
+			local_##name[value_of(app)] = val; \
+		return ret; }
+#include "def/config.def"
+
+		std::shared_ptr<config_t> config;
+		std::shared_ptr<messenger_config_t> messenger_config;
+		std::unique_ptr<messenger::instance_t<messenger::msg_config_t> > messenger_instance;
+		std::unique_ptr<holder_t<config_changed_t> > config_changed_provider;
+
+	};
+
+	class config_monitor_executor_t
+	{
+
+	public:
+
+		config_monitor_executor_t(std::shared_ptr<config_monitor_actual_t> actual) : actual(actual)
 		{
 
 		}
 
-		enum class set_result_t
+		void request_rescan()
 		{
-			success,
-			no_change
-		};
+			messages.push(message_t::rescan_requested);
+		}
 
-#define ENGINE_CONFIG_GLOBAL_DEF(type, name) virtual type get_global_##name() const = 0;  virtual set_result_t set_global_##name(const type & val) = 0;
-#define ENGINE_CONFIG_LOCAL_DEF(type, app, name) virtual type get_app_##app##_##name() const = 0;  virtual set_result_t set_app_##app##_##name(const type & val) = 0;
-#define ENGINE_CONFIG_DEF(type, name) virtual type get_cfg_##name(manifest_app_t::app_t app) const = 0;  virtual set_result_t set_cfg_##name(manifest_app_t::app_t app, const type & val) = 0;
-#include "def/config.def"
-
-		class provider_default_t
+		void terminate_pool()
 		{
+			messages.push(message_t::terminate_monitor);
+		}
 
-		public:
-
-#define ENGINE_CONFIG_GLOBAL_DEF(type, name) type get_default_global_##name() const; 
-#define ENGINE_CONFIG_LOCAL_DEF(type, app, name) type get_default_local_##app##_##name() const;
-#define ENGINE_CONFIG_DEF(type, name) type get_default_cfg_##name(manifest_app_t::app_t app) const;
-#include "def/config.def"
-
-			provider_default_t(std::unique_ptr<settings_t<config_t>> configuration) : configuration(std::move(configuration))
+		task_base_t::result_t run()
+		{
+			for(;;)
 			{
-
+				message_t msg = messages.pop();
+				switch(msg)
+				{
+					case message_t::rescan_requested: actual->rescan(); break;
+					case message_t::terminate_monitor:
+						return task_base_t::result_t::completed;
+				}
 			}
-
-		private:
-
-
-			std::unique_ptr<settings_t<config_t>> configuration;
-		};
-
-	protected:
-
-
+		}
 
 	private:
+		
+		enum class message_t
+		{
+			rescan_requested,
+			terminate_monitor
+		};
 
+		concurrent_queue_t<message_t> messages;
+		std::shared_ptr<config_monitor_actual_t> actual;
 
 	};
 
-	REGISTER_PROVIDER_BASE_TYPE(config_t, config_provider_base_t)
 
-	class config_real_t : public config_t
+	class config_monitor_service_t : public service_base_t
 	{
 
 	public:
 
-		config_real_t(std::shared_ptr<manifest_app_t> manifest_app, std::shared_ptr<messenger_t> messenger, std::unique_ptr<holder_t<config_t> > config_provider, std::shared_ptr<logger_t> logger);
+		config_monitor_service_t(std::shared_ptr<logger_t> logger, std::shared_ptr<messenger_config_storage_t> messenger_config_storage, std::shared_ptr<config_monitor_executor_t> config_monitor_executor) : logger(logger), messenger_config_storage(messenger_config_storage), config_monitor_executor(config_monitor_executor)
+		{
+			logger->log_msg(config, "Config monitor service has launched"_u);
+			messenger_instance = messenger_config_storage->register_callback([this](messenger::msg_config_storage_t* msg)
+			{
+				if(msg->get_type() == messenger::msg_config_storage_t::type_t::source_updated)
+					this->config_monitor_executor->request_rescan();
+			});
+		}
 
-		~config_real_t();
+		~config_monitor_service_t()
+		{
+			logger->log_msg(config, "Config monitor service has concluded"_u);
+		}
 
-#define ENGINE_CONFIG_GLOBAL_DEF(type, name) type get_global_##name() const final { return config_provider->get_provider()->get_global_##name(); }; void set_global_##name(type val) final { if(config_provider->get_provider()->set_global_##name(val) == config_provider_base_t::set_result_t::success) notify_on_change(item_t::global_##name); }
-#define ENGINE_CONFIG_LOCAL_DEF(type, app, name) type get_app_##app##_##name() const final { return config_provider->get_provider()->get_app_##app##_##name(); }; void set_app_##app##_##name(type val) final { if(config_provider->get_provider()->set_app_##app##_##name(val) == config_provider_base_t::set_result_t::success) notify_on_change(item_t::app_##app##_##name); }
-#define ENGINE_CONFIG_DEF(type, name) type get_cfg_##name(manifest_app_t::app_t app) const final { return config_provider->get_provider()->get_cfg_##name(app); }; void set_cfg_##name(manifest_app_t::app_t app, type val) final { if(config_provider->get_provider()->set_cfg_##name(app, val) == config_provider_base_t::set_result_t::success) notify_on_change(item_t::cfg_##name); }
-#include "def/config.def"
+		ustring_t get_name() const final
+		{
+			return "Config monitor service"_u;
+		}
+
+		task_base_t::result_t run() final
+		{
+			return config_monitor_executor->run();
+		}
+
+		void on_end_requested() final
+		{
+			config_monitor_executor->terminate_pool();
+		}
 
 	private:
 
-		void on_change_from_provider(msg_base_t * msg);
-
-		void notify_on_change(item_t item);
-		void notify_on_initial_value(item_t item);
-		
-		std::shared_ptr<messenger_t> messenger;
-		std::unique_ptr<holder_t<config_t> > config_provider;
 		std::shared_ptr<logger_t> logger;
+		std::shared_ptr<messenger_config_storage_t> messenger_config_storage;
+		std::unique_ptr<messenger::instance_t<messenger::msg_config_storage_t> > messenger_instance;
+		std::shared_ptr<config_monitor_executor_t> config_monitor_executor;
 
-		callback_container_t callbacks_container;
+	};
+
+	class config_monitor_real_t : public config_monitor_t
+	{
+
+	public:
+
+		config_monitor_real_t(std::shared_ptr<logger_t> logger, std::unique_ptr<service_t<config_monitor_service_t>> service) : logger(logger), service(std::move(service))
+		{
+			auto task_id = logger->log_task_start(config, "Initializing monitor [config]"_u);
+			this->service->start();
+			logger->log_task_done(task_id);
+		}
+
+		~config_monitor_real_t()
+		{
+			auto task_id = logger->log_task_start(config, "Monitor [config] is being disposed"_u);
+			this->service->end();
+			logger->log_task_done(task_id);
+		}
+
+	private:
+
+		std::shared_ptr<logger_t> logger;
+		std::unique_ptr<service_t<config_monitor_service_t>> service;
 
 	};
 }
 
-#include "component/config/provider/storage.hpp"
 
 #endif

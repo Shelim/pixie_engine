@@ -42,7 +42,7 @@ rem * Jump '\_engine\build\windows' -> '\'
 cd ..\..\..
 
 rem * Check if this directory do exists
-if exist "./_engine/depedency" goto :ok1 
+if exist "./_engine/dependency" goto :ok1 
 
 	rem * Output some info
 	echo Use download_dependencies.bat to download required depedencies before doing anything else!

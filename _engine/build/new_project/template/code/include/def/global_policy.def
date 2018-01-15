@@ -1,0 +1,12 @@
+#ifndef GAME_ALLOW_POLICY_DEF
+#define GAME_ALLOW_POLICY_DEF(...)
+#endif
+
+GAME_ALLOW_POLICY_DEF(instances_application, single)
+GAME_ALLOW_POLICY_DEF(instances_application, multiple)
+GAME_ALLOW_POLICY_DEF(instances_program, single)
+GAME_ALLOW_POLICY_DEF(instances_program, multiple)
+GAME_ALLOW_POLICY_DEF(renderer_thread, detached)
+GAME_ALLOW_POLICY_DEF(renderer_thread, callable_by_platform)
+
+#undef GAME_ALLOW_POLICY_DEF

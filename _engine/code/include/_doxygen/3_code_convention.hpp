@@ -22,7 +22,7 @@
  *      - `content` -> All `assets`
  *      - `data` -> Piece of information for engine. Common term for `assets`, `config` files, user profiles, saves, etc.
  *      - `debug` -> Output configuration intended on running only on developer machine. Also piece of code only to be used in debug. See @ref build_configuration "build specification"
- *      - `depedency` -> Other party piece of code or application that is used inside Pixie engine
+ *      - `dependency` -> Other party piece of code or application that is used inside Pixie engine
  *      - `environment` -> Specification of machine running pixie (usually end user machine)
  *      - `final` -> Output configuration inteded for relese. Beside application it will build auto-updater script and prepare them to push to repository. See @ref build_configuration "build specification"
  *      - `hybrid` -> Output configuration inteded for testers. It is faster then debug and does not contain debugging symbols. Can be open-tested. See @ref build_configuration "build specification"
@@ -60,7 +60,7 @@
  *
  *        public: // separate line, aligned to class
  *
- *           baz_t(std::shared_ptr<logger_t> logger) : logger(logger) // Use depedency injection
+ *           baz_t(std::shared_ptr<logger_t> logger) : logger(logger) // Use dependency injection
  *           {
  *
  *           }

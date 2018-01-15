@@ -6,6 +6,7 @@ rem * REQUIRES:
 rem *     - Prebuild documentation
 rem * INPUT:
 rem *     1. Language - currently either 'polish' or 'english'
+rem *     2. Format - currently either 'chm' and 'pdf'
 rem * AUTHOR:
 rem *     Piotr Kosek <piotr@kosek.com>
 rem * LICENSE:
@@ -38,8 +39,8 @@ rem *******************************************************************
 rem * Mark current directory
 pushd %~dp0
 
-rem * Jump '\_engine\build\windows' -> '\_engine\docs'
-cd "../../docs/"
+rem * Jump '\_engine\build\windows' -> '\_engine\!docs'
+cd "../../!docs/"
 
 rem * Set given language
 set language=%~1
@@ -47,8 +48,15 @@ set language=%~1
 rem * Or to default language if omitted
 if "%~1"=="" set language=English
 
+rem * Set format and reset to default if needed
+set format=%~2
+if NOT "%~2"=="chm" if NOT "%~2"=="pdf" set format=chm
+
 rem * Should we fail here...
-if exist engine_%language%.chm goto ok1 
+if "%format%"=="chm" if exist engine_%language%.chm goto ok1 
+
+rem * ... or here...
+if "%format%"=="pdf" if exist book_%language%.pdf goto ok1 
 
 	rem * Output some info
 	echo Documentation does not exists
@@ -60,7 +68,8 @@ rem * Ok, we did not fail!
 :ok1
 
 rem * Open documentation
-start engine_%language%.chm
+if "%format%"=="chm" start engine_%language%.chm
+if "%format%"=="pdf" start book_%language%.pdf
 
 rem * Finalize successfully
 goto ok

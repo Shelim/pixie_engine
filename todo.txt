@@ -1,11 +1,25 @@
+ - Sanitizing
+	 - Platform (!!!)
+		 - Rozbij environment na podklasy
+			 - Nie spiesz się!
+		 - Zaimplementuj komponenty ignitera!
+	 - Posprzątaj parser
+		 - Wykrywanie błędów (Intellisense)
+		 - Wspólne elementy powinny być w common
+	 - Formatowanie to_string (drugi argument!)
+	 - Replace libRocket with CEF3 https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage
+
  - Work on components:
-	 - config
-	 - config_monitor
+v	 - config
+v	 - config_monitor
 +	 - config_storage
+v		 - Nazwa wpisu dla danego itemka konfiguracyjnego ("global_foo") powinna być konfigurowalna w ustawieniach
 +        - XML (?) inside game directory (for portable!)
 			 - Requires: XML
      - console_output
-+        - filters
++        - Filters
+		 - Instances
+		 - Formatter
 	 - data_archives
 	 - data_creator
 	 - data_monitor
@@ -19,6 +33,9 @@ v	 - renderer_status
 v	 - terminal
  - Utility / XML
 
+ - Testy?
+	 - Chyba na to za wcześnie... specy ci się za często zmieniają!
+	 
 Docs
  - Document code
  - Add Engine Architecture page

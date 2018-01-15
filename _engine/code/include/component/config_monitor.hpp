@@ -1,95 +1,29 @@
-/*
-
-#ifndef ENGINE_COMPONENT_CONFIG_HPP
-#define ENGINE_COMPONENT_CONFIG_HPP
+#ifndef ENGINE_COMPONENT_CONFIG_MONITOR_HPP
+#define ENGINE_COMPONENT_CONFIG_MONITOR_HPP
 #pragma once
 
-#include <pugixml.hpp>
-#include <string>
-#include <vector>
-#include <bitset>
-#include <array>
-#include <mutex>
-#include <map>
-#include <thread>
-#include <chrono>
-#include <sstream>
-#include <SDL.h>
-#include <functional>
-#include <pugixml.hpp>
-#include "utility/text/ustring.hpp"
-#include "component/renderer_status.hpp"
-#include "utility/pattern/flags.hpp"
-#include "component/logger/item.hpp"
-#include "utility/pattern/class_settings.hpp"
-#include "utility/manifest/app.hpp"
-#include <cereal/cereal.hpp>
-#include <cereal/access.hpp>
-#include "utility/pattern/enum.hpp"
-#include <vlc/vlc.h>
-#include <bitset>
+#include "core/monitor/base.hpp"
+#include "component/config_common/enum.hpp"
+#include "component/config_common/changed_provider.hpp"
 
 namespace engine
 {
 
-	class config_t
+	class config_monitor_t : public monitor_base_t
 	{
+
 	public:
 
-		
-		config_t(std::shared_ptr<manifest_app_t> manifest_app) : manifest_app(manifest_app)
+		virtual ~config_monitor_t()
 		{
 
-		}
-
-		virtual ~config_t()
-		{
-
-		}
-
-#define ENGINE_CONFIG_GLOBAL_DEF(type, name) virtual type get_global_##name() const = 0;  virtual void set_global_##name(type val) = 0;
-#define ENGINE_CONFIG_LOCAL_DEF(type, app, name) virtual type get_app_##app##_##name() const = 0;  virtual void set_app_##app##_##name(type val) = 0;
-#define ENGINE_CONFIG_DEF(type, name) virtual type get_cfg_##name(manifest_app_t::app_t app) const = 0;  virtual void set_cfg_##name(manifest_app_t::app_t app, type val) = 0; type get_cfg_##name() const { return get_cfg_##name(manifest_app->get_local_app()); } void set_cfg_##name(type val) { set_cfg_##name(manifest_app->get_local_app(), val); }
-#include "def/config.def"
-
-		enum class item_t
-		{
-#define ENGINE_CONFIG_GLOBAL_DEF(type, name) global_##name,
-#define ENGINE_CONFIG_LOCAL_DEF(type, app, name) app_##app##_##name,
-#define ENGINE_CONFIG_DEF(type, name) cfg_##name,
-#include "def/config.def"
-			count
-		};
-
-		static const ustring_t type_to_text(item_t item)
-		{
-#define ENGINE_CONFIG_GLOBAL_DEF(type, name) if(item == item_t::global_##name) return "global_" #name##_u;
-#define ENGINE_CONFIG_LOCAL_DEF(type, app, name) if(item == item_t::app_##app##_##name) return "local_" #app "_" #name##_u;
-#define ENGINE_CONFIG_DEF(type, name) if(item == item_t::cfg_##name) return "cfg_" #name##_u;
-#include "def/config.def"
-			return "Unknown"_u;
-		}
-
-	private:
-
-		std::shared_ptr<manifest_app_t> manifest_app;
+		} 
 
 	};
 
-	SETTINGS_TABLE_START(config_t)
-
-#define ENGINE_CONFIG_GLOBAL_DEF(type, name) SETTINGS_TABLE_ENTRY(type, global_##name)
-#define ENGINE_CONFIG_LOCAL_DEF(type, app, name) SETTINGS_TABLE_ENTRY(type, app_##app##_##name)
-#define ENGINE_CONFIG_DEF(type, name) SETTINGS_TABLE_ENTRY(type, cfg_##name)
-#include "def/config.def"
-
-	SETTINGS_TABLE_END()
 }
 
-#include "component/config/dummy.hpp"
-#include "component/config/real.hpp"
-
+#include "component/config_monitor/dummy.hpp"
+#include "component/config_monitor/real.hpp"
 
 #endif
-
-*/

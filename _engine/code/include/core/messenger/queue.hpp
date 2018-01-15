@@ -9,6 +9,11 @@
 #include <functional>
 #include "core/messenger/msg.hpp"
 #include "core/messenger/instance.hpp"
+#include "utility/container/concurrent_queue.hpp"
+#include "utility/pattern/factory.hpp"
+#include "core/process/process.hpp"
+#include "core/process/runner/spawn.hpp"
+#include "core/process/task.hpp"
 
 namespace engine
 {
@@ -63,14 +68,21 @@ namespace engine
 
         template <class queue_t, class msg_actual_t, bool is_async, bool keep_history> class queue_base_t { };
 
-        template<class queue_t, class msg_actual_t, bool keep_history> class queue_base_t<queue_t, msg_actual_t, false, keep_history> : public std::enable_shared_from_this<queue_t>
+        template<class queue_t, class msg_actual_t, bool keep_history> class queue_base_t<queue_t, msg_actual_t, false, keep_history>
         {
 
         public:
 
-            virtual ~queue_base_t()
+            queue_base_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner)
             {
                 
+            }
+
+            virtual ~queue_base_t()
+            {
+                for(auto & instance : instances)
+                    instance->unregister_remotely();
+                instances.clear();
             }
             
             void write(std::shared_ptr<msg_actual_t> msg)
@@ -88,7 +100,7 @@ namespace engine
             {
                 std::lock_guard<std::mutex> guard(mutex);
 
-                std::unique_ptr<instance_t<msg_actual_t> > instance = std::unique_ptr<instance_t<msg_actual_t> >(new instance_t<msg_actual_t>(shared_from_this(), callback));
+                std::unique_ptr<instance_t<msg_actual_t> > instance = std::unique_ptr<instance_t<msg_actual_t> >(new instance_t<msg_actual_t>(static_cast<queue_t*>(this), callback));
                 instances.push_back(instance.get());
 
                 if(history == history_t::dump_if_available)
@@ -116,20 +128,24 @@ namespace engine
 
         };
         
-        template<class queue_t, class msg_actual_t, bool keep_history> class queue_base_t<queue_t, msg_actual_t, true, keep_history> : public std::enable_shared_from_this<queue_t>
+        template<class queue_t, class msg_actual_t, bool keep_history> class queue_base_t<queue_t, msg_actual_t, true, keep_history>
         {
 
         public:
 
-            queue_base_t() : id(next_id++)
+            queue_base_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : id(next_id++)
             {
-                runner = std::make_unique<process::runner_spawn_t>();
+                runner = runner_spawner->create();
                 runner->add_task(std::make_unique<task_func_t>([this](process::token_t*){ return execute(); }, format_string("Messenger '#1#' queue ###2#"_u, get_msg_type<msg_actual_t>(), id)));
             }
 
             virtual ~queue_base_t()
             {
                 std::lock_guard<std::mutex> guard(mutex);
+                for(auto & instance : instances)
+                    instance->unregister_remotely();
+                instances.clear();
+                typename msg_internal_register_instance<msg_actual_t>::info_t info; 
                 queue_msg.push(nullptr);
             }
             
@@ -197,7 +213,7 @@ namespace engine
                     {
                         auto register_message = static_cast<msg_internal_register_instance<msg_actual_t>*>(msg);
                         
-                        std::unique_ptr<instance_t<msg_actual_t> > instance = std::unique_ptr<instance_t<msg_actual_t> >(new instance_t<msg_actual_t>(shared_from_this(), register_message->get_callback()));
+                        std::unique_ptr<instance_t<msg_actual_t> > instance = std::unique_ptr<instance_t<msg_actual_t> >(new instance_t<msg_actual_t>(static_cast<queue_t*>(this), register_message->get_callback()));
                         instances.push_back(instance.get());
 
                         if(register_message->get_history() == history_t::dump_if_available)
@@ -224,14 +240,12 @@ namespace engine
 
         template<class msg_actual_t> class queue_t : public queue_base_t<queue_t<msg_actual_t>, msg_actual_t, msg_actual_t::is_queue_async, msg_actual_t::keep_history>
         {
-            // Empty, this is intended
+            public:
+                queue_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : queue_base_t(runner_spawner) {}
+
         };
 
-
     }
-
-#define ENGINE_MESSENGER_QUEUE_DEF(name) typedef messenger::queue_t<messenger::msg_##name##_t> messenger_##name##_t;
-#include "def/messenger.def"
 
 }
 

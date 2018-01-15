@@ -1,4 +1,4 @@
-{
+.{
 	"folders": [
 		{
 			"name": "$FULL_PROJECT_NAME$",
@@ -83,7 +83,29 @@
 			"xstring": "cpp",
 			"xtr1common": "cpp",
 			"xtree": "cpp",
-			"xutility": "cpp"
-		}
+			"xutility": "cpp",
+			"future": "cpp",
+			"*.def": "cpp",
+			"allocators": "cpp",
+			"atomic": "cpp",
+			"complex": "cpp",
+			"resumable": "cpp",
+			"forward_list": "cpp",
+			"hash_map": "cpp",
+			"hash_set": "cpp",
+			"regex": "cpp",
+			"stack": "cpp",
+			"valarray": "cpp",
+			"numeric": "cpp",
+			"strstream": "cpp",
+			"*.ipp": "cpp",
+			"cctype": "cpp",
+			"csignal": "cpp",
+			"cwctype": "cpp",
+			"random": "cpp",
+			"xxatomic": "cpp"
+		},
+		"git.ignoreLimitWarning": true,
+		"cSpell.language": "en"
 	}
 }

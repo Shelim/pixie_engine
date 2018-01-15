@@ -3,7 +3,7 @@
 #pragma once
 
 #include "utility/pattern/writer.hpp"
-#include "core/messenger/queue.hpp"
+#include "core/messenger/messenger.hpp"
 #include "core/messenger/msg/console.hpp"
 
 namespace engine

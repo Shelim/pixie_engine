@@ -1,0 +1,30 @@
+#ifndef ENGINE_ENUM_START
+#define ENGINE_ENUM_START(namespace, name) enum class name {
+#endif
+
+#ifndef ENGINE_ENUM_VALUE
+#define ENGINE_ENUM_VALUE(val, str) val,
+#endif
+
+#ifndef ENGINE_ENUM_END
+#define ENGINE_ENUM_END() count };
+#endif
+
+ENGINE_ENUM_START(engine, config_global_t)
+#define ENGINE_CONFIG_GLOBAL(unused, x) ENGINE_ENUM_VALUE(x, "global_" #x##_u)
+#include "def/config.def"
+ENGINE_ENUM_END()
+
+ENGINE_ENUM_START(engine, config_app_specific_t)
+#define ENGINE_CONFIG_ONLY_FOR_APP(unused, app, x) ENGINE_ENUM_VALUE(app##_##x, #app "_" #x##_u)
+#include "def/config.def"
+ENGINE_ENUM_END()
+
+ENGINE_ENUM_START(engine, config_local_t)
+#define ENGINE_CONFIG_LOCAL(unused, x) ENGINE_ENUM_VALUE(x, "local_" #x##_u)
+#include "def/config.def"
+ENGINE_ENUM_END()
+
+#undef ENGINE_ENUM_END
+#undef ENGINE_ENUM_VALUE
+#undef ENGINE_ENUM_START

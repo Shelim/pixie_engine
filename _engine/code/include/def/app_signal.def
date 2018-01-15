@@ -1,0 +1,8 @@
+#ifndef ENGINE_APP_SIGNAL_DEF
+#define ENGINE_APP_SIGNAL_DEF(...)
+#endif
+
+ENGINE_APP_SIGNAL_DEF(terminate)
+ENGINE_APP_SIGNAL_DEF(new_instance_request)
+
+#undef ENGINE_APP_SIGNAL_DEF

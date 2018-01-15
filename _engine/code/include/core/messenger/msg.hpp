@@ -5,6 +5,7 @@
 #include <cstdint>
 #include "utility/pattern/fourcc.hpp"
 #include "utility/concurrention/signal.hpp"
+#include "utility/text/ustring.hpp"
 
 namespace engine
 {
@@ -24,29 +25,15 @@ namespace engine
 
 		public:
 
-			virtual ~msg_base_t()
-			{
+			virtual ~msg_base_t();
 
-			}
+#include "def/enum/messenger_type.def"
 
-			enum class type_t
-			{
-	#define ENGINE_MESSENGER_MSG_BASE_TYPE_DEF(msg) msg,
-	#include "def/messenger.def"
-				count
-			};
-
-			type_t get_type() const
-			{
-				return type;
-			}
+			type_t get_type() const;
 
 		protected:
 
-			msg_base_t(type_t type) : type(type)
-			{
-
-			}
+			msg_base_t(type_t type);
 
 		private:
 
@@ -182,15 +169,18 @@ namespace engine
 	namespace messenger
 	{
 
-		template<class msg_actual_t> ustring_t get_msg_type(msg_actual_t * msg = nullptr)
+		template<class msg_actual_t> inline ustring_t get_msg_type(msg_actual_t * msg = nullptr)
 		{
 			return "Unknown"_u;
 		}
 
-#define ENGINE_MESSENGER_QUEUE_DEF(name) class msg_##name##_t; template<> ustring_t get_msg_type(msg_##name##_t * msg) { return #name##_u; };
+#define ENGINE_MESSENGER_QUEUE_DEF(name) class msg_##name##_t; template<> inline ustring_t get_msg_type(msg_##name##_t * msg) { return #name##_u; };
 #include "def/messenger.def"
 
 	}
 }
+
+#define ENGINE_ENUM_HEADER_TO_USE "def/enum/messenger_type.def"
+#include "core/utility/enum_to_string.hpp"
 
 #endif

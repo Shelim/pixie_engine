@@ -1,6 +1,6 @@
 @echo off
 rem *******************************************************************
-rem * This script is called by MSVC as process of the build.
+rem * This script is called by VS Code as process of the build.
 rem *     As you probably have guessed already, it does nothing
 rem * 
 rem * REQUIRES:

@@ -1,3 +1,4 @@
+#include "component/config.hpp"
 #include "component/config_storage.hpp"
 
 engine::config_storage_t::~config_storage_t()
@@ -185,7 +186,6 @@ engine::ustring_t engine::config_storage_real_t::retrieve(const ustring_t & key,
 {
 	return config_storage_provider->get_provider()->retrieve(key, def_val);
 }
-
 
 /*
 

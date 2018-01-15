@@ -80,6 +80,26 @@ namespace engine
 	bool is_path_separator_ascii(char ch);
 
 	/**
+	* @brief Check if given usymbol_t contains number
+	*
+	* @remark This function is platform independeant
+	*
+	* @param[in] item usymbol_t to check
+	* @return true if usymbol_t contains number
+	*/
+	bool is_numeric(char ch);
+
+	/**
+	* @brief Check if given usymbol_t contains ASCII character (a-z or A-Z)
+	*
+	* @remark This function is platform independeant
+	*
+	* @param[in] item usymbol_t to check
+	* @return true if usymbol_t contains ASCII character (a-z or A-Z)
+	*/
+	bool is_character_ascii(char ch);
+
+	/**
 	 * @brief Class for handling @c UTF-8 string
 	 */
 	class ustring_t final
@@ -956,12 +976,6 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		 * @brief Returns Unicode Symbol at given position in ustring_t
-		 *
-		 * @param[in] pos Position in ustring_t
-		 * @return Full Unicode glyph code
-		 */
-		/**
 		 * @brief Return length of ustring_t
 		 *
 		 * @return Length of ustring_t (in glyphs)
@@ -1252,7 +1266,7 @@ namespace engine
 		
 		friend class cereal::access;
 		template <class T> friend ustring_t to_string(const T & item);
-		template <class T> friend ustring_t to_string(const T & item, std::size_t totalDigits);
+		template <class T> friend ustring_t to_string(const T & item, const ustring_t & format);
 		template <class T> friend T from_string(const ustring_t & str);
 
 	private:
@@ -1359,10 +1373,23 @@ namespace engine
 	* @note has explicty declared to_string override
 	*
 	* @param[in] item Generic Object
+	* @param[in] format Format
 	* @return Converted `ustring_t`
 	* @see from_string
 	*/
-	template <class T> inline ustring_t to_string(const T & item);
+	template <class T> inline ustring_t to_string(const T & item, const ustring_t & format);
+
+	/**
+	* @brief Converts generic object into ustring_t
+	*
+	* @param[in] item Generic Object
+	* @return Converted `ustring_t`
+	* @see from_string
+	*/
+	template <class T> inline ustring_t to_string(const T & item)
+	{
+		return to_string(item, ""_u);
+	}
 
 	/**
 	* @brief Converts ustring_t into generic object
@@ -1379,76 +1406,76 @@ namespace engine
 
 	//////////////////////////////////////////////////////////////////////////
 
-	template<> inline ustring_t to_string<std::filesystem::path>(const std::filesystem::path & item)
+	template<> inline ustring_t to_string<std::filesystem::path>(const std::filesystem::path & item, const ustring_t & format)
 	{
 		std::string path = item.u8string();
 		return ustring_t(path.c_str());
 	}
 
-	template<> inline ustring_t to_string<void*>(void* const& item)
+	template<> inline ustring_t to_string<void*>(void* const& item, const ustring_t & format)
 	{
 		std::stringstream ss;
 		ss << "0x" << std::hex << std::setfill('0') << std::setw(sizeof(intptr_t) * 2) << reinterpret_cast<intptr_t>(item);
 		return ustring_t(ss.str());
 	}
 	
-	template<> inline ustring_t to_string<int8_t>(const int8_t & item)
+	template<> inline ustring_t to_string<int8_t>(const int8_t & item, const ustring_t & format)
 	{
 		return ustring_t(std::to_string(item));
 	}
 
-	template<> inline ustring_t to_string<uint8_t>(const uint8_t & item)
+	template<> inline ustring_t to_string<uint8_t>(const uint8_t & item, const ustring_t & format)
 	{
 		return ustring_t(std::to_string(item));
 	}
 
-	template<> inline ustring_t to_string<int16_t>(const int16_t & item)
+	template<> inline ustring_t to_string<int16_t>(const int16_t & item, const ustring_t & format)
 	{
 		return ustring_t(std::to_string(item));
 	}
 
-	template<> inline ustring_t to_string<uint16_t>(const uint16_t & item)
+	template<> inline ustring_t to_string<uint16_t>(const uint16_t & item, const ustring_t & format)
 	{
 		return ustring_t(std::to_string(item));
 	}
 
-	template<> inline ustring_t to_string<int32_t>(const int32_t & item)
+	template<> inline ustring_t to_string<int32_t>(const int32_t & item, const ustring_t & format)
 	{
 		return ustring_t(std::to_string(item));
 	}
 
-	template<> inline ustring_t to_string<uint32_t>(const uint32_t & item)
+	template<> inline ustring_t to_string<uint32_t>(const uint32_t & item, const ustring_t & format)
 	{
 		return ustring_t(std::to_string(item));
 	}
 
-	template<> inline ustring_t to_string<int64_t>(const int64_t & item)
+	template<> inline ustring_t to_string<int64_t>(const int64_t & item, const ustring_t & format)
 	{
 		return ustring_t(std::to_string(item));
 	}
 
-	template<> inline ustring_t to_string<uint64_t>(const uint64_t & item)
+	template<> inline ustring_t to_string<uint64_t>(const uint64_t & item, const ustring_t & format)
 	{
 		return ustring_t(std::to_string(item));
 	}
 
-	template<> inline ustring_t to_string<float>(const float & item)
+	template<> inline ustring_t to_string<float>(const float & item, const ustring_t & format)
 	{
 		return ustring_t(std::to_string(item));
 	}
 
-	template<> inline ustring_t to_string<double>(const double & item)
+	template<> inline ustring_t to_string<double>(const double & item, const ustring_t & format)
 	{
 		return ustring_t(std::to_string(item));
 	}
 	
-	template<> inline ustring_t to_string<bool>(const bool & item)
+	template<> inline ustring_t to_string<bool>(const bool & item, const ustring_t & format)
 	{
 		if (item) return ustring_t::from_ascii("true");
 		else return ustring_t::from_ascii("false");
 	}
 
-	template<> inline ustring_t to_string<ustring_collection_t>(const ustring_collection_t & item)
+	template<> inline ustring_t to_string<ustring_collection_t>(const ustring_collection_t & item, const ustring_t & format)
 	{
 		ustring_t ret;
 
@@ -1460,7 +1487,7 @@ namespace engine
 		return ret;
 	}
 
-	template<> inline ustring_t to_string<color_t>(const color_t & item)
+	template<> inline ustring_t to_string<color_t>(const color_t & item, const ustring_t & format)
 	{
 		std::stringstream ss;
 		ss << "#" << std::hex << std::setfill('0') << std::setw(sizeof(uint32_t) * 2)
@@ -1469,7 +1496,7 @@ namespace engine
 		return ustring_t(ss.str());
 	}
 
-	template <> inline ustring_t to_string<std::chrono::seconds>(const std::chrono::seconds & item)
+	template <> inline ustring_t to_string<std::chrono::seconds>(const std::chrono::seconds & item, const ustring_t & format)
 	{
 		uint32_t int_hours = std::chrono::duration_cast<std::chrono::hours>(item).count();
 		uint32_t int_minutes = std::chrono::duration_cast<std::chrono::minutes>(item).count() % 60;
@@ -1493,7 +1520,7 @@ namespace engine
 		return ustring_t(ret);
 	}
 
-	template <> inline ustring_t to_string<std::chrono::system_clock::time_point>(const std::chrono::system_clock::time_point & item)
+	template <> inline ustring_t to_string<std::chrono::system_clock::time_point>(const std::chrono::system_clock::time_point & item, const ustring_t & format)
 	{
 		std::time_t time = std::chrono::system_clock::to_time_t(item);
 		std::tm timetm = *std::localtime(&time);
@@ -1503,58 +1530,30 @@ namespace engine
 		return ustring_t::from_ascii(str.c_str());
 	}
 
-	template<> inline ustring_t to_string<ustring_t>(const ustring_t & item)
+	template<> inline ustring_t to_string<ustring_t>(const ustring_t & item, const ustring_t & format)
 	{
 		return item;
 	}
 
-	template<> inline ustring_t to_string<std::thread::id>(const std::thread::id & id)
+	template<> inline ustring_t to_string<std::thread::id>(const std::thread::id & id, const ustring_t & format)
 	{
 		std::stringstream ss;
 		ss << id;
 		return ustring_t(ss.str());
 	}
 
-	template<> inline ustring_t to_string<id_t>(const id_t & item)
+	template<> inline ustring_t to_string<id_t>(const id_t & item, const ustring_t & format)
 	{
+		id_t::underlying_type val = static_cast<id_t::underlying_type>(item);
+		
 		char buffer[5];
-		buffer[0] = ((item >> 24) & 0xff);
-		buffer[1] = ((item >> 16) & 0xff);
-		buffer[2] = ((item >> 8) & 0xff);
-		buffer[3] = ((item >> 0) & 0xff);
+		buffer[0] = ((val >> 24) & 0xff);
+		buffer[1] = ((val >> 16) & 0xff);
+		buffer[2] = ((val >> 8) & 0xff);
+		buffer[3] = ((val >> 0) & 0xff);
 		buffer[4] = '\0';
 
 		return ustring_t::from_ascii(buffer);
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-
-	/**
-	* @brief Converts generic number into ustring_t padding it with leadingZeros
-	*
-	* @note This function works only on integer types
-	*
-	* For example calling this with `to_string(123, 5)` would result in `00123`
-	*
-	* @param[in] item Generic integer number
-	* @param[in] total_digits Number of total digits
-	* @return Converted `ustring_t`
-	* @see from_string
-	*/
-	template<class T> inline ustring_t to_string(const T & item, std::size_t total_digits)
-	{
-		static_assert(std::is_integral<T>::value, "This method only works on integral types");
-
-		std::string base = std::to_string(item);
-
-		if (total_digits > base.length())
-		{
-			std::string str(total_digits - base.length(), '0');
-			str += base;
-			return ustring_t(str);
-		}
-
-		return ustring_t(base);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -1793,5 +1792,7 @@ namespace std
 		lhs.swap(rhs);
 	}
 }
+
+#include "utility/text/format/string.hpp"
 
 #endif

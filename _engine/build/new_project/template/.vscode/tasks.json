@@ -5,7 +5,7 @@
             "label": "Build debug",
             "type": "shell",
             "windows": {
-                "command": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/command/windows/build_vscode.bat"
+                "command": "echo | call ${workspaceRoot}/../$UNIX_PROJECT_NAME$/_command/windows/build_iterative.bat"
             },
             "args": [ ],
             "group": {

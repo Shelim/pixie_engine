@@ -2,8 +2,8 @@
 #define ENGINE_COMPONENT_DEF(...)
 #endif
 
-// ENGINE_COMPONENT_DEF(config)
-// ENGINE_COMPONENT_DEF(config_monitor)
+ENGINE_COMPONENT_DEF(config)
+ENGINE_COMPONENT_DEF(config_monitor)
 ENGINE_COMPONENT_DEF(config_storage)
 // ENGINE_COMPONENT_DEF(data_archives)
 // ENGINE_COMPONENT_DEF(data_creator)

@@ -18,8 +18,6 @@ namespace engine
 #define SETTINGS_SET(type, key, value) type key() const final { return value; }
 #define SETTINGS_END() };
 
-#define USE_SETTINGS(owner, id) engine::settings_for<engine::owner, engine::settings_metadata_##owner##_##id##_t>
-
 	template<class owner_t> class settings_t
 	{
 
@@ -38,7 +36,7 @@ namespace engine
 
 	template<class owner_t, class values_final_t> class settings_implementation_t : public settings_t<owner_t>
 	{
-		static_assert(std::is_base_of<typename settings_t<owner_t>::values_t, values_final_t>::value, "data_final_t must be descendet of data_t!");
+		static_assert(std::is_base_of<typename settings_t<owner_t>::values_t, values_final_t>::value, "data_final_t must be descended of data_t!");
 
 	public:
 

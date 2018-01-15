@@ -1,3 +1,58 @@
+#include "core/messenger/msg/console.hpp"
+#include "core/messenger/instance.hpp"
+#include "core/messenger/msg.hpp"
+#include "core/messenger/messenger.hpp"
+
+engine::messenger::msg_console_t::actual_t::~actual_t()
+{
+
+}
+
+engine::messenger::msg_console_t::actual_t::type_t engine::messenger::msg_console_t::actual_t::get_type() const
+{
+	return type;
+}
+
+engine::messenger::msg_console_t::actual_t::source_t engine::messenger::msg_console_t::actual_t::get_source() const
+{
+	return source;
+}
+
+engine::messenger::msg_console_t::actual_t::kind_t engine::messenger::msg_console_t::actual_t::get_kind() const
+{
+	return kind;
+}
+
+engine::messenger::msg_console_t::actual_t::actual_t(type_t type, source_t source, kind_t kind) : type(type), source(source), kind(kind)
+{
+
+}
+
+engine::messenger::msg_console_t::msg_console_t(std::unique_ptr<actual_t> actual) : actual(std::move(actual))
+{
+
+}
+
+engine::messenger::msg_console_t::actual_t * engine::messenger::msg_console_t::get()
+{
+	return actual.get();
+}
+
+engine::messenger::msg_base_t::~msg_base_t()
+{
+
+}
+
+engine::messenger::msg_base_t::type_t engine::messenger::msg_base_t::get_type() const
+{
+	return type;
+}
+
+engine::messenger::msg_base_t::msg_base_t(type_t type) : type(type)
+{
+
+}
+
 /*
 
 #include "core/messenger/messenger.hpp"

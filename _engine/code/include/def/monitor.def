@@ -1,0 +1,7 @@
+#ifndef ENGINE_MONITOR_DEF
+#define ENGINE_MONITOR_DEF(...)
+#endif
+
+ENGINE_MONITOR_DEF(config)
+
+#undef ENGINE_MONITOR_DEF

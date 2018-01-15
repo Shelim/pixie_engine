@@ -13,34 +13,21 @@ namespace engine
 
 	public:
 
-		enum class app_t
-		{
-#define ENGINE_APP_DEF(app) app,
-#include "def/app.def"
-			count
-		};
+#include "def/enum/app.def"
 
-		app_t get_local_app()
-		{
-			return local_app;
-		}
+		app_t get_local_app();
 
-		manifest_app_t(app_t local_app) : local_app(local_app)
-		{
-
-		}
+		manifest_app_t(app_t local_app);
 
 	private:
 
 		app_t local_app;
 
 	};
-	
-#define STRINGIFY_ENUM_TYPE manifest_app_t::app_t
-#define ENGINE_APP_DEF STRINGIFY_DEF_NAME
-#define STRINGIFY_DEF_INCLUDE "def/app.def"
-#include "core/utility/stringify_def.hpp"
 
 }
+
+#define ENGINE_ENUM_HEADER_TO_USE "def/enum/app.def"
+#include "core/utility/enum_to_string.hpp"
 
 #endif

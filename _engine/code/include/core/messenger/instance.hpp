@@ -6,12 +6,12 @@
 #include <memory>
 #include <map>
 #include <functional>
-#include "core/messenger/queue.hpp"
+#include "core/messenger/messenger.hpp"
 #include "utility/container/concurrent_queue.hpp"
 #include "utility/concurrention/signal.hpp"
+#include "utility/pattern/factory.hpp"
 #include "core/process/runner/spawn.hpp"
 #include "core/messenger/msg.hpp"
-#include "utility/pattern/factory.hpp"
 
 namespace engine
 {
@@ -55,9 +55,8 @@ namespace engine
 
         public:
 
-            instance_base_t(callback_t<msg_actual_t> callback) : callback(callback), id(next_id++)
+            instance_base_t(callback_t<msg_actual_t> callback, std::unique_ptr<process::runner_spawn_t> runner) : callback(callback), id(next_id++), runner(std::move(runner))
             {
-                runner = std::make_unique<process::runner_spawn_t>();
                 runner->add_task(std::make_unique<task_func_t>([this](process::token_t*){ return execute(); }, format_string("Messenger '#1#' output instance queue ###2#"_u, get_msg_type<msg_actual_t>(), id)));
             }
 
@@ -122,19 +121,25 @@ namespace engine
 
             ~instance_t()
             {
-                queue_owner->unregister_instance(this);
+                if(queue_owner)
+                    queue_owner->unregister_instance(this);
             }
 
         private:
 
+            void unregister_remotely()
+            {
+                queue_owner = nullptr;
+            }
+
             template<class T1, class T2, bool B1, bool B2> friend class queue_base_t;
             
-            instance_t(std::shared_ptr<queue_t<msg_actual_t> > queue_owner, callback_t<msg_actual_t> callback) : instance_base_t<msg_actual_t, msg_actual_t::is_instance_async>(callback), queue_owner(queue_owner)
+            instance_t(queue_t<msg_actual_t> * queue_owner, callback_t<msg_actual_t> callback) : instance_base_t<msg_actual_t, msg_actual_t::is_instance_async>(callback), queue_owner(queue_owner)
             {
 
             }
 
-            std::shared_ptr<queue_t<msg_actual_t> > queue_owner;
+            queue_t<msg_actual_t> * queue_owner;
 
         };
 

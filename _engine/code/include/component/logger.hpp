@@ -32,7 +32,7 @@ namespace engine
 	};
 }
 
-#define log_msg(source, ...) log(engine::console::logger_item_t::kind_t::note, engine::console::logger_item_t::source_t::source, engine::ustring_t::from_ascii(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), -1, __VA_ARGS__)
+#define log_msg(source, ...) log(engine::console::logger_item_t::kind_t::msg, engine::console::logger_item_t::source_t::source, engine::ustring_t::from_ascii(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), -1, __VA_ARGS__)
 #define log_task_start(source, ...) log(engine::console::logger_item_t::kind_t::pending, engine::console::logger_item_t::source_t::source, engine::ustring_t::from_ascii(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), -1, __VA_ARGS__)
 #define log_task_done(task_id) log(engine::console::logger_item_t::kind_t::success, engine::console::logger_item_t::source_t::unknown, engine::ustring_t::from_ascii(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), task_id, ""_u)
 #define log_task_failed(task_id) log(engine::console::logger_item_t::kind_t::failure, engine::console::logger_item_t::source_t::unknown, engine::ustring_t::from_ascii(__FILE__), __LINE__, engine::ustring_t::from_ascii(__FUNCTION__), task_id, ""_u)

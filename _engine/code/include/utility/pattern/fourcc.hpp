@@ -45,7 +45,7 @@ namespace engine
 
 	constexpr uint32_t make_id(const char (&str)[5]) // one byte for null!
 	{
-		return (static_cast<uint32_t>(str[0]) << 24) | (static_cast<uint32_t>(str[1]) << 16) | (static_cast<uint32_t>(str[2]) << 8) | (static_cast<uint32_t>(str[3]) << 8);
+		return (static_cast<uint32_t>(str[0]) << 24) | (static_cast<uint32_t>(str[1]) << 16) | (static_cast<uint32_t>(str[2]) << 8) | (static_cast<uint32_t>(str[3]) << 0);
 	}
 
 }

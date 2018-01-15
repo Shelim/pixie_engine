@@ -5,7 +5,6 @@
 #include "core/vfs/filesystem.hpp"
 #include <vector>
 #include "utility/text/ustring.hpp"
-#include "utility/text/parser.hpp"
 
 
 namespace engine
@@ -18,13 +17,7 @@ namespace engine
 
 		typedef ustring_t path_t;
 
-		enum class type_t : uint8_t
-		{
-			unknown,
-#define ENGINE_VIRTUAL_PATH_DEF(name) name,
-#include "def/virtual_path.def"
-			count
-		};
+#include "def/enum/virtual_path.def"
 
 		virtual_path_t() : type(type_t::unknown)
 		{
@@ -172,12 +165,14 @@ namespace engine
 		if (left.get_type() != right.get_type()) return false;
 		return left.get_path_lower() == right.get_path_lower();
 	}
+}
 
-#define STRINGIFY_ENUM_TYPE virtual_path_t::type_t
-#define ENGINE_VIRTUAL_PATH_DEF STRINGIFY_DEF_NAME
-#define STRINGIFY_DEF_INCLUDE "def/virtual_path.def"
-#include "core/utility/stringify_def.hpp"
 
+#define ENGINE_ENUM_HEADER_TO_USE "def/enum/virtual_path.def"
+#include "core/utility/enum_to_string.hpp"
+
+namespace engine
+{
 	/**
 	* @brief Converts `virtual_path_t` into ustring_t
 	*
