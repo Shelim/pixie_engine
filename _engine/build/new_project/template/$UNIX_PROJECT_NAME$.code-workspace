@@ -106,6 +106,9 @@
 			"xxatomic": "cpp"
 		},
 		"git.ignoreLimitWarning": true,
-		"cSpell.language": "en"
+		"cSpell.language": "en",
+		"doxdocgen.generic.paramTemplate": "@param[in] {param}",
+		"doxdocgen.generic.returnTemplate": "@return",
+		"workbench.iconTheme": "vscode-icons"
 	}
 }
