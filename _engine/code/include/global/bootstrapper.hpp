@@ -101,7 +101,7 @@ namespace engine
 
 #define INTERNAL_PROVIDER_INIT(provider_type, ...) boost::di::bind<engine::holder_t<engine::provider_type##_t>>().to < engine::holder_implementation_t<engine::provider_type##_t 
 
-#define BEGIN_BOOTSTRAPPER(name, context) const auto name = boost::di::make_injector(engine::injector_context(context)
+#define BEGIN_BOOTSTRAPPER(name, context) const auto name = boost::di::make_injector(engine::injector_context(context.get())
 #define ENABLE_COMPONENT(component) boost::di::bind<engine::component##_t>().in(engine::shared).to <engine::component##_real_t>()[boost::di::override],
 #define MOCKUP_COMPONENT(component) boost::di::bind<engine::component##_t>().in(engine::shared).to <engine::component##_mockup_t>()[boost::di::override],
 #define USE_SETTINGS(owner, id) boost::di::bind<engine::settings_t<engine::owner> >().to <engine::settings_implementation_t<engine::owner, engine::settings_metadata_##owner##_##id##_t> >(),
