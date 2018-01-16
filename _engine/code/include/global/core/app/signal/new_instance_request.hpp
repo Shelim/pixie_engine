@@ -1,8 +1,8 @@
-#ifndef ENGINE_GLOBAL_APP_SIGNAL_NEW_INSTANCE_REQUEST_HPP
-#define ENGINE_GLOBAL_APP_SIGNAL_NEW_INSTANCE_REQUEST_HPP
+#ifndef ENGINE_GLOBAL_CORE_APP_SIGNAL_NEW_INSTANCE_REQUEST_HPP
+#define ENGINE_GLOBAL_CORE_APP_SIGNAL_NEW_INSTANCE_REQUEST_HPP
 #pragma once
 
-#include "global/app/signal.hpp"
+#include "global/core/app/signal.hpp"
 #include "utility/text/ustring.hpp"
 
 namespace engine

@@ -2,7 +2,7 @@
 #define ENGINE_GLOBAL_APP_RUNNER_HPP
 #pragma once
 
-#include "global/app.hpp"
+#include "global/core/app.hpp"
 
 namespace engine
 {

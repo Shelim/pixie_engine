@@ -27,7 +27,7 @@
 #include "component/renderer_status.hpp"
 #include "component/terminal.hpp"
 #include "settings/default_config.hpp"
-#include "global/app/context.hpp"
+#include "global/core/app/context.hpp"
 
 #define INTERNAL_PROVIDER_0(provider_type) 
 #define INTERNAL_PROVIDER_1(provider_type, p1) , engine::provider_type##_provider_##p1##_t

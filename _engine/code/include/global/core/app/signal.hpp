@@ -1,5 +1,5 @@
-#ifndef ENGINE_GLOBAL_APP_SIGNAL_HPP
-#define ENGINE_GLOBAL_APP_SIGNAL_HPP
+#ifndef ENGINE_GLOBAL_CORE_APP_SIGNAL_HPP
+#define ENGINE_GLOBAL_CORE_APP_SIGNAL_HPP
 #pragma once
 
 namespace engine
@@ -45,7 +45,7 @@ namespace engine
 #define ENGINE_ENUM_HEADER_TO_USE "def/enum/app_signal.def"
 #include "core/utility/enum_to_string.hpp"
 
-#include "global/app/signal/new_instance_request.hpp"
-#include "global/app/signal/terminate.hpp"
+#include "global/core/app/signal/new_instance_request.hpp"
+#include "global/core/app/signal/terminate.hpp"
 
 #endif

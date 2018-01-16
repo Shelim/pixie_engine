@@ -1,10 +1,10 @@
-#ifndef ENGINE_GLOBAL_APP_HOLDER_HPP
-#define ENGINE_GLOBAL_APP_HOLDER_HPP
+#ifndef ENGINE_GLOBAL_CORE_APP_HOLDER_HPP
+#define ENGINE_GLOBAL_CORE_APP_HOLDER_HPP
 #pragma once
 
 #include <memory>
-#include "global/app.hpp"
-#include "global/app/context.hpp"
+#include "global/core/app.hpp"
+#include "global/core/app/context.hpp"
 #include "utility/concurrention/signal.hpp"
 
 namespace engine

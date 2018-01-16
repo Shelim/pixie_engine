@@ -1,11 +1,11 @@
-#ifndef ENGINE_GLOBAL_APP_HPP
-#define ENGINE_GLOBAL_APP_HPP
+#ifndef ENGINE_GLOBAL_CORE_APP_HPP
+#define ENGINE_GLOBAL_CORE_APP_HPP
 #pragma once
 
 #include "utility/pattern/flags.hpp"
 #include "utility/text/ustring.hpp"
-#include "global/app/signal.hpp"
-#include "global/app/context.hpp"
+#include "global/core/app/signal.hpp"
+#include "global/core/app/context.hpp"
 #include "core/manifest/app.hpp"
 
 namespace engine

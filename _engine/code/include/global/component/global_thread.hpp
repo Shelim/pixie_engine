@@ -2,7 +2,7 @@
 #define ENGINE_GLOBAL_GLOBAL_THREAD_HPP
 #pragma once
 
-#include "global/app.hpp"
+#include "global/core/app.hpp"
 
 namespace engine
 {
@@ -37,7 +37,7 @@ namespace engine
 #define ENGINE_GLOBAL_THREAD_HPP
 #pragma once
 
-#include "global/app.hpp"
+#include "global/core/app.hpp"
 
 namespace engine
 {

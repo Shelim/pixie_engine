@@ -1,9 +1,9 @@
-#ifndef ENGINE_GLOBAL_APP_SIGNAL_TERMINATE_HPP
-#define ENGINE_GLOBAL_APP_SIGNAL_TERMINATE_HPP
+#ifndef ENGINE_GLOBAL_CORE_APP_SIGNAL_TERMINATE_HPP
+#define ENGINE_GLOBAL_CORE_APP_SIGNAL_TERMINATE_HPP
 #pragma once
 
 #include "utility/pattern/flags.hpp"
-#include "global/app/signal.hpp"
+#include "global/core/app/signal.hpp"
 
 namespace engine
 {

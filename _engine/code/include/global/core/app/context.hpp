@@ -1,5 +1,5 @@
-#ifndef ENGINE_GLOBAL_APP_CONTEXT_HPP
-#define ENGINE_GLOBAL_APP_CONTEXT_HPP
+#ifndef ENGINE_GLOBAL_CORE_APP_CONTEXT_HPP
+#define ENGINE_GLOBAL_CORE_APP_CONTEXT_HPP
 #pragma once
 
 #include "utility/text/ustring.hpp"
