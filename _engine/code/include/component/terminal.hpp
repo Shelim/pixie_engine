@@ -24,7 +24,7 @@ namespace engine
 		public:
 
 			virtual ~instance_t();
-			virtual bool is_closed() ;
+			virtual bool is_closed();
 
 			virtual void write(const ustring_t & text, terminal_t::color_t foreground) = 0;
 			virtual void write(const ustring_t & text, terminal_t::color_t foreground, terminal_t::color_t background) = 0;
