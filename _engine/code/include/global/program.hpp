@@ -29,7 +29,7 @@ namespace engine
 
             std::unique_ptr<extinguisher_t> get_extinguisher()
             {
-                return std::make_unique<extinguisher_t>();
+                return std::make_unique<extinguisher_t>(this);
             }
 
         };
