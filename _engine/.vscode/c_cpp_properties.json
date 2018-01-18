@@ -53,8 +53,6 @@
                 "${workspaceRoot}/../_engine/dependency/library/googletest/src",
                 "${workspaceRoot}/../_engine/dependency/library/multiple_consoles/src",
                 "${workspaceRoot}/../_engine/dependency/library/pugixml/src",
-                "${workspaceRoot}/../_engine/dependency/library/stackwalker/src",
-                "${workspaceRoot}/../_engine/build/new_project/template/code/src",
                 "${workspaceRoot}/../_engine/code/include",
                 "${workspaceRoot}/../_engine/dependency/library/angelscript/include",
                 "${workspaceRoot}/../_engine/dependency/library/anttweakbar/include",
@@ -77,11 +75,9 @@
                 "${workspaceRoot}/../_engine/dependency/library/pugixml/include",
                 "${workspaceRoot}/../_engine/dependency/library/sdl/include",
                 "${workspaceRoot}/../_engine/dependency/library/sdl_net/include",
-                "${workspaceRoot}/../_engine/dependency/library/stackwalker/include",
                 "${workspaceRoot}/../_engine/dependency/library/stb/include",
                 "${workspaceRoot}/../_engine/dependency/library/windows_sdk/include",
-                "${workspaceRoot}/../_engine/dependency/library/wxwidgets/include",
-                "${workspaceRoot}/../_engine/build/new_project/template/code/include"
+                "${workspaceRoot}/../_engine/dependency/library/wxwidgets/include"
             ],
             "defines": [
                 "GLEW_STATIC",
@@ -110,13 +106,11 @@
                     "${workspaceRoot}/../_engine/code/src",
                     "${workspaceRoot}/../_engine/dependency/library/boost/include",
                     "${workspaceRoot}/../_engine/dependency/library/blowfish/src",
-                    "${workspaceRoot}/../_engine/dependency/library/glew-1${workspaceRoot}10${workspaceRoot}0/src",
+                    "${workspaceRoot}/../_engine/dependency/library/glew-1.10.0/src",
                     "${workspaceRoot}/../_engine/dependency/library/googlemock/src",
                     "${workspaceRoot}/../_engine/dependency/library/googletest/src",
                     "${workspaceRoot}/../_engine/dependency/library/multiple_consoles/src",
                     "${workspaceRoot}/../_engine/dependency/library/pugixml/src",
-                    "${workspaceRoot}/../_engine/dependency/library/stackwalker/src",
-                    "${workspaceRoot}/../_engine/build/new_project/template/code/src",
                     "${workspaceRoot}/../_engine/code/include",
                     "${workspaceRoot}/../_engine/dependency/library/angelscript/include",
                     "${workspaceRoot}/../_engine/dependency/library/anttweakbar/include",
@@ -127,7 +121,7 @@
                     "${workspaceRoot}/../_engine/dependency/library/cg/include",
                     "${workspaceRoot}/../_engine/dependency/library/debugbreak/include",
                     "${workspaceRoot}/../_engine/dependency/library/directx/include",
-                    "${workspaceRoot}/../_engine/dependency/library/glew-1${workspaceRoot}10${workspaceRoot}0/include",
+                    "${workspaceRoot}/../_engine/dependency/library/glew-1.10.0/include",
                     "${workspaceRoot}/../_engine/dependency/library/googlemock/include",
                     "${workspaceRoot}/../_engine/dependency/library/googletest/include",
                     "${workspaceRoot}/../_engine/dependency/library/levenshtein/include",
@@ -139,11 +133,9 @@
                     "${workspaceRoot}/../_engine/dependency/library/pugixml/include",
                     "${workspaceRoot}/../_engine/dependency/library/sdl/include",
                     "${workspaceRoot}/../_engine/dependency/library/sdl_net/include",
-                    "${workspaceRoot}/../_engine/dependency/library/stackwalker/include",
                     "${workspaceRoot}/../_engine/dependency/library/stb/include",
                     "${workspaceRoot}/../_engine/dependency/library/windows_sdk/include",
-                    "${workspaceRoot}/../_engine/dependency/library/wxwidgets/include",
-                    "${workspaceRoot}/../_engine/build/new_project/template/code/include"
+                    "${workspaceRoot}/../_engine/dependency/library/wxwidgets/include"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${workspaceRoot}/../_engine/!build/vscode/symbol.db"
