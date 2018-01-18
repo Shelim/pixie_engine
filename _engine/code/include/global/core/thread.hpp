@@ -3,6 +3,8 @@
 #pragma once
 
 #include "utility/pattern/fourcc.hpp"
+#include "utility/text/ustring.hpp"
+#include <memory>
 
 namespace engine
 {
