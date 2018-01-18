@@ -97,6 +97,7 @@
 	<property name="build_path_autogen_file" value="${build_path_autogen}/autogen_${build_dirname}.cc" />
 	<property name="populate_autogen_script_path" location="build/common/populate_autogen_actual.js" />
 	<property name="binary_filename_raw" value="pixie_${build_typename}${executable_extension}" />
+	<property name="map_filename_raw" value="pixie_${build_typename}${map_extension}" />
 	<property name="output_path" value="${project_dirname}!output/${build_dirname}" />
 	<property name="output_path_ready" value="${project_dirname}!output/${build_dirname}_ready" />
 	<property name="path_manifest_platform" value="${project_dirname}manifest/${platform_name}" />
