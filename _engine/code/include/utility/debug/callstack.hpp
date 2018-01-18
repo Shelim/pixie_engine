@@ -29,6 +29,8 @@ namespace engine
 		/**
 		 * @brief Single function call in callstack
 		 * 
+		 * @todo Each item (beside address) here should be optional with marker "is_XXX_present"
+		 * 
 		 * @note some function calls may be omitted from callstack due to compilator optimization
 		 * @see engine::platform::dump_callstack()
 		 */
@@ -82,6 +84,8 @@ namespace engine
 			 * 
 			 * Usually this will contain output of @c canonize_debug_filename(__FILE__)
 			 * 
+			 * @todo Currently we cannot obtain file from clang
+			 * 
 			 * @return filename
 			 * @see get_line
 			 */
@@ -94,6 +98,8 @@ namespace engine
 			 * @brief Get source line for this stack item
 			 * 
 			 * Usually this will contain output of @c __LINE__
+			 * 
+			 * @todo Currently we cannot obtain line from clang
 			 * 
 			 * @return line in file
 			 * @see get_file

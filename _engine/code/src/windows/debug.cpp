@@ -17,6 +17,7 @@
 #include <SDL_syswm.h>
 
 #define WIN32_LEAN_AND_MEAN
+#define _NO_CVCONST_H
 #include <windows.h>
 #include <shlwapi.h>
 #include <shlobj.h>
@@ -126,6 +127,21 @@ namespace
 				return def;
 			}
 
+			void get_file_and_line_from_symbol(intptr_t symbol, engine::ustring_t & file, int & line) const
+			{
+				IMAGEHLP_LINE64 LineInfo; 
+				std::memset(&LineInfo, 0, sizeof LineInfo);
+				LineInfo.SizeOfStruct = sizeof(IMAGEHLP_LINE64);
+				DWORD LineDisplacement = 0;
+
+				if(SymGetLineFromAddr64(GetCurrentProcess(), symbol, &LineDisplacement, &LineInfo))
+				{
+					file = engine::ustring_t::from_utf8(LineInfo.FileName);
+					line = LineInfo.LineNumber;
+				}
+				
+			}
+
 		private:
 
 			bool try_to_load_msvc_symbols()
@@ -133,12 +149,17 @@ namespace
 				std::lock_guard<std::mutex> guard(symbol_scanner);
 
 				const HANDLE process = GetCurrentProcess();
+
+				DWORD Options = SymGetOptions(); 
+				Options |= SYMOPT_LOAD_LINES;
+				SymSetOptions( Options ); 
+
 				if(!SymInitialize(process, 0, TRUE))
 					return false;
 
 				std::wstring image_name = this->name.to_wide();
 
-				DWORD64 BaseOfDll = SymLoadModuleEx(process,
+				BaseOfDll = SymLoadModuleEx(process,
                                 NULL,
                                 this->name.get_cstring(),
                                 NULL,
@@ -164,13 +185,14 @@ namespace
 				PVOID UserContext)
 			{
 				module_t * module = reinterpret_cast<module_t*>(UserContext);
-				module->symbols.emplace(pSymInfo->Address, symbol_t(pSymInfo->Address, engine::ustring_t::from_utf8(pSymInfo->Name)));
+				module->symbols.emplace(pSymInfo->Address - module->BaseOfDll, symbol_t(pSymInfo->Address - module->BaseOfDll, engine::ustring_t::from_utf8(pSymInfo->Name)));
 
 				return TRUE;
 			}
 
 			bool own_ref;
 			HMODULE mod;
+			DWORD64 BaseOfDll;
 			engine::ustring_t name;
 			symbols_t symbols;
 			static std::mutex symbol_scanner;
@@ -183,8 +205,6 @@ namespace
 engine::callstack_t engine::platform::dump_callstack(std::size_t skip_front)
 {
 	static std::map<HMODULE, module_t> modules;
-
-	unsigned skip = 1;
 
 	STACKFRAME64 frame;
 	std::memset(&frame, 0, sizeof frame);
@@ -224,9 +244,9 @@ engine::callstack_t engine::platform::dump_callstack(std::size_t skip_front)
 
 	while (StackWalk64(machine, process, thread, &frame, &context, 0, SymFunctionTableAccess64, SymGetModuleBase64, 0))
 	{
-		if (skip)
+		while (skip_front)
 		{
-			--skip;
+			--skip_front;
 			continue; // don't capture current frame
 		}
 
@@ -242,20 +262,22 @@ engine::callstack_t engine::platform::dump_callstack(std::size_t skip_front)
 
 		if (VirtualQuery(reinterpret_cast<const void *>(pc), &mbinfo, static_cast<DWORD>(sizeof(mbinfo))) == sizeof (mbinfo))
         {
-
 			HMODULE mod = static_cast<HMODULE>(mbinfo.AllocationBase);
 			auto module = modules.find(mod);
 
 			if(module == modules.end())
 				module = modules.emplace(mod, module_t(mod)).first;
 
+			pc -= reinterpret_cast<intptr_t>(mbinfo.AllocationBase);
+
 			data_module = module->second.get_name();
 			data_function = module->second.resolve_symbol(pc);
+			module->second.get_file_and_line_from_symbol(pc, data_file, data_line);
 		}
 	
 		ret.items.emplace_back(pc, data_module, data_file, data_line, data_function);
 	}
-	
+
 	return ret;
 }
 
