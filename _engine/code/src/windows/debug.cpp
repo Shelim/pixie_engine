@@ -7,11 +7,11 @@
 
 #include "utility/text/ustring.hpp"
 
-#include "StackWalker.h"
-
 #include <clocale>
 #include <string>
+#include <map>
 #include <stack>
+#include <mutex>
 
 #include <SDL.h>
 #include <SDL_syswm.h>
@@ -21,7 +21,7 @@
 #include <shlwapi.h>
 #include <shlobj.h>
 #include <shellapi.h>
-#include <dbghelp.h>
+#include <DbgHelp.h>
 
 #include <cstdio>
 #include <cstdlib>
@@ -35,71 +35,227 @@ void engine::platform::trigger_breakpoint()
 
 namespace
 {
-	class stack_walker_adapter_t : public StackWalker
+	class symbol_t
 	{
-	public:
 
-		stack_walker_adapter_t(std::size_t skip_front, engine::callstack_t::items_t & output) :
-			StackWalker(StackWalker::RetrieveVerbose | StackWalker::SymBuildPath), // do not use public Microsoft-Symbol-Server
-			discard_idx(skip_front + 2),
-			output(output)
-		{
+		public:
 
-		}
-		~stack_walker_adapter_t()
-		{
-		
-		}
-
-	protected:
-
-		void OnCallstackEntry(CallstackEntryType /*eType*/, CallstackEntry &entry) final
-		{
-			if (entry.lineFileName[0] == 0)
-				discard_idx = -1; // skip all entries from now on
-
-								  // discard first N stack entries
-			if (discard_idx > 0)
+			symbol_t(intptr_t address, const engine::ustring_t & name) : address(address), name(name)
 			{
-				discard_idx--;
+
 			}
-			else if (discard_idx == 0) 
+
+			intptr_t get_address() const
 			{
-				engine::callstack_t::item_t item(engine::platform::canonize_debug_filename(engine::ustring_t::from_utf8(entry.lineFileName)), entry.lineNumber, engine::ustring_t::from_utf8(entry.name));
-				output.push_back(item);
+				return address;
 			}
-		}
-		void OnOutput(LPCSTR /*szText*/) final
-		{
-			// discard (should never be called)
-		}
-		void OnSymInit(LPCSTR /*szSearchPath*/, DWORD /*symOptions*/, LPCSTR /*szUserName*/) final
-		{
-			// discard
-		}
-		void OnLoadModule(LPCSTR /*img*/, LPCSTR /*mod*/, DWORD64 /*baseAddr*/, DWORD /*size*/, DWORD /*result*/, LPCSTR /*symType*/, LPCSTR /*pdbName*/, ULONGLONG /*fileVersion*/) final
-		{
-			// discard
-		}
-		void OnDbgHelpErr(LPCSTR /*szFuncName*/, DWORD /*gle*/, DWORD64 /*addr*/)  final 
-		{
-			// discard
-		}
 
-	private:
+			const engine::ustring_t & get_name() const
+			{
+				return name;
+			}
 
-		engine::callstack_t::items_t & output;
+		private:
 
-		int discard_idx; ///< the number of stack entries to discard
+			friend bool operator< (const symbol_t &lhs, const symbol_t &rhs);
+
+			intptr_t address;
+			engine::ustring_t name;
 	};
 
+    inline bool operator< (const symbol_t &lhs, const symbol_t &rhs)
+    {
+        return lhs.address < rhs.address;
+    }
+
+	typedef std::map<intptr_t, symbol_t> symbols_t;
+
+	class module_t
+	{
+
+		public:
+
+			module_t(HMODULE mod) : mod(mod)
+			{
+				wchar_t utf16_name[32 * 1024] = L"";
+
+				const DWORD buffsize = sizeof utf16_name / sizeof *utf16_name;
+				DWORD len = GetModuleFileNameW(mod, utf16_name, buffsize);
+
+				if (len == buffsize)
+					utf16_name[--len] = L'\0';
+
+				name = engine::ustring_t::from_wide(utf16_name);
+
+				HMODULE temp = 0;
+				own_ref = GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, 
+                                                 reinterpret_cast<const char *>(mod),
+                                                 &temp);
+				
+				try_to_load_msvc_symbols();
+			}
+
+			~module_t()
+			{
+				if (own_ref)
+					FreeLibrary(mod);
+			}
+
+			HMODULE get_mod() const
+			{
+				return mod;
+			}
+
+			const engine::ustring_t & get_name() const
+			{
+				return name;
+			}
+
+			const engine::ustring_t & resolve_symbol(intptr_t symbol) const
+			{
+				static engine::ustring_t def = "..?!"_u;
+				engine::ustring_t & ret = def;
+
+				auto iter = symbols.upper_bound(symbol);
+				if(iter != symbols.begin())
+				{
+					--iter;
+					return iter->second.get_name();
+				}
+
+				return def;
+			}
+
+		private:
+
+			bool try_to_load_msvc_symbols()
+			{
+				std::lock_guard<std::mutex> guard(symbol_scanner);
+
+				const HANDLE process = GetCurrentProcess();
+				if(!SymInitialize(process, 0, TRUE))
+					return false;
+
+				std::wstring image_name = this->name.to_wide();
+
+				DWORD64 BaseOfDll = SymLoadModuleEx(process,
+                                NULL,
+                                this->name.get_cstring(),
+                                NULL,
+                                0,
+                                0,
+                                NULL,
+                                0);
+
+				if(!SymEnumSymbols(process, BaseOfDll, "*", EnumSymProc, this))
+				{
+					DWORD error = GetLastError();
+					SymCleanup(process);
+					return false;
+				}
+
+				SymCleanup(process);
+				return true;
+			}
+
+			static BOOL CALLBACK EnumSymProc( 
+				PSYMBOL_INFO pSymInfo,   
+				ULONG SymbolSize,      
+				PVOID UserContext)
+			{
+				module_t * module = reinterpret_cast<module_t*>(UserContext);
+				module->symbols.emplace(pSymInfo->Address, symbol_t(pSymInfo->Address, engine::ustring_t::from_utf8(pSymInfo->Name)));
+
+				return TRUE;
+			}
+
+			bool own_ref;
+			HMODULE mod;
+			engine::ustring_t name;
+			symbols_t symbols;
+			static std::mutex symbol_scanner;
+
+	};
+
+	std::mutex module_t::symbol_scanner;
 }
 
 engine::callstack_t engine::platform::dump_callstack(std::size_t skip_front)
 {
+	static std::map<HMODULE, module_t> modules;
+
+	unsigned skip = 1;
+
+	STACKFRAME64 frame;
+	std::memset(&frame, 0, sizeof frame);
+
+	CONTEXT context;
+	std::memset(&context, 0, sizeof context);
+	context.ContextFlags = CONTEXT_FULL;
+
+	RtlCaptureContext(&context);
+
+#if defined(_M_AMD64)
+	frame.AddrPC.Offset = context.Rip;
+	frame.AddrPC.Mode = AddrModeFlat;
+	frame.AddrStack.Offset = context.Rsp;
+	frame.AddrStack.Mode = AddrModeFlat;
+	frame.AddrFrame.Offset = context.Rbp;
+	frame.AddrFrame.Mode = AddrModeFlat;
+
+	const DWORD machine = IMAGE_FILE_MACHINE_AMD64;
+#else
+	frame.AddrPC.Offset = context.Eip;
+	frame.AddrPC.Mode = AddrModeFlat;
+	frame.AddrStack.Offset = context.Esp;
+	frame.AddrStack.Mode = AddrModeFlat;
+	frame.AddrFrame.Offset = context.Ebp;
+	frame.AddrFrame.Mode = AddrModeFlat;
+
+	const DWORD machine = IMAGE_FILE_MACHINE_I386;
+#endif
+
+	HANDLE process = GetCurrentProcess();
+	HANDLE thread = GetCurrentThread();
+
 	engine::callstack_t ret;
-	stack_walker_adapter_t stack_waker_adapter(skip_front, ret.items);
-	stack_waker_adapter.ShowCallstack();
+	
+	unsigned level = 0;
+
+	while (StackWalk64(machine, process, thread, &frame, &context, 0, SymFunctionTableAccess64, SymGetModuleBase64, 0))
+	{
+		if (skip)
+		{
+			--skip;
+			continue; // don't capture current frame
+		}
+
+		intptr_t pc = frame.AddrPC.Offset;
+
+		MEMORY_BASIC_INFORMATION mbinfo;
+        std::memset(&mbinfo, 0, sizeof mbinfo);
+
+		ustring_t data_module = "...?!"_u;
+		ustring_t data_file = "...?!"_u;
+		ustring_t data_function = "...?!"_u;
+		int data_line = -1;
+
+		if (VirtualQuery(reinterpret_cast<const void *>(pc), &mbinfo, static_cast<DWORD>(sizeof(mbinfo))) == sizeof (mbinfo))
+        {
+
+			HMODULE mod = static_cast<HMODULE>(mbinfo.AllocationBase);
+			auto module = modules.find(mod);
+
+			if(module == modules.end())
+				module = modules.emplace(mod, module_t(mod)).first;
+
+			data_module = module->second.get_name();
+			data_function = module->second.resolve_symbol(pc);
+		}
+	
+		ret.items.emplace_back(pc, data_module, data_file, data_line, data_function);
+	}
+	
 	return ret;
 }
 
