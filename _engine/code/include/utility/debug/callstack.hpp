@@ -2,6 +2,7 @@
 #define ENGINE_COMMON_UTILITY_DEBUG_CALLSTACK_HPP
 
 #include "utility/text/ustring.hpp"
+#include "utility/pattern/flags.hpp"
 #include "utility/platform/debug.hpp"
 
 #pragma once
@@ -19,7 +20,7 @@ namespace engine
 	 * or by using C++ 11 `for(auto item : callstack)`
 	 * 
 	 * @note some function calls may be omitted from callstack due to compilator optimization
-	 * @see engine::platform::dump_callstack()
+	 * @see engine::platform::dump_callstack(), callstack_t::item_t
 	 */
 	class callstack_t
 	{
@@ -28,8 +29,6 @@ namespace engine
 
 		/**
 		 * @brief Single function call in callstack
-		 * 
-		 * @todo Each item (beside address) here should be optional with marker "is_XXX_present"
 		 * 
 		 * @note some function calls may be omitted from callstack due to compilator optimization
 		 * @see engine::platform::dump_callstack()
@@ -48,9 +47,16 @@ namespace engine
 			 * @param[in] line Line to be used in given stack item. Usually you pass @c __LINE__
 			 * @param[in] function Function name to be used in given stack frame. Usually you pass @c __FUNCTION__
 			 */
-			item_t(intptr_t address, ustring_t module, ustring_t file, std::size_t line, ustring_t function) : address(address), module(module), file(file), line(line), function(function)
+			item_t(intptr_t address, ustring_t module, ustring_t file, int line, ustring_t function) : address(address), module(module), file(file), line(line), function(function)
 			{
-
+				if(!module.is_empty())
+					flags.set_flag(flag_t::is_module_available);
+				if(!file.is_empty())
+					flags.set_flag(flag_t::is_file_available);
+				if(line >= 0)
+					flags.set_flag(flag_t::is_line_available);
+				if(!function.is_empty())
+					flags.set_flag(flag_t::is_function_available);
 			}
 
 			/**
@@ -68,6 +74,18 @@ namespace engine
 			}
 
 			/**
+			 * @brief Returns true if module information is available
+			 * 
+			 * The information may be unavailable due to compiler not producing complete debugging symbols
+			 * 
+			 * @return true if module information is available
+			 */
+			bool is_module_available() const
+			{
+				return flags.is_flag(flag_t::is_module_available);
+			}
+
+			/**
 			 * @brief Returns module name of given stack item.
 			 * 
 			 * Usually you will see here name of your executable or external shared library
@@ -80,11 +98,23 @@ namespace engine
 			}
 
 			/**
+			 * @brief Returns true if file information is available
+			 * 
+			 * The information may be unavailable due to compiler not producing complete debugging symbols
+			 * 
+			 * @todo Currently LLVM is unable to emit file information :-(
+			 * 
+			 * @return true if file information is available
+			 */
+			bool is_file_available() const
+			{
+				return flags.is_flag(flag_t::is_file_available);
+			}
+
+			/**
 			 * @brief Get source file for this stack item
 			 * 
 			 * Usually this will contain output of @c canonize_debug_filename(__FILE__)
-			 * 
-			 * @todo Currently we cannot obtain file from clang
 			 * 
 			 * @return filename
 			 * @see get_line
@@ -95,11 +125,23 @@ namespace engine
 			}
 
 			/**
+			 * @brief Returns true if line information is available
+			 * 
+			 * The information may be unavailable due to compiler not producing complete debugging symbols
+			 * 
+			 * @todo Currently LLVM is unable to emit line information :-(
+			 * 
+			 * @return true if line information is available
+			 */
+			bool is_line_available() const
+			{
+				return flags.is_flag(flag_t::is_line_available);
+			}
+
+			/**
 			 * @brief Get source line for this stack item
 			 * 
 			 * Usually this will contain output of @c __LINE__
-			 * 
-			 * @todo Currently we cannot obtain line from clang
 			 * 
 			 * @return line in file
 			 * @see get_file
@@ -107,6 +149,18 @@ namespace engine
 			std::size_t get_line() const
 			{
 				return line;
+			}
+
+			/**
+			 * @brief Returns true if function information is available
+			 * 
+			 * The information may be unavailable due to compiler not producing complete debugging symbols
+			 * 
+			 * @return true if function information is available
+			 */
+			bool is_function_available() const
+			{
+				return flags.is_flag(flag_t::is_function_available);
 			}
 
 			/**
@@ -129,25 +183,65 @@ namespace engine
 			std::size_t line;
 			ustring_t function;
 
+			enum class flag_t
+			{
+				is_module_available,
+				is_file_available,
+				is_line_available,
+				is_function_available,
+
+				count
+			};
+
+			flags_t<flag_t> flags;
+
 		};
 
 		typedef std::vector<item_t> items_t;
 
+		/**
+		 * @brief Create new callstack instance by moving items_t collection
+		 * 
+		 * @param[in] items to populate callstack
+		 * @see callstack_t::item_t
+		 */
 		callstack_t(items_t && items) : items(std::move(items))
 		{
 			
 		}
 		
+		/**
+		 * @brief Gets the collection of callstack items
+		 * 
+		 * @return collection of callstack items
+		 * @see callstack_t::item_t
+		 */
 		const items_t & get_items() const
 		{
 			return items;
 		}
 		
+		/**
+		 * @brief Returns begin of collection of callstack items
+		 * 
+		 * This function is provided, so you can write: C++ 11 `for(auto item : callstack)`
+		 * 
+		 * @return begin of collection of callstack item
+		 * @see callstack_t::item_t
+		 */
 		items_t::const_iterator begin() const
 		{
 			return items.begin();
 		}
 
+		/**
+		 * @brief Returns end of collection of callstack items
+		 * 
+		 * This function is provided, so you can write: C++ 11 `for(auto item : callstack)`
+		 * 
+		 * @return end of collection of callstack item
+		 * @see callstack_t::item_t
+		 */
 		items_t::const_iterator end() const
 		{
 			return items.end();

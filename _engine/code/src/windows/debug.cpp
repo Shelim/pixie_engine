@@ -114,7 +114,7 @@ namespace
 
 			const engine::ustring_t & resolve_symbol(intptr_t symbol) const
 			{
-				static engine::ustring_t def = "..?!"_u;
+				static engine::ustring_t def = ""_u;
 				engine::ustring_t & ret = def;
 
 				auto iter = symbols.upper_bound(symbol);
@@ -255,9 +255,9 @@ engine::callstack_t engine::platform::dump_callstack(std::size_t skip_front)
 		MEMORY_BASIC_INFORMATION mbinfo;
         std::memset(&mbinfo, 0, sizeof mbinfo);
 
-		ustring_t data_module = "...?!"_u;
-		ustring_t data_file = "...?!"_u;
-		ustring_t data_function = "...?!"_u;
+		ustring_t data_module = ""_u;
+		ustring_t data_file = ""_u;
+		ustring_t data_function = ""_u;
 		int data_line = -1;
 
 		if (VirtualQuery(reinterpret_cast<const void *>(pc), &mbinfo, static_cast<DWORD>(sizeof(mbinfo))) == sizeof (mbinfo))
