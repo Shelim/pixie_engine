@@ -12,11 +12,16 @@
 #include "core/console/msg/logger.hpp"
 #include "core/console/msg/meta.hpp"
 #include "core/console/filter.hpp"
+#include "global/program.hpp"
 
 
 int main(int arg, char * argv[])
 {
-	BEGIN_BOOTSTRAPPER(bootstrapper)
+	engine::global::program_t program;
+	engine::ustring_collection_t args;
+	std::unique_ptr<engine::global::app_context_t> context = std::make_unique<engine::global::app_context_t>(&program, args);
+
+	BEGIN_BOOTSTRAPPER(bootstrapper, context)
 
 		APP(game)
 
