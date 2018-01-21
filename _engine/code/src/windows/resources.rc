@@ -1,34 +1,34 @@
 #if PIXIE_WINDOWS
 
 #if PIXIE_IS_ITERATIVE_BUILD
-#include "resources_windows_x86_iterative.hpp"
+#include "resources_windows_x64_iterative.hpp"
 #else
 
 #if PIXIE_IS_DEBUG_BUILD
 
 #if PIXIE_IS_PORTABLE_BUILD
-#include "resources_windows_x86_debug_portable.hpp"
+#include "resources_windows_x64_debug_portable.hpp"
 #else
-#include "resources_windows_x86_debug.hpp"
+#include "resources_windows_x64_debug.hpp"
 #endif
 
 #elif PIXIE_IS_FINAL_BUILD
 
 #if PIXIE_IS_PORTABLE_BUILD
-#include "resources_windows_x86_final_portable_deploy.hpp"
+#include "resources_windows_x64_final_portable_deploy.hpp"
 #else
-#include "resources_windows_x86_final_deploy.hpp"
+#include "resources_windows_x64_final_deploy.hpp"
 #endif
 
 #else
 
 #if PIXIE_IS_PORTABLE_BUILD
-#include "resources_windows_x86_hybrid_portable.hpp"
+#include "resources_windows_x64_hybrid_portable.hpp"
 #else
 #if PIXIE_IS_DEPLOY_BUILD
-#include "resources_windows_x86_hybrid_deploy.hpp"
+#include "resources_windows_x64_hybrid_deploy.hpp"
 #else
-#include "resources_windows_x86_hybrid.hpp"
+#include "resources_windows_x64_hybrid.hpp"
 #endif
 #endif
 

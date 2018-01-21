@@ -148,9 +148,9 @@ set PIXIE_ADDITIONAL_LIBRARIES=
 
 for /d %%a in ("..\..\dependency\library\*") do (
 	set "PIXIE_ADDITIONAL_INCLUDES=!PIXIE_ADDITIONAL_INCLUDES! -I..\..\_engine\dependency\library\%%~nxa\include"
-	set "PIXIE_ADDITIONAL_LIBRARIES=!PIXIE_ADDITIONAL_LIBRARIES! /LIBPATH:..\..\_engine\dependency\library\%%~nxa\lib\windows_x86"
+	set "PIXIE_ADDITIONAL_LIBRARIES=!PIXIE_ADDITIONAL_LIBRARIES! /LIBPATH:..\..\_engine\dependency\library\%%~nxa\lib\windows_x64"
 	
-	for /r %%l in ("..\..\dependency\library\%%~nxa\lib\windows_x86\*") do (
+	for /r %%l in ("..\..\dependency\library\%%~nxa\lib\windows_x64\*") do (
 		echo %%~nxl
 	)
 )

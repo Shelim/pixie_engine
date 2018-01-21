@@ -91,25 +91,25 @@
 	<property name="linker_binary" value="lld-link.exe" />
 	<property name="resource_compiler_binary" value="windres.exe" />
 	<property name="platform_name" value="windows" />
-	<property name="platform_ver" value="x86" />
+	<property name="platform_ver" value="x64" />
 	<property name="executable_extension" value=".exe" />
 	<property name="map_extension" value=".map" />
 	<property name="binary_filename_raw_pdb" value="pixie_${build_typename}.pdb" />
-    <property name="compiler_cmd_linker" value="/Subsystem:Windows /NODEFAULTLIB /MANIFEST:EMBED" />
+    <property name="compiler_cmd_linker" value="/Subsystem:Windows /NODEFAULTLIB /MANIFEST:EMBED /MACHINE:X64" />
 	<property name="compiler_cmd_linker_debug" value="/debug" />
 	<property name="compiler_cmd_linker_ndebug" value="" />
 	<property name="resources_cmd_iterative" value="-DPIXIE_IS_ITERATIVE_BUILD=1" />
 	<property name="resources_cmd_niterative" value="-DPIXIE_IS_ITERATIVE_BUILD=0" />
-	<property name="resources_cmd_debug" value="-D_MT -D_DLL -D_DEBUG -DPIXIE_IS_DEBUG_BUILD=1" />
-	<property name="resources_cmd_ndebug" value="-D_MT -D_DLL -DNDEBUG -DPIXIE_IS_DEBUG_BUILD=0" />
-	<property name="resources_cmd_platform_windows" value="-DPIXIE_WINDOWS=1 -DWINDOWS -D_MSC_VER=1910 -D_MSC_FULL_VER=191025019 -DWIN32_LEAN_AND_MEAN -DVC_EXTRALEAN -D_USING_V110_SDK71_ -DWXUSINGDLL -D__WXMSW__" />
+	<property name="resources_cmd_debug" value="-D_MDd -D_DLL -D_DEBUG -DPIXIE_IS_DEBUG_BUILD=1" />
+	<property name="resources_cmd_ndebug" value="-D_MD -D_DLL -DNDEBUG -DPIXIE_IS_DEBUG_BUILD=0" />
+	<property name="resources_cmd_platform_windows" value="-DPIXIE_WINDOWS=1 -DWINDOWS -DWINAPI_FAMILY=100 -D_M_X64=100 -D_M_AMD64=100 -D_MSC_VER=1910 -D_WIN32 -D_WIN64 -D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -D_MSC_FULL_VER=191025019 -DWIN32_LEAN_AND_MEAN -DVC_EXTRALEAN -D_USING_V110_SDK71_ -DWXUSINGDLL -D__WXMSW__" />
 	<property name="resources_cmd_final" value="-DPIXIE_IS_FINAL_BUILD=1" />
 	<property name="resources_cmd_nfinal" value="-DPIXIE_IS_FINAL_BUILD=0" />
 	<property name="resources_cmd_deploy" value="-DPIXIE_IS_DEPLOY_BUILD=1" />
 	<property name="resources_cmd_ndeploy" value="-DPIXIE_IS_DEPLOY_BUILD=0" />
 	<property name="resources_cmd_portable" value="-DPIXIE_IS_PORTABLE_BUILD=1" />
 	<property name="resources_cmd_nportable" value="-DPIXIE_IS_PORTABLE_BUILD=0" />
-	<property name="resources_cmd_common" value="-DGLEW_STATIC -DAS_USE_FLOAT=0 -DSTATIC_LIB -DUNICODE -D_UNICODE" />
+	<property name="resources_cmd_common" value="-DGLEW_STATIC -DAS_USE_FLOAT=0 -DSTATIC_LIB -DUNICODE -D_UNICODE --target=pe-x86-64" />
 	<property name="resources_cmd_cereal_xml_string_value" value="pixie" />
 
 <!-- END OF WIRED CONFIGURATION SECTION -->
@@ -301,12 +301,13 @@
 <!-- Helper target for below; Pack executable only if we're not building debug nor dll -->
 	<target name="check_if_can_pack_executable">
 		<condition property="can_pack_executable">
-			<istrue value="${build_is_deploy}" />
+		<!--<istrue value="${build_is_deploy}" />-->
+			<istrue value="false" />
 		</condition>
 	</target>
 	
 <!-- Pack executable with UPX, greatly reducing its size -->
-	<target name="pack_executable" depends="check_if_can_pack_executable" if="can_pack_executable">		
+	<target name="pack_executable" depends="check_if_can_pack_executable" if="can_pack_executable">	
 		<exec executable="${basedir}/dependency/other/upxw/${platform_name}/upx.exe" failonerror="false">
 			<arg value="--ultra-brute"/>
 			<arg value="${basedir}/${output_path}/${manifest_windows.executable_filename}"/>

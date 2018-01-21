@@ -4,9 +4,9 @@
 
 .BuildRoot = '..\..'
 
-.ClangBasicCmd = '-D_MT -D_DLL -g -fstandalone-debug -glldb -O0 -D_DEBUG -DPIXIE_IS_ITERATIVE_BUILD=1 -DPIXIE_IS_DEBUG_BUILD=1 -DPIXIE_IS_FINAL_BUILD=0 -DPIXIE_IS_DEPLOY_BUILD=0 -DPIXIE_IS_PORTABLE_BUILD=0 -nostdinc -nostdinc++ -w -fno-strict-aliasing -std=gnu++14 -DGLEW_STATIC -DAS_USE_FLOAT=0 -DSTATIC_LIB -DUNICODE -D_UNICODE -DPIXIE_PROJECT_NAME="\"$PIXIE_PROJECT_TO_BUILD$\"" -DCEREAL_XML_STRING_VALUE="\"pixie\""'
+.ClangBasicCmd = '-D_DLL -g -fstandalone-debug -glldb -O0 -D_DEBUG -DPIXIE_IS_ITERATIVE_BUILD=1 -DPIXIE_IS_DEBUG_BUILD=1 -DPIXIE_IS_FINAL_BUILD=0 -DPIXIE_IS_DEPLOY_BUILD=0 -DPIXIE_IS_PORTABLE_BUILD=0 -nostdinc -nostdinc++ -w -fno-strict-aliasing -std=gnu++14 -DGLEW_STATIC -DAS_USE_FLOAT=0 -DSTATIC_LIB -DUNICODE -D_UNICODE -DPIXIE_PROJECT_NAME="\"$PIXIE_PROJECT_TO_BUILD$\"" -DCEREAL_XML_STRING_VALUE="\"pixie\""'
 #if __WINDOWS__
-.ClangAdditionalCmd = '-ffunction-sections -DPIXIE_WINDOWS=1 -DWINDOWS -D_MSC_VER=1910 -D_MSC_FULL_VER=191025019 -DWIN32_LEAN_AND_MEAN -DVC_EXTRALEAN -D_USING_V110_SDK71_ -DWXUSINGDLL -D__WXMSW__'
+.ClangAdditionalCmd = '-D_MDd -ffunction-sections -DPIXIE_WINDOWS=1 -DWINDOWS -DWINAPI_FAMILY=100 -D_M_X64=100 -D_M_AMD64=100 -D_MSC_VER=1910 -D_WIN32 -D_WIN64 -D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -D_MSC_FULL_VER=191025019 -DWIN32_LEAN_AND_MEAN -DVC_EXTRALEAN -D_USING_V110_SDK71_ -DWXUSINGDLL -D__WXMSW__'
 #endif
 
 .ClangIncludes = '$PIXIE_ADDITIONAL_INCLUDES$ -I$BuildRoot$\_engine\code\include -I$BuildRoot$\$PIXIE_PROJECT_TO_BUILD$\code\include -I$BuildRoot$\$PIXIE_PROJECT_TO_BUILD$\!build\autogen'
@@ -26,7 +26,7 @@ ObjectList( 'engine_code' )
 {
 	.Compiler = 'Clang'
 	.CompilerOptions = '$ClangBasicCmd$ $ClangAdditionalCmd$ $ClangIncludes$ -c %1 -o %2'
-	.CompilerOutputPath = "$BuildRoot$\$PIXIE_PROJECT_TO_BUILD$\!build\windows_x86_iterative\obj\engine"
+	.CompilerOutputPath = "$BuildRoot$\$PIXIE_PROJECT_TO_BUILD$\!build\windows_x64_iterative\obj\engine"
 	.CompilerInputPath = '$BuildRoot$\_engine\code\src'
 	.CompilerInputPattern = '*.cpp'
 }
@@ -35,7 +35,7 @@ ObjectList( 'dependency_code_cpp' )
 {
 	.Compiler = 'Clang'
 	.CompilerOptions = '$ClangBasicCmd$ $ClangAdditionalCmd$ $ClangIncludes$ -c %1 -o %2'
-	.CompilerOutputPath = "$BuildRoot$\$PIXIE_PROJECT_TO_BUILD$\!build\windows_x86_iterative\obj\dependency"
+	.CompilerOutputPath = "$BuildRoot$\$PIXIE_PROJECT_TO_BUILD$\!build\windows_x64_iterative\obj\dependency"
 	.CompilerInputPath = '$BuildRoot$\_engine\dependency\library'
 	.CompilerInputPattern = '*.cpp'
 	.CompilerInputExcludePattern = '*include*'
@@ -45,7 +45,7 @@ ObjectList( 'dependency_code_c' )
 {
 	.Compiler = 'Clang'
 	.CompilerOptions = '$ClangBasicCmd$ $ClangAdditionalCmd$ $ClangIncludes$ -c %1 -o %2'
-	.CompilerOutputPath = "$BuildRoot$\$PIXIE_PROJECT_TO_BUILD$\!build\windows_x86_iterative\obj\dependency"
+	.CompilerOutputPath = "$BuildRoot$\$PIXIE_PROJECT_TO_BUILD$\!build\windows_x64_iterative\obj\dependency"
 	.CompilerInputPath = '$BuildRoot$\_engine\dependency\library'
 	.CompilerInputPattern = '*.c'
 	.CompilerInputExcludePattern = '*include*'
@@ -55,7 +55,7 @@ ObjectList( 'target_code' )
 {
 	.Compiler = 'Clang'
 	.CompilerOptions = '$ClangBasicCmd$ $ClangAdditionalCmd$ $ClangIncludes$ -c %1 -o %2'
-	.CompilerOutputPath = "$BuildRoot$\$PIXIE_PROJECT_TO_BUILD$\!build\windows_x86_iterative\obj\project"
+	.CompilerOutputPath = "$BuildRoot$\$PIXIE_PROJECT_TO_BUILD$\!build\windows_x64_iterative\obj\project"
 	.CompilerInputPath = '$BuildRoot$\$PIXIE_PROJECT_TO_BUILD$\code\src'
 	.CompilerInputPattern = '*.cpp'
 }
@@ -70,5 +70,5 @@ Executable('pixie_debug')
 
 Alias( 'all' )
 {
-	.Targets = { 'engine_code', 'dependency_code_cpp', 'dependency_code_c', 'target_code' }
+	.Targets = { 'engine_code', 'dependency_code_cpp', 'target_code' }
 }
