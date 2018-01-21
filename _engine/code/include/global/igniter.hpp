@@ -42,15 +42,15 @@ namespace engine
 #define GAME_ALLOW_POLICY_DEF(item, value) template<> class ignition_implementation_t<engine::global::item##_t, engine::global::item##_##value##_t> { public: typedef std::true_type is_allowed_t; };
 #include "def/global_policy.def"
 
-#define INTERNAL_IMPLEMENTATION_1(item, p1) , engine::global::item##_##p1##_t
-#define INTERNAL_IMPLEMENTATION_2(item, p1, ...) INTERNAL_IMPLEMENTATION_1(item, p1) EXPAND(INTERNAL_IMPLEMENTATION_1(item, __VA_ARGS__))
-#define INTERNAL_IMPLEMENTATION_3(item, p1, ...) INTERNAL_IMPLEMENTATION_1(item, p1) EXPAND(INTERNAL_IMPLEMENTATION_2(item, __VA_ARGS__))
-#define INTERNAL_IMPLEMENTATION_4(item, p1, ...) INTERNAL_IMPLEMENTATION_1(item, p1) EXPAND(INTERNAL_IMPLEMENTATION_3(item, __VA_ARGS__))
-#define INTERNAL_IMPLEMENTATION_5(item, p1, ...) INTERNAL_IMPLEMENTATION_1(item, p1) EXPAND(INTERNAL_IMPLEMENTATION_4(item, __VA_ARGS__))
-#define INTERNAL_IMPLEMENTATION_6(item, p1, ...) INTERNAL_IMPLEMENTATION_1(item, p1) EXPAND(INTERNAL_IMPLEMENTATION_5(item, __VA_ARGS__))
-#define INTERNAL_IMPLEMENTATION_7(item, p1, ...) INTERNAL_IMPLEMENTATION_1(item, p1) EXPAND(INTERNAL_IMPLEMENTATION_6(item, __VA_ARGS__))
-#define INTERNAL_IMPLEMENTATION_8(item, p1, ...) INTERNAL_IMPLEMENTATION_1(item, p1) EXPAND(INTERNAL_IMPLEMENTATION_7(item, __VA_ARGS__))
-#define INTERNAL_IMPLEMENTATION_9(item, p1, ...) INTERNAL_IMPLEMENTATION_1(item, p1) EXPAND(INTERNAL_IMPLEMENTATION_8(item, __VA_ARGS__))
+#define IGNITER_IMPLEMENTATION_1(item, p1) , engine::global::item##_##p1##_t
+#define IGNITER_IMPLEMENTATION_2(item, p1, ...) IGNITER_IMPLEMENTATION_1(item, p1) EXPAND(IGNITER_IMPLEMENTATION_1(item, __VA_ARGS__))
+#define IGNITER_IMPLEMENTATION_3(item, p1, ...) IGNITER_IMPLEMENTATION_1(item, p1) EXPAND(IGNITER_IMPLEMENTATION_2(item, __VA_ARGS__))
+#define IGNITER_IMPLEMENTATION_4(item, p1, ...) IGNITER_IMPLEMENTATION_1(item, p1) EXPAND(IGNITER_IMPLEMENTATION_3(item, __VA_ARGS__))
+#define IGNITER_IMPLEMENTATION_5(item, p1, ...) IGNITER_IMPLEMENTATION_1(item, p1) EXPAND(IGNITER_IMPLEMENTATION_4(item, __VA_ARGS__))
+#define IGNITER_IMPLEMENTATION_6(item, p1, ...) IGNITER_IMPLEMENTATION_1(item, p1) EXPAND(IGNITER_IMPLEMENTATION_5(item, __VA_ARGS__))
+#define IGNITER_IMPLEMENTATION_7(item, p1, ...) IGNITER_IMPLEMENTATION_1(item, p1) EXPAND(IGNITER_IMPLEMENTATION_6(item, __VA_ARGS__))
+#define IGNITER_IMPLEMENTATION_8(item, p1, ...) IGNITER_IMPLEMENTATION_1(item, p1) EXPAND(IGNITER_IMPLEMENTATION_7(item, __VA_ARGS__))
+#define IGNITER_IMPLEMENTATION_9(item, p1, ...) IGNITER_IMPLEMENTATION_1(item, p1) EXPAND(IGNITER_IMPLEMENTATION_8(item, __VA_ARGS__))
 
 		auto injector_igniter = [] {
 			return boost::di::make_injector(
@@ -62,7 +62,7 @@ namespace engine
 		};
 
 #define BEGIN_PLATFORM_POLICY_CONFIGURATION() namespace engine { namespace global { auto instance = [] { return boost::di::make_injector(
-#define PLATFORM_ALLOWS_POLICIES(item, ...) boost::di::bind<engine::global::item##_t>().to<typename engine::global::ignition_implementation_real_t<engine::global::item##_t EXPAND(EXPAND(_GET_NTH_ARG(item, __VA_ARGS__, INTERNAL_IMPLEMENTATION_9, INTERNAL_IMPLEMENTATION_8, INTERNAL_IMPLEMENTATION_7, INTERNAL_IMPLEMENTATION_6, INTERNAL_IMPLEMENTATION_5, INTERNAL_IMPLEMENTATION_4, INTERNAL_IMPLEMENTATION_3, INTERNAL_IMPLEMENTATION_2, INTERNAL_IMPLEMENTATION_1, INTERNAL_IMPLEMENTATION_0))(item, __VA_ARGS__))>::type>(),
+#define PLATFORM_ALLOWS_POLICIES(item, ...) boost::di::bind<engine::global::item##_t>().to<typename engine::global::ignition_implementation_real_t<engine::global::item##_t EXPAND(EXPAND(_GET_NTH_ARG(item, __VA_ARGS__, IGNITER_IMPLEMENTATION_9, IGNITER_IMPLEMENTATION_8, IGNITER_IMPLEMENTATION_7, IGNITER_IMPLEMENTATION_6, IGNITER_IMPLEMENTATION_5, IGNITER_IMPLEMENTATION_4, IGNITER_IMPLEMENTATION_3, IGNITER_IMPLEMENTATION_2, IGNITER_IMPLEMENTATION_1, IGNITER_IMPLEMENTATION_0))(item, __VA_ARGS__))>::type>(),
 #define END_PLATFORM_POLICY_CONFIGURATION() injector_igniter() ); }; } }
 
         class igniter_t
