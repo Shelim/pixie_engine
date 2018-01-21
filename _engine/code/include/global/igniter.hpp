@@ -2,10 +2,10 @@
 #define ENGINE_GLOBAL_IGNITER_HPP
 #pragma once
 
-#include "core/manifest/os.hpp"
 #include "global/bootstrapper.hpp"
 #include "global/component.hpp"
 #include "global/policy.hpp"
+#include "global/core/program.hpp"
 #include <type_traits>
 
 namespace engine
@@ -72,7 +72,7 @@ namespace engine
 
                 std::unique_ptr<program_t> ignite_from_main(int argc, char * argv[])
                 {
-                    return std::make_unique<program_t>();
+                    return std::make_unique<program_real_t>();
                 }
 
         };
