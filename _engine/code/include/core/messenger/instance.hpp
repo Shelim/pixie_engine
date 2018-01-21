@@ -20,7 +20,13 @@ namespace engine
     {        
         template<class msg_actual_t, bool is_async> class instance_base_t
         {
-            
+
+        public:
+
+            instance_base_t(callback_t<msg_actual_t> callback, std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner)
+            {
+
+            }
         };
 
         template<class msg_actual_t> class instance_base_t<msg_actual_t, false>
@@ -28,7 +34,7 @@ namespace engine
 
         public:
 
-			instance_base_t(callback_t<msg_actual_t> callback) : callback(callback)
+			instance_base_t(callback_t<msg_actual_t> callback, std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : callback(callback)
 			{
 
 			}
@@ -55,7 +61,7 @@ namespace engine
 
         public:
 
-            instance_base_t(callback_t<msg_actual_t> callback, std::unique_ptr<process::runner_spawn_t> runner) : callback(callback), id(next_id++), runner(std::move(runner))
+            instance_base_t(callback_t<msg_actual_t> callback, std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : callback(callback), id(next_id++), runner(runner_spawner->create())
             {
                 runner->add_task(std::make_unique<task_func_t>([this](process::token_t*){ return execute(); }, format_string("Messenger '#1#' output instance queue ###2#"_u, get_msg_type<msg_actual_t>(), id)));
             }
@@ -134,7 +140,7 @@ namespace engine
 
             template<class T1, class T2, bool B1, bool B2> friend class queue_base_t;
             
-            instance_t(queue_t<msg_actual_t> * queue_owner, callback_t<msg_actual_t> callback) : instance_base_t<msg_actual_t, msg_actual_t::is_instance_async>(callback), queue_owner(queue_owner)
+            instance_t(queue_t<msg_actual_t> * queue_owner, callback_t<msg_actual_t> callback, std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : instance_base_t<msg_actual_t, msg_actual_t::is_instance_async>(callback, runner_spawner), queue_owner(queue_owner)
             {
 
             }

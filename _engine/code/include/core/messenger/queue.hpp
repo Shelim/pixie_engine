@@ -66,14 +66,21 @@ namespace engine
 
         };
 
-        template <class queue_t, class msg_actual_t, bool is_async, bool keep_history> class queue_base_t { };
+        template <class queue_t, class msg_actual_t, bool is_async, bool keep_history> class queue_base_t
+        {
+        public:
+            queue_base_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner)
+            {
+                
+            }
+         };
 
         template<class queue_t, class msg_actual_t, bool keep_history> class queue_base_t<queue_t, msg_actual_t, false, keep_history>
         {
 
         public:
 
-            queue_base_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner)
+            queue_base_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : runner_spawner(runner_spawner)
             {
                 
             }
@@ -100,7 +107,7 @@ namespace engine
             {
                 std::lock_guard<std::mutex> guard(mutex);
 
-                std::unique_ptr<instance_t<msg_actual_t> > instance = std::unique_ptr<instance_t<msg_actual_t> >(new instance_t<msg_actual_t>(static_cast<queue_t*>(this), callback));
+                std::unique_ptr<instance_t<msg_actual_t> > instance = std::unique_ptr<instance_t<msg_actual_t> >(new instance_t<msg_actual_t>(static_cast<queue_t*>(this), callback, runner_spawner));
                 instances.push_back(instance.get());
 
                 if(history == history_t::dump_if_available)
@@ -122,6 +129,8 @@ namespace engine
 
             template<class T> friend class instance_t;
 
+            std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner;
+
             queue_history_t<msg_actual_t, keep_history> history;
             std::vector<instance_t<msg_actual_t> *> instances;
             std::mutex mutex;
@@ -133,7 +142,7 @@ namespace engine
 
         public:
 
-            queue_base_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : id(next_id++)
+            queue_base_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : id(next_id++), runner_spawner(runner_spawner)
             {
                 runner = runner_spawner->create();
                 runner->add_task(std::make_unique<task_func_t>([this](process::token_t*){ return execute(); }, format_string("Messenger '#1#' queue ###2#"_u, get_msg_type<msg_actual_t>(), id)));
@@ -178,6 +187,8 @@ namespace engine
 
             template<class T> friend class instance_t;
 
+            std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner;
+
             queue_history_t<msg_actual_t, keep_history> history;
             std::vector<instance_t<msg_actual_t> *> instances;
             concurrent_queue_t<std::unique_ptr<msg_base_t>> queue_msg;
@@ -213,7 +224,7 @@ namespace engine
                     {
                         auto register_message = static_cast<msg_internal_register_instance<msg_actual_t>*>(msg);
                         
-                        std::unique_ptr<instance_t<msg_actual_t> > instance = std::unique_ptr<instance_t<msg_actual_t> >(new instance_t<msg_actual_t>(static_cast<queue_t*>(this), register_message->get_callback()));
+                        std::unique_ptr<instance_t<msg_actual_t> > instance = std::unique_ptr<instance_t<msg_actual_t> >(new instance_t<msg_actual_t>(static_cast<queue_t*>(this), register_message->get_callback(), runner_spawner));
                         instances.push_back(instance.get());
 
                         if(register_message->get_history() == history_t::dump_if_available)
@@ -241,7 +252,7 @@ namespace engine
         template<class msg_actual_t> class queue_t : public queue_base_t<queue_t<msg_actual_t>, msg_actual_t, msg_actual_t::is_queue_async, msg_actual_t::keep_history>
         {
             public:
-                queue_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : queue_base_t(runner_spawner) {}
+                queue_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : queue_base_t<queue_t<msg_actual_t>, msg_actual_t, msg_actual_t::is_queue_async, msg_actual_t::keep_history>(runner_spawner) {}
 
         };
 
