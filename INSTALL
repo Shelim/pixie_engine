@@ -5,7 +5,7 @@ BEFORE DOING ANYTHINGE ELSE:
 	You will need to call this ONLY ONCE after project's checkout
 
 Then:
-	- Use _command/windows/view_documentation_english_chm.bat to read docs, or
+	- Use _command/windows/view_documentation.bat to read docs, or
 	- Jump into developing by calling _command/windows/new_project.bat
 	
 All scripts are interactive and can be run directly from Windows Explorer.
