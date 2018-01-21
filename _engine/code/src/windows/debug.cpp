@@ -16,7 +16,6 @@
 #include <SDL.h>
 #include <SDL_syswm.h>
 
-#define WIN32_LEAN_AND_MEAN
 #define _NO_CVCONST_H
 #include <windows.h>
 #include <shlwapi.h>
@@ -41,7 +40,7 @@ namespace
 
 		public:
 
-			symbol_t(intptr_t address, const engine::ustring_t & name) : address(address), name(name)
+			symbol_t(intptr_t address, const engine::ustring_t & name, const engine::ustring_t & file, int line) : address(address), name(name), file(file), line(line)
 			{
 
 			}
@@ -56,12 +55,24 @@ namespace
 				return name;
 			}
 
+			const engine::ustring_t & get_file() const
+			{
+				return file;
+			}
+
+			int get_line() const
+			{
+				return line;
+			}
+
 		private:
 
 			friend bool operator< (const symbol_t &lhs, const symbol_t &rhs);
 
 			intptr_t address;
 			engine::ustring_t name;
+			engine::ustring_t file;
+			int line;
 	};
 
     inline bool operator< (const symbol_t &lhs, const symbol_t &rhs)
@@ -112,34 +123,18 @@ namespace
 				return name;
 			}
 
-			const engine::ustring_t & resolve_symbol(intptr_t symbol) const
+			const symbol_t & resolve_symbol(intptr_t symbol) const
 			{
-				static engine::ustring_t def = ""_u;
-				engine::ustring_t & ret = def;
+				static symbol_t def(0, ""_u, ""_u, -1);
 
 				auto iter = symbols.upper_bound(symbol);
 				if(iter != symbols.begin())
 				{
 					--iter;
-					return iter->second.get_name();
+					return iter->second;
 				}
 
 				return def;
-			}
-
-			void get_file_and_line_from_symbol(intptr_t symbol, engine::ustring_t & file, int & line) const
-			{
-				IMAGEHLP_LINE64 LineInfo; 
-				std::memset(&LineInfo, 0, sizeof LineInfo);
-				LineInfo.SizeOfStruct = sizeof(IMAGEHLP_LINE64);
-				DWORD LineDisplacement = 0;
-
-				if(SymGetLineFromAddr64(GetCurrentProcess(), symbol, &LineDisplacement, &LineInfo))
-				{
-					file = engine::ustring_t::from_utf8(LineInfo.FileName);
-					line = LineInfo.LineNumber;
-				}
-				
 			}
 
 		private:
@@ -158,6 +153,7 @@ namespace
 					return false;
 
 				std::wstring image_name = this->name.to_wide();
+
 
 				BaseOfDll = SymLoadModuleEx(process,
                                 NULL,
@@ -184,8 +180,23 @@ namespace
 				ULONG SymbolSize,      
 				PVOID UserContext)
 			{
+				engine::ustring_t file = ""_u;
+				int line = -1;
+
+				IMAGEHLP_LINE64 LineInfo; 
+				std::memset(&LineInfo, 0, sizeof LineInfo);
+				LineInfo.SizeOfStruct = sizeof(IMAGEHLP_LINE64);
+				DWORD LineDisplacement = 0;
+
 				module_t * module = reinterpret_cast<module_t*>(UserContext);
-				module->symbols.emplace(pSymInfo->Address - module->BaseOfDll, symbol_t(pSymInfo->Address - module->BaseOfDll, engine::ustring_t::from_utf8(pSymInfo->Name)));
+
+				if(SymGetLineFromAddr64(GetCurrentProcess(), pSymInfo->Address - module->BaseOfDll, &LineDisplacement, &LineInfo))
+				{
+					file = engine::ustring_t::from_utf8(LineInfo.FileName);
+					line = LineInfo.LineNumber;
+				}
+
+				module->symbols.emplace(pSymInfo->Address - module->BaseOfDll, symbol_t(pSymInfo->Address - module->BaseOfDll, engine::ustring_t::from_utf8(pSymInfo->Name), file, line));
 
 				return TRUE;
 			}
@@ -193,6 +204,7 @@ namespace
 			bool own_ref;
 			HMODULE mod;
 			DWORD64 BaseOfDll;
+			DWORD64 BaseOfPdb;
 			engine::ustring_t name;
 			symbols_t symbols;
 			static std::mutex symbol_scanner;
@@ -205,60 +217,30 @@ namespace
 engine::callstack_t engine::platform::dump_callstack(std::size_t skip_front)
 {
 	static std::map<HMODULE, module_t> modules;
+	const int max_callers = 62; 
+	callstack_t ret;
 
-	STACKFRAME64 frame;
-	std::memset(&frame, 0, sizeof frame);
+	intptr_t stack[max_callers];
 
-	CONTEXT context;
-	std::memset(&context, 0, sizeof context);
-	context.ContextFlags = CONTEXT_FULL;
+	typedef USHORT (WINAPI *capture_stack_back_trace_type)(__in ULONG, __in ULONG, __out PVOID*, __out_opt PULONG);
+    capture_stack_back_trace_type func = (capture_stack_back_trace_type)(GetProcAddress(LoadLibrary(L"kernel32.dll"), "RtlCaptureStackBackTrace"));
 
-	RtlCaptureContext(&context);
+    if(func == NULL)
+        return ret; // WOE 29.SEP.2010
 
-#if defined(_M_AMD64)
-	frame.AddrPC.Offset = context.Rip;
-	frame.AddrPC.Mode = AddrModeFlat;
-	frame.AddrStack.Offset = context.Rsp;
-	frame.AddrStack.Mode = AddrModeFlat;
-	frame.AddrFrame.Offset = context.Rbp;
-	frame.AddrFrame.Mode = AddrModeFlat;
+	unsigned short frames = (func)( skip_front, max_callers - skip_front, reinterpret_cast<void**>(stack), NULL );
 
-	const DWORD machine = IMAGE_FILE_MACHINE_AMD64;
-#else
-	frame.AddrPC.Offset = context.Eip;
-	frame.AddrPC.Mode = AddrModeFlat;
-	frame.AddrStack.Offset = context.Esp;
-	frame.AddrStack.Mode = AddrModeFlat;
-	frame.AddrFrame.Offset = context.Ebp;
-	frame.AddrFrame.Mode = AddrModeFlat;
-
-	const DWORD machine = IMAGE_FILE_MACHINE_I386;
-#endif
-
-	HANDLE process = GetCurrentProcess();
-	HANDLE thread = GetCurrentThread();
-
-	engine::callstack_t ret;
-	
-	unsigned level = 0;
-
-	while (StackWalk64(machine, process, thread, &frame, &context, 0, SymFunctionTableAccess64, SymGetModuleBase64, 0))
+	for(unsigned short i = 1; i < frames; i++)
 	{
-		while (skip_front)
-		{
-			--skip_front;
-			continue; // don't capture current frame
-		}
-
-		intptr_t pc = frame.AddrPC.Offset;
-
-		MEMORY_BASIC_INFORMATION mbinfo;
-        std::memset(&mbinfo, 0, sizeof mbinfo);
+		intptr_t pc =stack[i];
 
 		ustring_t data_module = ""_u;
 		ustring_t data_file = ""_u;
 		ustring_t data_function = ""_u;
 		int data_line = -1;
+
+		MEMORY_BASIC_INFORMATION mbinfo;
+        std::memset(&mbinfo, 0, sizeof mbinfo);
 
 		if (VirtualQuery(reinterpret_cast<const void *>(pc), &mbinfo, static_cast<DWORD>(sizeof(mbinfo))) == sizeof (mbinfo))
         {
@@ -271,11 +253,10 @@ engine::callstack_t engine::platform::dump_callstack(std::size_t skip_front)
 			pc -= reinterpret_cast<intptr_t>(mbinfo.AllocationBase);
 
 			data_module = module->second.get_name();
-			data_function = module->second.resolve_symbol(pc);
-			module->second.get_file_and_line_from_symbol(pc, data_file, data_line);
+			auto & symbol = module->second.resolve_symbol(pc);
+
+			ret.items.emplace_back(pc, data_module, symbol.get_file(), symbol.get_line(), symbol.get_name());
 		}
-	
-		ret.items.emplace_back(pc, data_module, data_file, data_line, data_function);
 	}
 
 	return ret;
