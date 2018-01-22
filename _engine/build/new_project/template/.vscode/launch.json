@@ -5,12 +5,12 @@
         "name" : "Debug in LLDB",
         "type": "lldb",
         "request": "launch",
-        "program": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/!build/windows_x86_iterative/bin/pixie_iterative.exe",
+        "program": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/!build/windows_x64_iterative/bin/pixie_iterative.exe",
         "args": [],
         "terminal":"external",
         "cwd": "${workspaceFolder}",
         "windows":{
-            "program": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/!build/windows_x86_iterative/bin/pixie_iterative.exe"
+            "program": "${workspaceRoot}/../$UNIX_PROJECT_NAME$/!build/windows_x64_iterative/bin/pixie_iterative.exe"
         }
     }
     ]
