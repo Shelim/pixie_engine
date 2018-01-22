@@ -246,7 +246,7 @@
 		</apply>
 	</target>
     
-<!-- Link all *.o in given directory and store results as executable -->
+<!-- Link all *.o in given directory and store results as executable -->	
 	<target name="link_all">
 		<dirset dir="${basedir}" id="compile.libraries_path">
 			<include name="${code_dependency_lib}" />
@@ -282,7 +282,7 @@
 			</fileset>
 			<arg line="${compiler_cmd_linker}" />
 			<arg line="${link_all.debug_arg}" />
-			<!-- <arg line="/MAP:&quot;${link_all.path_map}&quot;" /> -->
+			<arg line="/LLDMAP:&quot;${link_all.path_map}&quot;" />
 			<arg line="/LIBPATH:&quot;${compile.libraries_path}&quot;" />
 			<arg line="/OUT:&quot;${basedir}/${build_path_binary}/${binary_filename_raw}&quot;" />
 			<!-- Workaround: SDL2main.lib has to be included before SDL2.lib -->
