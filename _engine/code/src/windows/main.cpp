@@ -15,7 +15,7 @@ PLATFORM_ALLOWS_POLICIES(instances_program, single)
 PLATFORM_ALLOWS_POLICIES(renderer_thread, detached)
 END_PLATFORM_POLICY_CONFIGURATION()
 
-std::unique_ptr<engine::global::program_t> program;
+DEFINE_PROGRAM_HOLDER(program);
 
 int main(int argc, char * argv[])
 {

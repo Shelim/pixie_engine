@@ -37,6 +37,8 @@ namespace engine
 
 }
 
+#define DEFINE_PROGRAM_HOLDER(name) std::unique_ptr<engine::global::program_t> name;
+
 #include "global/core/program/real.hpp"
 
 #endif
