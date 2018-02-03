@@ -46,8 +46,10 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceRoot}/../_engine/code/src",
+                "${workspaceRoot}/../_engine/build/new_project/template/code/src",
                 "${workspaceRoot}/../_engine/dependency/library/multiple_consoles/src",
                 "${workspaceRoot}/../_engine/code/include",
+                "${workspaceRoot}/../_engine/build/new_project/template/code/include",
                 "${workspaceRoot}/../_engine/dependency/library/angelscript/include",
                 "${workspaceRoot}/../_engine/dependency/library/anttweakbar/include",
                 "${workspaceRoot}/../_engine/dependency/library/blowfish/include",
