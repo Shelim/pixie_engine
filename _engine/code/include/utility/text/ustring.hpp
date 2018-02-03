@@ -4,7 +4,6 @@
 
 #include <string>
 #include <vector>
-#include <clocale>
 #include <cstdio>
 #include <cstring>
 #include <cstdarg>
@@ -18,6 +17,7 @@
 #include <iomanip>
 #include <utility>
 #include <iterator>
+#include <codecvt>
 #include <cereal/access.hpp>
 #include "core/vfs/filesystem.hpp"
 #include "utility/renderer/color.hpp"
@@ -38,7 +38,7 @@ namespace engine
 	typedef int_least32_t usymbol_t;
 
 	/**
-	* @brief Converts usymbol_t into uppercase
+	* @brief Converts usymbol_t into uppercaseR
 	*
 	* It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 	*

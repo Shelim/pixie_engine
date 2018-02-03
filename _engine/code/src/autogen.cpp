@@ -4,6 +4,10 @@
 #include "autogen_windows_x64_iterative.cc"
 #else
 
+#if PIXIE_IS_TESTER_BUILD
+#include "autogen_windows_x64_tester.cc"
+#else
+
 #if PIXIE_IS_DEBUG_BUILD
 
 #if PIXIE_IS_PORTABLE_BUILD
@@ -32,6 +36,7 @@
 #endif
 #endif
 
+#endif
 #endif
 #endif
 

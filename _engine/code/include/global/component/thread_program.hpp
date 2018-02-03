@@ -1,5 +1,5 @@
-#ifndef ENGINE_GLOBAL_GLOBAL_THREAD_HPP
-#define ENGINE_GLOBAL_GLOBAL_THREAD_HPP
+#ifndef ENGINE_GLOBAL_COMPONENT_THREAD_PROGRAM_HPP
+#define ENGINE_GLOBAL_COMPONENT_THREAD_PROGRAM_HPP
 #pragma once
 
 #include "global/core/app.hpp"
@@ -10,12 +10,12 @@ namespace engine
     namespace global
     {
 
-        class global_thread_t
+        class thread_program_t
         {
 
         public:
 
-            virtual ~global_thread_t()
+            virtual ~thread_program_t()
             {
 
             }
@@ -26,8 +26,8 @@ namespace engine
 
 }
 
-#include "global/component/global_thread/dummy.hpp"
-#include "global/component/global_thread/real.hpp"
+#include "global/component/thread_overseer/dummy.hpp"
+#include "global/component/thread_overseer/real.hpp"
 
 #endif
 

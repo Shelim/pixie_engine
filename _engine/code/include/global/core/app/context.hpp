@@ -17,9 +17,14 @@ namespace engine
 
         public:
 
-            app_context_t(program_t * program, const ustring_collection_t & args) : program(program), args(args)
+            app_context_t(std::shared_ptr<program_t> program, const ustring_collection_t & args) : program(program), args(args)
             {
 
+            }
+
+            std::shared_ptr<program_t> get_program()
+            {
+                return program;
             }
 
             const ustring_collection_t & get_args()
@@ -27,15 +32,10 @@ namespace engine
                 return args;
             }
 
-            program_t * get_program()
-            {
-                return program;
-            }
-
         private:
 
+            std::shared_ptr<program_t> program;
             ustring_collection_t args;
-            program_t *program;
             
         };
 

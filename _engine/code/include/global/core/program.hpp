@@ -7,7 +7,17 @@
 #include <vector>
 #include <algorithm>
 #include <mutex>
-#include "global/core/extinguisher.hpp"
+#include "global/component/app_instancer.hpp"
+#include "global/component/app_overseer.hpp"
+#include "global/component/app_resolver.hpp"
+#include "global/component/debug_symbols.hpp"
+#include "global/component/extinguisher.hpp"
+#include "global/component/program_args.hpp"
+#include "global/component/program_instances_communicator_client.hpp"
+#include "global/component/program_instances_communicator_host.hpp"
+#include "global/component/program_instances_detection.hpp"
+#include "global/component/thread_overseer.hpp"
+#include "global/component/thread_program.hpp"
 
 namespace engine
 {
@@ -18,27 +28,34 @@ namespace engine
         class program_t
         {
 
+        private:
+
+            class unused_t {};
+
         public:
 
-            virtual ~program_t()
+            program_t(boost::di::injector<
+#define ENGINE_GLOBAL_COMPONENT_DEF(component) std::shared_ptr<component##_t>,
+#include "def/global_component.def"
+            unused_t> injector)
             {
-
+#define ENGINE_GLOBAL_COMPONENT_DEF(component) this->component = injector.create<std::shared_ptr<component##_t> >();
+#include "def/global_component.def"
             }
 
-            virtual void wait_for_completion() = 0;
-
-            virtual int32_t get_return_code() const = 0;
+#define ENGINE_GLOBAL_COMPONENT_DEF(component) std::shared_ptr<component##_t> get_##component() { return component; }
+#include "def/global_component.def"
 
         private:
+
+#define ENGINE_GLOBAL_COMPONENT_DEF(component) std::shared_ptr<component##_t> component;
+#include "def/global_component.def"
+
 
         };
 
     }
 
 }
-
-#define DEFINE_PROGRAM_HOLDER(name) std::unique_ptr<engine::global::program_t> name;
-
-#include "global/core/program/real.hpp"
 
 #endif

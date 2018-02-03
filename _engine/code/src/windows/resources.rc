@@ -4,6 +4,10 @@
 #include "resources_windows_x64_iterative.hpp"
 #else
 
+#if PIXIE_IS_TESTER_BUILD
+#include "resources_windows_x64_tester.hpp"
+#else
+
 #if PIXIE_IS_DEBUG_BUILD
 
 #if PIXIE_IS_PORTABLE_BUILD
@@ -32,6 +36,7 @@
 #endif
 #endif
 
+#endif
 #endif
 #endif
 

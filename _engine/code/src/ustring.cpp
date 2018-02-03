@@ -1,6 +1,3 @@
-#include <wchar.h>
-#include <locale>
-#include <codecvt>
 #include "utility/text/ustring.hpp"
 
 //////////////////////////////////////////////////////////////////////////

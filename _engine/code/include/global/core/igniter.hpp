@@ -1,10 +1,11 @@
-#ifndef ENGINE_GLOBAL_IGNITER_HPP
-#define ENGINE_GLOBAL_IGNITER_HPP
+#ifndef ENGINE_GLOBAL_CORE_IGNITER_HPP
+#define ENGINE_GLOBAL_CORE_IGNITER_HPP
 #pragma once
 
-#include "global/bootstrapper.hpp"
-#include "global/component.hpp"
-#include "global/policy.hpp"
+#include "global/core/bootstrapper.hpp"
+#include "global/policy/instances_application.hpp"
+#include "global/policy/instances_program.hpp"
+#include "global/policy/renderer_thread.hpp"
 #include "global/core/program.hpp"
 #include <type_traits>
 
@@ -54,28 +55,14 @@ namespace engine
 
 		auto injector_igniter = [] {
 			return boost::di::make_injector(
-/*
-#define ENGINE_GLOBAL_COMPONENT_DEF(component) boost::di::bind<ifactory<singleton##_t>>().to(factory<singleton##_t>{}),
-#include "def/global_component.def"
-*/
+#define ENGINE_GLOBAL_COMPONENT_DEF(component) boost::di::bind<component##_t>().to<component##_real_t>(),
+//#include "def/global_component.def"
 				boost::di::make_injector());
 		};
 
-#define BEGIN_PLATFORM_POLICY_CONFIGURATION() namespace engine { namespace global { auto instance = [] { return boost::di::make_injector(
+#define BEGIN_PLATFORM_CONFIGURATION() namespace engine { namespace global { auto injector_igniter_final = [] { return boost::di::make_injector(
 #define PLATFORM_ALLOWS_POLICIES(item, ...) boost::di::bind<engine::global::item##_t>().to<typename engine::global::ignition_implementation_real_t<engine::global::item##_t EXPAND(EXPAND(_GET_NTH_ARG(item, __VA_ARGS__, IGNITER_IMPLEMENTATION_9, IGNITER_IMPLEMENTATION_8, IGNITER_IMPLEMENTATION_7, IGNITER_IMPLEMENTATION_6, IGNITER_IMPLEMENTATION_5, IGNITER_IMPLEMENTATION_4, IGNITER_IMPLEMENTATION_3, IGNITER_IMPLEMENTATION_2, IGNITER_IMPLEMENTATION_1, IGNITER_IMPLEMENTATION_0))(item, __VA_ARGS__))>::type>(),
-#define END_PLATFORM_POLICY_CONFIGURATION() injector_igniter() ); }; } }
-
-        class igniter_t
-        {
-
-            public:
-
-                std::unique_ptr<program_t> ignite_from_main(int argc, char * argv[])
-                {
-                    return std::make_unique<program_real_t>();
-                }
-
-        };
+#define END_PLATFORM_CONFIGURATION() injector_igniter() ); }; class igniter_t { public: std::shared_ptr<program_t> ignite_from_main(int argc, char * argv[]) { auto injector = injector_igniter_final(); return std::make_shared<program_t>(std::move(injector)); } }; } }
 
     }
 

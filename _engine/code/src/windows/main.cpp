@@ -6,24 +6,24 @@
 #include <cstdlib>
 #include <thread>
 #include <chrono>
-#include "global/igniter.hpp"
+#include "global/core/igniter.hpp"
 #include "global/core/program.hpp"
 
-BEGIN_PLATFORM_POLICY_CONFIGURATION()
+BEGIN_PLATFORM_CONFIGURATION()
 PLATFORM_ALLOWS_POLICIES(instances_application, multiple, single)
 PLATFORM_ALLOWS_POLICIES(instances_program, single)
 PLATFORM_ALLOWS_POLICIES(renderer_thread, detached)
-END_PLATFORM_POLICY_CONFIGURATION()
+END_PLATFORM_CONFIGURATION()
 
-DEFINE_PROGRAM_HOLDER(program);
+std::shared_ptr<engine::global::program_t> program;
 
 int main(int argc, char * argv[])
 {
     engine::global::igniter_t igniter;
     program = igniter.ignite_from_main(argc, argv);
 
-    program->wait_for_completion();
-    return program->get_return_code();
+    program->get_app_overseer()->wait_for_completion();
+    return program->get_extinguisher()->get_return_code();
 }
 
 #endif
