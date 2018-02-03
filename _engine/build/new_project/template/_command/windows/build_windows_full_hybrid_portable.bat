@@ -1,6 +1,6 @@
 @echo off
 rem *******************************************************************
-rem * This will build all configurations of this project
+rem * This will build hybrid - portable configuration of this project
 rem * 
 rem * REQUIRES:
 rem *     - See '\_engine\build\windows\builder_actual_windows.bat'
@@ -40,70 +40,23 @@ color 07
 rem * Mark current directory
 pushd %~dp0
 
-rem * Should we fail here to provide correct argument...
-if "%~1"=="" goto real
+rem * Jump '\$UNIX_PROJECT_NAME$\command\windows' -> '\_engine\build\windows'
+cd ..\..\..\_engine\build\windows
 
-rem * Execute script
-echo | call %~1
-
-rem * Should we fail here...
-if errorlevel 1 (
-
-	rem * Output some info
-	echo Failed to build this project
-
-	rem * Keep console Window open
-	pause
-	
-	rem * Fail execution
-	call failed
-	
-	rem * Fail execution
-	exit 1
-	
-)
-
-rem * Complete execution
-goto ok
-
-rem * Go to normal execution
-:real
-
-rem * From here, we will be enabling/disabling delayed expansion 
-rem * to avoid problems with special characters
-setlocal enableextensions enabledelayedexpansion
-
-rem * Search for all build scripts
-for %%f in (build_*_all.bat) do (
-
-rem * Output some info
-echo Running %%~nf
-
-rem * Execute build script
-start /wait build_all.bat %%f
+rem * Execute actual script (build)
+call builder_actual_windows.bat $UNIX_PROJECT_NAME$ full "build_is_iterative="false"" "build_typename="hybrid_portable"" "build_is_debug="false"" "build_is_portable="true"" "build_is_deploy="false"" "build_is_final="false"" "build_is_tester="false""
 
 rem * Should we fail here...
-if errorlevel 1 (
+if %ERRORLEVEL% == 0 goto ok1 
 
 	rem * Output some info
-	echo Failed to prebuild debug build
+	echo Failed to build hybrid - portable build
 
 	rem * Fail execution
-	call failed
-	
-	rem * Fail execution
-	exit 1
-	
-)
+	goto failed
 
-rem * Output some info
-echo Done!
-
-)
-
-)
-
-)
+rem * Ok, we did not fail!
+:ok1
 
 rem * Finalize successfully
 goto ok
@@ -138,8 +91,8 @@ color 2F
 rem * Output some info
 echo All Done!
 
-rem * Keep console Window open if calling script directly
-if "%~1"=="" pause
+rem * Keep console Window open
+pause
 
 rem * End script
 endlocal

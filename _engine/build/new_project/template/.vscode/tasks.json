@@ -2,10 +2,10 @@
     "version": "2.0.0",
     "tasks": [ 
         {
-            "label": "Build debug",
+            "label": "Build quick (Windows)",
             "type": "shell",
             "windows": {
-                "command": "echo | call ${workspaceRoot}/../$UNIX_PROJECT_NAME$/_command/windows/build_iterative.bat"
+                "command": "echo | call ${workspaceRoot}/../$UNIX_PROJECT_NAME$/_command/windows/build_windows_iterative.bat"
             },
             "args": [ ],
             "group": {

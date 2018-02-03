@@ -68,7 +68,7 @@
 	<property name="build_is_portable" value="false" />
 	<property name="build_is_deploy" value="false" />
 	<property name="build_is_final" value="false" />
-	<property name="build_is_final" value="false" />
+	<property name="build_is_tester" value="false" />
 	
 <!-- END OF INPUT SECTION -->
 <!-- START OF CONFIGURATION SECTION -->
@@ -96,6 +96,8 @@
 	<property name="map_extension" value=".map" />
 	<property name="binary_filename_raw_pdb" value="pixie_${build_typename}.pdb" />
     <property name="compiler_cmd_linker" value="/Subsystem:Windows /NODEFAULTLIB /MANIFEST:EMBED /MACHINE:X64" />
+	<property name="compiler_cmd_linker_tester" value="" />
+	<property name="compiler_cmd_linker_ntester" value="" />
 	<property name="compiler_cmd_linker_debug" value="/debug" />
 	<property name="compiler_cmd_linker_ndebug" value="" />
 	<property name="resources_cmd_iterative" value="-DPIXIE_IS_ITERATIVE_BUILD=1" />
@@ -103,7 +105,9 @@
 	<property name="resources_cmd_debug" value="-D_MDd -D_DLL -D_DEBUG -DPIXIE_IS_DEBUG_BUILD=1" />
 	<property name="resources_cmd_ndebug" value="-D_MD -D_DLL -DNDEBUG -DPIXIE_IS_DEBUG_BUILD=0" />
 	<property name="resources_cmd_platform_windows" value="-DPIXIE_WINDOWS=1 -DWINDOWS -DWINAPI_FAMILY=100 -D_M_X64=100 -D_M_AMD64=100 -D_MSC_VER=1910 -D_WIN32 -D_WIN64 -D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -D_MSC_FULL_VER=191025019 -DWIN32_LEAN_AND_MEAN -DVC_EXTRALEAN -D_USING_V110_SDK71_ -DWXUSINGDLL -D__WXMSW__" />
-	<property name="resources_cmd_final" value="-DPIXIE_IS_FINAL_BUILD=1" />
+	<property name="resources_cmd_tester" value="-DPIXIE_IS_TESTER_BUILD=1" />
+	<property name="resources_cmd_ntester" value="-DPIXIE_IS_TESTER_BUILD=0" />
+    <property name="resources_cmd_final" value="-DPIXIE_IS_FINAL_BUILD=1" />
 	<property name="resources_cmd_nfinal" value="-DPIXIE_IS_FINAL_BUILD=0" />
 	<property name="resources_cmd_deploy" value="-DPIXIE_IS_DEPLOY_BUILD=1" />
 	<property name="resources_cmd_ndeploy" value="-DPIXIE_IS_DEPLOY_BUILD=0" />
@@ -200,6 +204,9 @@
 				<fail message="Missing platform for this compiler run!"/>
 			</default>
 		</switch>
+		<condition property="build_resources.tester_arg" value="${resources_cmd_tester}" else="${resources_cmd_ntester}">
+			<istrue value="${build_is_tester}" />
+		</condition>
 		<condition property="build_resources.final_arg" value="${resources_cmd_final}" else="${resources_cmd_nfinal}">
 			<istrue value="${build_is_final}" />
 		</condition>
@@ -229,6 +236,7 @@
 			<arg line="${build_resources.debug_arg}" />
 			<arg line="${build_resources.platform}" />
 			<arg line="${build_resources.final_arg}" />
+			<arg line="${build_resources.tester_arg}" />
 			<arg line="${build_resources.deploy_arg}" />
 			<arg line="${build_resources.portable_arg}" />
 			<arg value="-I${basedir}/${code_engine_include}" />
@@ -268,6 +276,9 @@
 			</compositemapper>
 		</pathconvert>
 		
+		<condition property="link_all.tester_arg" value="${compiler_cmd_linker_tester}" else="${compiler_cmd_linker_ntester}">
+			<istrue value="${build_is_tester}" />
+		</condition>
 		<condition property="link_all.debug_arg" value="${compiler_cmd_linker_debug}" else="${compiler_cmd_linker_ndebug}">
 			<istrue value="${build_is_debug}" />
 		</condition>
@@ -282,6 +293,7 @@
 			</fileset>
 			<arg line="${compiler_cmd_linker}" />
 			<arg line="${link_all.debug_arg}" />
+			<arg line="${link_all.tester_arg}" />
 			<arg line="/LLDMAP:&quot;${link_all.path_map}&quot;" />
 			<arg line="/LIBPATH:&quot;${compile.libraries_path}&quot;" />
 			<arg line="/OUT:&quot;${basedir}/${build_path_binary}/${binary_filename_raw}&quot;" />

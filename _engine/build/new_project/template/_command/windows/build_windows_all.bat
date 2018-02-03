@@ -1,9 +1,9 @@
 @echo off
 rem *******************************************************************
-rem * This will build debug configuration of this project in iterative manner
+rem * This will build all configurations of this project
 rem * 
 rem * REQUIRES:
-rem *     - See '\_engine\build\windows\builder_actual.bat'
+rem *     - See '\_engine\build\windows\builder_actual_windows.bat'
 rem *
 rem * AUTHOR:
 rem *     Piotr Kosek <piotr@kosek.com>
@@ -14,7 +14,7 @@ rem *     0.1 [November, 2nd 2017]:
 rem *         - Initial version
 rem *******************************************************************
 rem * CONSTRAINS:
-rem *     - See '\_engine\build\windows\builder_actual.bat'
+rem *     - See '\_engine\build\windows\builder_actual_windows.bat'
 rem *******************************************************************
 rem * Copyright (c) 2017 Piotr Kosek
 rem * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -40,23 +40,70 @@ color 07
 rem * Mark current directory
 pushd %~dp0
 
-rem * Jump '\$UNIX_PROJECT_NAME$\command\windows' -> '\_engine\build\windows'
-cd ..\..\..\_engine\build\windows
+rem * Should we fail here to provide correct argument...
+if "%~1"=="" goto real
 
-rem * Execute actual script (build)
-call builder_actual.bat $UNIX_PROJECT_NAME$ iterative "build_typename="iterative"" "build_is_iterative="true"" "build_is_debug="true"" "build_is_portable="false"" "build_is_deploy="false"" "build_is_final="false""
+rem * Execute script
+echo | call %~1
 
 rem * Should we fail here...
-if %ERRORLEVEL% == 0 goto ok1 
+if errorlevel 1 (
 
 	rem * Output some info
-	echo Failed to build iterative build
+	echo Failed to build this project
+
+	rem * Keep console Window open
+	pause
+	
+	rem * Fail execution
+	call failed
+	
+	rem * Fail execution
+	exit 1
+	
+)
+
+rem * Complete execution
+goto ok
+
+rem * Go to normal execution
+:real
+
+rem * From here, we will be enabling/disabling delayed expansion 
+rem * to avoid problems with special characters
+setlocal enableextensions enabledelayedexpansion
+
+rem * Search for all build scripts
+for %%f in (build_windows_full_*.bat) do (
+
+rem * Output some info
+echo Running %%~nf
+
+rem * Execute build script
+start /wait build_all.bat %%f
+
+rem * Should we fail here...
+if errorlevel 1 (
+
+	rem * Output some info
+	echo Failed to prebuild debug build
 
 	rem * Fail execution
-	goto failed
+	call failed
+	
+	rem * Fail execution
+	exit 1
+	
+)
 
-rem * Ok, we did not fail!
-:ok1
+rem * Output some info
+echo Done!
+
+)
+
+)
+
+)
 
 rem * Finalize successfully
 goto ok
@@ -91,8 +138,8 @@ color 2F
 rem * Output some info
 echo All Done!
 
-rem * Keep console Window open
-pause
+rem * Keep console Window open if calling script directly
+if "%~1"=="" pause
 
 rem * End script
 endlocal

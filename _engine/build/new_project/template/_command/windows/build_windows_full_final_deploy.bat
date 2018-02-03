@@ -1,9 +1,9 @@
 @echo off
 rem *******************************************************************
-rem * This will build hybrid - deploy configuration of this project
+rem * This will build final - deploy configuration of this project
 rem * 
 rem * REQUIRES:
-rem *     - See '\_engine\build\windows\builder_actual.bat'
+rem *     - See '\_engine\build\windows\builder_actual_windows.bat'
 rem *
 rem * AUTHOR:
 rem *     Piotr Kosek <piotr@kosek.com>
@@ -14,7 +14,7 @@ rem *     0.1 [November, 2nd 2017]:
 rem *         - Initial version
 rem *******************************************************************
 rem * CONSTRAINS:
-rem *     - See '\_engine\build\windows\builder_actual.bat'
+rem *     - See '\_engine\build\windows\builder_actual_windows.bat'
 rem *******************************************************************
 rem * Copyright (c) 2017 Piotr Kosek
 rem * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -44,13 +44,13 @@ rem * Jump '\$UNIX_PROJECT_NAME$\command\windows' -> '\_engine\build\windows'
 cd ..\..\..\_engine\build\windows
 
 rem * Execute actual script (build)
-call builder_actual.bat $UNIX_PROJECT_NAME$ full "build_is_iterative="false"" "build_typename="hybrid_deploy"" "build_is_debug="false"" "build_is_portable="false"" "build_is_deploy="true"" "build_is_final="false""
+call builder_actual_windows.bat $UNIX_PROJECT_NAME$ full "build_is_iterative="false"" "build_typename="final_deploy"" "build_is_debug="false"" "build_is_portable="false"" "build_is_deploy="true"" "build_is_final="true"" "build_is_tester="false""
 
 rem * Should we fail here...
 if %ERRORLEVEL% == 0 goto ok1 
 
 	rem * Output some info
-	echo Failed to build hybrid - deploy build
+	echo Failed to build final - deploy build
 
 	rem * Fail execution
 	goto failed
