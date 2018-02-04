@@ -1,19 +1,30 @@
  - Sanitizing
-	 - Platform (!!!)
-		 - Rozbij environment na podklasy
-			 - Nie spiesz się!
-		 - Zaimplementuj komponenty ignitera!
-	 - Posprzątaj parser
-		 - Wykrywanie błędów (Intellisense)
-		 - Wspólne elementy powinny być w common
-	 - Formatowanie to_string (drugi argument!)
+	 - Program (!!!)
+		 - Engine startup
+		 - Move config_storage to global_config_storage
+		 - Move logger to global_logger (?)
+		 - Create global messanger/console (? - should have info from which INSTANCE - not APP - it comes)
+		 - Create config_global_monitor
+		 - Config_monitor should subscribe on config_global_monitor
+		 - Debug_symbol should be a global module
+     - Code Coverage for tests:
+             - Use CLANG: https://clang.llvm.org/docs/SourceBasedCodeCoverage.html
+             - See docs in _command/windows/execute_tests.bat
+             - Research ways of including that in VSCode inline notes
+	 - Cleanup parser
+		 - Error detection (Intellisense): https://stackoverflow.com/questions/47354226/how-to-provider-user-with-autocomplete-suggestions-for-given-boostspirit-gramm
+		 - Common elements should be in common
+	 - to_string formatting (second argument!)
+	 
+ - New dependencies:
 	 - Replace libRocket with CEF3 https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage
+	 - Add remotely for profiling: https://github.com/Celtoys/Remotery
+		 - Add new configurations:
+			 - Debug_profilable
+			 - Hybrid_profilable
 
  - Work on components:
-v	 - config
-v	 - config_monitor
 +	 - config_storage
-v		 - Nazwa wpisu dla danego itemka konfiguracyjnego ("global_foo") powinna być konfigurowalna w ustawieniach
 +        - XML (?) inside game directory (for portable!)
 			 - Requires: XML
      - console_output
@@ -25,16 +36,11 @@ v		 - Nazwa wpisu dla danego itemka konfiguracyjnego ("global_foo") powinna być
 	 - data_monitor
 	 - data_source
 	 - environment_info
-v	 - filesystem
-v		 - Windows implementation
-v	 - logger
 	 - path_resolver
-v	 - renderer_status
-v	 - terminal
+	 - renderer_status
  - Utility / XML
 
- - Testy?
-	 - Chyba na to za wcześnie... specy ci się za często zmieniają!
+ - Unit Tests
 	 
 Docs
  - Document code
