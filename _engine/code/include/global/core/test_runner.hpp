@@ -18,7 +18,7 @@ namespace engine
     namespace global
     {
 
-        class test_runner_t // ToDo: Move to separate thread!!!
+        class test_runner_t
         {
 
         public:
