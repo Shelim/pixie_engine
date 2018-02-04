@@ -8,9 +8,6 @@
 namespace engine
 {
 
-    namespace global
-    {
-
         class app_signal_new_instance_request_t : public app_signal_t
         {
 
@@ -49,8 +46,6 @@ namespace engine
             result_t result;
 
         };
-
-    }
 
 }
 

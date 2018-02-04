@@ -1,19 +1,27 @@
-#include "core/console/msg/logger.hpp"
-#include "core/console/msg/meta.hpp"
-#include "core/console/filter.hpp"
-#include "core/console/formatter.hpp"
-#include "core/console/instance.hpp"
-#include "core/console/string.hpp"
-#include "core/console/writer.hpp"
+#include "global/core/console/msg/logger.hpp"
+#include "global/core/console/msg/meta.hpp"
+#include "global/core/console/filter.hpp"
+#include "global/core/console/formatter.hpp"
+#include "global/core/console/instance.hpp"
+#include "global/core/console/string.hpp"
+#include "global/core/console/writer.hpp"
 
-engine::console::logger_item_t::logger_item_t(std::size_t id, kind_t kind, source_t source, const ustring_t & message, const ustring_t & function, const ustring_t & file, uint32_t line, uint64_t frame, std::chrono::seconds time, std::thread::id thread, std::size_t link) :
-				actual_t(type_t::logger, source, kind), id(id), message(message), function(function), file_raw(file), line(line), frame(frame), time(time), thread(thread), link(link)
+engine::console::logger_item_t::logger_item_t(std::size_t id, kind_t kind, app_t::kind_t app, app_t::instance_id_t app_instance_id, source_t source, const ustring_t & message, const ustring_t & function, const ustring_t & file, uint32_t line, std::chrono::seconds time, std::thread::id thread, std::size_t link) :
+				actual_t(type_t::logger, source, kind), id(id), app(app), app_instance_id(app_instance_id), message(message), function(function), file_raw(file), line(line), time(time), thread(thread), link(link)
 {
     this->file = platform::canonize_debug_filename(file_raw);
 }
 std::size_t engine::console::logger_item_t::get_id() const
 {
     return id;
+}
+engine::app_t::kind_t engine::console::logger_item_t::get_app() const
+{
+    return app;
+}
+engine::app_t::instance_id_t engine::console::logger_item_t::get_app_instance_id() const
+{
+    return app_instance_id;
 }
 engine::ustring_t engine::console::logger_item_t::get_source_as_string() const
 {
@@ -38,10 +46,6 @@ const engine::ustring_t & engine::console::logger_item_t::get_file_raw() const
 uint32_t engine::console::logger_item_t::get_line() const
 {
     return line;
-}
-uint64_t engine::console::logger_item_t::get_frame() const
-{
-    return frame;
 }
 std::chrono::seconds engine::console::logger_item_t::get_time() const
 {

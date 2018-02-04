@@ -7,27 +7,22 @@
 namespace engine
 {
 
-    namespace global
+    class thread_program_t
     {
 
-        class thread_program_t
+    public:
+
+        virtual ~thread_program_t()
         {
 
-        public:
+        }
 
-            virtual ~thread_program_t()
-            {
-
-            }
-
-        };
-
-    }
+    };
 
 }
 
-#include "global/component/thread_overseer/dummy.hpp"
-#include "global/component/thread_overseer/real.hpp"
+#include "global/component/thread_program/dummy.hpp"
+#include "global/component/thread_program/real.hpp"
 
 #endif
 
@@ -82,7 +77,7 @@ namespace engine
 }
 
 #define ENGINE_ENUM_HEADER_TO_USE "def/enum/global_thread.def"
-#include "core/utility/enum_to_string.hpp"
+#include "global/core/utility/enum_to_string.hpp"
 
 #endif
 

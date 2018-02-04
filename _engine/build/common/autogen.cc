@@ -1,5 +1,5 @@
-#include "core/manifest/version.hpp"
-#include "core/manifest/manifest.hpp"
+#include "global/core/manifest/version.hpp"
+#include "global/core/manifest/manifest.hpp"
 #include "utility/pattern/enum.hpp"
 #include "utility/text/ustring.hpp"
 #include <array>

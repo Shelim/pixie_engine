@@ -1,6 +1,6 @@
 /*
 
-#include "component/logger_file_writer.hpp"
+#include "global/component/logger_file_writer.hpp"
 
 engine::logger_file_writer_real_t::logger_file_writer_real_t(std::shared_ptr<platform::filesystem_t> platform_filesystem)
 {

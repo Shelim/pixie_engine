@@ -6,12 +6,11 @@
 #include <cstdio>
 #include <cstdlib>
 #include "core/bootstrapper.hpp"
-#include "component/logger.hpp"
-#include "component/renderer_status.hpp"
-#include "core/vfs/filesystem.hpp"
+#include "global/component/logger.hpp"
+#include "global/core/vfs/filesystem.hpp"
 #include "utility/text/ustring.hpp"
-#include "core/vfs/virtual_path.hpp"
-#include "component/terminal_writer.hpp"
+#include "global/core/vfs/virtual_path.hpp"
+#include "global/component/terminal_writer.hpp"
 
 namespace engine
 {

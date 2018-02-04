@@ -8,10 +8,10 @@
 #include <chrono>
 #include "global/bootstrapper.hpp"
 #include "utility/concurrention/signal.hpp"
-#include "core/messenger/messenger.hpp"
-#include "core/console/msg/logger.hpp"
-#include "core/console/msg/meta.hpp"
-#include "core/console/filter.hpp"
+#include "global/core/messenger/messenger.hpp"
+#include "global/core/console/msg/logger.hpp"
+#include "global/core/console/msg/meta.hpp"
+#include "global/core/console/filter.hpp"
 #include "global/program.hpp"
 
 
@@ -657,9 +657,9 @@ int main(int arg, char * argv[])
 #include <thread>
 #include <chrono>
 #include "bootstrapper.hpp"
-#include "core/vfs/filesystem.hpp"
+#include "global/core/vfs/filesystem.hpp"
 #include "utility/text/ustring.hpp"
-#include "core/vfs/virtual_path.hpp"
+#include "global/core/vfs/virtual_path.hpp"
 #include "settings/default_archive.hpp"
 #include "settings/default_paths.hpp"
 #include "settings/default_terminal.hpp"

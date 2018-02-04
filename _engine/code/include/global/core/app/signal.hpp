@@ -4,46 +4,40 @@
 
 namespace engine
 {
-
-    namespace global
+    class app_signal_t
     {
 
-        class app_signal_t
-        {
+        public:
 
-            public:
+            virtual ~app_signal_t()
+            {
 
-                virtual ~app_signal_t()
-                {
+            }
 
-                }
+#include "def/enum/app_signal.def"
 
-    #include "def/enum/app_signal.def"
+            type_t get_type() const
+            {
+                return type;
+            }
 
-                type_t get_type() const
-                {
-                    return type;
-                }
+        protected:
 
-            protected:
+            app_signal_t(type_t type) : type(type)
+            {
+                
+            }
 
-                app_signal_t(type_t type) : type(type)
-                {
-                    
-                }
+        private:
 
-            private:
+            type_t type;
 
-                type_t type;
-
-        };
-
-    }
+    };
 
 }
 
 #define ENGINE_ENUM_HEADER_TO_USE "def/enum/app_signal.def"
-#include "core/utility/enum_to_string.hpp"
+#include "global/core/utility/enum_to_string.hpp"
 
 #include "global/core/app/signal/new_instance_request.hpp"
 #include "global/core/app/signal/terminate.hpp"

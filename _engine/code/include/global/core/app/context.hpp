@@ -4,43 +4,49 @@
 
 #include "utility/text/ustring.hpp"
 #include "utility/platform/args.hpp"
+#include <functional>
 
 namespace engine
 {
 
-    namespace global
+    class instance_id_t {};
+
+    extern instance_id_t instace_id;
+
+    class program_t;
+
+    class app_context_t
     {
 
-        class program_t;
+    public:
 
-        class app_context_t
+        app_context_t(std::shared_ptr<program_t> program, const args_t & args) : program(program), args(args), instance_id(next_instance_id++)
         {
 
-        public:
+        }
 
-            app_context_t(std::shared_ptr<program_t> program, const args_t & args) : program(program), args(args)
-            {
+        std::shared_ptr<program_t> get_program()
+        {
+            return program;
+        }
 
-            }
+        const args_t & get_args()
+        {
+            return args;
+        }
 
-            std::shared_ptr<program_t> get_program()
-            {
-                return program;
-            }
+        int32_t get_instance_id() const
+        {
+            return instance_id;
+        }
 
-            const args_t & get_args()
-            {
-                return args;
-            }
+    private:
 
-        private:
-
-            std::shared_ptr<program_t> program;
-            args_t args;
-            
-        };
-
-    }
+        std::shared_ptr<program_t> program;
+        args_t args;
+        int32_t instance_id;
+        static int32_t next_instance_id;
+    };
 
 }
 

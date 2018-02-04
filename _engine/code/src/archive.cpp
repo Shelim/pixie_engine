@@ -1,11 +1,11 @@
 /*
 
-#include "component/data_archives.hpp"
-#include "core/messenger/msg_scanner_found_item.hpp"
-#include "core/data/provider_actual.hpp"
-#include "core/data/provider_actual/archive.hpp"
+#include "global/component/data_archives.hpp"
+#include "global/core/messenger/msg_scanner_found_item.hpp"
+#include "global/core/data/provider_actual.hpp"
+#include "global/core/data/provider_actual/archive.hpp"
 #include "utility/archive/zip.hpp"
-#include "core/data/results.hpp"
+#include "global/core/data/results.hpp"
 
 engine::data_archives_real_t::data_archives_real_t(std::shared_ptr<messenger_t> messenger, std::unique_ptr<settings_t<data_archives_t>> settings) : messenger(messenger), settings(std::move(settings)), callbacks_container(messenger, this)
 {

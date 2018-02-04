@@ -7,7 +7,7 @@
 #include <sstream>
 #include <string>
 #include "utility/text/ustring.hpp"
-#include "core/vfs/virtual_path.hpp"
+#include "global/core/vfs/virtual_path.hpp"
 
 namespace engine
 {

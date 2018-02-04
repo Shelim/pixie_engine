@@ -3,7 +3,7 @@
 #if PIXIE_WINDOWS
 
 #include "debugbreak.h"
-#include "core/data/output.hpp"
+#include "global/core/data/output.hpp"
 
 #include "utility/text/ustring.hpp"
 

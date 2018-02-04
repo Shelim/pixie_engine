@@ -15,68 +15,63 @@
 namespace engine
 {
 
-    namespace global
+    class test_runner_t
     {
 
-        class test_runner_t
+    public:
+
+        test_runner_t() : return_code(1)
         {
 
-        public:
+        }
 
-            test_runner_t() : return_code(1)
-            {
+        ~test_runner_t()
+        {
+            if(worker.joinable())
+                worker.join();
+        }
 
-            }
+        void run_test(int argc, char * argv[])
+        {
+            args = std::make_unique<args_t>(argc, argv);
 
-            ~test_runner_t()
-            {
-                if(worker.joinable())
-                    worker.join();
-            }
+            run_test_actual();
+        }
+        bool has_completed()
+        {
+            return signal.is_released();
+        }
+        void wait_till_completed()
+        {
+            signal.wait();
+        }
+        int32_t get_return_code()
+        { 
+            return return_code; 
+        }
 
-            void run_test(int argc, char * argv[])
-            {
-                args = std::make_unique<args_t>(argc, argv);
+    private:
 
-                run_test_actual();
-            }
-            bool has_completed()
-            {
-                return signal.is_released();
-            }
-            void wait_till_completed()
-            {
-                signal.wait();
-            }
-            int32_t get_return_code()
-            { 
-                return return_code; 
-            }
+        std::unique_ptr<args_t> args;
+        int32_t return_code;
+        signal_t signal;
+        std::thread worker;
 
-        private:
+        void run_test_actual()
+        {
+            worker = std::thread([this]{
 
-            std::unique_ptr<args_t> args;
-            int32_t return_code;
-            signal_t signal;
-            std::thread worker;
+            int argc = args->get_argc();
+            std::vector<const char*> argv = args->get_argv();
 
-            void run_test_actual()
-            {
-                worker = std::thread([this]{
+            testing::InitGoogleTest(&argc, const_cast<char**>(&argv[0]));
+            return_code = RUN_ALL_TESTS();
+            signal.signal();
+            
+            });
+        }
 
-                int argc = args->get_argc();
-                std::vector<const char*> argv = args->get_argv();
-
-                testing::InitGoogleTest(&argc, const_cast<char**>(&argv[0]));
-                return_code = RUN_ALL_TESTS();
-                signal.signal();
-                
-                });
-            }
-
-        };
-    }
-
+    };
 }
 
 

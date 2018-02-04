@@ -7,22 +7,17 @@
 namespace engine
 {
 
-    namespace global
+    class thread_overseer_t
     {
 
-        class thread_overseer_t
+    public:
+
+        virtual ~thread_overseer_t()
         {
 
-        public:
+        }
 
-            virtual ~thread_overseer_t()
-            {
-
-            }
-
-        };
-
-    }
+    };
 
 }
 

@@ -7,22 +7,17 @@
 namespace engine
 {
 
-    namespace global
+    class program_instances_communicator_client_t
     {
 
-        class program_instances_communicator_client_t
+    public:
+
+        virtual ~program_instances_communicator_client_t()
         {
 
-        public:
+        }
 
-            virtual ~program_instances_communicator_client_t()
-            {
-
-            }
-
-        };
-
-    }
+    };
 
 }
 

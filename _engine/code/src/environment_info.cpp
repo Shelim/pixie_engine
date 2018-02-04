@@ -1,6 +1,6 @@
 /*
 
-#include "component/environment_info.hpp"
+#include "global/component/environment_info.hpp"
 #include "utility/platform/compilation.hpp"
 #include "utility/platform/info.hpp"
 #include "utility/text/ustring.hpp"

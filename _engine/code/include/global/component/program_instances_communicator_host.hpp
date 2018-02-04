@@ -7,23 +7,18 @@
 namespace engine
 {
 
-    namespace global
+    class program_instances_communicator_host_t
     {
 
-        class program_instances_communicator_host_t
+    public:
+
+        virtual ~program_instances_communicator_host_t()
         {
 
-        public:
+        }
 
-            virtual ~program_instances_communicator_host_t()
-            {
-
-            }
-
-        };
-
-    }
-
+    };
+    
 }
 
 #include "global/component/program_instances_communicator_host/dummy.hpp"

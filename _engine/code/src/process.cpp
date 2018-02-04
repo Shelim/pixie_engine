@@ -1,12 +1,12 @@
-#include "core/process/process.hpp"
-#include "core/process/runner.hpp"
-#include "core/process/runner/engine_thread.hpp"
-#include "core/process/runner/spawn.hpp"
-#include "core/process/runner/sync.hpp"
-#include "core/process/runner/thread_pool.hpp"
-#include "core/process/task.hpp"
-#include "core/process/token.hpp"
-#include "core/process/service.hpp"
+#include "global/core/process/process.hpp"
+#include "global/core/process/runner.hpp"
+#include "global/core/process/runner/engine_thread.hpp"
+#include "global/core/process/runner/spawn.hpp"
+#include "global/core/process/runner/sync.hpp"
+#include "global/core/process/runner/thread_pool.hpp"
+#include "global/core/process/task.hpp"
+#include "global/core/process/token.hpp"
+#include "global/core/process/service.hpp"
 
 bool engine::process::token_t::is_requested_shutdown()
 {

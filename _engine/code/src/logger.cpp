@@ -1,7 +1,7 @@
-#include "component/logger.hpp"
-#include "core/console/writer.hpp"
-#include "core/vfs/virtual_path.hpp"
-#include "core/console/msg/meta.hpp"
+#include "global/component/logger.hpp"
+#include "global/core/console/writer.hpp"
+#include "global/core/vfs/virtual_path.hpp"
+#include "global/core/console/msg/meta.hpp"
 
 engine::logger_t::logger_t()
 {
@@ -13,7 +13,7 @@ engine::logger_t::~logger_t()
 
 }
 
-engine::logger_t::item_id_t engine::logger_dummy_t::log_local(engine::console::logger_item_t::kind_t kind, engine::console::logger_item_t::source_t source, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message)
+engine::logger_t::item_id_t engine::logger_dummy_t::log_local(engine::console::logger_item_t::kind_t kind, engine::app_t::kind_t app, engine::app_t::instance_id_t app_instance_id, engine::console::logger_item_t::source_t source, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message)
 {
 	return 0;
 }
@@ -28,8 +28,8 @@ engine::logger_provider_base_t::~logger_provider_base_t()
 
 }
 
-engine::logger_real_t::logger_real_t(std::shared_ptr<engine::renderer_status_t> renderer_status, std::shared_ptr<engine::environment_info_t> environment_info, std::unique_ptr<holder_t<logger_t> > logger_providers)
- : renderer_status(renderer_status), logger_providers(std::move(logger_providers))
+engine::logger_real_t::logger_real_t(std::shared_ptr<engine::environment_info_t> environment_info, std::unique_ptr<holder_t<logger_t> > logger_providers)
+ : logger_providers(std::move(logger_providers))
 {
 	time_start = std::chrono::system_clock::now();
 	output_start();
@@ -61,18 +61,22 @@ void engine::logger_real_t::output_end()
 	}
 }
 
-engine::logger_real_t::item_id_t engine::logger_real_t::log_local(engine::console::logger_item_t::kind_t kind, engine::console::logger_item_t::source_t source, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message)
+engine::logger_real_t::item_id_t engine::logger_real_t::log_local(engine::console::logger_item_t::kind_t kind, engine::app_t::kind_t app, engine::app_t::instance_id_t app_instance_id, engine::console::logger_item_t::source_t source, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message)
 {
 	size_t item_id;
 	{
 		if (source == engine::console::logger_item_t::source_t::unknown && link < cache.size())
+		{
 			source = cache[link].get_source();
+			app = cache[link].get_app();
+			app_instance_id = cache[link].get_app_instance_id();
+		}
 
 		ustring_t msg = message;
 		if (link < cache.size() && msg.is_empty())
 			msg = cache[link].get_message();
 
-		engine::console::logger_item_t item(cache.size(), kind, source, msg, function, file, line, renderer_status->get_frame(), std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - time_start), std::this_thread::get_id(), link);
+		engine::console::logger_item_t item(cache.size(), kind, app, app_instance_id, source, msg, function, file, line, std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - time_start), std::this_thread::get_id(), link);
 
 		cache.push_back(item);
 

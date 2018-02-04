@@ -7,22 +7,17 @@
 namespace engine
 {
 
-    namespace global
+    class program_instances_detection_t
     {
 
-        class program_instances_detection_t
+    public:
+
+        virtual ~program_instances_detection_t()
         {
 
-        public:
+        }
 
-            virtual ~program_instances_detection_t()
-            {
-
-            }
-
-        };
-
-    }
+    };
 
 }
 

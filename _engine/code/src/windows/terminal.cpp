@@ -1,4 +1,4 @@
-#include "component/terminal/provider/windows.hpp"
+#include "local/component/terminal/provider/windows.hpp"
 
 #if PIXIE_WINDOWS
 

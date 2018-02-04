@@ -6,56 +6,57 @@
 #include "utility/text/ustring.hpp"
 #include "global/core/app/signal.hpp"
 #include "global/core/app/context.hpp"
-#include "core/manifest/app.hpp"
 
 namespace engine
 {
 
-    namespace global
+    class app_t
     {
 
-        class app_t
-        {
+        public:
 
-            public:
+#include "def/enum/app.def"
 
-                virtual ~app_t()
-                {
+            typedef int32_t instance_id_t;
 
-                }
+            virtual ~app_t()
+            {
 
-    #include "def/enum/main_return_code.def"
+            }
 
-                virtual return_code_t main(std::unique_ptr<app_context_t> context) = 0;
+#include "def/enum/main_return_code.def"
 
-                virtual void signal(app_signal_t * signal)
-                {
+            virtual return_code_t main(std::unique_ptr<app_context_t> context) = 0;
 
-                }
+            virtual void signal(app_signal_t * signal)
+            {
 
-                manifest_app_t::app_t get_app() const
-                {
-                    return app;
-                }
+            }
 
-            protected:
+            app_t::kind_t get_app() const
+            {
+                return app;
+            }
 
-                app_t(manifest_app_t::app_t app) : app(app)
-                {
+        protected:
 
-                }
+            app_t(app_t::kind_t app) : app(app)
+            {
 
-            private:
+            }
 
-                manifest_app_t::app_t app;
-                
-        };
+        private:
 
-    }
+            app_t::kind_t app;
+            
+    };
 
 }
 
 #define ENGINE_ENUM_HEADER_TO_USE "def/enum/main_return_code.def"
-#include "core/utility/enum_to_string.hpp"
+#include "global/core/utility/enum_to_string.hpp"
+
+#define ENGINE_ENUM_HEADER_TO_USE "def/enum/app.def"
+#include "global/core/utility/enum_to_string.hpp"
 
 #endif

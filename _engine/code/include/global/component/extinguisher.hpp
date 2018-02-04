@@ -7,24 +7,19 @@
 namespace engine
 {
 
-    namespace global
+    class extinguisher_t
     {
 
-        class extinguisher_t
+    public:
+
+        virtual ~extinguisher_t()
         {
 
-        public:
+        }
 
-            virtual ~extinguisher_t()
-            {
+        virtual int32_t get_return_code() {return 0;}
 
-            }
-
-            virtual int32_t get_return_code() {return 0;}
-
-        };
-
-    }
+    };
 
 }
 

@@ -7,24 +7,19 @@
 namespace engine
 {
 
-    namespace global
+    class app_overseer_t
     {
 
-        class app_overseer_t
+    public:
+
+        virtual ~app_overseer_t()
         {
 
-        public:
+        }
 
-            virtual ~app_overseer_t()
-            {
+        virtual void wait_for_completion() {}
 
-            }
-
-            virtual void wait_for_completion() {}
-
-        };
-
-    }
+    };
 
 }
 

@@ -8,55 +8,50 @@
 namespace engine
 {
 
-    namespace global
+    class app_signal_terminate_t : public app_signal_t
     {
+        
+    public:
 
-        class app_signal_terminate_t : public app_signal_t
+#include "def/enum/app_termination_reason.def"
+
+        app_signal_terminate_t(reason_t reason) : app_signal_t(app_signal_t::type_t::terminate), reason(reason)
         {
-            
-        public:
 
-    #include "def/enum/app_termination_reason.def"
+        }
 
-            app_signal_terminate_t(reason_t reason) : app_signal_t(app_signal_t::type_t::terminate), reason(reason)
-            {
+        void cancel()
+        {
+            flags.set_flag(flag_t::is_cancelled, true);
+        }
 
-            }
+        bool is_cancelled() const
+        {
+            return flags.is_flag(flag_t::is_cancelled);
+        }
 
-            void cancel()
-            {
-                flags.set_flag(flag_t::is_cancelled, true);
-            }
+        reason_t get_reason() const
+        {
+            return reason;
+        }
 
-            bool is_cancelled() const
-            {
-                return flags.is_flag(flag_t::is_cancelled);
-            }
+    private:
 
-            reason_t get_reason() const
-            {
-                return reason;
-            }
+        reason_t reason;
 
-        private:
-
-            reason_t reason;
-
-            enum class flag_t
-            {
-                is_cancelled,
-                count
-            };
-
-            flags_t<flag_t> flags;
-
+        enum class flag_t
+        {
+            is_cancelled,
+            count
         };
 
-    }
+        flags_t<flag_t> flags;
+
+    };
 
 }
 
 #define ENGINE_ENUM_HEADER_TO_USE "def/enum/app_termination_reason.def"
-#include "core/utility/enum_to_string.hpp"
+#include "global/core/utility/enum_to_string.hpp"
 
 #endif

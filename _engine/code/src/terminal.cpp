@@ -1,4 +1,4 @@
-#include "component/terminal.hpp"
+#include "local/component/terminal.hpp"
 
 engine::terminal_t::terminal_t()
 {
@@ -49,26 +49,26 @@ engine::terminal_provider_base_t::~terminal_provider_base_t()
 
 engine::terminal_real_t::terminal_real_t(std::shared_ptr<logger_t> logger, std::unique_ptr<holder_t<terminal_t> > terminal_provider) : logger(logger), terminal_provider(std::move(terminal_provider))
 {
-	logger->log_msg(terminal, "Terminal component has started"_u);
+//	logger->log_msg(terminal, "Terminal component has started"_u);
 }
 
 engine::terminal_real_t::~terminal_real_t()
 {
-	logger->log_msg(terminal, "Terminal component has been disposed"_u);
+//	logger->log_msg(terminal, "Terminal component has been disposed"_u);
 }
 
 std::shared_ptr<engine::terminal_t::instance_t> engine::terminal_real_t::open(const ustring_t & name, terminal_t::color_t background, closing_callback_t on_closing)
 {
-	logger->log_msg(terminal, "Terminal '#1#' is being opened"_u, name);
+//	logger->log_msg(terminal, "Terminal '#1#' is being opened"_u, name);
 	return terminal_provider->get_provider()->open(name, background, on_closing);
 }
 
 /*
 
-#include "component/terminal.hpp"
+#include "global/component/terminal.hpp"
 #include "wrapper/terminal_writer.hpp"
 #include "utility/platform/terminal.hpp"
-#include "component/config/msg_config_updated.hpp"
+#include "global/component/config/msg_config_updated.hpp"
 
 const engine::id_t engine::parser::token_terminal_escape_t::id = engine::make_id("tesc");
 const engine::id_t engine::parser::token_terminal_eof_t::id = engine::make_id("teof");

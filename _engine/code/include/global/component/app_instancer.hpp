@@ -7,22 +7,17 @@
 namespace engine
 {
 
-    namespace global
+    class app_instancer_t
     {
 
-        class app_instancer_t
+    public:
+
+        virtual ~app_instancer_t()
         {
 
-        public:
+        }
 
-            virtual ~app_instancer_t()
-            {
-
-            }
-
-        };
-
-    }
+    };
 
 }
 

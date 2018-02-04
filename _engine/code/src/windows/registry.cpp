@@ -1,4 +1,4 @@
-#include "component/config_storage/provider/windows_registry.hpp"
+#include "global/component/config_storage/provider/windows_registry.hpp"
 
 #if PIXIE_WINDOWS
 

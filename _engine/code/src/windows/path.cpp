@@ -4,7 +4,7 @@
 
 #if PIXIE_WINDOWS
 
-#include "core/data/output.hpp"
+#include "global/core/data/output.hpp"
 
 #include "windows/internal.hpp"
 #include "utility/text/ustring.hpp"

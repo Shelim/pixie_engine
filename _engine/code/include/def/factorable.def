@@ -2,6 +2,4 @@
 #define ENGINE_FACTORABLE_DEF(...)
 #endif
 
-ENGINE_FACTORABLE_DEF(process::runner_spawn_t)
-
 #undef ENGINE_FACTORABLE_DEF

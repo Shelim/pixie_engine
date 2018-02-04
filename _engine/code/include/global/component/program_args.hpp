@@ -7,22 +7,17 @@
 namespace engine
 {
 
-    namespace global
+    class program_args_t
     {
 
-        class program_args_t
+    public:
+
+        virtual ~program_args_t()
         {
 
-        public:
+        }
 
-            virtual ~program_args_t()
-            {
-
-            }
-
-        };
-
-    }
+    };
 
 }
 

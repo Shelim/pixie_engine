@@ -1,7 +1,7 @@
-#include "core/messenger/msg/console.hpp"
-#include "core/messenger/instance.hpp"
-#include "core/messenger/msg.hpp"
-#include "core/messenger/messenger.hpp"
+#include "global/core/messenger/msg/console.hpp"
+#include "global/core/messenger/instance.hpp"
+#include "global/core/messenger/msg.hpp"
+#include "global/core/messenger/messenger.hpp"
 
 engine::messenger::msg_console_t::actual_t::~actual_t()
 {
@@ -55,9 +55,9 @@ engine::messenger::msg_base_t::msg_base_t(type_t type) : type(type)
 
 /*
 
-#include "core/messenger/messenger.hpp"
-#include "core/messenger/msg_shutdown.hpp"
-#include "core/messenger/msg_kill_messanger.hpp"
+#include "global/core/messenger/messenger.hpp"
+#include "global/core/messenger/msg_shutdown.hpp"
+#include "global/core/messenger/msg_kill_messanger.hpp"
 
 
 engine::messenger_t::messenger_t()

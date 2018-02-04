@@ -1,28 +1,28 @@
 /*
-#include "core/data/changes.hpp"
-#include "core/data/collection_items.hpp"
-#include "core/data/input.hpp"
-#include "core/data/item_actual.hpp"
-#include "core/data/item.hpp"
-#include "core/data/output.hpp"
-#include "core/data/provider_actual.hpp"
-#include "core/data/provider.hpp"
-#include "core/data/results.hpp"
-#include "core/data/scanner.hpp"
-#include "core/data/scanners.hpp"
-#include "core/data/state.hpp"
+#include "global/core/data/changes.hpp"
+#include "global/core/data/collection_items.hpp"
+#include "global/core/data/input.hpp"
+#include "global/core/data/item_actual.hpp"
+#include "global/core/data/item.hpp"
+#include "global/core/data/output.hpp"
+#include "global/core/data/provider_actual.hpp"
+#include "global/core/data/provider.hpp"
+#include "global/core/data/results.hpp"
+#include "global/core/data/scanner.hpp"
+#include "global/core/data/scanners.hpp"
+#include "global/core/data/state.hpp"
 */
 
 /*
 
-#include "core/data/input.hpp"
-#include "core/data/state.hpp"
-#include "core/data/results.hpp"
-#include "core/data/scanner/directory.hpp"
-#include "core/data/provider_actual/archive.hpp"
-#include "component/data_source.hpp"
-#include "component/data_source/msg_scanner_found_item.hpp"
-#include "core/data/changes.hpp"
+#include "global/core/data/input.hpp"
+#include "global/core/data/state.hpp"
+#include "global/core/data/results.hpp"
+#include "global/core/data/scanner/directory.hpp"
+#include "global/core/data/provider_actual/archive.hpp"
+#include "global/component/data_source.hpp"
+#include "global/component/data_source/msg_scanner_found_item.hpp"
+#include "global/core/data/changes.hpp"
 
 
 std::unique_ptr<engine::data::input_t> engine::data::input_t::spawn_partial(int32_t size)

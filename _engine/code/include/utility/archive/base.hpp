@@ -2,10 +2,10 @@
 #define ENGINE_COMMON_UTILITY_ARCHIVE_BASE_HPP
 #pragma once
 
-#include "core/vfs/virtual_path.hpp"
+#include "global/core/vfs/virtual_path.hpp"
 #include "utility/pattern/flags.hpp"
-#include "core/data/provider_actual.hpp"
-#include "core/data/input.hpp"
+#include "global/core/data/provider_actual.hpp"
+#include "global/core/data/input.hpp"
 
 namespace engine
 {

@@ -7,22 +7,17 @@
 namespace engine
 {
 
-    namespace global
+    class app_resolver_t
     {
 
-        class app_resolver_t
+    public:
+
+        virtual ~app_resolver_t()
         {
 
-        public:
+        }
 
-            virtual ~app_resolver_t()
-            {
-
-            }
-
-        };
-
-    }
+    };
 
 }
 

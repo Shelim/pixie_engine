@@ -10,7 +10,7 @@
 #define ENGINE_ENUM_END() count };
 #endif
 
-ENGINE_ENUM_START(engine::global::app_t, return_code_t)
+ENGINE_ENUM_START(engine::app_t, return_code_t)
 #define ENGINE_MAIN_RETURN_CODE_DEF(x) ENGINE_ENUM_VALUE(x, #x##_u)
 #include "def/main_return_code.def"
 ENGINE_ENUM_END()

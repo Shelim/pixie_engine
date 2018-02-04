@@ -7,22 +7,17 @@
 namespace engine
 {
 
-    namespace global
+    class debug_symbols_t
     {
 
-        class debug_symbols_t
+    public:
+
+        virtual ~debug_symbols_t()
         {
 
-        public:
+        }
 
-            virtual ~debug_symbols_t()
-            {
-
-            }
-
-        };
-
-    }
+    };
 
 }
 

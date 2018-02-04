@@ -9,71 +9,66 @@
 namespace engine
 {
 
-    namespace global
+    class core_thread_t // For example: renderer thread!
     {
 
-        class core_thread_t // For example: renderer thread!
-        {
+        public:
 
-            public:
+            core_thread_t(id_t id, ustring_t name) : id(id), name(name)
+            {
 
-                core_thread_t(id_t id, ustring_t name) : id(id), name(name)
-                {
+            }
 
-                }
+            id_t get_id() const
+            {
+                return id;
+            }
 
-                id_t get_id() const
-                {
-                    return id;
-                }
+            const ustring_t & get_name() const
+            {
+                return name;
+            }
 
-                const ustring_t & get_name() const
-                {
-                    return name;
-                }
+            class instance_t
+            {
 
-                class instance_t
-                {
+                public:
 
-                    public:
+                    ~instance_t()
+                    {
 
-                        ~instance_t()
-                        {
+                    }
 
-                        }
+                private:
 
-                    private:
+                    instance_t(core_thread_t * owner) : owner(owner)
+                    {
 
-                        instance_t(core_thread_t * owner) : owner(owner)
-                        {
+                    }
 
-                        }
+                    core_thread_t * owner;
 
-                        core_thread_t * owner;
+                    friend class core_thread_t;
 
-                        friend class core_thread_t;
+            };
 
-                };
+            typedef std::function<void()> callback_t;
 
-                typedef std::function<void()> callback_t;
+            std::unique_ptr<instance_t> register_callback(callback_t callback);
 
-                std::unique_ptr<instance_t> register_callback(callback_t callback);
+            void execute_thread_once();
 
-                void execute_thread_once();
+            ~core_thread_t()
+            {
+                
+            }
 
-                ~core_thread_t()
-                {
-                    
-                }
+        private:
 
-            private:
+            id_t id;
+            ustring_t name;
 
-                id_t id;
-                ustring_t name;
-
-        };
-    }
-
+    };
 }
 
 #endif

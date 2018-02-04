@@ -19,7 +19,7 @@
 #include <iterator>
 #include <codecvt>
 #include <cereal/access.hpp>
-#include "core/vfs/filesystem.hpp"
+#include "global/core/vfs/filesystem.hpp"
 #include "utility/renderer/color.hpp"
 #include "utility/pattern/fourcc.hpp"
 

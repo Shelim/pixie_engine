@@ -17,9 +17,9 @@ namespace engine
                 return return_code_t::success;
             }
 
-            manifest_app_t::app_t get_app() final
+            app_t::kind_t get_app() final
             {
-                return manifest_app_t::app_t::tester;
+                return app_t::kind_t::tester;
             }
             
     };
