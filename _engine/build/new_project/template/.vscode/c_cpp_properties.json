@@ -90,6 +90,7 @@
                 "PIXIE_IS_FINAL_BUILD=0",
                 "PIXIE_IS_DEPLOY_BUILD=0",
                 "PIXIE_IS_PORTABLE_BUILD=0",
+                "PIXIE_IS_TESTER_BUILD=0",
                 "_UNICODE",
                 "WXUSINGDLL",
                 "__WXMSW__",
