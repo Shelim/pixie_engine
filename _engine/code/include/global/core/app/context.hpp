@@ -3,6 +3,7 @@
 #pragma once
 
 #include "utility/text/ustring.hpp"
+#include "utility/platform/args.hpp"
 
 namespace engine
 {
@@ -17,7 +18,7 @@ namespace engine
 
         public:
 
-            app_context_t(std::shared_ptr<program_t> program, const ustring_collection_t & args) : program(program), args(args)
+            app_context_t(std::shared_ptr<program_t> program, const args_t & args) : program(program), args(args)
             {
 
             }
@@ -27,7 +28,7 @@ namespace engine
                 return program;
             }
 
-            const ustring_collection_t & get_args()
+            const args_t & get_args()
             {
                 return args;
             }
@@ -35,7 +36,7 @@ namespace engine
         private:
 
             std::shared_ptr<program_t> program;
-            ustring_collection_t args;
+            args_t args;
             
         };
 

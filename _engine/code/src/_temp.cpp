@@ -25,12 +25,7 @@ int main(int arg, char * argv[])
 
 		APP(game)
 
-		ENABLE_COMPONENT(config)
-		ENABLE_COMPONENT(config_monitor)
-		ENABLE_COMPONENT(config_storage)
-		ENABLE_COMPONENT(filesystem)
-		ENABLE_COMPONENT(logger)
-		ENABLE_COMPONENT(terminal)
+		ALL_COMPONENTS_BY_DEFAULT_ARE(real)
 
 		USE_PROVIDER_FOR(config, config_storage)
 		USE_PROVIDERS_FOR(config_changed, messenger, logger)

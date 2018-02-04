@@ -32,6 +32,8 @@ namespace engine
 
             class unused_t {};
 
+            friend class igniter_t;
+
         public:
 
             program_t(boost::di::injector<
