@@ -95,9 +95,9 @@
 	<property name="executable_extension" value=".exe" />
 	<property name="map_extension" value=".map" />
 	<property name="binary_filename_raw_pdb" value="pixie_${build_typename}.pdb" />
-    <property name="compiler_cmd_linker" value="/Subsystem:Windows /NODEFAULTLIB /MANIFEST:EMBED /MACHINE:X64" />
-	<property name="compiler_cmd_linker_tester" value="" />
-	<property name="compiler_cmd_linker_ntester" value="" />
+    <property name="compiler_cmd_linker" value="/NODEFAULTLIB /MANIFEST:EMBED /MACHINE:X64" />
+	<property name="compiler_cmd_linker_tester" value="/Subsystem:Console" />
+	<property name="compiler_cmd_linker_ntester" value="/Subsystem:Windows" />
 	<property name="compiler_cmd_linker_debug" value="/debug" />
 	<property name="compiler_cmd_linker_ndebug" value="" />
 	<property name="resources_cmd_iterative" value="-DPIXIE_IS_ITERATIVE_BUILD=1" />
