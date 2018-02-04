@@ -73,7 +73,10 @@
 	-->
 	<property name="compiler_cmd_ndebug" value="-D_MD -D_DLL -O2 -fexpensive-optimizations -DNDEBUG -DPIXIE_IS_DEBUG_BUILD=0" />
 	<property name="compiler_cmd_platform_windows" value="-DPIXIE_WINDOWS=1 -DWINDOWS -DWINAPI_FAMILY=100 -D_M_X64=100 -D_M_AMD64=100 -D_MSC_VER=1910 -D_WIN32 -D_WIN64 -D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -D_MSC_FULL_VER=191025019 -DWIN32_LEAN_AND_MEAN -DVC_EXTRALEAN -D_USING_V110_SDK71_ -DWXUSINGDLL -D__WXMSW__" />
+	<property name="compiler_cmd_tester" value="-DPIXIE_IS_TESTER_BUILD=1" />
+	<!--
 	<property name="compiler_cmd_tester" value="-DPIXIE_IS_TESTER_BUILD=1 -fprofile-instr-generate -fcoverage-mapping" />
+	-->
 	<property name="compiler_cmd_ntester" value="-DPIXIE_IS_TESTER_BUILD=0" />
 	<property name="compiler_cmd_final" value="-DPIXIE_IS_FINAL_BUILD=1" />
 	<property name="compiler_cmd_nfinal" value="-DPIXIE_IS_FINAL_BUILD=0" />
