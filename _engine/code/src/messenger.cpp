@@ -8,6 +8,16 @@ engine::messenger::msg_console_t::actual_t::~actual_t()
 
 }
 
+engine::app_t::kind_t engine::messenger::msg_console_t::actual_t::get_app() const
+{
+	return app;
+}
+
+engine::app_t::instance_id_t engine::messenger::msg_console_t::actual_t::get_app_instance_id() const
+{
+	return app_instance_id;
+}
+
 engine::messenger::msg_console_t::actual_t::type_t engine::messenger::msg_console_t::actual_t::get_type() const
 {
 	return type;
@@ -23,7 +33,7 @@ engine::messenger::msg_console_t::actual_t::kind_t engine::messenger::msg_consol
 	return kind;
 }
 
-engine::messenger::msg_console_t::actual_t::actual_t(type_t type, source_t source, kind_t kind) : type(type), source(source), kind(kind)
+engine::messenger::msg_console_t::actual_t::actual_t(app_t::kind_t app, app_t::instance_id_t app_instance_id, type_t type, source_t source, kind_t kind) : app(app), app_instance_id(app_instance_id), type(type), source(source), kind(kind)
 {
 
 }

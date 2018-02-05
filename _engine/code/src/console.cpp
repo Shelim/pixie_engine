@@ -7,21 +7,13 @@
 #include "global/core/console/writer.hpp"
 
 engine::console::logger_item_t::logger_item_t(std::size_t id, kind_t kind, app_t::kind_t app, app_t::instance_id_t app_instance_id, source_t source, const ustring_t & message, const ustring_t & function, const ustring_t & file, uint32_t line, std::chrono::seconds time, std::thread::id thread, std::size_t link) :
-				actual_t(type_t::logger, source, kind), id(id), app(app), app_instance_id(app_instance_id), message(message), function(function), file_raw(file), line(line), time(time), thread(thread), link(link)
+				actual_t(app, app_instance_id, type_t::logger, source, kind), id(id), message(message), function(function), file_raw(file), line(line), time(time), thread(thread), link(link)
 {
     this->file = platform::canonize_debug_filename(file_raw);
 }
 std::size_t engine::console::logger_item_t::get_id() const
 {
     return id;
-}
-engine::app_t::kind_t engine::console::logger_item_t::get_app() const
-{
-    return app;
-}
-engine::app_t::instance_id_t engine::console::logger_item_t::get_app_instance_id() const
-{
-    return app_instance_id;
 }
 engine::ustring_t engine::console::logger_item_t::get_source_as_string() const
 {
@@ -67,7 +59,7 @@ bool engine::console::logger_item_t::is_linked() const
 }
 
 engine::console::meta_item_t::meta_item_t(meta_type_t meta_type, type_t type) :
-                actual_t(type_t::meta, source_t::core, kind_t::meta), meta_type(meta_type), type(type)
+                actual_t(app_t::kind_t::_engine, 0, type_t::meta, source_t::core, kind_t::meta), meta_type(meta_type), type(type)
 {
 
 }

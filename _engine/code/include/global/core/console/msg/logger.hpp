@@ -21,8 +21,6 @@ namespace engine
 
 			logger_item_t(std::size_t id, kind_t kind, app_t::kind_t app, app_t::instance_id_t app_instance_id, source_t source, const ustring_t & message, const ustring_t & function, const ustring_t & file, uint32_t line, std::chrono::seconds time, std::thread::id thread, std::size_t link = -1);
 			std::size_t get_id() const;
-			app_t::kind_t get_app() const;
-			app_t::instance_id_t get_app_instance_id() const;
 			ustring_t get_source_as_string() const;
 			const ustring_t & get_message() const;
 			const ustring_t & get_function() const;
@@ -38,8 +36,8 @@ namespace engine
 
 			std::size_t id; // 1 for formatting
 			// Kind is 2 for formatting
-			app_t::kind_t app; // App is 3 for formatting
-			app_t::instance_id_t app_instance_id; // App Instance ID is 4 for formatting
+			// App is 3 for formatting
+			// App Instance ID is 4 for formatting
 			ustring_t message; // 5 for formatting
 			ustring_t function; // 6 for formatting
 			ustring_t file; // 7 for formatting
