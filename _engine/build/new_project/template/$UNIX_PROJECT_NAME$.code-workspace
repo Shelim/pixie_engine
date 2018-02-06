@@ -106,7 +106,7 @@
 			"xxatomic": "cpp"
 		},
 		"git.ignoreLimitWarning": true,
-		"cSpell.language": "en",
+		"lldb.executable": "./../_engine/dependency/other/llvm/windows/bin/lldb",
 		"doxdocgen.generic.paramTemplate": "@param[in] {param}",
 		"doxdocgen.generic.returnTemplate": "@return",
 		"workbench.iconTheme": "vscode-icons"
