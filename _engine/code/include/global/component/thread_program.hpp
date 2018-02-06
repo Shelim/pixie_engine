@@ -3,6 +3,7 @@
 #pragma once
 
 #include "global/core/app.hpp"
+#include "global/core/process/runner/program_thread.hpp"
 
 namespace engine
 {
@@ -16,6 +17,8 @@ namespace engine
         {
 
         }
+
+//      virtual std::shared_ptr<runner_base_t> get_thread(engine::process::runner_thread_t thread) = 0;
 
     };
 

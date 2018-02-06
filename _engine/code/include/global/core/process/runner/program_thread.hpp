@@ -13,18 +13,18 @@ namespace engine
 
 #include "def/enum/process_runner.def"
 
-		template<runner_thread_t thread> class runner_engine_thread_t : public runner_base_t
+		template<runner_thread_t thread> class runner_program_thread_t : public runner_base_t
 		{
 
 		public:
 
-			runner_engine_thread_t() : runner_base_t()
+			runner_program_thread_t() : runner_base_t()
 			{
 				
 			}
 
 
-			~runner_engine_thread_t()
+			~runner_program_thread_t()
 			{
 				
 			}
