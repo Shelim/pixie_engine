@@ -2,9 +2,6 @@
 	 - Output logger from across different modules (now it is possible, due to logger being global object)
 	 - Program (!!!)
 		 - Engine startup
-		 - Create global messanger/console (? - should have info from which INSTANCE - not APP - it comes)
-		 - Create config_global_monitor
-		 - Config_monitor should subscribe on config_global_monitor
 		 - Debug_symbol should be a global module
      - Code Coverage for tests:
              - Use CLANG: https://clang.llvm.org/docs/SourceBasedCodeCoverage.html
