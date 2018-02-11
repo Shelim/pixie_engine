@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "global/core/process/runner.hpp"
 
 namespace engine
 {

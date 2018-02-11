@@ -39,6 +39,7 @@ int main(int argc, char * argv[])
     USE_PROVIDER_FOR(config_storage, windows_registry)
     USE_PROVIDER_FOR(filesystem, windows)
     USE_PROVIDERS_FOR(logger, console)
+    USE_PROVIDERS_FOR(overseable_thread, messenger)
 
 #if PIXIE_IS_DEBUG_BUILD
     USE_SETTINGS(config_t, debug)

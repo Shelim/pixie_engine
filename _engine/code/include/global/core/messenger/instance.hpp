@@ -10,7 +10,7 @@
 #include "utility/container/concurrent_queue.hpp"
 #include "utility/concurrention/signal.hpp"
 #include "utility/pattern/factory.hpp"
-#include "global/core/process/runner/spawn.hpp"
+#include "global/core/process/runner.hpp"
 #include "global/core/messenger/msg.hpp"
 
 namespace engine
@@ -23,7 +23,7 @@ namespace engine
 
         public:
 
-            instance_base_t(callback_t<msg_actual_t> callback, std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner)
+            instance_base_t(callback_t<msg_actual_t> callback, std::shared_ptr<process::runner_spawn_factory_t > runner_spawner)
             {
 
             }
@@ -34,7 +34,7 @@ namespace engine
 
         public:
 
-			instance_base_t(callback_t<msg_actual_t> callback, std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : callback(callback)
+			instance_base_t(callback_t<msg_actual_t> callback, std::shared_ptr<process::runner_spawn_factory_t > runner_spawner) : callback(callback)
 			{
 
 			}
@@ -61,9 +61,11 @@ namespace engine
 
         public:
 
-            instance_base_t(callback_t<msg_actual_t> callback, std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : callback(callback), id(next_id++), runner(runner_spawner->create())
+            instance_base_t(callback_t<msg_actual_t> callback, std::shared_ptr<process::runner_spawn_factory_t > runner_spawner) : callback(callback), id(next_id++)
             {
-                runner->add_task(std::make_unique<task_func_t>([this](process::token_t*){ return execute(); }, format_string("Messenger '#1#' output instance queue ###2#"_u, get_msg_type<msg_actual_t>(), id)));
+                ustring_t name = format_string("Messenger '#1#' output instance queue ###2#"_u, get_msg_type<msg_actual_t>(), id);
+                runner = runner_spawner->create(name);
+                runner->add_task(std::make_unique<task_func_t>([this](process::token_t*){ return execute(); }, name));
             }
 
             virtual ~instance_base_t()
@@ -140,7 +142,7 @@ namespace engine
 
             template<class T1, class T2, bool B1, bool B2> friend class queue_base_t;
             
-            instance_t(queue_t<msg_actual_t> * queue_owner, callback_t<msg_actual_t> callback, std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : instance_base_t<msg_actual_t, msg_actual_t::is_instance_async>(callback, runner_spawner), queue_owner(queue_owner)
+            instance_t(queue_t<msg_actual_t> * queue_owner, callback_t<msg_actual_t> callback, std::shared_ptr<process::runner_spawn_factory_t > runner_spawner) : instance_base_t<msg_actual_t, msg_actual_t::is_instance_async>(callback, runner_spawner), queue_owner(queue_owner)
             {
 
             }

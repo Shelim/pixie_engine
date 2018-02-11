@@ -3,12 +3,15 @@
 
 #pragma once
 
-#include "global/core/process/runner.hpp"
 #include "utility/container/concurrent_queue.hpp"
+#include "global/core/app.hpp"
 #include <mutex>
 
 namespace engine
 {
+	class thread_factory_t;
+	class thread_t;
+	
 	namespace process
 	{
 
@@ -17,7 +20,8 @@ namespace engine
 
 		public:
 
-			runner_spawn_t();
+			runner_spawn_t(const ustring_t & name, std::shared_ptr<thread_factory_t> thread_factory);
+			runner_spawn_t(app_t::kind_t app, app_t::instance_id_t app_instance_id, const ustring_t & name, std::shared_ptr<thread_factory_t> thread_factory);
 
 			~runner_spawn_t();
 
@@ -29,7 +33,7 @@ namespace engine
 			}
 
 			concurrent_queue_t<std::unique_ptr<task_t> > tasks;
-			std::thread thread;
+			std::unique_ptr<thread_t> thread;
 			std::mutex add_task_mutex;
 
 			void thread_func();

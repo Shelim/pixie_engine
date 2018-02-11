@@ -7,6 +7,7 @@
 
 namespace engine
 {
+	class logger_t;
 	
 	class filesystem_provider_base_t : public filesystem_t
 	{
@@ -23,8 +24,14 @@ namespace engine
 
 	protected:
 
+		filesystem_provider_base_t()
+		{
+
+		}
+
 		bool match(char const *needle, wchar_t const *haystack);
 		bool match(char const *needle, char const *haystack);
+
 	};
 
 	REGISTER_PROVIDER_BASE_TYPE(filesystem_t, filesystem_provider_base_t)
@@ -35,6 +42,7 @@ namespace engine
 	public:
 		
 		filesystem_real_t(std::unique_ptr<holder_t<filesystem_t> > filesystem_provider);
+		~filesystem_real_t();
 
 		std::filesystem::file_time_type get_mod_time(std::filesystem::path path) final;
 

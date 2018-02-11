@@ -126,7 +126,7 @@ std::filesystem::file_time_type engine::filesystem_provider_windows_t::filetime_
     return tp;
 }
 
-engine::filesystem_provider_windows_t::filesystem_provider_windows_t() : tmp_item(0)
+engine::filesystem_provider_windows_t::filesystem_provider_windows_t() : filesystem_provider_base_t(), tmp_item(0)
 {
 
 }

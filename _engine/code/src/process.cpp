@@ -7,6 +7,8 @@
 #include "global/core/process/task.hpp"
 #include "global/core/process/token.hpp"
 #include "global/core/process/service.hpp"
+#include "global/core/process/thread_pool.hpp"
+#include "global/core/thread.hpp"
 
 bool engine::process::token_t::is_requested_shutdown()
 {
@@ -48,9 +50,16 @@ void engine::process::runner_spawn_t::thread_func()
 	}
 }
 
-engine::process::runner_spawn_t::runner_spawn_t() : runner_base_t(), thread([this]() {thread_func(); })
+engine::process::runner_spawn_t::runner_spawn_t(const ustring_t & name, std::shared_ptr<thread_factory_t> thread_factory) : runner_base_t()
 {
+	thread = thread_factory->create(name, [this]{thread_func();});
 }
+
+engine::process::runner_spawn_t::runner_spawn_t(app_t::kind_t app, app_t::instance_id_t app_instance_id, const ustring_t & name, std::shared_ptr<thread_factory_t> thread_factory) : runner_base_t()
+{
+	thread = thread_factory->create(app, app_instance_id, name, [this]{thread_func();});
+}
+
 
 engine::process::runner_spawn_t::~runner_spawn_t()
 {
@@ -58,10 +67,38 @@ engine::process::runner_spawn_t::~runner_spawn_t()
 		request_shutdown();
 		tasks.push(nullptr);
 	}
+}
 
-	try
+bool engine::thread_pool_token_t::is_shutdown_requested()
+{
+	return owner->is_shutdown_requested();
+}
+
+engine::thread_pool_t::thread_pool_t(std::size_t count, const ustring_t & name, std::shared_ptr<thread_factory_t> thread_factory) : count(count), token(this)
+{
+	worker_threads.resize(count);
+	for (uint32_t i = 0; i < count; i++)
 	{
-		thread.join();
+		ustring_t instance_name = format_string("#1# (#2# of #3#)"_u, name, (i+1), count);
+		worker_threads[i] = thread_factory->create(instance_name, [this]() { thread_func(); });
 	}
-	catch (const std::system_error& e) {}
+}
+
+engine::thread_pool_t::thread_pool_t(std::size_t count, app_t::kind_t app, app_t::instance_id_t app_instance_id, const ustring_t & name, std::shared_ptr<thread_factory_t> thread_factory) : count(count), token(this)
+{
+	worker_threads.resize(count);
+	for (uint32_t i = 0; i < count; i++)
+	{
+		ustring_t instance_name = format_string("#1# (#2# of #3#)"_u, name, (i+1), count);
+		worker_threads[i] = thread_factory->create(app, app_instance_id, instance_name, [this]() { thread_func(); });
+	}
+}
+
+engine::thread_pool_t::~thread_pool_t()
+{
+	flags.set_flag(flag_t::request_shutdown, true);
+	for (uint32_t i = 0; i < count; i++)
+	{
+		jobs.push(nullptr);
+	}
 }

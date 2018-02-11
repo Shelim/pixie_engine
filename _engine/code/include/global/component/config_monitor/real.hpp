@@ -17,15 +17,20 @@ namespace engine
 
 	public:
 
-		config_monitor_actual_t(std::shared_ptr<config_t> config, std::shared_ptr<messenger_config_t> messenger_config, std::unique_ptr<holder_t<config_changed_t> > config_changed_provider) : 
-			config(config), messenger_config(messenger_config), config_changed_provider(std::move(config_changed_provider))
+		config_monitor_actual_t(std::shared_ptr<config_t> config, std::shared_ptr<messenger_config_t> messenger_config, std::unique_ptr<holder_t<config_changed_t> > config_changed_provider, std::shared_ptr<logger_t> logger) : 
+			config(config), messenger_config(messenger_config), config_changed_provider(std::move(config_changed_provider)), logger(logger)
 		{
 			std::lock_guard<std::mutex> guard(mutex);
+
+			logger->log_global_msg(config, "Config monitor actual component has started"_u);
+			auto task_id = logger->log_global_task_start(config, "Running initial scan inside actual config monitor"_u);
 
 #define ENGINE_CONFIG_GLOBAL(type, name) set_global_##name(config->get_global_##name());
 #define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) set_app_##app##_##name(config->get_app_##app##_##name());
 #define ENGINE_CONFIG_LOCAL(type, name) for(std::size_t app = 0; app < value_of(app_t::kind_t::count); app++) set_local_##name(static_cast<app_t::kind_t>(app), config->get_local_##name(static_cast<app_t::kind_t>(app)));
 #include "def/config.def"
+
+			logger->log_global_task_done(task_id);
 
 			messenger_instance = messenger_config->register_callback([this](engine::messenger::msg_config_t* msg){on_config_changed(msg);});
 		}
@@ -130,6 +135,7 @@ namespace engine
 		std::shared_ptr<messenger_config_t> messenger_config;
 		std::unique_ptr<messenger::instance_t<messenger::msg_config_t> > messenger_instance;
 		std::unique_ptr<holder_t<config_changed_t> > config_changed_provider;
+		std::shared_ptr<logger_t> logger;
 
 	};
 

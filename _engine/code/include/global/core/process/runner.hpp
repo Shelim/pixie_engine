@@ -8,6 +8,7 @@
 #include <mutex>
 #include "utility/pattern/fourcc.hpp"
 #include "global/core/process/task.hpp"
+#include "global/core/app.hpp"
 
 namespace engine
 {
@@ -154,5 +155,66 @@ namespace engine
 #include "global/core/process/runner/spawn.hpp"
 #include "global/core/process/runner/sync.hpp"
 #include "global/core/process/runner/thread_pool.hpp"
+
+
+namespace engine
+{
+	namespace process
+	{	
+
+		class runner_spawn_factory_t
+		{
+
+			public:
+
+				runner_spawn_factory_t(std::shared_ptr<thread_factory_t> thread_factory) : thread_factory(thread_factory)
+				{
+
+				}
+
+				std::unique_ptr<runner_spawn_t> create(const ustring_t & name)
+				{
+					return std::make_unique<runner_spawn_t>(name, thread_factory);
+				}
+
+				std::unique_ptr<runner_spawn_t> create(app_t::kind_t app, app_t::instance_id_t app_instance_id, const ustring_t & name)
+				{
+					return std::make_unique<runner_spawn_t>(app, app_instance_id, name, thread_factory);
+				}
+
+			private:
+
+				std::shared_ptr<thread_factory_t> thread_factory;
+
+		};
+
+		class runner_thread_pool_factory_t
+		{
+
+			public:
+
+				runner_thread_pool_factory_t(std::shared_ptr<thread_factory_t> thread_factory) : thread_factory(thread_factory)
+				{
+
+				}
+
+				std::unique_ptr<runner_thread_pool_t> create(std::size_t count, const ustring_t & name)
+				{
+					return std::make_unique<runner_thread_pool_t>(count, name, thread_factory);
+				}
+
+				std::unique_ptr<runner_thread_pool_t> create(std::size_t count, app_t::kind_t app, app_t::instance_id_t app_instance_id, const ustring_t & name)
+				{
+					return std::make_unique<runner_thread_pool_t>(count, app, app_instance_id, name, thread_factory);
+				}
+
+			private:
+
+				std::shared_ptr<thread_factory_t> thread_factory;
+
+		};
+
+	}
+}
 
 #endif

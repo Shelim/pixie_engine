@@ -46,9 +46,10 @@ namespace engine
 
 	public:
 
-		service_t(std::unique_ptr<process::runner_spawn_t> runner, std::unique_ptr<service_object_t> object) : runner(std::move(runner)), object(std::move(object))
+		service_t(std::shared_ptr<process::runner_spawn_factory_t> runner_spawn, std::unique_ptr<service_object_t> object) : object(std::move(object))
 		{
-			
+			ustring_t name = format_string("Service '#1#'"_u, this->object->get_name());
+			runner = runner_spawn->create(name);
 		}
 
 		void start()

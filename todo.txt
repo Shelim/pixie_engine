@@ -1,6 +1,10 @@
  - Sanitizing
-	 - Output logger from across different modules (now it is possible, due to logger being global object)
+	 - Add new DEF for Default Providers
 	 - Program (!!!)
+         - Overseerable object needs to have provider to note where they should inform about creation/deletion
+                (like logger, messenger)
+         - Finish up thread overseer
+         - Make similiar overseer for apps
 		 - Engine startup
 		 - Debug_symbol should be a global module
      - Code Coverage for tests:
@@ -19,7 +23,9 @@
 			 - Debug_profilable
 			 - Hybrid_profilable
 
- - Work on components:
+ - Work on components: 
+     - app_instancer
+     - app_overseer
 +	 - config_storage
 +        - XML (?) inside game directory (for portable!)
 			 - Requires: XML

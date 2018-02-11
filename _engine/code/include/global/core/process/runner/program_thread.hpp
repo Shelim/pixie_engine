@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "global/core/process/runner.hpp"
 #include "utility/container/sync_queue.hpp"
 
 namespace engine

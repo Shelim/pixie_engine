@@ -41,13 +41,15 @@ namespace engine
 			/**
 			 * @brief Creates callstack item from given values
 			 * 
+			 * If you wish to add more data later on use @ref add_debug_info
+			 * 
 			 * @param[in] address Location in executable file for given stack item. Usually you pass content of @c ProgramCounter register
 			 * @param[in] module Module to be used in given stack item. Usually you pass here @c argv[0]
 			 * @param[in] file Filename to be used in given stack item. Usually you pass @c canonize_debug_filename(__FILE__)
 			 * @param[in] line Line to be used in given stack item. Usually you pass @c __LINE__
 			 * @param[in] function Function name to be used in given stack frame. Usually you pass @c __FUNCTION__
 			 */
-			item_t(intptr_t address, ustring_t module, ustring_t file, int line, ustring_t function) : address(address), module(module), file(file), line(line), function(function)
+			item_t(intptr_t address, ustring_t module = ""_u, ustring_t file = ""_u, int line = 0, ustring_t function = ""_u) : address(address), module(module), file(file), line(line), function(function)
 			{
 				if(!module.is_empty())
 					flags.set_flag(flag_t::is_module_available);
@@ -60,11 +62,41 @@ namespace engine
 			}
 
 			/**
+			 * @brief Adds debug info for given callstack item
+			 * 
+			 * @param[in] module Module to be used in given stack item. Usually you pass here @c argv[0]
+			 * @param[in] file Filename to be used in given stack item. Usually you pass @c canonize_debug_filename(__FILE__)
+			 * @param[in] line Line to be used in given stack item. Usually you pass @c __LINE__
+			 * @param[in] function Function name to be used in given stack frame. Usually you pass @c __FUNCTION__
+			*/
+			void add_debug_info(ustring_t module = ""_u, ustring_t file = ""_u, int line = 0, ustring_t function = ""_u)
+			{
+				if(!module.is_empty())
+				{
+					this->module = module;
+					flags.set_flag(flag_t::is_module_available);
+				}
+				if(!file.is_empty())
+				{
+					this->file = file;
+					flags.set_flag(flag_t::is_file_available);
+				}
+				if(line >= 0)
+				{
+					this->line = line;
+					flags.set_flag(flag_t::is_line_available);
+				}
+				if(!function.is_empty())
+				{
+					this->function = function;
+					flags.set_flag(flag_t::is_function_available);
+				}
+			}
+
+			/**
 			 * @brief Returns address of given stack item.
 			 * 
 			 * @note You can look up more information about this stack item in linker map file, in case callstack dump is comming from build without debugging symbols
-			 * 
-			 * @todo Currently LLD-LINK is unable to produce map file :-(
 			 * 
 			 * @return Address of given stack item
 			 */

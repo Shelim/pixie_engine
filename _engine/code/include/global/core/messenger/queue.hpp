@@ -12,7 +12,7 @@
 #include "utility/container/concurrent_queue.hpp"
 #include "utility/pattern/factory.hpp"
 #include "global/core/process/process.hpp"
-#include "global/core/process/runner/spawn.hpp"
+#include "global/core/process/runner.hpp"
 #include "global/core/process/task.hpp"
 
 namespace engine
@@ -69,7 +69,7 @@ namespace engine
         template <class queue_t, class msg_actual_t, bool is_async, bool keep_history> class queue_base_t
         {
         public:
-            queue_base_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner)
+            queue_base_t(std::shared_ptr<process::runner_spawn_factory_t > runner_spawner)
             {
                 
             }
@@ -80,7 +80,7 @@ namespace engine
 
         public:
 
-            queue_base_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : runner_spawner(runner_spawner)
+            queue_base_t(std::shared_ptr<process::runner_spawn_factory_t> runner_spawner) : runner_spawner(runner_spawner)
             {
                 
             }
@@ -129,7 +129,7 @@ namespace engine
 
             template<class T> friend class instance_t;
 
-            std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner;
+            std::shared_ptr<process::runner_spawn_factory_t> runner_spawner;
 
             queue_history_t<msg_actual_t, keep_history> history;
             std::vector<instance_t<msg_actual_t> *> instances;
@@ -142,10 +142,11 @@ namespace engine
 
         public:
 
-            queue_base_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : id(next_id++), runner_spawner(runner_spawner)
+            queue_base_t(std::shared_ptr<process::runner_spawn_factory_t> runner_spawner) : id(next_id++), runner_spawner(runner_spawner)
             {
-                runner = runner_spawner->create();
-                runner->add_task(std::make_unique<task_func_t>([this](process::token_t*){ return execute(); }, format_string("Messenger '#1#' queue ###2#"_u, get_msg_type<msg_actual_t>(), id)));
+                ustring_t name = format_string("Messenger '#1#' queue ###2#"_u, get_msg_type<msg_actual_t>(), id);
+                runner = runner_spawner->create(name);
+                runner->add_task(std::make_unique<task_func_t>([this](process::token_t*){ return execute(); }, name));
             }
 
             virtual ~queue_base_t()
@@ -187,7 +188,7 @@ namespace engine
 
             template<class T> friend class instance_t;
 
-            std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner;
+            std::shared_ptr<process::runner_spawn_factory_t> runner_spawner;
 
             queue_history_t<msg_actual_t, keep_history> history;
             std::vector<instance_t<msg_actual_t> *> instances;
@@ -252,7 +253,7 @@ namespace engine
         template<class msg_actual_t> class queue_t : public queue_base_t<queue_t<msg_actual_t>, msg_actual_t, msg_actual_t::is_queue_async, msg_actual_t::keep_history>
         {
             public:
-                queue_t(std::shared_ptr<ifactory<process::runner_spawn_t> > runner_spawner) : queue_base_t<queue_t<msg_actual_t>, msg_actual_t, msg_actual_t::is_queue_async, msg_actual_t::keep_history>(runner_spawner) {}
+                queue_t(std::shared_ptr<process::runner_spawn_factory_t> runner_spawner) : queue_base_t<queue_t<msg_actual_t>, msg_actual_t, msg_actual_t::is_queue_async, msg_actual_t::keep_history>(runner_spawner) {}
 
         };
 

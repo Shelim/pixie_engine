@@ -1,4 +1,5 @@
 #include "global/component/filesystem.hpp"
+#include "global/component/logger.hpp"
 
 engine::filesystem_t::~filesystem_t()
 {
@@ -264,6 +265,11 @@ engine::filesystem_real_t::filesystem_real_t(std::unique_ptr<holder_t<filesystem
 
 }
 
+engine::filesystem_real_t::~filesystem_real_t()
+{
+
+}
+
 std::filesystem::file_time_type engine::filesystem_real_t::get_mod_time(std::filesystem::path path)
 {
     return filesystem_provider->get_provider()->get_mod_time(path);
@@ -400,7 +406,7 @@ uint32_t engine::filesystem_provider_generic_t::file_input_generic_t::read(uint8
     return size;
 }
 
-engine::filesystem_provider_generic_t::filesystem_provider_generic_t() : tmp_item(0)
+engine::filesystem_provider_generic_t::filesystem_provider_generic_t() : filesystem_provider_base_t(), tmp_item(0)
 {
 
 }
