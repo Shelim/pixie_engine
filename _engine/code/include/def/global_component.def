@@ -2,8 +2,8 @@
 #define ENGINE_GLOBAL_COMPONENT_DEF(...)
 #endif
 
+ENGINE_GLOBAL_COMPONENT_DEF(app_accounter)
 ENGINE_GLOBAL_COMPONENT_DEF(app_instancer)
-ENGINE_GLOBAL_COMPONENT_DEF(app_overseer)
 ENGINE_GLOBAL_COMPONENT_DEF(app_resolver)
 ENGINE_GLOBAL_COMPONENT_DEF(config)
 ENGINE_GLOBAL_COMPONENT_DEF(config_monitor)
@@ -16,7 +16,7 @@ ENGINE_GLOBAL_COMPONENT_DEF(program_args)
 ENGINE_GLOBAL_COMPONENT_DEF(program_instances_communicator_client)
 ENGINE_GLOBAL_COMPONENT_DEF(program_instances_communicator_host)
 ENGINE_GLOBAL_COMPONENT_DEF(program_instances_detection)
-ENGINE_GLOBAL_COMPONENT_DEF(thread_overseer)
+ENGINE_GLOBAL_COMPONENT_DEF(thread_accounter)
 ENGINE_GLOBAL_COMPONENT_DEF(thread_program)
 
 

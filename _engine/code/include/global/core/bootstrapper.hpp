@@ -20,6 +20,7 @@
 #include "local/core/manifest/app.hpp"
 #include "local/component/renderer_status.hpp"
 #include "local/component/terminal.hpp"
+#include "settings/default_accounter.hpp"
 #include "settings/default_config.hpp"
 #include "global/core/app/context.hpp"
 #include "global/core/program.hpp"

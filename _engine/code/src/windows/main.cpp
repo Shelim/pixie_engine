@@ -25,7 +25,7 @@ int main(int argc, char * argv[])
 #else
 
 int main(int argc, char * argv[])
-{
+{    
     BEGIN_PLATFORM_CONFIGURATION(windows)
 
     PLATFORM_ALLOWS_POLICIES(instances_application, multiple, single)
@@ -38,9 +38,10 @@ int main(int argc, char * argv[])
     USE_PROVIDERS_FOR(config_changed, messenger, logger)
     USE_PROVIDER_FOR(config_storage, windows_registry)
     USE_PROVIDER_FOR(filesystem, windows)
-    USE_PROVIDERS_FOR(logger, console)
-    USE_PROVIDERS_FOR(overseable_thread, messenger)
+    USE_PROVIDERS_FOR(logger, console, temp_file)
+    USE_PROVIDERS_FOR(accountable_thread, messenger)
 
+    USE_SETTINGS(thread_accounter_t, normal)
 #if PIXIE_IS_DEBUG_BUILD
     USE_SETTINGS(config_t, debug)
 #else
@@ -52,7 +53,7 @@ int main(int argc, char * argv[])
 
     std::shared_ptr<engine::program_t> program = windows.ignite_from_main(argc, argv);
 
-    program->get_app_overseer()->wait_for_completion();
+//    program->get_app_overseer()->wait_for_completion();
     return program->get_extinguisher()->get_return_code();
 }
 

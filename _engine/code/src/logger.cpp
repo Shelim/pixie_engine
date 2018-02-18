@@ -33,33 +33,15 @@ engine::logger_real_t::logger_real_t(std::shared_ptr<engine::environment_info_t>
  : logger_providers(std::move(logger_providers))
 {
 	time_start = std::chrono::system_clock::now();
-	output_start();
 }
 
 engine::logger_real_t::~logger_real_t()
 {
-	output_end();
 }
 
 const engine::console::logger_items_t & engine::logger_real_t::get_cache() const
 {
 	return cache;
-}
-
-void engine::logger_real_t::output_start()
-{
-	for (int provider = 0; provider < logger_providers->get_providers_count(); provider++)
-	{
-		logger_providers->get_provider(provider)->output_start();
-	}
-}
-
-void engine::logger_real_t::output_end()
-{
-	for (int provider = 0; provider < logger_providers->get_providers_count(); provider++)
-	{
-		logger_providers->get_provider(provider)->output_end();
-	}
 }
 
 engine::logger_real_t::item_id_t engine::logger_real_t::log_local(engine::console::logger_item_t::kind_t kind, engine::app_t::kind_t app, engine::app_t::instance_id_t app_instance_id, engine::console::logger_item_t::source_t source, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message)
@@ -96,15 +78,7 @@ engine::logger_provider_console_t::logger_provider_console_t(std::shared_ptr<eng
 
 }
 
-void engine::logger_provider_console_t::output_start() const
-{
-	console_writer->write(std::make_unique<engine::console::meta_item_t>(engine::console::meta_item_t::meta_type_t::output_start, engine::console::meta_item_t::type_t::logger));
-}
 void engine::logger_provider_console_t::output(const engine::console::logger_item_t & item) const
 {
 	console_writer->write(std::make_unique<engine::console::logger_item_t>(item));
-}
-void engine::logger_provider_console_t::output_end() const
-{
-	console_writer->write(std::make_unique<engine::console::meta_item_t>(engine::console::meta_item_t::meta_type_t::output_end, engine::console::meta_item_t::type_t::logger));
 }

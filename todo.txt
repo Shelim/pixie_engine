@@ -1,10 +1,12 @@
  - Sanitizing
+	 - Add FlatBufffers dependency https://google.github.io/flatbuffers/index.html
 	 - Add new DEF for Default Providers
 	 - Program (!!!)
-         - Overseerable object needs to have provider to note where they should inform about creation/deletion
-                (like logger, messenger)
-         - Finish up thread overseer
-         - Make similiar overseer for apps
+         - Finish up thread accounter
+			 -> Platform dependand thread usage 
+			 -> Thread snapshot notifier should be async
+         - Make similiar accounter for apps
+		 - Make apps overseer
 		 - Engine startup
 		 - Debug_symbol should be a global module
      - Code Coverage for tests:

@@ -13,9 +13,7 @@ namespace engine
 
         logger_provider_console_t(std::shared_ptr<console_writer_t> console_writer);
 
-        void output_start() const final;
 		void output(const engine::console::logger_item_t & item) const final;
-		void output_end() const final;
 
     private:
 

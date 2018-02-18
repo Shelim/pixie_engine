@@ -35,6 +35,11 @@ namespace engine
 			messenger_instance = messenger_config->register_callback([this](engine::messenger::msg_config_t* msg){on_config_changed(msg);});
 		}
 
+		~config_monitor_actual_t()
+		{
+			logger->log_global_msg(config, "Config monitor actual component has concluded"_u);
+		}
+
 		void rescan()
 		{
 #define ENGINE_CONFIG_GLOBAL(type, name) if(set_global_##name(config->get_global_##name()) == result_t::changed) notify_on_change(engine::config_global_t::name, to_string(global_##name));

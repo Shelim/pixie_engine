@@ -19,9 +19,7 @@ namespace engine
 
 		virtual ~logger_provider_base_t();
 
-		virtual void output_start() const = 0;
 		virtual void output(const engine::console::logger_item_t & item) const = 0;
-		virtual void output_end() const = 0;
 
 	private:
 	};
@@ -44,9 +42,6 @@ namespace engine
 		
 		std::unique_ptr<holder_t<logger_t> > logger_providers;
 
-		void output_start();
-		void output_end();
-
 		std::chrono::system_clock::time_point time_start;
 
 		item_id_t log_local(engine::console::logger_item_t::kind_t kind, engine::app_t::kind_t app, engine::app_t::instance_id_t instance_id, engine::console::logger_item_t::source_t source, const ustring_t & file, uint32_t line, const ustring_t & function, std::size_t link, const ustring_t & message) final;
@@ -55,5 +50,6 @@ namespace engine
 
 #include "global/component/logger/provider/console.hpp"
 #include "global/component/logger/provider/mockup.hpp"
+#include "global/component/logger/provider/temp_file.hpp"
 
 #endif

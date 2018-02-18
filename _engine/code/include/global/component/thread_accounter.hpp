@@ -1,5 +1,5 @@
-#ifndef ENGINE_GLOBAL_COMPONENT_THREAD_OVERSEER_HPP
-#define ENGINE_GLOBAL_COMPONENT_THREAD_OVERSEER_HPP
+#ifndef ENGINE_GLOBAL_COMPONENT_THREAD_ACCOUNTER_HPP
+#define ENGINE_GLOBAL_COMPONENT_THREAD_ACCOUNTER_HPP
 #pragma once
 
 #include <chrono>
@@ -9,12 +9,12 @@
 namespace engine
 {
 
-    class thread_overseer_t
+    class thread_accounter_t
     {
 
     public:
 
-        virtual ~thread_overseer_t()
+        virtual ~thread_accounter_t()
         {
 
         }
@@ -49,13 +49,13 @@ namespace engine
                     return total_time;
                 }
 
-                std::chrono::seconds get_snapshot_time() const
+                std::chrono::seconds get_cpu_usage_in_last_second() const
                 {
-                    return snapshot_time;
+                    return cpu_usage_in_last_second;
                 }
 
-                thread_info_t(std::thread::id id, app_t::kind_t app, app_t::instance_id_t app_instance_id, const ustring_t & name, std::chrono::seconds total_time, std::chrono::seconds snapshot_time) :
-                    id(id), app(app), app_instance_id(app_instance_id), name(name), total_time(total_time), snapshot_time(snapshot_time)
+                thread_info_t(std::thread::id id, app_t::kind_t app, app_t::instance_id_t app_instance_id, const ustring_t & name, std::chrono::seconds total_time, std::chrono::seconds cpu_usage_in_last_second) :
+                    id(id), app(app), app_instance_id(app_instance_id), name(name), total_time(total_time), cpu_usage_in_last_second(cpu_usage_in_last_second)
                 {
 
                 }
@@ -67,19 +67,22 @@ namespace engine
                 app_t::instance_id_t app_instance_id;
                 ustring_t name;
                 std::chrono::seconds total_time;
-                std::chrono::seconds snapshot_time;
+                std::chrono::seconds cpu_usage_in_last_second;
         };
 
-        virtual std::vector<thread_info_t> snapshot_state()
-        {
+        typedef std::vector<thread_info_t> threads_info_t;
 
-        }
+        virtual threads_info_t get_snapshot() = 0;
 
     };
 
+SETTINGS_TABLE_START(thread_accounter_t)
+    SETTINGS_TABLE_ENTRY(std::chrono::duration<double>, snapshot_refresh_interval)
+SETTINGS_TABLE_END()
+
 }
 
-#include "global/component/thread_overseer/dummy.hpp"
-#include "global/component/thread_overseer/real.hpp"
+#include "global/component/thread_accounter/dummy.hpp"
+#include "global/component/thread_accounter/real.hpp"
 
 #endif

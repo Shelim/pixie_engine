@@ -20,9 +20,7 @@ namespace engine
 
 		}
 
-		virtual void output_start() const = 0;
 		virtual void output(environment_info_t::key_t key, environment_info_t::status_t status, const ustring_t & value) const = 0;
-		virtual void output_end() const = 0;
 
 	private:
 	};

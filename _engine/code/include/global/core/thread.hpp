@@ -4,7 +4,7 @@
 
 #include "utility/pattern/fourcc.hpp"
 #include "utility/text/ustring.hpp"
-#include "global/core/overseable/overseable.hpp"
+#include "global/core/accountable/accountable.hpp"
 #include "global/core/app.hpp"
 #include <thread>
 #include <functional>
@@ -18,11 +18,11 @@ namespace engine
 
         public:
 
-            thread_t(app_t::kind_t app, app_t::instance_id_t app_instance_id, std::shared_ptr<holder_t<overseable_thread_t> > notifier, const ustring_t & name, std::function<void()> thread_func) :
+            thread_t(app_t::kind_t app, app_t::instance_id_t app_instance_id, std::shared_ptr<holder_t<accountable_thread_t> > notifier, const ustring_t & name, std::function<void()> thread_func) :
                 app(app), app_instance_id(app_instance_id), name(name)
             {
                 thread = std::thread([this, notifier, thread_func]{ id = std::this_thread::get_id();
-                instance = std::make_unique<oversee_thread_instance_t>(notifier, this);
+                instance = std::make_unique<accountable_thread_instance_t>(notifier, this);
                 thread_func(); } );
             }
 
@@ -63,7 +63,7 @@ namespace engine
             app_t::kind_t app;
             app_t::instance_id_t app_instance_id;
             ustring_t name;
-            std::unique_ptr<oversee_thread_instance_t > instance;
+            std::unique_ptr<accountable_thread_instance_t > instance;
     };
 
     class thread_factory_t
@@ -71,7 +71,7 @@ namespace engine
 
         public:
 
-            thread_factory_t(std::shared_ptr<holder_t<overseable_thread_t> > notifier) : notifier(notifier)
+            thread_factory_t(std::shared_ptr<holder_t<accountable_thread_t> > notifier) : notifier(notifier)
             {
 
             }
@@ -88,7 +88,7 @@ namespace engine
 
         private:
 
-            std::shared_ptr<holder_t<overseable_thread_t> > notifier;
+            std::shared_ptr<holder_t<accountable_thread_t> > notifier;
 
     };
 

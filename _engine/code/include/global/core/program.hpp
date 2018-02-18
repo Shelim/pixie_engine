@@ -7,8 +7,8 @@
 #include <vector>
 #include <algorithm>
 #include <mutex>
+#include "global/component/app_accounter.hpp"
 #include "global/component/app_instancer.hpp"
-#include "global/component/app_overseer.hpp"
 #include "global/component/app_resolver.hpp"
 #include "global/component/config.hpp"
 #include "global/component/config_monitor.hpp"
@@ -22,7 +22,7 @@
 #include "global/component/program_instances_communicator_client.hpp"
 #include "global/component/program_instances_communicator_host.hpp"
 #include "global/component/program_instances_detection.hpp"
-#include "global/component/thread_overseer.hpp"
+#include "global/component/thread_accounter.hpp"
 #include "global/component/thread_program.hpp"
 
 namespace engine

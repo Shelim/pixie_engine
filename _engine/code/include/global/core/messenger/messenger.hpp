@@ -3,10 +3,11 @@
 #pragma once
 
 #include "global/core/messenger/queue.hpp"
+#include "global/core/messenger/msg/accountable.hpp"
 #include "global/core/messenger/msg/config_storage.hpp"
 #include "global/core/messenger/msg/config.hpp"
 #include "global/core/messenger/msg/console.hpp"
-#include "global/core/messenger/msg/overseable.hpp"
+#include "global/core/messenger/msg/threads_snapshot.hpp"
 
 
 namespace engine
@@ -15,12 +16,15 @@ namespace engine
     namespace messenger
     {
 
-        // Workaround: overseable thread should not have thread in constructor, otherwise we have infinite depedenad loop
-        template<> class queue_t<msg_overseable_thread_t> : public queue_base_t<queue_t<msg_overseable_thread_t>, msg_overseable_thread_t, msg_overseable_thread_t::is_queue_async, msg_overseable_thread_t::keep_history>
+        // Workaround: accountable thread should not have thread in constructor, otherwise we have infinite depedenad loop
+        template<> class queue_t<msg_accountable_thread_t> : public queue_base_t<queue_t<msg_accountable_thread_t>, msg_accountable_thread_t, msg_accountable_thread_t::is_queue_async, msg_accountable_thread_t::keep_history>
         {
-            static_assert(msg_overseable_thread_t::is_queue_async == false, "Message overseable thread cannot be async (because threading is based on it!)");
+            static_assert(msg_accountable_thread_t::is_queue_async == false, "Message accountable thread cannot be async (because threading is based on it!)");
             public:
-                queue_t() : queue_base_t<queue_t<msg_overseable_thread_t>, msg_overseable_thread_t, msg_overseable_thread_t::is_queue_async, msg_overseable_thread_t::keep_history>(nullptr) {}
+                queue_t() : queue_base_t<queue_t<msg_accountable_thread_t>, msg_accountable_thread_t, msg_accountable_thread_t::is_queue_async, msg_accountable_thread_t::keep_history>(nullptr)
+                {
+
+                }
 
         };
     }
