@@ -19,7 +19,7 @@ namespace engine
 		public:
 
 			static constexpr bool is_queue_async = false;
-			static constexpr bool is_instance_async = false;
+			static constexpr bool is_instance_async = true;
 			static constexpr bool keep_history = false;
 
         private:

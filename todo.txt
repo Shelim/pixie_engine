@@ -4,7 +4,6 @@
 	 - Program (!!!)
          - Finish up thread accounter
 			 -> Platform dependand thread usage 
-			 -> Thread snapshot notifier should be async
          - Make similiar accounter for apps
 		 - Make apps overseer
 		 - Engine startup
