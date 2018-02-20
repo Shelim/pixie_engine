@@ -37,7 +37,7 @@ namespace engine
 			messenger_instance.reset();
 			{
 				std::lock_guard<std::mutex> guard(mutex);
-				auto task_id = logger->log_global_task_start(threads, "Thread accounter actual component has concluded"_u);
+				auto task_id = logger->log_global_task_start(threads, "Thread accounter actual component is being disposed"_u);
 				if(threads_info.size() == 0)
 					logger->log_global_msg(threads, "All threads have been accounted for. Clean exit"_u);
 				else
