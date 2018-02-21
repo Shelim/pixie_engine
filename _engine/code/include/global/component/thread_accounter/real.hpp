@@ -7,14 +7,100 @@
 
 namespace engine
 {
+
 	class thread_accounter_provider_base_t
 	{
 
 	public:
 
-		virtual ~thread_accounter_provider_base_t();
+		virtual ~thread_accounter_provider_base_t()
+		{
+
+		}
+
+		class thread_info_t
+		{
+
+		public:
+
+			thread_info_t(thread_t * thread) : thread(thread), creation_time(std::chrono::steady_clock::now())
+			{
+
+			}
+
+			virtual ~thread_info_t()
+			{
+
+			}
+
+			thread_t * get_thread()
+			{
+				return thread;
+			}
+
+			std::chrono::duration<double> get_total_time() const
+			{
+				return std::chrono::steady_clock::now() - creation_time;
+			}
+
+			virtual std::chrono::duration<double> get_cpu_usage_in_last_second() const = 0;
+
+		private:
+
+			thread_t * thread;
+			std::chrono::steady_clock::time_point creation_time;
+
+		};
+
+		typedef std::vector<std::unique_ptr<thread_info_t> > threads_info_t;
+
+		void add_thread(thread_t * thread)
+		{
+			for(auto & thread_info : threads_info)
+			{
+				if(thread_info->get_thread() == thread &&
+					thread_info->get_thread()->get_id() == thread->get_id())
+					{
+						logger->log_global_warn(threads, "The thread #1# [id: #2#] attempted to account itself second time (original name: #3# called in #4####5#)"_u, thread->get_name(), thread->get_id(), thread_info->get_thread()->get_name(), thread_info->get_thread()->get_app(), thread_info->get_thread()->get_app_instance_id());
+						return;
+					}
+			}
+
+			threads_info.push_back(create_thread_info(thread));
+		}
+
+		void remove_thread(thread_t * thread)
+		{
+			for(auto iter = threads_info.begin(); iter != threads_info.end(); iter++)
+			{
+				if((*iter)->get_thread() == thread &&
+					(*iter)->get_thread()->get_id() == thread->get_id())
+				{
+					threads_info.erase(iter);
+					return;
+				}
+			}
+			
+			logger->log_global_warn(threads, "The thread #1# [id: #2#] attempted to free itself, while it was not registered in the first place"_u, thread->get_name(), thread->get_id());
+		}
+
+		const threads_info_t & get_threads() const
+		{
+			return threads_info;
+		}
+
+	protected:
+
+		thread_accounter_provider_base_t(std::shared_ptr<logger_t> logger) : logger(logger)
+		{
+
+		}
 
 	private:
+
+		virtual std::unique_ptr<thread_info_t> create_thread_info(thread_t * thread) = 0;
+		threads_info_t threads_info;
+		std::shared_ptr<logger_t> logger;
 	
 	};
 
@@ -25,7 +111,7 @@ namespace engine
 
 	public:
 
-		thread_accounter_actual_t(std::shared_ptr<logger_t> logger, std::shared_ptr<messenger_accountable_thread_t> messenger_accountable_thread) : logger(logger), messenger_accountable_thread(messenger_accountable_thread)
+		thread_accounter_actual_t(std::shared_ptr<logger_t> logger, std::shared_ptr<messenger_accountable_thread_t> messenger_accountable_thread, std::unique_ptr<holder_t<thread_accounter_t> > thread_accounter_provider) : logger(logger), messenger_accountable_thread(messenger_accountable_thread), thread_accounter_provider(std::move(thread_accounter_provider))
 		{
 			logger->log_global_msg(threads, "Thread accounter actual component has started"_u);
 
@@ -38,6 +124,7 @@ namespace engine
 			{
 				std::lock_guard<std::mutex> guard(mutex);
 				auto task_id = logger->log_global_task_start(threads, "Thread accounter actual component is being disposed"_u);
+				auto & threads_info = thread_accounter_provider->get_provider()->get_threads();
 				if(threads_info.size() == 0)
 					logger->log_global_msg(threads, "All threads have been accounted for. Clean exit"_u);
 				else
@@ -48,7 +135,7 @@ namespace engine
 						logger->log_global_msg(threads, "#1# threads are still not accounted for. Will release them after accounter has died. List of them follows:"_u, threads_info.size());
 					for(auto & thread_info : threads_info)
 					{
-						logger->log_global_msg(threads, "Thread #1# [id: #2#] in #3####4# is not yet accounted for"_u, thread_info.get_thread()->get_name(), thread_info.get_thread()->get_id(), thread_info.get_thread()->get_app(), thread_info.get_thread()->get_app_instance_id());
+						logger->log_global_msg(threads, "Thread #1# [id: #2#] in #3####4# is not yet accounted for"_u, thread_info->get_thread()->get_name(), thread_info->get_thread()->get_id(), thread_info->get_thread()->get_app(), thread_info->get_thread()->get_app_instance_id());
 					}
 				}
 				logger->log_global_task_done(task_id);	
@@ -60,9 +147,9 @@ namespace engine
 			std::lock_guard<std::mutex> guard(mutex);
 			thread_accounter_t::threads_info_t ret;
 
-			for(auto & thread_info : threads_info)
+			for(auto & thread_info : thread_accounter_provider->get_provider()->get_threads())
 			{
-				ret.emplace_back(thread_info.get_thread()->get_id(), thread_info.get_thread()->get_app(), thread_info.get_thread()->get_app_instance_id(), thread_info.get_thread()->get_name(), thread_info.get_total_time(), thread_info.get_cpu_usage_in_last_second());
+				ret.emplace_back(thread_info->get_thread()->get_id(), thread_info->get_thread()->get_app(), thread_info->get_thread()->get_app_instance_id(), thread_info->get_thread()->get_name(), thread_info->get_total_time(), thread_info->get_cpu_usage_in_last_second());
 			}
 
 			return ret;
@@ -70,53 +157,12 @@ namespace engine
 
 	private:
 
-		class thread_info_t
-		{
-
-		public:
-
-			thread_info_t(thread_t * thread) : thread(thread), creation_time(std::chrono::steady_clock::now())
-			{
-
-			}
-
-			thread_t * get_thread()
-			{
-				return thread;
-			}
-
-			std::chrono::seconds get_total_time() const
-			{
-				return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - creation_time);
-			}
-
-			std::chrono::seconds get_cpu_usage_in_last_second() const
-			{
-				return cpu_usage_in_last_second;
-			}
-
-			void set_cpu_usage_in_last_second(std::chrono::seconds val)
-			{
-				cpu_usage_in_last_second = val;
-			}
-		
-		private:
-
-			thread_t * thread;
-			std::chrono::steady_clock::time_point creation_time;
-			std::chrono::seconds cpu_usage_in_last_second;
-
-		};
-
 		std::mutex mutex;
 
 		std::shared_ptr<logger_t> logger;
 		std::shared_ptr<messenger_accountable_thread_t> messenger_accountable_thread;
+		std::unique_ptr<holder_t<thread_accounter_t> > thread_accounter_provider;
 		std::unique_ptr<messenger::instance_t<messenger::msg_accountable_thread_t> > messenger_instance;
-
-		typedef std::vector<thread_info_t> threads_info_t;
-
-		threads_info_t threads_info;
 
 		void on_accountable_created(messenger::msg_accountable_thread_t * msg)
 		{
@@ -125,17 +171,7 @@ namespace engine
 			else
 				logger->log_global_msg(threads, "New thread was just created for #3####4#: #1# [id: #2#]"_u, msg->get_object()->get_name(), msg->get_object()->get_id(), msg->get_object()->get_app(), msg->get_object()->get_app_instance_id());
 			
-			for(auto & thread_info : threads_info)
-			{
-				if(thread_info.get_thread() == msg->get_object() &&
-					thread_info.get_thread()->get_id() == msg->get_object()->get_id())
-				{
-					logger->log_global_warn(threads, "The thread #1# [id: #2#] attempted to account itself second time (original name: #3# called in #4####5#)"_u, msg->get_object()->get_name(), msg->get_object()->get_id(), thread_info.get_thread()->get_name(), thread_info.get_thread()->get_app(), thread_info.get_thread()->get_app_instance_id());
-					return;
-				}
-			}
-
-			threads_info.emplace_back(msg->get_object());
+			thread_accounter_provider->get_provider()->add_thread(msg->get_object());
 		}
 
         void on_accountable_destroyed(messenger::msg_accountable_thread_t * msg)
@@ -145,17 +181,7 @@ namespace engine
 			else
 				logger->log_global_msg(threads, "Thread was just destroyed for #3####4#: #1# [id: #2#]"_u, msg->get_object()->get_name(), msg->get_object()->get_id(), msg->get_object()->get_app(), msg->get_object()->get_app_instance_id());
 			
-			for(auto iter = threads_info.begin(); iter != threads_info.end(); iter++)
-			{
-				if(iter->get_thread() == msg->get_object() &&
-					iter->get_thread()->get_id() == msg->get_object()->get_id())
-				{
-					threads_info.erase(iter);
-					return;
-				}
-			}
-
-			logger->log_global_warn(threads, "The thread #1# [id: #2#] attempted to free itself, while it was not registered in the first place"_u, msg->get_object()->get_name(), msg->get_object()->get_id());
+			thread_accounter_provider->get_provider()->remove_thread(msg->get_object());
 		}
 		
 		void on_accountable_changed(messenger::msg_accountable_thread_t* msg)
@@ -274,5 +300,8 @@ namespace engine
 
 	};
 }
+
+#include "global/component/thread_accounter/provider/generic.hpp"
+#include "global/component/thread_accounter/provider/windows.hpp"
 
 #endif

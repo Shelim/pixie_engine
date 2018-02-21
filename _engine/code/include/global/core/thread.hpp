@@ -35,6 +35,11 @@ namespace engine
                 }
 	            catch (const std::system_error& e) {}
             }
+
+            std::thread::native_handle_type get_native_handle()
+            {
+                return thread.native_handle();
+            }
             
             std::thread::id get_id() const
             {

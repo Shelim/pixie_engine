@@ -44,17 +44,17 @@ namespace engine
                     return name;
                 }
 
-                std::chrono::seconds get_total_time() const
+                std::chrono::duration<double> get_total_time() const
                 {
                     return total_time;
                 }
 
-                std::chrono::seconds get_cpu_usage_in_last_second() const
+                std::chrono::duration<double> get_cpu_usage_in_last_second() const
                 {
                     return cpu_usage_in_last_second;
                 }
 
-                thread_info_t(std::thread::id id, app_t::kind_t app, app_t::instance_id_t app_instance_id, const ustring_t & name, std::chrono::seconds total_time, std::chrono::seconds cpu_usage_in_last_second) :
+                thread_info_t(std::thread::id id, app_t::kind_t app, app_t::instance_id_t app_instance_id, const ustring_t & name, std::chrono::duration<double> total_time, std::chrono::duration<double> cpu_usage_in_last_second) :
                     id(id), app(app), app_instance_id(app_instance_id), name(name), total_time(total_time), cpu_usage_in_last_second(cpu_usage_in_last_second)
                 {
 
@@ -66,8 +66,8 @@ namespace engine
                 app_t::kind_t app;
                 app_t::instance_id_t app_instance_id;
                 ustring_t name;
-                std::chrono::seconds total_time;
-                std::chrono::seconds cpu_usage_in_last_second;
+                std::chrono::duration<double> total_time;
+                std::chrono::duration<double> cpu_usage_in_last_second;
         };
 
         typedef std::vector<thread_info_t> threads_info_t;
