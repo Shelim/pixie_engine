@@ -96,6 +96,11 @@ namespace engine
 
 		}
 
+		std::shared_ptr<logger_t> get_logger()
+		{
+			return logger;
+		}
+
 	private:
 
 		virtual std::unique_ptr<thread_info_t> create_thread_info(thread_t * thread) = 0;
