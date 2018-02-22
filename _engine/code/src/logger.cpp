@@ -2,7 +2,7 @@
 #include "global/core/console/writer.hpp"
 #include "global/core/vfs/virtual_path.hpp"
 #include "global/core/console/msg/meta.hpp"
-#include "global/core/thread.hpp"
+#include "global/core/thread/thread.hpp"
 
 engine::logger_t::logger_t()
 {

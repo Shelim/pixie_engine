@@ -8,7 +8,7 @@
 #include "global/core/process/token.hpp"
 #include "global/core/process/service.hpp"
 #include "global/core/process/thread_pool.hpp"
-#include "global/core/thread.hpp"
+#include "global/core/thread/thread.hpp"
 
 bool engine::process::token_t::is_requested_shutdown()
 {

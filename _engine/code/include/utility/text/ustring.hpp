@@ -1561,6 +1561,36 @@ namespace engine
 		return ustring_t(ss.str());
 	}
 
+	template <> inline ustring_t to_string<std::chrono::duration<double> >(const std::chrono::duration<double> & item, const ustring_t & format)
+	{
+		uint32_t int_hours = std::chrono::duration_cast<std::chrono::hours>(item).count();
+		uint32_t int_minutes = std::chrono::duration_cast<std::chrono::minutes>(item).count() % 60;
+		uint32_t int_seconds = std::chrono::duration_cast<std::chrono::seconds>(item).count() % 60;
+		uint32_t int_miliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(item).count() % 1000;
+
+		const ustring_t str_zero = "0"_u;
+		const ustring_t str_none = ""_u;
+
+		std::string ret = "";
+		if (int_hours < 10) ret.push_back('0');
+		ret += std::to_string(int_hours);
+
+		ret.push_back(':');
+		if (int_minutes < 10) ret.push_back('0');
+		ret += std::to_string(int_minutes);
+
+		ret.push_back(':');
+		if (int_seconds < 10) ret.push_back('0');
+		ret += std::to_string(int_seconds);
+
+		ret.push_back(':');
+		if (int_miliseconds < 10) ret.push_back('0');
+		if (int_miliseconds < 100) ret.push_back('0');
+		ret += std::to_string(int_miliseconds);
+
+		return ustring_t(ret);
+	}
+
 	template <> inline ustring_t to_string<std::chrono::seconds>(const std::chrono::seconds & item, const ustring_t & format)
 	{
 		uint32_t int_hours = std::chrono::duration_cast<std::chrono::hours>(item).count();

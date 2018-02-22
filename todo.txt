@@ -2,9 +2,7 @@
 	 - Add FlatBufffers dependency https://google.github.io/flatbuffers/index.html
 	 - Add new DEF for Default Providers
 	 - Program (!!!)
-         - Finish up thread accounter
-			 -> Platform dependand thread usage 
-         - Make similiar accounter for apps
+         - Make similiar accounter for apps (like threads)
 		 - Make apps overseer
 		 - Engine startup
 		 - Debug_symbol should be a global module

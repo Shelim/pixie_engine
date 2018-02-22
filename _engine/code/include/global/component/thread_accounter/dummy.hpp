@@ -12,14 +12,9 @@ namespace engine
 
 	public:
 
-		thread_accounter_dummy_t()
+		threads_meta_t get_running_threads() final
 		{
-
-		}
-
-		threads_info_t get_snapshot() final
-		{
-			threads_info_t ret;
+			threads_meta_t ret;
 			return ret;
 		}
 

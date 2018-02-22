@@ -6,7 +6,7 @@
 #include "global/core/app.hpp"
 #include "global/core/app/context.hpp"
 #include "utility/concurrention/signal.hpp"
-#include "global/core/thread.hpp"
+#include "global/core/thread/thread.hpp"
 
 namespace engine
 {

@@ -40,9 +40,8 @@ int main(int argc, char * argv[])
     USE_PROVIDER_FOR(filesystem, windows)
     USE_PROVIDERS_FOR(logger, console, temp_file)
     USE_PROVIDERS_FOR(accountable_thread, messenger)
-    USE_PROVIDER_FOR(thread_accounter, windows)
+    USE_PROVIDER_FOR(thread_stats, windows)
 
-    USE_SETTINGS(thread_accounter_t, normal)
 #if PIXIE_IS_DEBUG_BUILD
     USE_SETTINGS(config_t, debug)
 #else
