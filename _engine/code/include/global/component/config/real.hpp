@@ -64,7 +64,7 @@ namespace engine
 
 		~config_real_t()
 		{
-			logger->log_global_msg(config, "Config component has been disposed"_u);
+			logger->log_global_msg(config, "Config component has concluded"_u);
 		}
 	
 #define ENGINE_CONFIG_GLOBAL(type, name) \

@@ -70,5 +70,5 @@ Executable('pixie_debug')
 
 Alias( 'all' )
 {
-	.Targets = { 'engine_code', 'dependency_code_cpp', 'target_code' }
+	.Targets = { 'engine_code', 'dependency_code_cpp', 'dependency_code_c', 'target_code' }
 }

@@ -17,8 +17,6 @@ namespace engine
 
         }
 
-        virtual void wait_for_completion() {}
-
     };
 
 }

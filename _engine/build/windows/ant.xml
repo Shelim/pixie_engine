@@ -164,13 +164,13 @@
 		</condition>
 		
 		<pathconvert property="binary_base_depedencies" pathsep=",">
-			<dirset dir="dependency/library" includes="*/lib/${platform_fullname}/${binary_base.debug}" />
+			<dirset dir="dependency/library" includes="*/content/${platform_fullname}/${binary_base.debug}" />
 		</pathconvert>
 		
 		<copy todir="${binary_base.output_path}" preservelastmodified="true" overwrite="true">
-			<multirootfileset basedirs="${binary_base_depedencies}" type="file" includes="**/*.dll" />
-			<multirootfileset basedirs="${binary_base_depedencies}" type="file" includes="**/*.exe" />
+			<multirootfileset basedirs="${binary_base_depedencies}" type="file" includes="**" />
 		</copy>
+        
 	</target>
 	
 <!-- Populate resources file and store it in build_path so it is accessible for include inside /code/src/windows/resources.rc -->

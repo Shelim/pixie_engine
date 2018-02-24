@@ -10,12 +10,29 @@
 namespace engine
 {
 	
+	class thread_accounter_provider_base_t
+	{
+
+	public:
+
+		virtual ~thread_accounter_provider_base_t()
+		{
+			
+		}
+		
+		virtual void thread_created(std::shared_ptr<thread_meta_t> thread_meta) = 0;
+		virtual void thread_destroyed(std::shared_ptr<thread_meta_t> thread_meta) = 0;
+
+	};
+
+	REGISTER_PROVIDER_BASE_TYPE(thread_accounter_t, thread_accounter_provider_base_t)
+	
 	class thread_accounter_real_t : public thread_accounter_t
 	{
 
 	public:
 
-		thread_accounter_real_t(std::shared_ptr<logger_t> logger, std::shared_ptr<messenger_accountable_thread_t> messenger_accountable_thread) : logger(logger), messenger_accountable_thread(messenger_accountable_thread)
+		thread_accounter_real_t(std::shared_ptr<logger_t> logger, std::shared_ptr<messenger_accountable_thread_t> messenger_accountable_thread, std::unique_ptr<holder_t<thread_accounter_t> > thread_accounter_provider) : logger(logger), messenger_accountable_thread(messenger_accountable_thread), thread_accounter_provider(std::move(thread_accounter_provider))
 		{
 			auto task_id = logger->log_global_task_start(threads, "Initializing accounter [thread]"_u);
 			messenger_instance = messenger_accountable_thread->register_callback([this](messenger::msg_accountable_thread_t* msg){on_accountable_changed(msg);}, messenger::history_t::dump_if_available);
@@ -59,6 +76,7 @@ namespace engine
 
 		std::shared_ptr<logger_t> logger;
 		std::shared_ptr<messenger_accountable_thread_t> messenger_accountable_thread;
+		std::unique_ptr<holder_t<thread_accounter_t> > thread_accounter_provider;
 		std::unique_ptr<messenger::instance_t<messenger::msg_accountable_thread_t> > messenger_instance;
 		threads_meta_t threads_collection;
 		
@@ -81,6 +99,10 @@ namespace engine
 			}
 
 			threads_collection.push_back(msg->get_object()->get_thread_meta());
+			for(std::size_t i = 0; i < thread_accounter_provider->get_providers_count(); i++)
+			{
+				thread_accounter_provider->get_provider(i)->thread_created(msg->get_object()->get_thread_meta());
+			}
 		}
 
         void on_accountable_destroyed(messenger::msg_accountable_thread_t * msg)
@@ -108,6 +130,12 @@ namespace engine
 					(*iter)->get_id() == msg->get_object()->get_thread_meta()->get_id())
 				{
 					threads_collection.erase(iter);
+
+					for(std::size_t i = 0; i < thread_accounter_provider->get_providers_count(); i++)
+					{
+						thread_accounter_provider->get_provider(i)->thread_destroyed(msg->get_object()->get_thread_meta());
+					}
+
 					return;
 				}
 			}
@@ -133,5 +161,7 @@ namespace engine
 
 	};
 }
+
+#include "global/component/thread_accounter/provider/console.hpp"
 
 #endif

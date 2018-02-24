@@ -1,5 +1,5 @@
 #include "global/core/console/msg/logger.hpp"
-#include "global/core/console/msg/meta.hpp"
+#include "global/core/console/msg/accountable.hpp"
 #include "global/core/console/filter.hpp"
 #include "global/core/console/formatter.hpp"
 #include "global/core/console/instance.hpp"
@@ -56,22 +56,6 @@ std::size_t engine::console::logger_item_t::get_link() const
 bool engine::console::logger_item_t::is_linked() const
 {
     return link != -1;
-}
-
-engine::console::meta_item_t::meta_item_t(meta_type_t meta_type, type_t type) :
-                actual_t(app_t::kind_t::_engine, 0, type_t::meta, source_t::core, kind_t::meta), meta_type(meta_type), type(type)
-{
-
-}
-
-engine::console::meta_item_t::meta_type_t engine::console::meta_item_t::get_meta_type() const
-{
-    return meta_type;
-}
-
-engine::messenger::msg_console_t::actual_t::type_t engine::console::meta_item_t::get_meta_type_type() const
-{
-    return type;
 }
 
 engine::console_writer_t::console_writer_t(std::shared_ptr<messenger_console_t> console) : console(console)

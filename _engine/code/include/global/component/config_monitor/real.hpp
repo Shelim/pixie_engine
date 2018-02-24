@@ -199,7 +199,7 @@ namespace engine
 
 		config_monitor_service_t(std::shared_ptr<logger_t> logger, std::shared_ptr<messenger_config_storage_t> messenger_config_storage, std::shared_ptr<config_monitor_executor_t> config_monitor_executor) : logger(logger), messenger_config_storage(messenger_config_storage), config_monitor_executor(config_monitor_executor)
 		{
-			logger->log_global_msg(config, "Config monitor service has launched"_u);
+			logger->log_global_msg(config, "Config monitor service has started"_u);
 			messenger_instance = messenger_config_storage->register_callback([this](messenger::msg_config_storage_t* msg)
 			{
 				if(msg->get_type() == messenger::msg_config_storage_t::type_t::source_updated)

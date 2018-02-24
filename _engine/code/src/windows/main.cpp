@@ -41,6 +41,8 @@ int main(int argc, char * argv[])
     USE_PROVIDERS_FOR(logger, console, temp_file)
     USE_PROVIDERS_FOR(accountable_thread, messenger)
     USE_PROVIDER_FOR(thread_stats, windows)
+    USE_PROVIDERS_FOR(thread_accounter, console)
+    USE_PROVIDER_FOR(profiler, remotery)
 
 #if PIXIE_IS_DEBUG_BUILD
     USE_SETTINGS(config_t, debug)
@@ -54,9 +56,7 @@ int main(int argc, char * argv[])
     std::shared_ptr<engine::program_t> program = windows.ignite_from_main(argc, argv);
     if(!program) return EXIT_FAILURE; // Failed to ignite (for example different instance is running)
 
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-
-//    program->get_app_overseer()->wait_for_completion();
+    program->get_app_overseer()->wait_for_completion();
     return program->get_extinguisher()->get_return_code();
 }
 
