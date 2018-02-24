@@ -42,12 +42,13 @@ int main(int argc, char * argv[])
     USE_PROVIDERS_FOR(accountable_thread, messenger)
     USE_PROVIDER_FOR(thread_stats, windows)
     USE_PROVIDERS_FOR(thread_accounter, console)
-    USE_PROVIDER_FOR(profiler, remotery)
 
 #if PIXIE_IS_DEBUG_BUILD
     USE_SETTINGS(config_t, debug)
+    USE_PROVIDER_FOR(profiler, remotery)
 #else
     USE_SETTINGS(config_t, release)
+    DISABLE_GLOBAL_COMPONENT(profiler)
 #endif
     USE_SETTINGS(config_storage_t, normal)
 
