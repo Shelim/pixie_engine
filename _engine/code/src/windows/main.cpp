@@ -55,7 +55,32 @@ int main(int argc, char * argv[])
 
     std::shared_ptr<engine::program_t> program = windows.ignite_from_main(argc, argv);
     if(!program) return EXIT_FAILURE; // Failed to ignite (for example different instance is running)
-
+/*
+    program->get_profiler()->name_current_thread("Main thread"_u);
+    for(int i = 0; i < 1024; i++)
+    {
+        program->get_profiler()->prof_begin_section("Frame");
+        for(int p = 0; p < 5; p++)
+        {
+            program->get_profiler()->prof_begin_section("Op 1");
+            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+            program->get_profiler()->prof_end_section();
+        }
+        for(int p = 0; p < 3; p++)
+        {
+            program->get_profiler()->prof_begin_section("Op 2");
+            std::this_thread::sleep_for(std::chrono::milliseconds(40));
+            program->get_profiler()->prof_end_section();
+        }
+        for(int p = 0; p < 4; p++)
+        {
+            program->get_profiler()->prof_begin_section("Op 3");
+            std::this_thread::sleep_for(std::chrono::milliseconds(45));
+            program->get_profiler()->prof_end_section();
+        }
+        program->get_profiler()->prof_end_section();
+    }
+*/
     program->get_app_overseer()->wait_for_completion();
     return program->get_extinguisher()->get_return_code();
 }
