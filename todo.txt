@@ -5,7 +5,7 @@
 		 - Make apps overseer
          - Make accounter for apps
      - Profiler
-         - Practical usage
+         - Practical usage (use remotely to profile code!)
          - Write/Read to console
      - Debug_symbol should be a global module
 	 - Cleanup parser

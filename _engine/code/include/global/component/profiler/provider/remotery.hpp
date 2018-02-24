@@ -4,7 +4,7 @@
 
 #include "global/component/profiler/real.hpp"
 #include "global/core/messenger/messenger.hpp"
-#include <remotery.h>
+#include "utility/debug/remotery.hpp"
 #include <string>
 #include <set>
 
@@ -15,44 +15,34 @@ namespace engine
 
     public:
 
-        profiler_provider_remotery_t() : rmt(nullptr)
+        profiler_provider_remotery_t(std::shared_ptr<remotery_t> remotery) : remotery(remotery)
         {
-            rmtSettings* settings = rmt_Settings();
 
-            settings->limit_connections_to_localhost = true;
-
-            std::lock_guard<std::mutex> guard(mutex);
-            rmtError ret_code = rmt_CreateGlobalInstance(&rmt);
         }
 
         ~profiler_provider_remotery_t()
         {
-            std::lock_guard<std::mutex> guard(mutex);
-            rmt_DestroyGlobalInstance(rmt);
+            
         }
 
         void prof_begin_section(const char * name) final
         {
-            std::lock_guard<std::mutex> guard(mutex);
-            rmt_BeginCPUSampleDynamic(name, RMTSF_None);
+            remotery->prof_begin_section(name);
         }
         
         void prof_end_section() final
         {
-            std::lock_guard<std::mutex> guard(mutex);
-            rmt_EndCPUSample();
+            remotery->prof_end_section();
         }
 
         void name_current_thread(const ustring_t & name)
         {
-            std::lock_guard<std::mutex> guard(mutex);
-            rmt_SetCurrentThreadName(name.get_cstring());
+            remotery->name_current_thread(name);
         }
 
     private:
 
-        Remotery* rmt;
-        std::mutex mutex;
+        std::shared_ptr<remotery_t> remotery;
 
     };
 
