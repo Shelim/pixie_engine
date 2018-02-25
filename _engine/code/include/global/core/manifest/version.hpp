@@ -2,6 +2,7 @@
 #define ENGINE_COMMON_UTILITY_MANIFEST_VERSION_HPP
 
 #include "utility/text/ustring.hpp"
+#include "utility/container/version.hpp"
 
 #pragma once
 
@@ -13,19 +14,16 @@ namespace engine
 
 	public:
 
-		uint32_t get_major() const;
-		uint32_t get_minor() const;
-		uint32_t get_revision() const;
-		uint32_t get_build() const;
+		const version_t & get_version() const
+		{
+			return version;
+		}
 
 	private:
 
-	};
+		static version_t version;
 
-	template<> inline ustring_t to_string<manifest_version_t>(const manifest_version_t & item)
-	{
-		return format_string("#1#.#2#.#3#.#4#"_u, item.get_major(), item.get_minor(), item.get_revision(), item.get_build());
-	}
+	};
 
 }
 
