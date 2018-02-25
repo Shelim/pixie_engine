@@ -2,6 +2,10 @@
 #define ENGINE_COMPONENT_ENVIRONMENT_INFO_HPP
 #pragma once
 
+#include "utility/platform/cpu_features.hpp"
+#include "utility/platform/version.hpp"
+#include "utility/text/ustring.hpp"
+#include "global/core/manifest/os.hpp"
 
 namespace engine
 {
@@ -13,9 +17,12 @@ namespace engine
 
 #include "def/enum/environment_info.def"
 
-		virtual const ustring_t & get(type_t key) const = 0;
+		virtual ustring_t get(type_t key) const = 0;
+
+#define ENGINE_ENVIRONMENT_INFO_DEF(key, name, type) virtual ::type get_##key() const = 0;
+#include "def/environment_info.def"
 		  
-		virtual status_t get_status(type_t key) const = 0;
+		virtual status_t status(type_t key) const = 0;
 	};
 }
 

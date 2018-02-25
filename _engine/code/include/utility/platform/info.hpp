@@ -4,7 +4,7 @@
 
 #include<memory>
 #include "utility/text/ustring.hpp"
-
+#include "utility/platform/cpu_features.hpp"
 namespace engine
 {
 
@@ -29,13 +29,18 @@ namespace engine
 		uint32_t get_cache_line_size();
 
 		/**
-		 * @brief List CPU features
+		 * @brief Get total RAM size in megabytes
 		 * 
-		 * @note This function is intended for logging and debugging purposes
+		 * @return Total RAM size in megabytes
+		 */
+		uint32_t get_total_ram_in_mb();
+
+		/**
+		 * @brief List CPU features
 		 * 
 		 * @return Platform-specifc CPU features
 		 */
-		ustring_t get_cpu_features();
+		cpu_features_t get_cpu_features();
 
 	}
 

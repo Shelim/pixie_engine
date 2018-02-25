@@ -2,7 +2,7 @@
 #define ENGINE_COMMON_UTILITY_MANIFEST_VERSION_HPP
 
 #include "utility/text/ustring.hpp"
-#include "utility/container/version.hpp"
+#include "utility/platform/version.hpp"
 
 #pragma once
 

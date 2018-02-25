@@ -1625,6 +1625,7 @@ namespace engine
 		return ustring_t::from_ascii(str.c_str());
 	}
 
+
 	template<> inline ustring_t to_string<ustring_t>(const ustring_t & item, const ustring_t & format)
 	{
 		return item;

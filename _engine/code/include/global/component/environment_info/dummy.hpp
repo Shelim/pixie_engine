@@ -12,12 +12,15 @@ namespace engine
 
 	public:
 		
-		const ustring_t & get(type_t key) const final
+		ustring_t get(type_t key) const final
 		{
 			return ""_u;
 		}
+
+#define ENGINE_ENVIRONMENT_INFO_DEF(key, name, type) ::type get_##key() const final { return from_string<::type>(""_u); }
+#include "def/environment_info.def"
 		  
-		status_t get_status(type_t key) const final
+		status_t status(type_t key) const final
 		{
 			return status_t::not_yet_populated;
 		}

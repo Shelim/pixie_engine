@@ -11,7 +11,7 @@
 #endif
 
 ENGINE_ENUM_START(engine::environment_info_t, type_t)
-#define ENGINE_ENVIRONMENT_INFO_DEF(x, name) ENGINE_ENUM_VALUE(x, name)
+#define ENGINE_ENVIRONMENT_INFO_DEF(x, name, type) ENGINE_ENUM_VALUE(x, name)
 #include "def/environment_info.def"
 ENGINE_ENUM_END()
 

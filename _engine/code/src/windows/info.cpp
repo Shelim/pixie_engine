@@ -42,23 +42,27 @@ uint32_t engine::platform::get_cache_line_size()
 	return SDL_GetCPUCacheLineSize();
 }
 
-engine::ustring_t engine::platform::get_cpu_features()
+uint32_t engine::platform::get_total_ram_in_mb()
 {
-	ustring_t features;
-	if (SDL_Has3DNow()) features.append_ascii("3DNow ");
-	if (SDL_HasAltiVec()) features.append_ascii("AltiVec ");
-	if (SDL_HasMMX()) features.append_ascii("MMX ");
-	if (SDL_HasRDTSC()) features.append_ascii("RDTSC ");
-	if (SDL_HasSSE()) features.append_ascii("SSE ");
-	if (SDL_HasSSE2()) features.append_ascii("SSE2 ");
-	if (SDL_HasSSE3()) features.append_ascii("SSE3 ");
-	if (SDL_HasSSE41()) features.append_ascii("SSE41 ");
-	if (SDL_HasSSE42()) features.append_ascii("SSE42 ");
+	return SDL_GetSystemRAM();
+}
 
-	if (features.len() > 0)
-		return features.substr(0, features.len() - 1);
+engine::cpu_features_t engine::platform::get_cpu_features()
+{
+	engine::cpu_features_t::builder_t builder;
 
-	return features;
+	if (SDL_Has3DNow()) 	builder.set_feature(cpu_features_t::feature_t::_3d_now, true);
+	if (SDL_HasAVX())		builder.set_feature(cpu_features_t::feature_t::avx, true);
+	if (SDL_HasAltiVec()) 	builder.set_feature(cpu_features_t::feature_t::alti_vec, true);
+	if (SDL_HasMMX())		builder.set_feature(cpu_features_t::feature_t::mmx, true);
+	if (SDL_HasRDTSC())		builder.set_feature(cpu_features_t::feature_t::rdtsc, true);
+	if (SDL_HasSSE())		builder.set_feature(cpu_features_t::feature_t::sse, true);
+	if (SDL_HasSSE2())		builder.set_feature(cpu_features_t::feature_t::sse2, true);
+	if (SDL_HasSSE3()) 		builder.set_feature(cpu_features_t::feature_t::sse3, true);
+	if (SDL_HasSSE41()) 	builder.set_feature(cpu_features_t::feature_t::sse41, true);
+	if (SDL_HasSSE42()) 	builder.set_feature(cpu_features_t::feature_t::sse42, true);
+
+	return builder.build();
 }
 
 #endif

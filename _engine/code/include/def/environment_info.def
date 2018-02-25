@@ -6,13 +6,14 @@
 #define ENGINE_ENVIRONMENT_INFO_STATUS_DEF(...)
 #endif
 
-ENGINE_ENVIRONMENT_INFO_DEF(engine_version, "Engine version"_u)
-ENGINE_ENVIRONMENT_INFO_DEF(launched_time, "Launched at"_u)
-ENGINE_ENVIRONMENT_INFO_DEF(os_name, "OS"_u)
-ENGINE_ENVIRONMENT_INFO_DEF(os_ver, "OS version"_u)
-ENGINE_ENVIRONMENT_INFO_DEF(cpu_cores, "CPU cores"_u)
-ENGINE_ENVIRONMENT_INFO_DEF(cpu_cache_line, "CPU cache line size"_u)
-ENGINE_ENVIRONMENT_INFO_DEF(cpu_features, "CPU features"_u)
+ENGINE_ENVIRONMENT_INFO_DEF(engine_version, "Engine version"_u, engine::version_t)
+ENGINE_ENVIRONMENT_INFO_DEF(launched_time, "Launched at"_u, std::chrono::system_clock::time_point)
+ENGINE_ENVIRONMENT_INFO_DEF(os_name, "OS"_u, engine::manifest_os_t::os_t)
+ENGINE_ENVIRONMENT_INFO_DEF(os_ver, "OS version"_u, engine::ustring_t)
+ENGINE_ENVIRONMENT_INFO_DEF(cpu_cores, "CPU cores"_u, int32_t)
+ENGINE_ENVIRONMENT_INFO_DEF(cpu_cache_line, "CPU cache line size"_u, int32_t)
+ENGINE_ENVIRONMENT_INFO_DEF(cpu_features, "CPU features"_u, engine::cpu_features_t)
+ENGINE_ENVIRONMENT_INFO_DEF(ram, "Total RAM (MB)"_u, int32_t)
 
 
 ENGINE_ENVIRONMENT_INFO_STATUS_DEF(not_yet_populated)

@@ -1,0 +1,20 @@
+#ifndef ENGINE_ENUM_START
+#define ENGINE_ENUM_START(namespace, name) enum class name {
+#endif
+
+#ifndef ENGINE_ENUM_VALUE
+#define ENGINE_ENUM_VALUE(val, str) val,
+#endif
+
+#ifndef ENGINE_ENUM_END
+#define ENGINE_ENUM_END() count };
+#endif
+
+ENGINE_ENUM_START(engine::cpu_features_t, feature_t)
+#define ENGINE_CPU_FEATURE_DEF(x, name) ENGINE_ENUM_VALUE(x, name)
+#include "def/cpu_feature.def"
+ENGINE_ENUM_END()
+
+#undef ENGINE_ENUM_END
+#undef ENGINE_ENUM_VALUE
+#undef ENGINE_ENUM_START

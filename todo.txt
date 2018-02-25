@@ -33,7 +33,6 @@
 	 - data_creator
 	 - data_monitor
 	 - data_source
-	 - environment_info
 	 - path_resolver
  - Utility / XML
 
