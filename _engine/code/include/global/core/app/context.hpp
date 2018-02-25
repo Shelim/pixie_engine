@@ -11,7 +11,7 @@ namespace engine
 
     class instance_id_t {};
 
-    extern instance_id_t instace_id;
+    extern instance_id_t instance_id;
 
     class program_t;
 

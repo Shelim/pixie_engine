@@ -110,7 +110,7 @@ namespace engine
 			return boost::di::make_injector(
 #define ENGINE_GLOBAL_COMPONENT_DEF(component) boost::di::bind<engine::component##_t>().to(context->get_program()->get_##component()),
 #include "def/global_component.def"
-				boost::di::bind<app_t::instance_id_t>().named(engine::instace_id).to(context->get_instance_id()));
+				boost::di::bind<app_t::instance_id_t>().named(engine::instance_id).to(context->get_instance_id()));
 		};
 	}
 
