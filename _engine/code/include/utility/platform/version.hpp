@@ -46,7 +46,7 @@ namespace engine
 
 	};
 
-    bool operator== (const version_t & version1, const version_t & version2)
+    inline bool operator== (const version_t & version1, const version_t & version2)
     {
         if(version1.get_major() != version_t::any && version2.get_major() != version_t::any)
         {
@@ -66,11 +66,11 @@ namespace engine
         }
         return true;
     }
-    bool operator!= (const version_t & version1, const version_t & version2)
+    inline bool operator!= (const version_t & version1, const version_t & version2)
     {
         return !(version1 == version2);
     }
-    bool operator< (const version_t & version1, const version_t & version2)
+    inline bool operator< (const version_t & version1, const version_t & version2)
     {
         if(version1.get_major() != version_t::any && version2.get_major() != version_t::any)
         {
@@ -95,15 +95,15 @@ namespace engine
         }
         return true;
     }
-    bool operator<= (const version_t & version1, const version_t & version2)
+    inline bool operator<= (const version_t & version1, const version_t & version2)
     {
         return version1 < version2 || version1 == version2;
     }
-    bool operator> (const version_t & version1, const version_t & version2)
+    inline bool operator> (const version_t & version1, const version_t & version2)
     {
         return !(version1 <= version2);
     }
-    bool operator>= (const version_t & version1, const version_t & version2)
+    inline bool operator>= (const version_t & version1, const version_t & version2)
     {
         return !(version1 < version2);
     }
