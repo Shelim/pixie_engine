@@ -28,7 +28,7 @@ engine::logger_provider_base_t::~logger_provider_base_t()
 
 }
 
-engine::logger_real_t::logger_real_t(std::shared_ptr<engine::environment_info_t> environment_info, std::unique_ptr<holder_t<logger_t> > logger_providers)
+engine::logger_real_t::logger_real_t(std::unique_ptr<holder_t<logger_t> > logger_providers)
  : logger_providers(std::move(logger_providers))
 {
 	time_start = std::chrono::system_clock::now();

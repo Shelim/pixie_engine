@@ -31,7 +31,7 @@ namespace engine
 
 	public:
 
-		logger_real_t(std::shared_ptr<engine::environment_info_t> environment_info, std::unique_ptr<holder_t<logger_t> > logger_providers);
+		logger_real_t(std::unique_ptr<holder_t<logger_t> > logger_providers);
 		~logger_real_t();
 
 		const engine::console::logger_items_t & get_cache() const final;
