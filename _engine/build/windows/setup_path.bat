@@ -42,7 +42,7 @@ rem * Jump '\_engine\build\windows' -> '\_engine'
 cd ..\..
 
 rem * Set path
-set path=%cd%\dependency\other\texlive\bin\win32;%cd%\dependency\other\jdk1.8.0_131\bin;%cd%\dependency\other\llvm\windows\bin;%cd%\dependency\other\python-3.5\windows;%cd%\dependency\other\mingw\windows\bin;%cd%\dependency\other\apache_ant\bin;%cd%\dependency\other\doxygen\windows;%cd%\dependency\other\dot\windows;%cd%\dependency\other\fastbuild\windows;%cd%\dependency\other\cppcheck\windows;%cd%\dependency\other\dia
+set path=%cd%\dependency\other\texlive\bin\win32;%cd%\dependency\other\jdk1.8.0_131\bin;%cd%\dependency\other\llvm\windows\bin;%cd%\dependency\other\python-3.5\windows;%cd%\dependency\other\mingw\windows\bin;%cd%\dependency\other\apache_ant\bin;%cd%\dependency\other\doxygen\windows;%cd%\dependency\other\dot\windows;%cd%\dependency\other\fastbuild\windows;%cd%\dependency\other\cppcheck\windows;%cd%\dependency\other\dia;%cd%\dependency\other\open_cpp_coverage\windows;%cd%\dependency\other\msxsl\windows
 set JAVA_HOME=%cd%\dependency\other\jdk1.8.0_131\windows
 set PYTHONPATH=%cd%\dependency\other\python-3.5\windows;%cd%\dependency\other\python-3.5\windows\Lib;%cd%\dependency\other\python-3.5\windows\Lib\site-packages
 set PYTHONHOME=%cd%\dependency\other\python-3.5\windows

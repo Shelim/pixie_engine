@@ -109,6 +109,7 @@
 		"lldb.executable": "./../_engine/dependency/other/llvm/windows/bin/lldb",
 		"doxdocgen.generic.paramTemplate": "@param[in] {param}",
 		"doxdocgen.generic.returnTemplate": "@return",
-		"workbench.iconTheme": "vscode-icons"
+		"workbench.iconTheme": "vscode-icons",
+		"coverage-gutters.showLineCoverage": true
 	}
 }

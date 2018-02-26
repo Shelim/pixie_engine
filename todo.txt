@@ -22,10 +22,6 @@
  - New dependencies:
 	 - Replace libRocket with CEF3 https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage
 	 - Add FlatBufffers dependency https://google.github.io/flatbuffers/index.html
-     - Code Coverage for tests:
-         - Use CLANG: https://clang.llvm.org/docs/SourceBasedCodeCoverage.html
-         - See docs in _command/windows/execute_tests.bat
-         - Research ways of including that in VSCode inline notes
 
  - Work on components: 
 +	 - config_storage
