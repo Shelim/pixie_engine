@@ -16,6 +16,22 @@
                 "reveal": "always",
                 "panel": "new"
             }
+        },
+        {
+            "label": "Run tests",
+            "type": "shell",
+            "windows": {
+                "command": "echo | call ${workspaceRoot}/../_command/windows/execute_tests.bat"
+            },
+            "args": [ ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
         }
     ]
 }

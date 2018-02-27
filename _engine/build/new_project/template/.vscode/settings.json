@@ -1,0 +1,9 @@
+{
+  "files.exclude": {
+    "_changelog": true,
+    "_ready": true,
+    ".vscode-user": true,
+    "!build": true,
+    "!output": true,
+  }
+}

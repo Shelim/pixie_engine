@@ -1,2 +1,11 @@
 {
+    "files.exclude": {
+        ".vscode-user": true,
+        "!build": true,
+        "!output": true,
+        "dependency/other": true
+      },
+      "search.exclude": {
+          "dependency":true
+      }
 }
