@@ -161,6 +161,9 @@ msxsl test_detail.xml "..\_engine\build\common\test.xslt" > "raport.html"
 rem * Jump '\!test_results' -> '\'
 cd ..
 
+rem * Update test_result.html in root directory
+echo F| xcopy "%cd%\!test_results\raport.html" "%cd%\test_result.html" /Y /Q /R /K
+
 rem * Remove project; We do not need it now
 rmdir /s /q "_test_running"
 
