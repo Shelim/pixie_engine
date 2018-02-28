@@ -29,7 +29,6 @@ namespace engine
             switch(item.get_kind())
             {
                 case console::logger_item_t::kind_t::meta:
-                case console::logger_item_t::kind_t::info:
                 case console::logger_item_t::kind_t::msg:
                     format = " msg ###1:id# <#2:module#> #3:message#   time: #8:time#, thread: #9:thread#, func: #4:function#()   at: #5:file#, on line: #6:line#"_u;
                 break;
