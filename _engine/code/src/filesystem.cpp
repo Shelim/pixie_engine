@@ -1,5 +1,4 @@
 #include "global/component/filesystem.hpp"
-#include "global/component/logger.hpp"
 
 engine::filesystem_t::~filesystem_t()
 {
@@ -260,7 +259,7 @@ bool engine::filesystem_provider_base_t::match(char const *needle, char const *h
     return *haystack == '\0';
 }
 
-engine::filesystem_real_t::filesystem_real_t(std::unique_ptr<holder_t<filesystem_t> > filesystem_provider) : filesystem_provider(std::move(filesystem_provider))
+engine::filesystem_real_t::filesystem_real_t(std::unique_ptr<holder_t<filesystem_t> > filesystem_provider, std::shared_ptr<profiler_t> profiler) : filesystem_provider(std::move(filesystem_provider)), profiler(profiler)
 {
 
 }
@@ -277,18 +276,30 @@ std::filesystem::file_time_type engine::filesystem_real_t::get_mod_time(std::fil
 
 engine::paths_t engine::filesystem_real_t::iterate_files_in_directory(std::filesystem::path path, const ustring_t & pattern)
 {
+    ustring_t name = format_string("Iterate files in dir '#1#'"_u, path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
     return filesystem_provider->get_provider()->iterate_files_in_directory(path, pattern);
 }
 engine::paths_t engine::filesystem_real_t::iterate_directories(std::filesystem::path path, const ustring_t & pattern)
 {
+    ustring_t name = format_string("Iterate dirs in dir '#1#'"_u, path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
     return filesystem_provider->get_provider()->iterate_directories(path, pattern);
 }
 engine::paths_t engine::filesystem_real_t::iterate_files_in_subdirectories(std::filesystem::path path, const ustring_t & pattern)
 {
+    ustring_t name = format_string("Iterate files in all subdirs of '#1#'"_u, path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+    
     return filesystem_provider->get_provider()->iterate_files_in_subdirectories(path, pattern);
 }
 engine::paths_t engine::filesystem_real_t::iterate_subdirectories(std::filesystem::path path, const ustring_t & pattern)
 {
+    ustring_t name = format_string("Iterate dirs in all subdirs of '#1#'"_u, path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+    
     return filesystem_provider->get_provider()->iterate_subdirectories(path, pattern);
 }
 
@@ -303,6 +314,9 @@ std::shared_ptr<engine::filesystem_t::file_input_t> engine::filesystem_real_t::i
 
 std::filesystem::path engine::filesystem_real_t::construct_temp_file()
 {
+    ustring_t name = format_string("Create temp file"_u);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
     return filesystem_provider->get_provider()->construct_temp_file();
 }
 bool engine::filesystem_real_t::exists(std::filesystem::path path)
@@ -320,32 +334,54 @@ bool engine::filesystem_real_t::is_directory(std::filesystem::path path)
 
 void engine::filesystem_real_t::copy_file(std::filesystem::path src, std::filesystem::path trg)
 {
+    ustring_t name = format_string("Copying file '#1#' -> '#2#'"_u, src, trg);
+    profiler_t::section_t section(profiler, name.get_cstring());
+    
     filesystem_provider->get_provider()->copy_file(src, trg);
+    
 }
 void engine::filesystem_real_t::copy_directory(std::filesystem::path src, std::filesystem::path trg)
 {
+    ustring_t name = format_string("Copying dir '#1#' -> '#2#'"_u, src, trg);
+    profiler_t::section_t section(profiler, name.get_cstring());
+    
     filesystem_provider->get_provider()->copy_directory(src, trg);
 }
 
 void engine::filesystem_real_t::delete_file(std::filesystem::path path)
 {
+    ustring_t name = format_string("Deleting file '#1#'"_u, path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+    
     filesystem_provider->get_provider()->delete_file(path);
 }
 void engine::filesystem_real_t::delete_directory(std::filesystem::path path)
 {
+    ustring_t name = format_string("Deleting dir '#1#'"_u, path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+    
     filesystem_provider->get_provider()->delete_directory(path);
 }
 void engine::filesystem_real_t::move_file(std::filesystem::path src, std::filesystem::path trg)
 {
+    ustring_t name = format_string("Moving file '#1#' -> '#2#'"_u, src, trg);
+    profiler_t::section_t section(profiler, name.get_cstring());
+    
     filesystem_provider->get_provider()->move_file(src, trg);
 }
 void engine::filesystem_real_t::move_directory(std::filesystem::path src, std::filesystem::path trg)
 {
+    ustring_t name = format_string("Moving dir '#1#' -> '#2#'"_u, src, trg);
+    profiler_t::section_t section(profiler, name.get_cstring());
+    
     filesystem_provider->get_provider()->move_directory(src, trg);
 }
 
-engine::filesystem_provider_generic_t::file_output_generic_t::file_output_generic_t(std::filesystem::path physical_path) : physical_path(physical_path)
+engine::filesystem_provider_generic_t::file_output_generic_t::file_output_generic_t(std::filesystem::path physical_path, std::shared_ptr<profiler_t> profiler) : physical_path(physical_path), profiler(profiler)
 {
+    ustring_t name = format_string("Opening file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
     std::error_code ec;
 
     std::filesystem::path dir = physical_path;
@@ -358,27 +394,42 @@ engine::filesystem_provider_generic_t::file_output_generic_t::file_output_generi
 
 engine::filesystem_provider_generic_t::file_output_generic_t::~file_output_generic_t()
 {
+    ustring_t name = format_string("Closing file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
     file.close();
 }
 
 uint32_t engine::filesystem_provider_generic_t::file_output_generic_t::write(const uint8_t * buffer, uint32_t size)
 {
+    ustring_t name = format_string("Writing file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+    
     file.write(reinterpret_cast<const char*>(buffer), size);
     return size;
 }
 
 void engine::filesystem_provider_generic_t::file_output_generic_t::flush()
 {
+    ustring_t name = format_string("Flushing file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
     file.flush();
 }
 
-engine::filesystem_provider_generic_t::file_input_generic_t::file_input_generic_t(std::filesystem::path path)
+engine::filesystem_provider_generic_t::file_input_generic_t::file_input_generic_t(std::filesystem::path physical_path, std::shared_ptr<profiler_t> profiler) : physical_path(physical_path), profiler(profiler)
 {
-    file.open(path, std::ios_base::in | std::ios_base::binary);
+    ustring_t name = format_string("Opening file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
+    file.open(physical_path, std::ios_base::in | std::ios_base::binary);
 }
 
 engine::filesystem_provider_generic_t::file_input_generic_t::~file_input_generic_t()
 {
+    ustring_t name = format_string("Closing file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
     file.close();
 }
 
@@ -401,12 +452,14 @@ uint32_t engine::filesystem_provider_generic_t::file_input_generic_t::tell() con
 }
 uint32_t engine::filesystem_provider_generic_t::file_input_generic_t::read(uint8_t * buffer, uint32_t size)
 {
+    ustring_t name = format_string("Reading file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+    
     file.read(reinterpret_cast<char *>(buffer), size);
-
     return size;
 }
 
-engine::filesystem_provider_generic_t::filesystem_provider_generic_t() : filesystem_provider_base_t(), tmp_item(0)
+engine::filesystem_provider_generic_t::filesystem_provider_generic_t(std::shared_ptr<profiler_t> profiler) : filesystem_provider_base_t(), tmp_item(0), profiler(profiler)
 {
 
 }
@@ -496,12 +549,12 @@ engine::paths_t engine::filesystem_provider_generic_t::iterate_subdirectories(st
 
 std::shared_ptr<engine::filesystem_t::file_output_t> engine::filesystem_provider_generic_t::output(std::filesystem::path path)
 {
-    return std::make_shared<file_output_generic_t>(path);
+    return std::make_shared<file_output_generic_t>(path, profiler);
 }
 
 std::shared_ptr<engine::filesystem_t::file_input_t> engine::filesystem_provider_generic_t::input(std::filesystem::path path)
 {
-    return std::make_shared<file_input_generic_t>(path);
+    return std::make_shared<file_input_generic_t>(path, profiler);
 }
 
 std::filesystem::path engine::filesystem_provider_generic_t::construct_temp_file()

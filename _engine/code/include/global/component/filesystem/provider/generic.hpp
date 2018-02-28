@@ -20,7 +20,7 @@ namespace engine
 
 		public:
 
-			file_output_generic_t(std::filesystem::path physical_path);
+			file_output_generic_t(std::filesystem::path physical_path, std::shared_ptr<profiler_t> profiler);
 			~file_output_generic_t();
 
 			uint32_t write(const uint8_t * buffer, uint32_t size) final;
@@ -31,6 +31,7 @@ namespace engine
 			std::ofstream file;
 
 			std::filesystem::path physical_path;
+			std::shared_ptr<profiler_t> profiler;
 		};
 
 		class file_input_generic_t : public file_input_t
@@ -38,7 +39,7 @@ namespace engine
 
 		public:
 
-			file_input_generic_t(std::filesystem::path path);
+			file_input_generic_t(std::filesystem::path physical_path, std::shared_ptr<profiler_t> profiler);
 			~file_input_generic_t();
 
 			void seek(int32_t position, file_seek_origin_t origin) final;
@@ -49,11 +50,14 @@ namespace engine
 		private:
 
 			mutable std::ifstream file;
+			
+			std::filesystem::path physical_path;
+			std::shared_ptr<profiler_t> profiler;
 		};
 
 	public:
 
-		filesystem_provider_generic_t();
+		filesystem_provider_generic_t(std::shared_ptr<profiler_t> profiler);
 
 		std::filesystem::file_time_type get_mod_time(std::filesystem::path path) final;
 
@@ -82,6 +86,7 @@ namespace engine
 
 		int tmp_item;
 		std::mutex tmp_mutex;
+		std::shared_ptr<profiler_t> profiler;
 
 		std::filesystem::path naive_uncomplete(std::filesystem::path const p, std::filesystem::path const base);
 	};

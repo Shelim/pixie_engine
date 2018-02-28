@@ -39,7 +39,7 @@ namespace engine
 
         protected:
         
-            accountable_item_t(std::shared_ptr<object_t> object, accountable_type_t accountable_type, type_t type, source_t source, app_t::kind_t app = app_t::kind_t::_engine, app_t::instance_id_t app_instance_id = 0) : actual_t(app, app_instance_id, type, source, kind_t::info), object(object), accountable_type(accountable_type)
+            accountable_item_t(std::shared_ptr<object_t> object, accountable_type_t accountable_type, type_t type, source_t source, app_t::kind_t app = app_t::kind_t::_engine, app_t::instance_id_t app_instance_id = 0) : actual_t(app, app_instance_id, type, source, kind_t::msg), object(object), accountable_type(accountable_type)
             {
 
             }

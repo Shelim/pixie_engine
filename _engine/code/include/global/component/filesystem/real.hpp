@@ -4,6 +4,7 @@
 
 #include "global/component/filesystem.hpp"
 #include "utility/pattern/provider.hpp"
+#include "global/component/profiler.hpp"
 
 namespace engine
 {
@@ -41,7 +42,7 @@ namespace engine
 
 	public:
 		
-		filesystem_real_t(std::unique_ptr<holder_t<filesystem_t> > filesystem_provider);
+		filesystem_real_t(std::unique_ptr<holder_t<filesystem_t> > filesystem_provider, std::shared_ptr<profiler_t> profiler);
 		~filesystem_real_t();
 
 		std::filesystem::file_time_type get_mod_time(std::filesystem::path path) final;
@@ -70,6 +71,7 @@ namespace engine
 	private:
 
 		std::unique_ptr<holder_t<filesystem_t> > filesystem_provider;
+		std::shared_ptr<profiler_t> profiler;
 
 	};
 }

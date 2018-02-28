@@ -7,6 +7,7 @@
 #include "global/component/config_monitor.hpp"
 #include "global/core/messenger/messenger.hpp"
 #include "global/core/process/service.hpp"
+#include "global/component/profiler.hpp"
 #include "utility/pattern/factory.hpp"
 #include "utility/container/concurrent_queue.hpp"
 
@@ -17,8 +18,8 @@ namespace engine
 
 	public:
 
-		config_monitor_actual_t(std::shared_ptr<config_t> config, std::shared_ptr<messenger_config_t> messenger_config, std::unique_ptr<holder_t<config_changed_t> > config_changed_provider, std::shared_ptr<logger_t> logger) : 
-			config(config), messenger_config(messenger_config), config_changed_provider(std::move(config_changed_provider)), logger(logger)
+		config_monitor_actual_t(std::shared_ptr<config_t> config, std::shared_ptr<messenger_config_t> messenger_config, std::unique_ptr<holder_t<config_changed_t> > config_changed_provider, std::shared_ptr<logger_t> logger, std::shared_ptr<profiler_t> profiler) : 
+			config(config), messenger_config(messenger_config), config_changed_provider(std::move(config_changed_provider)), logger(logger), profiler(profiler)
 		{
 			std::lock_guard<std::mutex> guard(mutex);
 
@@ -42,6 +43,8 @@ namespace engine
 
 		void rescan()
 		{
+    		profiler_t::section_t section(profiler, "Rescanning config");
+			
 #define ENGINE_CONFIG_GLOBAL(type, name) if(set_global_##name(config->get_global_##name()) == result_t::changed) notify_on_change(engine::config_global_t::name, to_string(global_##name));
 #define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) if(set_app_##app##_##name(config->get_app_##app##_##name()) == result_t::changed) notify_on_change(engine::config_app_specific_t::##app##_##name, to_string(app_##app##_##name));
 #define ENGINE_CONFIG_LOCAL(type, name) for(std::size_t app = 0; app < value_of(app_t::kind_t::count); app++) { if(set_local_##name(static_cast<app_t::kind_t>(app), config->get_local_##name(static_cast<app_t::kind_t>(app))) == result_t::changed) notify_on_change(static_cast<app_t::kind_t>(app), engine::config_local_t::name, to_string(local_##name[app])); }
@@ -141,6 +144,7 @@ namespace engine
 		std::unique_ptr<messenger::instance_t<messenger::msg_config_t> > messenger_instance;
 		std::unique_ptr<holder_t<config_changed_t> > config_changed_provider;
 		std::shared_ptr<logger_t> logger;
+		std::shared_ptr<profiler_t> profiler;
 
 	};
 

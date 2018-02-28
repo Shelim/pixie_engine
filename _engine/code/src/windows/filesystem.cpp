@@ -24,9 +24,12 @@
 #include <fcntl.h>
 
 
-engine::filesystem_provider_windows_t::file_output_windows_t::file_output_windows_t(const std::filesystem::path & path) : handle(INVALID_HANDLE_VALUE)
+engine::filesystem_provider_windows_t::file_output_windows_t::file_output_windows_t(const std::filesystem::path & physical_path, std::shared_ptr<profiler_t> profiler) : handle(INVALID_HANDLE_VALUE), physical_path(physical_path), profiler(profiler)
 {
-    std::wstring filename = path.wstring();
+    ustring_t name = format_string("Opening file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
+    std::wstring filename = physical_path.wstring();
 
     const wchar_t * p = filename.c_str();
     wchar_t folder[MAX_PATH];
@@ -47,24 +50,37 @@ engine::filesystem_provider_windows_t::file_output_windows_t::file_output_window
 
 engine::filesystem_provider_windows_t::file_output_windows_t::~file_output_windows_t()
 {
+    ustring_t name = format_string("Closing file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
     CloseHandle(handle);
 }
 
 uint32_t engine::filesystem_provider_windows_t::file_output_windows_t::write(const uint8_t * buffer, uint32_t size)
 {
+    ustring_t name = format_string("Writing file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
     uint32_t ret;
     WriteFile(handle, buffer, size, reinterpret_cast<LPDWORD>(&ret), nullptr);
+    
     return ret;
 }
 
 void engine::filesystem_provider_windows_t::file_output_windows_t::flush()
 {
+    ustring_t name = format_string("Flushing file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
     FlushFileBuffers(handle);
 }
 
-engine::filesystem_provider_windows_t::file_input_windows_t::file_input_windows_t(std::filesystem::path path)
+engine::filesystem_provider_windows_t::file_input_windows_t::file_input_windows_t(std::filesystem::path physical_path, std::shared_ptr<profiler_t> profiler) : physical_path(physical_path), profiler(profiler)
 {
-    std::wstring filename = path.wstring();
+    ustring_t name = format_string("Opening file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
+    std::wstring filename = physical_path.wstring();
 
     handle = CreateFileW(filename.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
@@ -75,6 +91,9 @@ engine::filesystem_provider_windows_t::file_input_windows_t::file_input_windows_
 
 engine::filesystem_provider_windows_t::file_input_windows_t::~file_input_windows_t()
 {
+    ustring_t name = format_string("Closing file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+
     CloseHandle(handle);
 }
 
@@ -100,6 +119,9 @@ uint32_t engine::filesystem_provider_windows_t::file_input_windows_t::tell() con
 
 uint32_t engine::filesystem_provider_windows_t::file_input_windows_t::read(uint8_t * buffer, uint32_t size)
 {
+    ustring_t name = format_string("Reading file '#1#'"_u, physical_path);
+    profiler_t::section_t section(profiler, name.get_cstring());
+    
     uint32_t ret;
     ReadFile(handle, buffer, size, reinterpret_cast<LPDWORD>(&ret), nullptr);
     return ret;
@@ -126,7 +148,7 @@ std::filesystem::file_time_type engine::filesystem_provider_windows_t::filetime_
     return tp;
 }
 
-engine::filesystem_provider_windows_t::filesystem_provider_windows_t() : filesystem_provider_base_t(), tmp_item(0)
+engine::filesystem_provider_windows_t::filesystem_provider_windows_t(std::shared_ptr<profiler_t> profiler) : filesystem_provider_base_t(), tmp_item(0), profiler(profiler)
 {
 
 }
@@ -202,12 +224,12 @@ engine::paths_t engine::filesystem_provider_windows_t::iterate_directories(std::
 
 std::shared_ptr<engine::filesystem_provider_base_t::file_output_t> engine::filesystem_provider_windows_t::output(std::filesystem::path path)
 {
-    return std::make_shared<file_output_windows_t>(path);
+    return std::make_shared<file_output_windows_t>(path, profiler);
 }
 
 std::shared_ptr<engine::filesystem_provider_base_t::file_input_t> engine::filesystem_provider_windows_t::input(std::filesystem::path path)
 {
-    return std::make_shared<file_input_windows_t>(path);
+    return std::make_shared<file_input_windows_t>(path, profiler);
 }
 
 
