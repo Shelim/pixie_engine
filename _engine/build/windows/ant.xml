@@ -52,11 +52,6 @@
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 	
 <!-- START OF INPUT SECTION -->
-
-	<!-- FTP authentication variables (for pack_and_upload_dependencies.bat script) -->
-	<property name="dependencies_ftp_server" value="unknown" />
-	<property name="dependencies_ftp_login" value="unknown" />
-	<property name="dependencies_ftp_password" value="unknown" />
 	
 	<!-- Project to build (common for scripts) -->
 	<property name="project_to_build" value="unknown" />
@@ -73,16 +68,13 @@
 <!-- END OF INPUT SECTION -->
 <!-- START OF CONFIGURATION SECTION -->
 
-	<!-- Where can we upload depedencies? -->
-	<property name="dependencies_ftp_port" value="21" />
-	<property name="dependencies_ftp_remote_directory" value="pixie_engine" />
-	
 	<!-- Where we should store dependency for upload -->
-	<property name="dependencies_ftp_build_path" value="!build/dependency_for_upload/" />
+	<property name="dependencies_build_path" value="!build/dependency_for_upload/" />
 	<!-- Which directory we should pack for depedencies -->
-	<property name="dependencies_ftp_source_path" value="dependency/" />
+	<property name="dependencies_source_path" value="dependency/" />
+
 	<!-- What is the name of zip file? If you change it here, remember to update download_dependencies.bat as well! -->
-	<property name="dependencies_ftp_zip_filename" value="depedencies.zip" />
+	<property name="dependencies_zip_filename" value="depedencies.zip" />
 	
 <!-- END OF CONFIGURATION SECTION -->
 <!-- START OF WIRED CONFIGURATION SECTION -->
@@ -129,13 +121,6 @@
 
 <!-- END OF ADDITIONAL CONFIGURATION SECTION -->
 <!-- START OF HELPER SECTION -->
-
-	<taskdef name="ftp" classname="org.apache.tools.ant.taskdefs.optional.net.FTP">
-	  <classpath>
-		<pathelement location="${basedir}/dependency/apache_ant/lib/commons-net-2.0.jar"/>
-		<pathelement location="${basedir}/dependency/apache_ant/lib/ant-commons-net-1.9.3.jar"/>
-	  </classpath>
-	</taskdef>
 	
 <!-- Replaces tags inside given file (some are included in common/ant) -->
 	<target name="replace_variables" depends="replace_variables_common">
@@ -406,28 +391,16 @@
 <!-- START OF CALLABLE SECTION -->
 	
 	<!-- Pack and upload depedencies directory to server -->
-	<target name="pack_and_upload_dependencies">
-		<!-- Verify that we have correct login and password for FTP -->
-		<ftp server="${dependencies_ftp_server}" port="${dependencies_ftp_port}" remotedir="${dependencies_ftp_remote_directory}" userid="${dependencies_ftp_login}" password="${dependencies_ftp_password}" passive="yes" action="list" listing="${dependencies_ftp_build_path}ftp_valid">
-			<fileset>
-				<include name="*"/>
-			</fileset>
-		</ftp>
+	<target name="pack_dependencies">
 	
 		<!-- Delete old dependency packed directory (do not fail on error, the project may be not here!) -->
-		<delete dir="${dependencies_ftp_build_path}" failonerror="false" />
+		<delete dir="${dependencies_build_path}" failonerror="false" />
 		<!-- Create new dependency packed directory -->
-		<mkdir dir="${dependencies_ftp_build_path}"/>
+		<mkdir dir="${dependencies_build_path}"/>
 	
 		<!-- Compress depedencies -->
-		<zip destfile="${dependencies_ftp_build_path}/${dependencies_ftp_zip_filename}" basedir="${dependencies_ftp_source_path}" update="true" compress="true" whenempty="create" comment="Unpack this to '_engine/dependency'" level="7" />
-		
-		<!-- ... and upload them to server -->
-		<ftp server="${dependencies_ftp_server}" port="${dependencies_ftp_port}" remotedir="${dependencies_ftp_remote_directory}" userid="${dependencies_ftp_login}"  password="${dependencies_ftp_password}" passive="yes"  depends="no"  binary="yes"  action="send">
-			<fileset dir="${dependencies_ftp_build_path}">
-				<include name="${dependencies_ftp_zip_filename}"/>
-			</fileset>
-		</ftp>
+		<zip destfile="${dependencies_build_path}/${dependencies_zip_filename}" basedir="${dependencies_source_path}" update="true" compress="true" whenempty="create" comment="Unpack this to '_engine/dependency'" level="7" />
+	
 	</target>
 
 	<!-- Prebuild step for iterative build -->
