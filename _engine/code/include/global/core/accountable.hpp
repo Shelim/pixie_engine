@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <memory>
 #include "global/core/messenger/msg.hpp"
-#include "global/core/messenger/messenger.hpp"
+#include "global/core/messenger.hpp"
 #include "global/core/accountable/provider.hpp"
 
 namespace engine

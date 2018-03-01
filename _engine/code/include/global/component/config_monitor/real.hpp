@@ -5,7 +5,7 @@
 #include "global/component/config.hpp"
 #include "global/component/logger.hpp"
 #include "global/component/config_monitor.hpp"
-#include "global/core/messenger/messenger.hpp"
+#include "global/core/messenger.hpp"
 #include "global/core/process/service.hpp"
 #include "global/component/profiler.hpp"
 #include "utility/pattern/factory.hpp"

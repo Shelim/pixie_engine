@@ -7,7 +7,7 @@
 #include "global/component/config_storage/real.hpp"
 #include "global/core/manifest/manifest.hpp"
 #include "global/core/process/service.hpp"
-#include "global/core/messenger/messenger.hpp"
+#include "global/core/messenger.hpp"
 
 namespace engine
 {

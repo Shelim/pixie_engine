@@ -9,7 +9,7 @@
 #include "utility/text/ustring.hpp"
 #include "utility/pattern/class_settings.hpp"
 #include "global/component/config_common/enum.hpp"
-#include "global/core/messenger/messenger.hpp"
+#include "global/core/messenger.hpp"
 #include "global/core/messenger/msg/config.hpp"
 
 namespace engine

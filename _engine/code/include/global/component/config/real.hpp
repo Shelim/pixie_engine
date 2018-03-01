@@ -5,7 +5,7 @@
 #include "global/component/config.hpp"
 #include "global/component/logger.hpp"
 #include "utility/pattern/provider.hpp"
-#include "global/core/messenger/messenger.hpp"
+#include "global/core/messenger.hpp"
 #include "utility/pattern/flags.hpp"
 #include "utility/pattern/enum.hpp"
 #include "global/component/config_common/changed_provider.hpp"

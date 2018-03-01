@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include <mutex>
+#include "global/core/program/reference.hpp"
 #include "global/component/app_accounter.hpp"
 #include "global/component/app_instancer.hpp"
 #include "global/component/app_resolver.hpp"
@@ -44,15 +45,19 @@ namespace engine
 #include "def/global_component.def"
         unused_t> injector)
         {
-#define ENGINE_GLOBAL_COMPONENT_DEF(component) this->component = injector.create<std::shared_ptr<component##_t> >();
+            program_reference = std::make_shared<program_reference_t>(this);
+            auto injector_with_reference = boost::di::make_injector(std::move(injector), boost::di::bind<>().to(program_reference));
+#define ENGINE_GLOBAL_COMPONENT_DEF(component) this->component = injector_with_reference.create<std::shared_ptr<component##_t> >();
 #include "def/global_component.def"
         }
 
+        std::shared_ptr<program_reference_t> get_program_reference() { return program_reference; }
 #define ENGINE_GLOBAL_COMPONENT_DEF(component) std::shared_ptr<component##_t> get_##component() { return component; }
 #include "def/global_component.def"
 
     private:
 
+        std::shared_ptr<program_reference_t> program_reference;
 #define ENGINE_GLOBAL_COMPONENT_DEF(component) std::shared_ptr<component##_t> component;
 #include "def/global_component.def"
 

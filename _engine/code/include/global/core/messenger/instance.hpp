@@ -6,7 +6,7 @@
 #include <memory>
 #include <map>
 #include <functional>
-#include "global/core/messenger/messenger.hpp"
+#include "global/core/messenger.hpp"
 #include "utility/container/concurrent_queue.hpp"
 #include "utility/concurrention/signal.hpp"
 #include "utility/pattern/factory.hpp"

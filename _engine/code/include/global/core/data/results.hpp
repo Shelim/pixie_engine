@@ -2,7 +2,7 @@
 #define ENGINE_COMMON_UTILITY_DATA_RESULTS_HPP
 #pragma once
 
-#include "global/core/messenger/messenger.hpp"
+#include "global/core/messenger.hpp"
 #include "global/core/data/state.hpp"
 #include "global/core/data/provider.hpp"
 #include "global/core/messenger/msg_scanner_found_item.hpp"

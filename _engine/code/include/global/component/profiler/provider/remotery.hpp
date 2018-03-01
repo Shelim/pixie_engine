@@ -3,7 +3,7 @@
 #pragma once
 
 #include "global/component/profiler/real.hpp"
-#include "global/core/messenger/messenger.hpp"
+#include "global/core/messenger.hpp"
 #include "utility/debug/remotery.hpp"
 #include <string>
 #include <set>

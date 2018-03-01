@@ -8,7 +8,7 @@
 #include <chrono>
 #include "global/bootstrapper.hpp"
 #include "utility/concurrention/signal.hpp"
-#include "global/core/messenger/messenger.hpp"
+#include "global/core/messenger.hpp"
 #include "global/core/console/msg/logger.hpp"
 #include "global/core/console/msg/meta.hpp"
 #include "global/core/console/filter.hpp"

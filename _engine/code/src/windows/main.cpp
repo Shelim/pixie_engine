@@ -6,9 +6,9 @@
 #include <cstdlib>
 #include <thread>
 #include <chrono>
-#include "global/core/igniter.hpp"
+#include "global/core/program/igniter.hpp"
 #include "global/core/program.hpp"
-#include "global/core/test_runner.hpp"
+#include "global/core/program/test_runner.hpp"
 
 #if PIXIE_IS_TESTER_BUILD
 

@@ -68,25 +68,11 @@ if %ERRORLEVEL% == 0 goto ok1
 rem * Ok, we did not fail!
 :ok1
 
-rem * Ask for FTP host
-set /p ftp_server=Enter FTP host:
-
-rem * Ask for FTP login 
-set /p ftp_login=Enter FTP login: 
-
-rem * Ask for FTP password (use Powershell to introduce asterisk during writing '*')
-set "psCommand=powershell -Command "$pword = read-host 'Enter FTP password' -AsSecureString ; ^
-    $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pword); ^
-        [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)""
-		
-rem * Read password from above command
-for /f "usebackq delims=" %%p in (`%psCommand%`) do set ftp_password=%%p
-
 rem * Register all standard paths form build system
 call build\windows\setup_path.bat
 
 rem * Execute ant file
-call ant -v -buildfile "build\windows\ant.xml" pack_and_upload_dependencies -Ddependencies_ftp_server="%ftp_server%" -Ddependencies_ftp_login="%ftp_login%" -Ddependencies_ftp_password="%ftp_password%"
+call ant -v -buildfile "build\windows\ant.xml" pack_dependencies
 
 rem * Should we fail here...
 if %ERRORLEVEL% == 0 goto ok2 
