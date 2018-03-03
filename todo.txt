@@ -14,6 +14,7 @@
 		 - Error detection (Intellisense): https://stackoverflow.com/questions/47354226/how-to-provider-user-with-autocomplete-suggestions-for-given-boostspirit-gramm
 		 - Common elements should be in common
          - to_string formatting (second argument!)
+		 - command line parsing from string (requires parser!)
      - console_output
 +        - Filters
 		 - Instances
