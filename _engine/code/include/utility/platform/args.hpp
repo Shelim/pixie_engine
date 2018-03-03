@@ -15,30 +15,56 @@ namespace engine
 
         args_t(int argc, char * argv[])
         {
+            arg_collection_raw.reserve(argc);
+            ustring_t args_full;
+
             for(int i = 0; i < argc; i++)
             {
-                data.push_back(ustring_t::from_utf8(argv[i]));
+                if(i > 0) args_full.append(" "_u);
+                arg_collection_raw.push_back(ustring_t::from_utf8(argv[i]));
+                args_full.append(arg_collection_raw[i]);
             }
-        }
 
-        int get_argc() const
+            parse_args(args_full);
+        }
+        args_t(char * args)
         {
-            return data.size();
+            ustring_t args_full = ustring_t::from_utf8(args);
+
+            int index = args_full.index_of(' ');
+            int prev_index = 0;
+            while(index != -1)
+            {
+                ustring_t arg = args_full.substr(prev_index, index - prev_index);
+
+                if(!arg.is_empty())
+                    arg_collection_raw.push_back(arg);
+
+                prev_index = index;
+                index = args_full.index_of(' ', index + 1);
+            }
+
+            parse_args(args_full);
         }
 
-        const char * get_argv(int i) const
+        int get_raw_argc() const
         {
-            return data[i].get_cstring();
+            return arg_collection_raw.size();
         }
 
-        std::vector<const char*> get_argv() const
+        const char * get_raw_argv(int i) const
+        {
+            return arg_collection_raw[i].get_cstring();
+        }
+
+        std::vector<const char*> get_raw_argv() const
         {
             std::vector<const char *> ret;
-            ret.resize(data.size());
+            ret.resize(arg_collection_raw.size());
 
-            for(int i = 0; i < data.size(); i++)
+            for(int i = 0; i < arg_collection_raw.size(); i++)
             {
-                ret[i] = data[i].get_cstring();
+                ret[i] = arg_collection_raw[i].get_cstring();
             }
 
             return ret;
@@ -46,7 +72,9 @@ namespace engine
 
     private:
 
-        ustring_collection_t data;
+        ustring_collection_t arg_collection_raw;
+
+        void parse_args(const ustring_t & args);
 
     };
 

@@ -61,8 +61,8 @@ namespace engine
         {
             worker = std::thread([this]{
 
-            int argc = args->get_argc();
-            std::vector<const char*> argv = args->get_argv();
+            int argc = args->get_raw_argc();
+            std::vector<const char*> argv = args->get_raw_argv();
 
             testing::InitGoogleTest(&argc, const_cast<char**>(&argv[0]));
             return_code = RUN_ALL_TESTS();
