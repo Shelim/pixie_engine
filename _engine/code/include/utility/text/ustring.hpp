@@ -1910,5 +1910,6 @@ namespace std
 }
 
 #include "utility/text/format/string.hpp"
+#include "utility/test/print_to.hpp"
 
 #endif

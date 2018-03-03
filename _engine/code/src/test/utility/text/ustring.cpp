@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include "utility/text/ustring.hpp"
-#include "test/utility.hpp"
 
 TEST(UtilityTextUstring, EqualityUtf8)
 {
