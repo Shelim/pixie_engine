@@ -17,6 +17,12 @@ namespace engine
 
 		}
 
+		apps_meta_t get_running_apps() final
+		{
+			apps_meta_t ret;
+			return ret;	
+		}
+
 	private:
 
 	};

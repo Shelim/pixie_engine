@@ -1,12 +1,7 @@
  - Most urgent
 	 - Apps
-         - Make app resolver
-         - Make app instancer
-		 - Make apps overseer
-         - Make accounter for apps
-     - Profiler
-         - Practical usage (use remotery to profile code!)
-         - Write/Read to console
+         - Interrupter queue
+		 - Overseer
      - Debug_symbol should be a global module
 		 - Ability to read from .PDB and .Map
 		 - Ability to dump information about callstack POST-MORTEM (!)
@@ -19,6 +14,12 @@
 +        - Filters
 		 - Instances
 		 - Formatter
+	 - Args parser
+		 - Parsing into fields
+		 - App resolver implementation
+     - Profiler
+         - Practical usage (use remotery to profile code!)
+         - Write/Read to console
 	 
  - New dependencies:
 	 - Replace libRocket with CEF3 https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage

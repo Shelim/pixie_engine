@@ -13,7 +13,7 @@ engine::app_t::instance_id_t engine::manifest_app_t::get_local_instance_id() con
     return local_instance_id;
 }
 
-engine::manifest_app_t::manifest_app_t(app_t::kind_t local_app, engine::app_t::instance_id_t local_instance_id) : local_app(local_app), local_instance_id(local_instance_id)
+engine::manifest_app_t::manifest_app_t(app_t::kind_t local_app, engine::app_t::instance_id_t local_instance_id, app_context_t * app_context) : local_app(local_app), local_instance_id(local_instance_id), app_context(app_context)
 {
 
 }

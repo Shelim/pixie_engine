@@ -17,6 +17,11 @@ namespace engine
 
 		}
 
+		app_t::kind_t get_app_kind_for_given_context(app_context_t * context) final
+		{
+			return app_t::kind_t::_engine;
+		}
+
 	private:
 
 	};

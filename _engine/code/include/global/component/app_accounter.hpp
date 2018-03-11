@@ -17,6 +17,12 @@ namespace engine
 
         }
 
+        typedef std::vector<std::shared_ptr<app_meta_t> > apps_meta_t;
+
+        virtual apps_meta_t get_running_apps() = 0;
+
+        virtual void wait_for_completion() {} // ToDo: Remove me and move to overseer
+
     };
 
 }

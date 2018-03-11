@@ -74,7 +74,10 @@ namespace engine
 
         ustring_collection_t arg_collection_raw;
 
-        void parse_args(const ustring_t & args);
+        void parse_args(const ustring_t & args)
+        {
+            
+        }
 
     };
 

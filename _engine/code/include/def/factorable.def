@@ -2,4 +2,7 @@
 #define ENGINE_FACTORABLE_DEF(...)
 #endif
 
+#define GAME_APP_DEF(app) ENGINE_FACTORABLE_DEF(client::app_##app##_t)
+#include "def/app.def"
+
 #undef ENGINE_FACTORABLE_DEF

@@ -20,12 +20,18 @@ namespace engine
 
 		app_t::instance_id_t get_local_instance_id() const;
 
-		BOOST_DI_INJECT(manifest_app_t, app_t::kind_t local_app, (named = engine::instance_id) app_t::instance_id_t local_instance_id);
+		app_context_t * get_app_context()
+		{
+			return app_context;
+		}
+
+		BOOST_DI_INJECT(manifest_app_t, app_t::kind_t local_app, (named = engine::instance_id) app_t::instance_id_t local_instance_id, app_context_t * app_context);
 
 	private:
 
 		app_t::kind_t local_app;
 		app_t::instance_id_t local_instance_id;
+		app_context_t * app_context;
 	};
 
 }

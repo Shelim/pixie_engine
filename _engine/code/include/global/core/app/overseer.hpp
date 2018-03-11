@@ -12,18 +12,8 @@ namespace engine
 
     public:
 
-        virtual ~app_overseer_t()
-        {
-
-        }
-
-        virtual void wait_for_completion() {}
-
     };
 
 }
-
-#include "global/component/app_overseer/dummy.hpp"
-#include "global/component/app_overseer/real.hpp"
 
 #endif

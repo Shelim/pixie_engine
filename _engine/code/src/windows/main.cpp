@@ -27,37 +27,19 @@ int main(int argc, char * argv[])
 int main(int argc, char * argv[])
 {
     BEGIN_PLATFORM_CONFIGURATION(windows)
-
-    PLATFORM_ALLOWS_POLICIES(instances_application, multiple, single)
-    PLATFORM_ALLOWS_POLICIES(instances_program, single)
-    PLATFORM_ALLOWS_POLICIES(renderer_thread, detached)
-
+    USE_STANDARD_POLICIES()
     ALL_GLOBAL_COMPONENTS_BY_DEFAULT_ARE(enabled)
-
-    USE_PROVIDER_FOR(config, config_storage)
-    USE_PROVIDERS_FOR(config_changed, messenger, logger)
-    USE_PROVIDER_FOR(config_storage, windows_registry)
-    USE_PROVIDER_FOR(filesystem, windows)
-    USE_PROVIDERS_FOR(logger, console, temp_file)
-    USE_PROVIDERS_FOR(accountable_thread, messenger)
-    USE_PROVIDER_FOR(thread_stats, windows)
-    USE_PROVIDERS_FOR(thread_accounter, console)
-
-#if PIXIE_IS_DEBUG_BUILD
-    USE_SETTINGS(config_t, debug)
-    USE_PROVIDER_FOR(profiler, remotery)
-#else
-    USE_SETTINGS(config_t, release)
+    USE_STANDARD_GLOBAL_PROVIDERS()
+    USE_STANDARD_GLOBAL_SETTINGS()
+#if !PIXIE_IS_DEBUG_BUILD
     DISABLE_GLOBAL_COMPONENT(profiler)
 #endif
-    USE_SETTINGS(config_storage_t, normal)
-
     END_PLATFORM_CONFIGURATION()
 
     std::shared_ptr<engine::program_t> program = windows.ignite_from_main(argc, argv);
     if(!program) return EXIT_FAILURE; // Failed to ignite (for example different instance is running)
 
-    program->get_app_overseer()->wait_for_completion();
+    program->get_app_accounter()->wait_for_completion();
     return program->get_extinguisher()->get_return_code();
 }
 

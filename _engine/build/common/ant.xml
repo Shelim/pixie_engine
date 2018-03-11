@@ -282,7 +282,6 @@
 	
 <!-- Do the actual compilation -->
 	<target name="compile">
-		
 		<antcall target="compile_directory">
 			<param name="compile_directory.source" value="${code_engine_src}" />
 			<param name="compile_directory.source_matcher" value="**" />

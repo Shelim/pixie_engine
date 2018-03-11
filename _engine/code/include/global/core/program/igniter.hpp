@@ -78,6 +78,7 @@ namespace engine
 #define DISABLE_GLOBAL_COMPONENT(component) boost::di::bind<engine::component##_t>().in(engine::shared).to <engine::component##_dummy_t>()[boost::di::override],
 #define END_PLATFORM_CONFIGURATION() engine::injector_igniter_factorable() ));
 
+
     class igniter_t
     {
 
@@ -96,6 +97,11 @@ namespace engine
                 return std::make_shared<program_t>(std::move(injector));
             }
 
+            std::shared_ptr<program_t> ignite_for_tests()
+            {
+                return std::make_shared<program_t>(std::move(injector));
+            }
+
         private:
 
             boost::di::injector<
@@ -106,5 +112,6 @@ namespace engine
 
 }
 
+#include "global/core/program/igniter_standard.hpp"
 
 #endif

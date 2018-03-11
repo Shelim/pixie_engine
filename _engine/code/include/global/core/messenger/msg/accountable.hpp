@@ -12,6 +12,7 @@ namespace engine
 {
 
     class thread_t;
+    class app_t;
 	
     namespace messenger
     {

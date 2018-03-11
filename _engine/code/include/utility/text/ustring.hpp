@@ -1757,6 +1757,44 @@ namespace engine
 		return color_t(color);
 	}
 
+	template<> inline std::chrono::duration<double> from_string(const ustring_t & str)
+	{
+		std::chrono::duration<double> ret;
+		
+		int_fast32_t level = 0;
+		size_t start = str.len();
+
+		const std::string & str_internal = str.to_utf8();
+
+		for (size_t i = str_internal.length(); i-- > 0;)
+		{
+			usymbol_t u = str_internal[i];
+			if (u == ':')
+			{
+				int_fast64_t number = 0;
+				for (size_t s = i + 1; s < start; s++)
+				{
+					u = str_internal[s];
+					if (isdigit(u))
+					{
+						number *= 10;
+						number += u - '0';
+					}
+				}
+				start = i;
+				++level;
+				switch (level)
+				{
+				case 1: ret += std::chrono::milliseconds(number); break;
+				case 2: ret += std::chrono::seconds(number); break;
+				case 3: ret += std::chrono::minutes(number); break;
+				case 4: ret += std::chrono::hours(number); break;
+				}
+			}
+		}
+		return ret;
+	}
+
 	template<> inline std::chrono::seconds from_string(const ustring_t & str)
 	{
 		std::chrono::seconds ret;
@@ -1792,6 +1830,11 @@ namespace engine
 			}
 		}
 		return ret;
+	}
+	
+	template<> inline std::chrono::system_clock::time_point from_string(const ustring_t & str)
+	{
+		return std::chrono::system_clock::now(); // ToDo: Fix me!
 	}
 
 	template<> inline id_t from_string(const ustring_t & str)

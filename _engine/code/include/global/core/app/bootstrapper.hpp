@@ -10,7 +10,7 @@
 #include "utility/pattern/class_settings.hpp"
 #include "utility/pattern/enum.hpp"
 #include "utility/pattern/factory.hpp"
-#include "global/component/app_overseer.hpp"
+#include "global/component/app_accounter.hpp"
 #include "global/component/config.hpp"
 #include "global/component/config_common/changed_provider.hpp"
 #include "global/component/config_monitor.hpp"
@@ -19,6 +19,7 @@
 #include "global/component/filesystem.hpp"
 #include "global/component/logger.hpp"
 #include "global/component/profiler.hpp"
+#include "global/component/thread_accounter.hpp"
 #include "local/core/manifest/app.hpp"
 #include "local/component/renderer_status.hpp"
 #include "local/component/terminal.hpp"
@@ -106,11 +107,12 @@ namespace engine
 				boost::di::make_injector());
 		};
 
-		auto injector_context = [] (app_context_t* context){ // ToDo: register instances for global components
+		auto injector_context = [] (app_context_t* context){
 			return boost::di::make_injector(
 #define ENGINE_GLOBAL_COMPONENT_DEF(component) boost::di::bind<engine::component##_t>().to(context->get_program()->get_##component()),
 #include "def/global_component.def"
-				boost::di::bind<app_t::instance_id_t>().named(engine::instance_id).to(context->get_instance_id()));
+				boost::di::bind<app_t::instance_id_t>().named(engine::instance_id).to(context->get_instance_id()),
+				boost::di::bind<>().to(context));
 		};
 	}
 
@@ -119,7 +121,7 @@ namespace engine
 
 #define INTERNAL_PROVIDER_INIT(provider_type, ...) boost::di::bind<engine::holder_t<engine::provider_type##_t>>().to < engine::holder_implementation_t<engine::provider_type##_t 
 
-#define BEGIN_BOOTSTRAPPER(name, context) const auto name = boost::di::make_injector(engine::injector_context(context.get()), 
+#define BEGIN_BOOTSTRAPPER(name, context) const auto name = boost::di::make_injector(engine::injector_context(context), 
 #define ALL_COMPONENTS_BY_DEFAULT_ARE(type) engine::injector_##type(),
 #define ENABLE_COMPONENT(component) boost::di::bind<engine::component##_t>().in(engine::shared).to <engine::component##_real_t>()[boost::di::override],
 #define MOCKUP_COMPONENT(component) boost::di::bind<engine::component##_t>().in(engine::shared).to <engine::component##_mockup_t>()[boost::di::override],
@@ -131,5 +133,7 @@ namespace engine
 #define END_BOOTSTRAPPER() engine::injector_factorable() );
 
 #define GET_COMPONENT(bootstrapper, component) bootstrapper.create<std::shared_ptr<engine::component##_t> >()
+
+#include "global/core/app/bootstrapper_standard.hpp"
 
 #endif

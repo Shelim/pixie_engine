@@ -3,6 +3,7 @@
 #endif
 
 ENGINE_APP_SIGNAL_DEF(terminate)
-ENGINE_APP_SIGNAL_DEF(new_instance_request)
+ENGINE_APP_SIGNAL_DEF(allow_new_instance)
+ENGINE_APP_SIGNAL_DEF(allow_close)
 
 #undef ENGINE_APP_SIGNAL_DEF

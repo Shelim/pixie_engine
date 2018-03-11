@@ -9,7 +9,7 @@
 #include <mutex>
 #include "global/core/program/reference.hpp"
 #include "global/component/app_accounter.hpp"
-#include "global/component/app_instancer.hpp"
+#include "global/component/app_interrupter.hpp"
 #include "global/component/app_resolver.hpp"
 #include "global/component/config.hpp"
 #include "global/component/config_monitor.hpp"

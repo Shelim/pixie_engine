@@ -9,6 +9,7 @@
 #include "utility/platform/debug.hpp"
 #include "global/core/messenger/msg.hpp"
 #include "global/core/thread/meta.hpp"
+#include "global/core/app/meta.hpp"
 
 namespace engine
 {
@@ -57,6 +58,19 @@ namespace engine
         public:
 
             thread_accountable_item_t(std::shared_ptr<thread_meta_t> thread_meta, accountable_type_t accountable_type) : accountable_item_t(thread_meta, accountable_type, messenger::msg_console_t::actual_t::type_t::thread_accountable, messenger::msg_console_t::actual_t::source_t::threads, thread_meta->get_app(), thread_meta->get_app_instance_id())
+            {
+
+            }
+
+
+        };
+
+        class app_accountable_item_t : public accountable_item_t<app_meta_t>
+        {
+
+        public:
+
+            app_accountable_item_t(std::shared_ptr<app_meta_t> app_meta, accountable_type_t accountable_type) : accountable_item_t(app_meta, accountable_type, messenger::msg_console_t::actual_t::type_t::app_accountable, messenger::msg_console_t::actual_t::source_t::apps, app_meta->get_app(), app_meta->get_instance_id())
             {
 
             }

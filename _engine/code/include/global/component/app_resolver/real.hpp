@@ -3,6 +3,7 @@
 #pragma once
 
 #include "global/component/app_resolver.hpp"
+#include "global/core/app/resolver.hpp"
 
 namespace engine
 {
@@ -15,6 +16,11 @@ namespace engine
 		app_resolver_real_t()
 		{
 
+		}
+
+		app_t::kind_t get_app_kind_for_given_context(app_context_t * context) final
+		{
+			return engine::client::resolve_app(context);
 		}
 
 	private:
