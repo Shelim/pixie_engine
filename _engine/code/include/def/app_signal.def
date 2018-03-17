@@ -1,9 +1,0 @@
-#ifndef ENGINE_APP_SIGNAL_DEF
-#define ENGINE_APP_SIGNAL_DEF(...)
-#endif
-
-ENGINE_APP_SIGNAL_DEF(terminate)
-ENGINE_APP_SIGNAL_DEF(allow_new_instance)
-ENGINE_APP_SIGNAL_DEF(allow_close)
-
-#undef ENGINE_APP_SIGNAL_DEF
