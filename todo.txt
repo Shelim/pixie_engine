@@ -1,8 +1,5 @@
  - Most urgent
 	 - Apps
-         - Interrupter queue
-			 -> service
-			 -> move register/unregister to event queue (handle can take some time...)
 		 - Overseer
      - Create class for enum -> to_string
      - Debug_symbol should be a global module
