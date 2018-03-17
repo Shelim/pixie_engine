@@ -4,6 +4,7 @@
 
 #include "global/component/logger/real.hpp"
 
+#include <iostream>
 #include <fstream>
 #include "Remotery.h"
 
@@ -16,12 +17,14 @@ namespace engine
 
         logger_provider_temp_file_t() : fout("C:/pixie.txt")
         {
+            std::cout << "#####################\n### LOGGER OUTPUT ###\n#####################\n";
             fout << "#####################\n### LOGGER OUTPUT ###\n#####################\n";
             rmt_LogText("#####################\n### LOGGER OUTPUT ###\n#####################\n");
         }
 
         ~logger_provider_temp_file_t()
         {
+            std::cout << "\n##################\n### CLEAN EXIT ###\n##################\n";
             fout << "\n##################\n### CLEAN EXIT ###\n##################\n";
             rmt_LogText("\n##################\n### CLEAN EXIT ###\n##################\n");
         }
@@ -53,6 +56,7 @@ namespace engine
             }
 
             ustring_t output = format_string(format, item.get_id(), item.get_source(), item.get_message(), item.get_function(), item.get_file(), item.get_line(), 0, item.get_time(), item.get_thread(), item.get_link());
+            std::cout << output.get_cstring() << std::endl;
             fout << output.get_cstring() << std::endl;
             rmt_LogText(output.get_cstring());
         }
