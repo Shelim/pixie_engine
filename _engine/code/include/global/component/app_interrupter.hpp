@@ -33,7 +33,7 @@ namespace engine
 
         typedef std::function<void(interruption_t*)> handler_t;
 
-        virtual std::unique_ptr<instance_t> register_handler(app_t::kind_t app,app_context_t* context, priority_t priority, handler_t handler) = 0;
+        virtual std::unique_ptr<instance_t> register_handler(app_t::kind_t app, app_context_t* context, priority_t priority, handler_t handler) = 0;
         virtual void send_interruption(std::unique_ptr<interruption_t> interruption) = 0;
 
     private:
