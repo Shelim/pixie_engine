@@ -20,7 +20,7 @@ Well, there are dozens of 2D engines in the wild, almost all related to making g
   - Great care put to nice look'n'feel (I'm artists too!)
   
 ## When it will be production-ready?
-I expect to have it ready for writing games about August/September 2017
+I expect to have it ready for writing games about May 2018
   
 ## Who is the author?
 Gamedev programmer in retirement, now working in more serious programming corporation. I have a few games published commercially as of now, and hope to extend that list some time in the future :-)
