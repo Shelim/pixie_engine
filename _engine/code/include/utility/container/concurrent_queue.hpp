@@ -47,6 +47,17 @@ namespace engine
 			return std::move(ret);
 		}
 
+		T try_pop(T if_empty)
+		{
+			std::lock_guard<std::mutex> lock(mutex);
+			if (queue.empty()) return std::move(if_empty);
+			
+			T front = std::move(queue.front());
+			queue.pop();
+
+			return std::move(front);
+		}
+
 	private:
 		std::queue<T> queue;
 		mutable std::mutex mutex;
