@@ -3,27 +3,11 @@
 #pragma once
 
 #include "global/core/app.hpp"
+#include "global/core/app/interruption.hpp"
 
 namespace engine
 {
-    class app_context_t;
     
-    class interruption_t
-    {
-
-    public:
-
-        virtual ~interruption_t()
-        {
-
-        }
-
-        bool was_handled();
-        bool begin_handling();
-        void end_handling();
-
-    };
-
     class app_interrupter_t
     {
 
@@ -34,29 +18,35 @@ namespace engine
 
         }
 
-        /*
+#include "def/enum/app_interruption_priority.def"
 
-        class reciever_queue_t
+        class instance_t
         {
-            public:
 
-                virtual ~reciever_queue_t()
+            public:
+                virtual ~instance_t()
                 {
 
                 }
 
-                virtual std::shared_ptr<interruption_t> poll();
-                virtual std::shared_ptr<interruption_t> wait_for();
         };
 
-        virtual std::unique_ptr<reciever_queue_t> get_reciever(app_context_t * app_context) = 0;
+        typedef std::function<void(interruption_t*)> handler_t;
 
-        virtual void send_interruption(app_t::instance_id_t target, std::shared_ptr<interruption_t> interruption) = 0;
+        virtual std::unique_ptr<instance_t> register_handler(app_t::kind_t app,app_context_t* context, priority_t priority, handler_t handler) = 0;
+        virtual void send_interruption(std::unique_ptr<interruption_t> interruption) = 0;
 
-        */
+    private:
+
+
     };
 
 }
+#define ENGINE_ENUM_HEADER_TO_USE "def/enum/app_interruption.def"
+#include "global/core/utility/enum_to_string.hpp"
+
+#define ENGINE_ENUM_HEADER_TO_USE "def/enum/app_interruption_priority.def"
+#include "global/core/utility/enum_to_string.hpp"
 
 #include "global/component/app_interrupter/dummy.hpp"
 #include "global/component/app_interrupter/real.hpp"
