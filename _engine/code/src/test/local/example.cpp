@@ -25,7 +25,7 @@ TEST(LocalExample, Sample)
     APP(game)
     END_BOOTSTRAPPER()
 
-    auto terminal = GET_COMPONENT(test_app, terminal);
+    auto terminal = test_app.get_terminal();
 
     ASSERT_TRUE(terminal);
 
