@@ -7,7 +7,7 @@
 namespace engine
 {
 
-#define ENGINE_ACCOUNTABLE_DEF(type) \
+#define ENGINE_ACCOUNTABLE_IMPL(type) \
 	\
 	class accountable_##type##_provider_base_t \
 	{ \
@@ -16,6 +16,7 @@ namespace engine
         virtual void notify(engine::messenger::accountable_type_t accountable_type, type##_t * type) = 0; \
 	};
 
+#define ENGINE_ACCOUNTABLE_DEF(...) DEFINE_TYPE_PASS(ENGINE_ACCOUNTABLE_IMPL, __VA_ARGS__)
 #include "def/accountable.def"
 
 }

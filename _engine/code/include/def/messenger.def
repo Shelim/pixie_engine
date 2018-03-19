@@ -6,16 +6,19 @@
 #define ENGINE_MESSENGER_MSG_BASE_TYPE_DEF(...)
 #endif
 
-ENGINE_MESSENGER_QUEUE_DEF(console)
-ENGINE_MESSENGER_QUEUE_DEF(config_storage)
-ENGINE_MESSENGER_QUEUE_DEF(config)
-ENGINE_MESSENGER_QUEUE_DEF(accountable_thread)
-ENGINE_MESSENGER_QUEUE_DEF(accountable_app)
-ENGINE_MESSENGER_QUEUE_DEF(threads_snapshot_updated)
+ENGINE_MESSENGER_QUEUE_DEF( (console), (config_storage), (config),
+                            (accountable_thread), (accountable_app), (threads_snapshot_updated) )
 
-ENGINE_MESSENGER_MSG_BASE_TYPE_DEF(msg)
-ENGINE_MESSENGER_MSG_BASE_TYPE_DEF(register_instance)
-ENGINE_MESSENGER_MSG_BASE_TYPE_DEF(unregister_instance)
+ENGINE_MESSENGER_MSG_BASE_TYPE_DEF( (msg), (register_instance), (unregister_instance) )
+
+
+#ifdef ENGINE_MESSENGER_QUEUE_IMPL
+#undef ENGINE_MESSENGER_QUEUE_IMPL
+#endif
+
+#ifdef ENGINE_MESSENGER_MSG_BASE_TYPE_IMPL
+#undef ENGINE_MESSENGER_MSG_BASE_TYPE_IMPL
+#endif
 
 #undef ENGINE_MESSENGER_MSG_BASE_TYPE_DEF
 #undef ENGINE_MESSENGER_QUEUE_DEF

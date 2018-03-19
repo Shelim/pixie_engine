@@ -23,7 +23,8 @@ namespace engine
 			static constexpr bool is_instance_async = false;
 			static constexpr bool keep_history = false;
 
-#include "def/enum/config_storage_msg.def"
+#define ENGINE_CONFIG_STORAGE_MSG(...) DEFINE_ENUM_ONLY_1ST_TYPE(type_t, __VA_ARGS__)
+#include "def/config.def"
 
             type_t get_type() const
             {
@@ -45,7 +46,7 @@ namespace engine
 
 }
 
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/config_storage_msg.def"
-#include "global/core/utility/enum_to_string.hpp"
+#define ENGINE_CONFIG_STORAGE_MSG(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::messenger::msg_config_storage_t::type_t, __VA_ARGS__)
+#include "def/config.def"
 
 #endif

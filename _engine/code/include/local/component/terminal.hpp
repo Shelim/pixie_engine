@@ -16,7 +16,8 @@ namespace engine
 		terminal_t();
 		virtual ~terminal_t();
 
-#include "def/enum/terminal.def"
+#define ENGINE_TERMINAL_COLOR_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(color_t, __VA_ARGS__)
+#include "def/terminal.def"
 
 		class instance_t
 		{
@@ -43,8 +44,8 @@ namespace engine
 	};
 
 }
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/terminal.def"
-#include "global/core/utility/enum_to_string.hpp"
+#define ENGINE_TERMINAL_COLOR_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::terminal_t::color_t, __VA_ARGS__)
+#include "def/terminal.def"
 
 #include "local/component/terminal/dummy.hpp"
 #include "local/component/terminal/real.hpp"

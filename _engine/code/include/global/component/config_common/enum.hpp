@@ -6,11 +6,42 @@
 namespace engine
 {
 
-#include "def/enum/config_items.def"
+#define ENGINE_CONFIG_GLOBAL_IMPL2(...) DEFINE_ENUM_ONLY_2ND_TYPE(config_global_t, EXPAND_MULTI __VA_ARGS__)
+#define ENGINE_CONFIG_GLOBAL_IMPL(name, ...) (name, "global_" #name)
+#define ENGINE_CONFIG_GLOBAL(...) DEFINE_TYPE_MULTIPASS(ENGINE_CONFIG_GLOBAL_IMPL2, ENGINE_CONFIG_GLOBAL_IMPL, __VA_ARGS__)
+#include "def/config.def"
+#undef ENGINE_CONFIG_GLOBAL_IMPL2
+
+#define ENGINE_CONFIG_ONLY_FOR_APP_IMPL2(...) DEFINE_ENUM_ONLY_2ND_TYPE(config_app_specific_t, EXPAND_MULTI __VA_ARGS__)
+#define ENGINE_CONFIG_ONLY_FOR_APP_IMPL(name, unused, app, ...) (app##_##name, #app "_" #name)
+#define ENGINE_CONFIG_ONLY_FOR_APP(...) DEFINE_TYPE_MULTIPASS(ENGINE_CONFIG_ONLY_FOR_APP_IMPL2, ENGINE_CONFIG_ONLY_FOR_APP_IMPL, __VA_ARGS__)
+#include "def/config.def"
+#undef ENGINE_CONFIG_ONLY_FOR_APP_IMPL2
+
+#define ENGINE_CONFIG_LOCAL_IMPL2(...) DEFINE_ENUM_ONLY_2ND_TYPE(config_local_t, EXPAND_MULTI __VA_ARGS__)
+#define ENGINE_CONFIG_LOCAL_IMPL(name, ...) (name, "local_" #name)
+#define ENGINE_CONFIG_LOCAL(...) DEFINE_TYPE_MULTIPASS(ENGINE_CONFIG_LOCAL_IMPL2, ENGINE_CONFIG_LOCAL_IMPL, __VA_ARGS__)
+#include "def/config.def"
+#undef ENGINE_CONFIG_LOCAL_IMPL2
 
 }
 
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/config_items.def"
-#include "global/core/utility/enum_to_string.hpp"
+#define ENGINE_CONFIG_GLOBAL_IMPL2(...) DEFINE_ENUM_ONLY_2ND_TO_STRING(engine::config_global_t, EXPAND_MULTI __VA_ARGS__)
+#define ENGINE_CONFIG_GLOBAL_IMPL(name, ...) (name, "global_" #name)
+#define ENGINE_CONFIG_GLOBAL(...) DEFINE_TYPE_MULTIPASS(ENGINE_CONFIG_GLOBAL_IMPL2, ENGINE_CONFIG_GLOBAL_IMPL, __VA_ARGS__)
+#include "def/config.def"
+#undef ENGINE_CONFIG_GLOBAL_IMPL2
+
+#define ENGINE_CONFIG_ONLY_FOR_APP_IMPL2(...) DEFINE_ENUM_ONLY_2ND_TO_STRING(engine::config_app_specific_t, EXPAND_MULTI __VA_ARGS__)
+#define ENGINE_CONFIG_ONLY_FOR_APP_IMPL(name, unused, app, ...) (app##_##name, #app "_" #name)
+#define ENGINE_CONFIG_ONLY_FOR_APP(...) DEFINE_TYPE_MULTIPASS(ENGINE_CONFIG_ONLY_FOR_APP_IMPL2, ENGINE_CONFIG_ONLY_FOR_APP_IMPL, __VA_ARGS__)
+#include "def/config.def"
+#undef ENGINE_CONFIG_ONLY_FOR_APP_IMPL2
+
+#define ENGINE_CONFIG_LOCAL_IMPL2(...) DEFINE_ENUM_ONLY_2ND_TO_STRING(engine::config_local_t, EXPAND_MULTI __VA_ARGS__)
+#define ENGINE_CONFIG_LOCAL_IMPL(name, ...) (name, "local_" #name)
+#define ENGINE_CONFIG_LOCAL(...) DEFINE_TYPE_MULTIPASS(ENGINE_CONFIG_LOCAL_IMPL2, ENGINE_CONFIG_LOCAL_IMPL, __VA_ARGS__)
+#include "def/config.def"
+#undef ENGINE_CONFIG_LOCAL_IMPL2
 
 #endif

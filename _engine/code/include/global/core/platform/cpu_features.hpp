@@ -20,7 +20,8 @@ namespace engine
             
         }
 
-#include "def/enum/cpu_feature.def"
+#define ENGINE_CPU_FEATURE_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(feature_t, __VA_ARGS__)
+#include "def/cpu_feature.def"
 
         bool is_feature(feature_t feature) const
         {
@@ -68,11 +69,12 @@ namespace engine
 	template<> inline ustring_t to_string<cpu_features_t>(const cpu_features_t & item)
 	{
 		ustring_t ret;
-#define ENGINE_CPU_FEATURE_DEF(type, name)  if(item.is_feature(cpu_features_t::feature_t::type)) \
+#define ENGINE_CPU_FEATURE_IMPL(type, name)  if(item.is_feature(cpu_features_t::feature_t::type)) \
                                             { \
                                                 if(!ret.is_empty()) ret.append(" "_u); \
                                                 ret.append(name); \
                                             }
+#define ENGINE_CPU_FEATURE_DEF(...) DEFINE_TYPE_PASS(ENGINE_CPU_FEATURE_IMPL, __VA_ARGS__)
 #include "def/cpu_feature.def"
         return ret;
 	}
@@ -84,7 +86,7 @@ namespace engine
 
 }
 
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/cpu_feature.def"
-#include "global/core/utility/enum_to_string.hpp"
+#define ENGINE_CPU_FEATURE_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::cpu_features_t::feature_t, __VA_ARGS__)
+#include "def/cpu_feature.def"
 
 #endif

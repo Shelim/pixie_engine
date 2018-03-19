@@ -83,33 +83,38 @@ namespace engine
 
 		auto injector_disabled = [] {
 			return boost::di::make_injector(
-#define ENGINE_COMPONENT_DEF(component)	boost::di::bind<component##_t>().in(shared).to <component##_dummy_t>(),
+#define ENGINE_COMPONENT_IMPL(component)	boost::di::bind<component##_t>().in(shared).to <component##_dummy_t>(),
+#define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/component.def"
 				boost::di::make_injector());
 		};
 		auto injector_mockup = [] {
 			return boost::di::make_injector(
-#define ENGINE_COMPONENT_DEF(component)	boost::di::bind<component##_t>().in(shared).to <component##_mockup_t>(),
+#define ENGINE_COMPONENT_IMPL(component)	boost::di::bind<component##_t>().in(shared).to <component##_mockup_t>(),
+#define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 //#include "def/component.def"
 				boost::di::make_injector());
 		};
 		auto injector_enabled = [] {
 			return boost::di::make_injector(
-#define ENGINE_COMPONENT_DEF(component)	boost::di::bind<component##_t>().in(shared).to <component##_real_t>(),
+#define ENGINE_COMPONENT_IMPL(component)	boost::di::bind<component##_t>().in(shared).to <component##_real_t>(),
+#define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/component.def"
 				boost::di::make_injector());
 		};
 
 		auto injector_factorable = [] {
 			return boost::di::make_injector(
-#define ENGINE_FACTORABLE_DEF(factorable) boost::di::bind<ifactory<factorable>>().to(factory<factorable>{}),
+#define ENGINE_FACTORABLE_IMPL(factorable) boost::di::bind<ifactory<factorable>>().to(factory<factorable>{}),
+#define ENGINE_FACTORABLE_DEF(...) DEFINE_TYPE_PASS(ENGINE_FACTORABLE_IMPL, __VA_ARGS__)
 #include "def/factorable.def"
 				boost::di::make_injector());
 		};
 
 		auto injector_context = [] (app_context_t* context){
 			return boost::di::make_injector(
-#define ENGINE_GLOBAL_COMPONENT_DEF(component) boost::di::bind<engine::component##_t>().to(context->get_program()->get_##component()),
+#define ENGINE_GLOBAL_COMPONENT_IMPL(component) boost::di::bind<engine::component##_t>().to(context->get_program()->get_##component()),
+#define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/global_component.def"
 				boost::di::bind<app_t::instance_id_t>().named(engine::instance_id).to(context->get_instance_id()),
 				boost::di::bind<>().to(context));
@@ -126,25 +131,31 @@ namespace engine
 			};
 
 			boostrapper_t(boost::di::injector<
-#define ENGINE_GLOBAL_COMPONENT_DEF(component) std::shared_ptr<component##_t>,
+#define ENGINE_GLOBAL_COMPONENT_IMPL(component) std::shared_ptr<component##_t>,
+#define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/global_component.def"
-#define ENGINE_COMPONENT_DEF(component) std::shared_ptr<component##_t>,
+#define ENGINE_COMPONENT_IMPL(component) std::shared_ptr<component##_t>,
+#define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/component.def"
 			unused_t> injector) : injector(std::move(injector))
 			{
 
 			}
-#define ENGINE_GLOBAL_COMPONENT_DEF(component) std::shared_ptr<engine::component##_t> get_##component() { return injector.create<std::shared_ptr<engine::component##_t> >(); }
+#define ENGINE_GLOBAL_COMPONENT_IMPL(component) std::shared_ptr<engine::component##_t> get_##component() { return injector.create<std::shared_ptr<engine::component##_t> >(); }
+#define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/global_component.def"
-#define ENGINE_COMPONENT_DEF(component) std::shared_ptr<engine::component##_t> get_##component() { return injector.create<std::shared_ptr<engine::component##_t> >(); }
+#define ENGINE_COMPONENT_IMPL(component) std::shared_ptr<engine::component##_t> get_##component() { return injector.create<std::shared_ptr<engine::component##_t> >(); }
+#define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/component.def"
 
 		private:
 		
 			boost::di::injector<
-#define ENGINE_GLOBAL_COMPONENT_DEF(component) std::shared_ptr<component##_t>,
+#define ENGINE_GLOBAL_COMPONENT_IMPL(component) std::shared_ptr<component##_t>,
+#define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/global_component.def"
-#define ENGINE_COMPONENT_DEF(component) std::shared_ptr<component##_t>,
+#define ENGINE_COMPONENT_IMPL(component) std::shared_ptr<component##_t>,
+#define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/component.def"
 			unused_t> injector;
 

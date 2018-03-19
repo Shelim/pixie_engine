@@ -28,7 +28,8 @@ namespace engine
         };
     }
     
-#define ENGINE_MESSENGER_QUEUE_DEF(name) typedef messenger::queue_t<messenger::msg_##name##_t> messenger_##name##_t;
+#define ENGINE_MESSENGER_QUEUE_IMPL(name) typedef messenger::queue_t<messenger::msg_##name##_t> messenger_##name##_t;
+#define ENGINE_MESSENGER_QUEUE_DEF(...) DEFINE_TYPE_PASS(ENGINE_MESSENGER_QUEUE_IMPL, __VA_ARGS__)
 #include "def/messenger.def"
 
 }

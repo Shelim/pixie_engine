@@ -4,7 +4,7 @@
 
 #include<memory>
 #include "utility/text/ustring.hpp"
-#include "utility/platform/cpu_features.hpp"
+#include "global/core/platform/cpu_features.hpp"
 namespace engine
 {
 

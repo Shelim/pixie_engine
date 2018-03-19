@@ -6,20 +6,25 @@
 #define ENGINE_ENVIRONMENT_INFO_STATUS_DEF(...)
 #endif
 
-ENGINE_ENVIRONMENT_INFO_DEF(engine_version, "Engine version"_u, engine::version_t)
-ENGINE_ENVIRONMENT_INFO_DEF(launched_time, "Launched at"_u, std::chrono::system_clock::time_point)
-ENGINE_ENVIRONMENT_INFO_DEF(os_name, "OS"_u, engine::manifest_os_t::os_t)
-ENGINE_ENVIRONMENT_INFO_DEF(os_ver, "OS version"_u, engine::ustring_t)
-ENGINE_ENVIRONMENT_INFO_DEF(cpu_cores, "CPU cores"_u, int32_t)
-ENGINE_ENVIRONMENT_INFO_DEF(cpu_cache_line, "CPU cache line size"_u, int32_t)
-ENGINE_ENVIRONMENT_INFO_DEF(cpu_features, "CPU features"_u, engine::cpu_features_t)
-ENGINE_ENVIRONMENT_INFO_DEF(ram, "Total RAM (MB)"_u, int32_t)
+ENGINE_ENVIRONMENT_INFO_DEF(    (engine_version, "Engine version", engine::version_t),
+                                (launched_time, "Launched at", std::chrono::system_clock::time_point),
+                                (os_name, "OS", engine::manifest_os_t::os_t),
+                                (os_ver, "OS version", engine::ustring_t),
+                                (cpu_cores, "CPU cores", int32_t),
+                                (cpu_cache_line, "CPU cache line size", int32_t),
+                                (cpu_features, "CPU features", engine::cpu_features_t),
+                                (ram, "Total RAM (MB)", int32_t) )
 
 
-ENGINE_ENVIRONMENT_INFO_STATUS_DEF(not_yet_populated)
-ENGINE_ENVIRONMENT_INFO_STATUS_DEF(normal)
-ENGINE_ENVIRONMENT_INFO_STATUS_DEF(good)
-ENGINE_ENVIRONMENT_INFO_STATUS_DEF(bad)
+ENGINE_ENVIRONMENT_INFO_STATUS_DEF( (not_yet_populated), (normal), (good), (bad) )
+
+#ifdef ENGINE_ENVIRONMENT_INFO_IMPL
+#undef ENGINE_ENVIRONMENT_INFO_IMPL
+#endif
+
+#ifdef ENGINE_ENVIRONMENT_INFO_STATUS_IMPL
+#undef ENGINE_ENVIRONMENT_INFO_STATUS_IMPL
+#endif
 
 #undef ENGINE_ENVIRONMENT_INFO_STATUS_DEF
 #undef ENGINE_ENVIRONMENT_INFO_DEF

@@ -1,7 +1,6 @@
  - Most urgent
 	 - Apps
 		 - Overseer
-     - Create class for enum -> to_string
      - Debug_symbol should be a global module
 		 - Ability to read from .PDB and .Map
 		 - Ability to dump information about callstack POST-MORTEM (!)

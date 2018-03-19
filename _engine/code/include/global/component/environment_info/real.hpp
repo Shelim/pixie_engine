@@ -5,7 +5,7 @@
 #include "global/component/environment_info.hpp"
 #include "utility/pattern/enum.hpp"
 #include "global/core/manifest/version.hpp"
-#include "utility/platform/info.hpp"
+#include "global/core/platform/info.hpp"
 #include <array>
 
 namespace engine
@@ -36,13 +36,15 @@ namespace engine
 
 		ustring_t get(type_t key) const final
 		{
-#define ENGINE_ENVIRONMENT_INFO_DEF(key_val, name, type) if(key == type_t::key_val) return to_string(val_##key_val);
+#define ENGINE_ENVIRONMENT_INFO_IMPL(key_val, name, type) if(key == type_t::key_val) return to_string(val_##key_val);
+#define ENGINE_ENVIRONMENT_INFO_DEF(...) DEFINE_TYPE_PASS(ENGINE_ENVIRONMENT_INFO_IMPL, __VA_ARGS__)
 #include "def/environment_info.def"
 
 			return ""_u;
 		}
 
-#define ENGINE_ENVIRONMENT_INFO_DEF(key, name, type) ::type get_##key() const final { return val_##key; }
+#define ENGINE_ENVIRONMENT_INFO_IMPL(key, name, type) ::type get_##key() const final { return val_##key; }
+#define ENGINE_ENVIRONMENT_INFO_DEF(...) DEFINE_TYPE_PASS(ENGINE_ENVIRONMENT_INFO_IMPL, __VA_ARGS__)
 #include "def/environment_info.def"
 
 		status_t status(type_t key) const final
@@ -54,10 +56,12 @@ namespace engine
 
 		std::array<status_t, value_of(type_t::count)> statuses;
 		
-#define ENGINE_ENVIRONMENT_INFO_DEF(key, name, type) ::type val_##key;
+#define ENGINE_ENVIRONMENT_INFO_IMPL(key, name, type) ::type val_##key;
+#define ENGINE_ENVIRONMENT_INFO_DEF(...) DEFINE_TYPE_PASS(ENGINE_ENVIRONMENT_INFO_IMPL, __VA_ARGS__)
 #include "def/environment_info.def"
 
-#define ENGINE_ENVIRONMENT_INFO_DEF(key, name, type) void set_##key(const ::type & val_##key, status_t status = status_t::normal) { this->val_##key = val_##key; statuses[value_of(type_t::key)] = status; }
+#define ENGINE_ENVIRONMENT_INFO_IMPL(key, name, type) void set_##key(const ::type & val_##key, status_t status = status_t::normal) { this->val_##key = val_##key; statuses[value_of(type_t::key)] = status; }
+#define ENGINE_ENVIRONMENT_INFO_DEF(...) DEFINE_TYPE_PASS(ENGINE_ENVIRONMENT_INFO_IMPL, __VA_ARGS__)
 #include "def/environment_info.def"
 	};
 

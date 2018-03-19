@@ -26,9 +26,12 @@ namespace engine
 			logger->log_global_msg(config, "Config monitor actual component has started"_u);
 			auto task_id = logger->log_global_task_start(config, "Running initial scan inside actual config monitor"_u);
 
-#define ENGINE_CONFIG_GLOBAL(type, name) set_global_##name(config->get_global_##name());
-#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) set_app_##app##_##name(config->get_app_##app##_##name());
-#define ENGINE_CONFIG_LOCAL(type, name) for(std::size_t app = 0; app < value_of(app_t::kind_t::count); app++) set_local_##name(static_cast<app_t::kind_t>(app), config->get_local_##name(static_cast<app_t::kind_t>(app)));
+#define ENGINE_CONFIG_GLOBAL_IMPL(name, type) set_global_##name(config->get_global_##name());
+#define ENGINE_CONFIG_ONLY_FOR_APP_IMPL(name, type, app) set_app_##app##_##name(config->get_app_##app##_##name());
+#define ENGINE_CONFIG_LOCAL_IMPL(name, type) for(std::size_t app = 0; app < value_of(app_t::kind_t::count); app++) set_local_##name(static_cast<app_t::kind_t>(app), config->get_local_##name(static_cast<app_t::kind_t>(app)));
+#define ENGINE_CONFIG_GLOBAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_GLOBAL_IMPL, __VA_ARGS__)
+#define ENGINE_CONFIG_ONLY_FOR_APP(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_ONLY_FOR_APP_IMPL, __VA_ARGS__)
+#define ENGINE_CONFIG_LOCAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_LOCAL_IMPL, __VA_ARGS__)
 #include "def/config.def"
 
 			logger->log_global_task_done(task_id);
@@ -45,9 +48,12 @@ namespace engine
 		{
     		profiler_t::section_t section(profiler, "Rescanning config");
 			
-#define ENGINE_CONFIG_GLOBAL(type, name) if(set_global_##name(config->get_global_##name()) == result_t::changed) notify_on_change(engine::config_global_t::name, to_string(global_##name));
-#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) if(set_app_##app##_##name(config->get_app_##app##_##name()) == result_t::changed) notify_on_change(engine::config_app_specific_t::##app##_##name, to_string(app_##app##_##name));
-#define ENGINE_CONFIG_LOCAL(type, name) for(std::size_t app = 0; app < value_of(app_t::kind_t::count); app++) { if(set_local_##name(static_cast<app_t::kind_t>(app), config->get_local_##name(static_cast<app_t::kind_t>(app))) == result_t::changed) notify_on_change(static_cast<app_t::kind_t>(app), engine::config_local_t::name, to_string(local_##name[app])); }
+#define ENGINE_CONFIG_GLOBAL_IMPL(name, type) if(set_global_##name(config->get_global_##name()) == result_t::changed) notify_on_change(engine::config_global_t::name, to_string(global_##name));
+#define ENGINE_CONFIG_ONLY_FOR_APP_IMPL(name, type, app) if(set_app_##app##_##name(config->get_app_##app##_##name()) == result_t::changed) notify_on_change(engine::config_app_specific_t::app##_##name, to_string(app_##app##_##name));
+#define ENGINE_CONFIG_LOCAL_IMPL(name, type) for(std::size_t app = 0; app < value_of(app_t::kind_t::count); app++) { if(set_local_##name(static_cast<app_t::kind_t>(app), config->get_local_##name(static_cast<app_t::kind_t>(app))) == result_t::changed) notify_on_change(static_cast<app_t::kind_t>(app), engine::config_local_t::name, to_string(local_##name[app])); }
+#define ENGINE_CONFIG_GLOBAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_GLOBAL_IMPL, __VA_ARGS__)
+#define ENGINE_CONFIG_ONLY_FOR_APP(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_ONLY_FOR_APP_IMPL, __VA_ARGS__)
+#define ENGINE_CONFIG_LOCAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_LOCAL_IMPL, __VA_ARGS__)
 #include "def/config.def"
 		}
 
@@ -83,21 +89,24 @@ namespace engine
 				case engine::messenger::msg_config_t::type_t::global:
 					switch(msg->get_global()->global)
 					{
-#define ENGINE_CONFIG_GLOBAL(type, name) case engine::config_global_t::name: set_global_##name(config->get_global_##name()); break;
+#define ENGINE_CONFIG_GLOBAL_IMPL(name, type) case engine::config_global_t::name: set_global_##name(config->get_global_##name()); break;
+#define ENGINE_CONFIG_GLOBAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_GLOBAL_IMPL, __VA_ARGS__)
 #include "def/config.def"
 					}
 				break;
 				case engine::messenger::msg_config_t::type_t::app_specific:
 					switch(msg->get_app_specific()->app_specific)
 					{
-#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) case engine::config_app_specific_t::##app##_##name: set_app_##app##_##name(config->get_app_##app##_##name()); break;
+#define ENGINE_CONFIG_ONLY_FOR_APP_IMPL(name, type, app) case engine::config_app_specific_t::app##_##name: set_app_##app##_##name(config->get_app_##app##_##name()); break;
+#define ENGINE_CONFIG_ONLY_FOR_APP(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_ONLY_FOR_APP_IMPL, __VA_ARGS__)
 #include "def/config.def"
 					}
 				break;
 				case engine::messenger::msg_config_t::type_t::local:
 					switch(msg->get_local()->local)
 					{
-#define ENGINE_CONFIG_LOCAL(type, name) case engine::config_local_t::name: set_local_##name(msg->get_local()->app, config->get_local_##name(msg->get_local()->app)); break;
+#define ENGINE_CONFIG_LOCAL_IMPL(name, type) case engine::config_local_t::name: set_local_##name(msg->get_local()->app, config->get_local_##name(msg->get_local()->app)); break;
+#define ENGINE_CONFIG_LOCAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_LOCAL_IMPL, __VA_ARGS__)
 #include "def/config.def"
 					}
 				break;
@@ -106,9 +115,12 @@ namespace engine
 
 		std::mutex mutex;
 
-#define ENGINE_CONFIG_GLOBAL(type, name) type global_##name;
-#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) type app_##app##_##name;
-#define ENGINE_CONFIG_LOCAL(type, name) type local_##name[value_of(app_t::kind_t::count)];
+#define ENGINE_CONFIG_GLOBAL_IMPL(name, type) type global_##name;
+#define ENGINE_CONFIG_ONLY_FOR_APP_IMPL(name, type, app) type app_##app##_##name;
+#define ENGINE_CONFIG_LOCAL_IMPL(name, type) type local_##name[value_of(app_t::kind_t::count)];
+#define ENGINE_CONFIG_GLOBAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_GLOBAL_IMPL, __VA_ARGS__)
+#define ENGINE_CONFIG_ONLY_FOR_APP(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_ONLY_FOR_APP_IMPL, __VA_ARGS__)
+#define ENGINE_CONFIG_LOCAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_LOCAL_IMPL, __VA_ARGS__)
 #include "def/config.def"
 
 		enum class result_t
@@ -117,26 +129,29 @@ namespace engine
 			changed
 		};
 
-#define ENGINE_CONFIG_GLOBAL(type, name) \
+#define ENGINE_CONFIG_GLOBAL_IMPL(name, type) \
 		result_t set_global_##name(type val) \
 		{ result_t ret = result_t::no_change; \
 		if(global_##name != val) ret = result_t::changed; \
 		global_##name = val; \
 		return ret; }
+#define ENGINE_CONFIG_GLOBAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_GLOBAL_IMPL, __VA_ARGS__)
 		
-#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) \
+#define ENGINE_CONFIG_ONLY_FOR_APP_IMPL(name, type, app) \
 		result_t set_app_##app##_##name(type val) \
 		{ result_t ret = result_t::no_change; \
 		if(app_##app##_##name != val) ret = result_t::changed; \
 		app_##app##_##name = val; \
 		return ret; }
+#define ENGINE_CONFIG_ONLY_FOR_APP(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_ONLY_FOR_APP_IMPL, __VA_ARGS__)
 
-#define ENGINE_CONFIG_LOCAL(type, name) \
+#define ENGINE_CONFIG_LOCAL_IMPL(name, type) \
 		result_t set_local_##name(app_t::kind_t app, type val) \
 		{ result_t ret = result_t::no_change; \
 		if(local_##name[value_of(app)] != val) ret = result_t::changed; \
 			local_##name[value_of(app)] = val; \
 		return ret; }
+#define ENGINE_CONFIG_LOCAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_LOCAL_IMPL, __VA_ARGS__)
 #include "def/config.def"
 
 		std::shared_ptr<config_t> config;

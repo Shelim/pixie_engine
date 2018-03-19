@@ -42,9 +42,12 @@ namespace engine
 
 SETTINGS_TABLE_START(config_storage_t)
 
-#define ENGINE_CONFIG_GLOBAL(type, name) SETTINGS_TABLE_ENTRY(ustring_t, key_for_global_##name)
-#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) SETTINGS_TABLE_ENTRY(ustring_t, key_for_app_##app##_##name)
-#define ENGINE_CONFIG_LOCAL(type, name) SETTINGS_TABLE_ENTRY(ustring_t, key_for_local_##name)
+#define ENGINE_CONFIG_GLOBAL_IMPL(name, type) SETTINGS_TABLE_ENTRY(ustring_t, key_for_global_##name)
+#define ENGINE_CONFIG_ONLY_FOR_APP_IMPL(name, type, app) SETTINGS_TABLE_ENTRY(ustring_t, key_for_app_##app##_##name)
+#define ENGINE_CONFIG_LOCAL_IMPL(name, type) SETTINGS_TABLE_ENTRY(ustring_t, key_for_local_##name)
+#define ENGINE_CONFIG_GLOBAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_GLOBAL_IMPL, __VA_ARGS__)
+#define ENGINE_CONFIG_ONLY_FOR_APP(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_ONLY_FOR_APP_IMPL, __VA_ARGS__)
+#define ENGINE_CONFIG_LOCAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_LOCAL_IMPL, __VA_ARGS__)
 #include "def/config.def"
 
 SETTINGS_TABLE_END()

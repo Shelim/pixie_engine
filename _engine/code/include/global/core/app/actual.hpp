@@ -44,13 +44,14 @@ namespace engine
     namespace client
     {
 
-#define GAME_APP_DEF(app) \
+#define GAME_APP_IMPL(app) \
         class app_##app##_t : public app_actual_t \
         { \
             public: \
                 app_##app##_t() : app_actual_t(app_t::kind_t::app) { } \
                 app_t::return_code_t main(app_context_t* context) final { return main_##app(context); } \
         };
+#define GAME_APP_DEF(...) DEFINE_TYPE_PASS(GAME_APP_IMPL, __VA_ARGS__)
 #include "def/app.def"
 
     }

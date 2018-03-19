@@ -5,6 +5,7 @@
 #include "global/core/vfs/filesystem.hpp"
 #include <vector>
 #include "utility/text/ustring.hpp"
+#include "utility/pattern/enum.hpp"
 
 
 namespace engine
@@ -17,7 +18,8 @@ namespace engine
 
 		typedef ustring_t path_t;
 
-#include "def/enum/virtual_path.def"
+		#define ENGINE_VIRTUAL_PATH_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(type_t, __VA_ARGS__)
+		#include "def/virtual_path.def"
 
 		virtual_path_t() : type(type_t::unknown)
 		{
@@ -168,8 +170,8 @@ namespace engine
 }
 
 
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/virtual_path.def"
-#include "global/core/utility/enum_to_string.hpp"
+#define ENGINE_VIRTUAL_PATH_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::virtual_path_t::type_t, __VA_ARGS__)
+#include "def/virtual_path.def"
 
 namespace engine
 {

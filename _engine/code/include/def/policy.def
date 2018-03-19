@@ -2,8 +2,10 @@
 #define ENGINE_POLICY_DEF(...)
 #endif
 
-ENGINE_POLICY_DEF(instances_application)
-ENGINE_POLICY_DEF(instances_program)
-ENGINE_POLICY_DEF(renderer_thread)
+ENGINE_POLICY_DEF( (instances_application), (instances_program), (renderer_thread) )
+
+#ifdef ENGINE_POLICY_IMPL
+#undef ENGINE_POLICY_IMPL
+#endif
 
 #undef ENGINE_POLICY_DEF

@@ -22,16 +22,35 @@
 #define ENGINE_CONFIG_LOCAL(...)
 #endif
 
-ENGINE_CONFIG_TYPE(global)
-ENGINE_CONFIG_TYPE(app_specific)
-ENGINE_CONFIG_TYPE(local)
+ENGINE_CONFIG_TYPE( (global), (app_specific), (local) )
 
-ENGINE_CONFIG_STORAGE_MSG(source_updated)
+ENGINE_CONFIG_STORAGE_MSG( (source_updated) )
 
-ENGINE_CONFIG_CHANGE_SOURCE(internal)
-ENGINE_CONFIG_CHANGE_SOURCE(external)
+ENGINE_CONFIG_CHANGE_SOURCE( (internal), (external) )
 
-ENGINE_CONFIG_LOCAL(bool, test_setting)
+ENGINE_CONFIG_GLOBAL( (test_setting, bool) )
+ENGINE_CONFIG_ONLY_FOR_APP( (test_setting, bool, game) )
+ENGINE_CONFIG_LOCAL( (test_setting, bool) )
+
+#ifdef ENGINE_CONFIG_TYPE_IMPL
+#undef ENGINE_CONFIG_TYPE_IMPL
+#endif 
+
+#ifdef ENGINE_CONFIG_STORAGE_MSG_IMPL
+#undef ENGINE_CONFIG_STORAGE_MSG_IMPL
+#endif 
+
+#ifdef ENGINE_CONFIG_GLOBAL_IMPL
+#undef ENGINE_CONFIG_GLOBAL_IMPL
+#endif
+
+#ifdef ENGINE_CONFIG_ONLY_FOR_APP_IMPL
+#undef ENGINE_CONFIG_ONLY_FOR_APP_IMPL
+#endif
+
+#ifdef ENGINE_CONFIG_LOCAL_IMPL
+#undef ENGINE_CONFIG_LOCAL_IMPL
+#endif
 
 #undef ENGINE_CONFIG_LOCAL
 #undef ENGINE_CONFIG_ONLY_FOR_APP

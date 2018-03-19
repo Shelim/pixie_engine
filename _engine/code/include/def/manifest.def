@@ -2,42 +2,36 @@
 #define ENGINE_MANIFEST_TYPE_DEF(...)
 #endif
 
-#ifndef ENGINE_MANIFEST_START_DEF
-#define ENGINE_MANIFEST_START_DEF(...)
-#endif
-
 #ifndef ENGINE_MANIFEST_DEF
 #define ENGINE_MANIFEST_DEF(...)
 #endif
 
-#ifndef ENGINE_MANIFEST_END_DEF
-#define ENGINE_MANIFEST_END_DEF(...)
-#endif
-
-ENGINE_MANIFEST_TYPE_DEF(common)
-#define ENGINE_OS_DEF(platform) ENGINE_MANIFEST_TYPE_DEF(platform)
+#define ENGINE_OS_IMPL(platform) platform
+#define ENGINE_OS_DEF(...) DEFINE_TYPE_MULTIPASS(ENGINE_MANIFEST_TYPE_DEF, ENGINE_OS_IMPL,  (common), __VA_ARGS__)
 #include "def/os.def"
 
-ENGINE_MANIFEST_START_DEF(common)
-ENGINE_MANIFEST_DEF(common, full_name)
-ENGINE_MANIFEST_END_DEF()
+ENGINE_MANIFEST_DEF(    ((common), ( (full_name) ) ),
 
-ENGINE_MANIFEST_START_DEF(windows)
-ENGINE_MANIFEST_DEF(windows, installer_filename)
-ENGINE_MANIFEST_DEF(windows, portable_filename)
-ENGINE_MANIFEST_DEF(windows, executable_filename)
-ENGINE_MANIFEST_DEF(windows, resources_company)
-ENGINE_MANIFEST_DEF(windows, resources_internal)
-ENGINE_MANIFEST_DEF(windows, resources_copyrights)
-ENGINE_MANIFEST_DEF(windows, resources_product)
-ENGINE_MANIFEST_DEF(windows, install_dir)
-ENGINE_MANIFEST_DEF(windows, install_shortcut)
-ENGINE_MANIFEST_DEF(windows, install_registry)
-ENGINE_MANIFEST_DEF(windows, game_app_dir)
-ENGINE_MANIFEST_DEF(windows, storage_registry)
-ENGINE_MANIFEST_END_DEF()
+                        ((windows), ( (installer_filename),
+                                    (portable_filename),
+                                    (executable_filename),
+                                    (resources_company),
+                                    (resources_internal),
+                                    (resources_copyrights),
+                                    (resources_product),
+                                    (install_dir),
+                                    (install_shortcut),
+                                    (install_registry),
+                                    (game_app_dir),
+                                    (storage_registry) ) ) )
 
-#undef ENGINE_MANIFEST_END_DEF
+#ifdef ENGINE_MANIFEST_TYPE_IMPL
+#undef ENGINE_MANIFEST_TYPE_IMPL
+#endif
+
+#ifdef ENGINE_MANIFEST_IMPL
+#undef ENGINE_MANIFEST_IMPL
+#endif
+
 #undef ENGINE_MANIFEST_DEF
-#undef ENGINE_MANIFEST_START_DEF
 #undef ENGINE_MANIFEST_TYPE_DEF

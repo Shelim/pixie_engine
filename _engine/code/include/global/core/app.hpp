@@ -21,11 +21,13 @@ namespace engine
 
         public:
 
-#include "def/enum/app.def"
+#define GAME_APP_ACTUAL_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(kind_t, __VA_ARGS__)
+#include "def/app_actual.def"
+
+#define ENGINE_MAIN_RETURN_CODE_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(return_code_t, __VA_ARGS__)
+#include "def/main_return_code.def"
 
             typedef int32_t instance_id_t;
-
-#include "def/enum/main_return_code.def"
 
             app_t(std::unique_ptr<app_actual_t> app, std::unique_ptr<app_context_t> context, std::shared_ptr<holder_t<accountable_app_t> > notifier, std::shared_ptr<thread_factory_t> thread_factory);
 
@@ -53,11 +55,12 @@ namespace engine
     
 }
 
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/main_return_code.def"
-#include "global/core/utility/enum_to_string.hpp"
 
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/app.def"
-#include "global/core/utility/enum_to_string.hpp"
+#define GAME_APP_ACTUAL_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::app_t::kind_t, __VA_ARGS__)
+#include "def/app_actual.def"
+
+#define ENGINE_MAIN_RETURN_CODE_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::app_t::return_code_t, __VA_ARGS__)
+#include "def/main_return_code.def"
 
 #include "global/core/app/actual.hpp"
 #include "global/core/app/meta.hpp"

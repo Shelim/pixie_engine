@@ -10,7 +10,8 @@ namespace engine
 	namespace process
 	{
 
-#include "def/enum/process_runner.def"
+#define ENGINE_TASK_THREAD_CALLER_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(runner_thread_t, __VA_ARGS__)
+#include "def/process_runner.def"
 
 		template<runner_thread_t thread> class runner_program_thread_t : public runner_base_t
 		{
@@ -108,8 +109,7 @@ namespace engine
 
 
 }
-
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/process_runner.def"
-#include "global/core/utility/enum_to_string.hpp"
+#define ENGINE_TASK_THREAD_CALLER_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::process::runner_thread_t, __VA_ARGS__)
+#include "def/process_runner.def"
 
 #endif

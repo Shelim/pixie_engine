@@ -13,7 +13,8 @@ namespace engine
 
 	public:
 
-#include "def/enum/os.def"
+#define ENGINE_OS_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(os_t, __VA_ARGS__)
+#include "def/os.def"
 
         constexpr os_t get_os()
         {
@@ -28,7 +29,7 @@ namespace engine
 
 }
 
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/os.def"
-#include "global/core/utility/enum_to_string.hpp"
+#define ENGINE_OS_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::manifest_os_t::os_t, __VA_ARGS__)
+#include "def/os.def"
 
 #endif

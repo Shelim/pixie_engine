@@ -2,7 +2,6 @@
 #define ENGINE_COMMON_DEFAULT_TERMINAL_HPP
 #pragma once
 
-#include <SDL.h>
 #include <cstdio>
 #include <cstdlib>
 #include "core/bootstrapper.hpp"

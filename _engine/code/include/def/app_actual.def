@@ -1,0 +1,12 @@
+#ifndef GAME_APP_ACTUAL_DEF
+#define GAME_APP_ACTUAL_DEF(...)
+#endif
+
+#define GAME_APP_DEF(...) GAME_APP_ACTUAL_DEF( (_engine), __VA_ARGS__ )
+#include "def/app.def"
+
+#ifdef GAME_APP_ACTUAL_IMPL
+#undef GAME_APP_ACTUAL_IMPL
+#endif 
+
+#undef GAME_APP_ACTUAL_DEF

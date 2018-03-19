@@ -11,7 +11,7 @@
 namespace engine
 {
 
-#define ENGINE_ACCOUNTABLE_DEF(type) \
+#define ENGINE_ACCOUNTABLE_IMPL(type) \
     class accountable_##type##_provider_messenger_t : public accountable_##type##_provider_base_t \
     {\
 	public: \
@@ -27,6 +27,7 @@ namespace engine
         std::shared_ptr<engine::messenger_accountable_##type##_t> messenger;	\
     };
 
+#define ENGINE_ACCOUNTABLE_DEF(...) DEFINE_TYPE_PASS(ENGINE_ACCOUNTABLE_IMPL, __VA_ARGS__)
 #include "def/accountable.def"
 
 }

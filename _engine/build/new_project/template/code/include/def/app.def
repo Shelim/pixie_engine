@@ -2,8 +2,10 @@
 #define GAME_APP_DEF(...)
 #endif
 
-GAME_APP_DEF(launcher)
-GAME_APP_DEF(game)
-GAME_APP_DEF(editor)
+GAME_APP_DEF( (launcher), (game), (editor) )
+
+#ifdef GAME_APP_IMPL
+#undef GAME_APP_IMPL
+#endif 
 
 #undef GAME_APP_DEF

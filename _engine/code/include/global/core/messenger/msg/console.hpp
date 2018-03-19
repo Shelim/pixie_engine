@@ -28,7 +28,10 @@ namespace engine
 
 			public:
 
-#include "def/enum/console_msg.def"
+#define ENGINE_CONSOLE_OUTPUT_KIND_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(kind_t, __VA_ARGS__)
+#define ENGINE_CONSOLE_SOURCE_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(source_t, __VA_ARGS__)
+#define ENGINE_CONSOLE_MSG_TYPE_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(type_t, __VA_ARGS__)
+#include "def/console.def"
 
 				virtual ~actual_t();
 		
@@ -66,7 +69,10 @@ namespace engine
 
 }
 
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/console_msg.def"
-#include "global/core/utility/enum_to_string.hpp"
+
+#define ENGINE_CONSOLE_OUTPUT_KIND_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::messenger::msg_console_t::actual_t::kind_t, __VA_ARGS__)
+#define ENGINE_CONSOLE_SOURCE_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::messenger::msg_console_t::actual_t::source_t, __VA_ARGS__)
+#define ENGINE_CONSOLE_MSG_TYPE_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::messenger::msg_console_t::actual_t::type_t, __VA_ARGS__)
+#include "def/console.def"
 
 #endif

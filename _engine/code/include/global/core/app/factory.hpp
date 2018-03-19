@@ -15,10 +15,12 @@ namespace engine
         public:
 
             app_factory_t(
-#define GAME_APP_DEF(app) std::shared_ptr<engine::ifactory<client::app_##app##_t> > app_##app##_factory,
+#define GAME_APP_IMPL(app) std::shared_ptr<engine::ifactory<client::app_##app##_t> > app_##app##_factory,
+#define GAME_APP_DEF(...) DEFINE_TYPE_PASS(GAME_APP_IMPL, __VA_ARGS__)
 #include "def/app.def"
                 std::shared_ptr<holder_t<accountable_app_t> > notifier, std::shared_ptr<thread_factory_t> thread_factory) :
-#define GAME_APP_DEF(app) app_##app##_factory(app_##app##_factory),
+#define GAME_APP_IMPL(app) app_##app##_factory(app_##app##_factory),
+#define GAME_APP_DEF(...) DEFINE_TYPE_PASS(GAME_APP_IMPL, __VA_ARGS__)
 #include "def/app.def"
                 notifier(notifier), thread_factory(thread_factory)
             {
@@ -29,14 +31,17 @@ namespace engine
             {
                 switch(kind)
                 {
-#define GAME_APP_DEF(app) case app_t::kind_t::app: return std::make_shared<app_t>(app_##app##_factory->create(), std::move(context), notifier, thread_factory);
+#define GAME_APP_IMPL(app) case app_t::kind_t::app: return std::make_shared<app_t>(app_##app##_factory->create(), std::move(context), notifier, thread_factory);
+#define GAME_APP_DEF(...) DEFINE_TYPE_PASS(GAME_APP_IMPL, __VA_ARGS__)
+#include "def/app.def"
                 }
                 return std::shared_ptr<app_t>();
             }
 
         private:
 
-#define GAME_APP_DEF(app) std::shared_ptr<engine::ifactory<client::app_##app##_t> > app_##app##_factory;
+#define GAME_APP_IMPL(app) std::shared_ptr<engine::ifactory<client::app_##app##_t> > app_##app##_factory;
+#define GAME_APP_DEF(...) DEFINE_TYPE_PASS(GAME_APP_IMPL, __VA_ARGS__)
 #include "def/app.def"
 
             std::shared_ptr<holder_t<accountable_app_t> > notifier;

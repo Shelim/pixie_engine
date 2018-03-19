@@ -2,7 +2,10 @@
 #define ENGINE_COMPONENT_DEF(...)
 #endif
 
-ENGINE_COMPONENT_DEF(renderer_status)
-ENGINE_COMPONENT_DEF(terminal)
+ENGINE_COMPONENT_DEF( (renderer_status), (terminal) )
+
+#ifdef ENGINE_COMPONENT_IMPL
+#undef ENGINE_COMPONENT_IMPL
+#endif 
 
 #undef ENGINE_COMPONENT_DEF

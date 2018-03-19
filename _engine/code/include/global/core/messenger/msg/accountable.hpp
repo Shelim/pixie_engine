@@ -17,7 +17,8 @@ namespace engine
     namespace messenger
     {
 
-#include "def/enum/accountable.def"
+#define ENGINE_ACCOUNTABLE_MSG_TYPE_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(accountable_type_t, __VA_ARGS__)
+#include "def/accountable.def"
 
         template<class object_t> class msg_accountable_t
 		{
@@ -55,7 +56,7 @@ namespace engine
 
         };
 
-#define ENGINE_ACCOUNTABLE_DEF(item) \
+#define ENGINE_ACCOUNTABLE_IMPL(item) \
         class msg_accountable_##item##_t : public msg_accountable_t<item##_t> \
         { \
             public: msg_accountable_##item##_t(accountable_type_t type, item##_t * object) \
@@ -64,13 +65,14 @@ namespace engine
                 } \
         };
 
+#define ENGINE_ACCOUNTABLE_DEF(...) DEFINE_TYPE_PASS(ENGINE_ACCOUNTABLE_IMPL, __VA_ARGS__)
 #include "def/accountable.def"
 
     }
 
 }
 
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/accountable.def"
-#include "global/core/utility/enum_to_string.hpp"
+#define ENGINE_ACCOUNTABLE_MSG_TYPE_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::messenger::accountable_type_t, __VA_ARGS__)
+#include "def/accountable.def"
 
 #endif

@@ -28,17 +28,21 @@ namespace engine
 			no_change
 		};
         
-#define ENGINE_CONFIG_GLOBAL(type, name) \
+#define ENGINE_CONFIG_GLOBAL_IMPL(name, type) \
 		virtual type get_global_##name() const = 0; \
 		virtual set_result_t set_global_##name(type val) = 0;
+#define ENGINE_CONFIG_GLOBAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_GLOBAL_IMPL, __VA_ARGS__)
 
-#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) \
+#define ENGINE_CONFIG_ONLY_FOR_APP_IMPL(name, type, app) \
 		virtual type get_app_##app##_##name() const = 0; \
 		virtual set_result_t set_app_##app##_##name(type val) = 0;
+#define ENGINE_CONFIG_ONLY_FOR_APP(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_ONLY_FOR_APP_IMPL, __VA_ARGS__)
 
-#define ENGINE_CONFIG_LOCAL(type, name) \
+#define ENGINE_CONFIG_LOCAL_IMPL(name, type) \
 		virtual type get_local_##name(app_t::kind_t app) const = 0; \
 		virtual set_result_t set_local_##name(app_t::kind_t app, type val) = 0;
+#define ENGINE_CONFIG_LOCAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_LOCAL_IMPL, __VA_ARGS__)
+
 #include "def/config.def"
 
 	};
@@ -67,17 +71,24 @@ namespace engine
 			logger->log_global_msg(config, "Config component has concluded"_u);
 		}
 	
-#define ENGINE_CONFIG_GLOBAL(type, name) \
+#define ENGINE_CONFIG_GLOBAL_IMPL(name, type) \
 		type get_global_##name() const final { std::lock_guard<std::recursive_mutex> guard(mutex); return config_provider->get_provider()->get_global_##name(); } \
 		void set_global_##name(type val) final { std::lock_guard<std::recursive_mutex> guard(mutex); if(config_provider->get_provider()->set_global_##name(val) == config_provider_base_t::set_result_t::success) notify_on_change(config_global_t::name, to_string(val)); }
 
-#define ENGINE_CONFIG_ONLY_FOR_APP(type, app, name) \
+#define ENGINE_CONFIG_GLOBAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_GLOBAL_IMPL, __VA_ARGS__)
+
+#define ENGINE_CONFIG_ONLY_FOR_APP_IMPL(name, type, app) \
 		type get_app_##app##_##name() const final { std::lock_guard<std::recursive_mutex> guard(mutex); return config_provider->get_provider()->get_app_##app##_##name(); } \
 		void set_app_##app##_##name(type val) final { std::lock_guard<std::recursive_mutex> guard(mutex); if(config_provider->get_provider()->set_app_##app##_##name(val) == config_provider_base_t::set_result_t::success) notify_on_change(config_app_specific_t::app##_##name, to_string(val)); }
 
-#define ENGINE_CONFIG_LOCAL(type, name) \
+#define ENGINE_CONFIG_ONLY_FOR_APP(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_ONLY_FOR_APP_IMPL, __VA_ARGS__)
+
+#define ENGINE_CONFIG_LOCAL_IMPL(name, type) \
 		type get_local_##name(app_t::kind_t app) const final { std::lock_guard<std::recursive_mutex> guard(mutex); return config_provider->get_provider()->get_local_##name(app); } \
 		void set_local_##name(app_t::kind_t app, type val) final { std::lock_guard<std::recursive_mutex> guard(mutex); if(config_provider->get_provider()->set_local_##name(app, val) == config_provider_base_t::set_result_t::success) notify_on_change(app, config_local_t::name, to_string(val)); }
+
+#define ENGINE_CONFIG_LOCAL(...) DEFINE_TYPE_PASS(ENGINE_CONFIG_LOCAL_IMPL, __VA_ARGS__)
+
 #include "def/config.def"
 
 	private:

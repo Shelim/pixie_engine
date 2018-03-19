@@ -27,7 +27,8 @@ namespace engine
 
 			virtual ~msg_base_t();
 
-#include "def/enum/messenger_type.def"
+#define ENGINE_MESSENGER_MSG_BASE_TYPE_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(type_t, __VA_ARGS__)
+#include "def/messenger.def"
 
 			type_t get_type() const;
 
@@ -174,13 +175,14 @@ namespace engine
 			return "Unknown"_u;
 		}
 
-#define ENGINE_MESSENGER_QUEUE_DEF(name) class msg_##name##_t; template<> inline ustring_t get_msg_type(msg_##name##_t * msg) { return #name##_u; };
+#define ENGINE_MESSENGER_QUEUE_IMPL(name) class msg_##name##_t; template<> inline ustring_t get_msg_type(msg_##name##_t * msg) { return #name##_u; };
+#define ENGINE_MESSENGER_QUEUE_DEF(...) DEFINE_TYPE_PASS(ENGINE_MESSENGER_QUEUE_IMPL, __VA_ARGS__)
 #include "def/messenger.def"
 
 	}
 }
 
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/messenger_type.def"
-#include "global/core/utility/enum_to_string.hpp"
+#define ENGINE_MESSENGER_MSG_BASE_TYPE_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::messenger::msg_base_t::type_t, __VA_ARGS__)
+#include "def/messenger.def"
 
 #endif

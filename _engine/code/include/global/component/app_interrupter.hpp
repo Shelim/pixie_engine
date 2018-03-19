@@ -18,7 +18,8 @@ namespace engine
 
         }
 
-#include "def/enum/app_interruption_priority.def"
+#define ENGINE_APP_INTERRUPTION_PRIORITY_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(priority_t, __VA_ARGS__)
+#include "def/app_interruption.def"
 
         class instance_t
         {
@@ -42,11 +43,9 @@ namespace engine
     };
 
 }
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/app_interruption.def"
-#include "global/core/utility/enum_to_string.hpp"
 
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/app_interruption_priority.def"
-#include "global/core/utility/enum_to_string.hpp"
+#define ENGINE_APP_INTERRUPTION_PRIORITY_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::app_interrupter_t::priority_t, __VA_ARGS__)
+#include "def/app_interruption.def"
 
 #include "global/component/app_interrupter/dummy.hpp"
 #include "global/component/app_interrupter/real.hpp"

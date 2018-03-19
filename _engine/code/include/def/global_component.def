@@ -2,24 +2,16 @@
 #define ENGINE_GLOBAL_COMPONENT_DEF(...)
 #endif
 
-ENGINE_GLOBAL_COMPONENT_DEF(app_accounter)
-ENGINE_GLOBAL_COMPONENT_DEF(app_interrupter)
-ENGINE_GLOBAL_COMPONENT_DEF(app_resolver)
-ENGINE_GLOBAL_COMPONENT_DEF(config)
-ENGINE_GLOBAL_COMPONENT_DEF(config_monitor)
-ENGINE_GLOBAL_COMPONENT_DEF(config_storage)
-ENGINE_GLOBAL_COMPONENT_DEF(debug_symbols)
-ENGINE_GLOBAL_COMPONENT_DEF(environment_info)
-ENGINE_GLOBAL_COMPONENT_DEF(extinguisher)
-ENGINE_GLOBAL_COMPONENT_DEF(filesystem)
-ENGINE_GLOBAL_COMPONENT_DEF(logger)
-ENGINE_GLOBAL_COMPONENT_DEF(profiler)
-ENGINE_GLOBAL_COMPONENT_DEF(program_args)
-ENGINE_GLOBAL_COMPONENT_DEF(program_instances_communicator_client)
-ENGINE_GLOBAL_COMPONENT_DEF(program_instances_communicator_host)
-ENGINE_GLOBAL_COMPONENT_DEF(program_instances_detection)
-ENGINE_GLOBAL_COMPONENT_DEF(thread_accounter)
-ENGINE_GLOBAL_COMPONENT_DEF(thread_program)
+ENGINE_GLOBAL_COMPONENT_DEF( (app_accounter), (app_interrupter), (app_resolver),
+                             (config), (config_monitor), (config_storage),
+                             (debug_symbols), (environment_info), (extinguisher),
+                             (filesystem), (logger), (profiler),
+                             (program_args), (program_instances_communicator_client),
+                             (program_instances_communicator_host), (program_instances_detection),
+                             (thread_accounter), (thread_program) )
 
+#ifdef ENGINE_GLOBAL_COMPONENT_IMPL
+#undef ENGINE_GLOBAL_COMPONENT_IMPL
+#endif
 
 #undef ENGINE_GLOBAL_COMPONENT_DEF

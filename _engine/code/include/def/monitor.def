@@ -2,6 +2,10 @@
 #define ENGINE_MONITOR_DEF(...)
 #endif
 
-ENGINE_MONITOR_DEF(config)
+ENGINE_MONITOR_DEF( (config) )
+
+#ifdef ENGINE_MONITOR_IMPL
+#undef ENGINE_MONITOR_IMPL
+#endif
 
 #undef ENGINE_MONITOR_DEF

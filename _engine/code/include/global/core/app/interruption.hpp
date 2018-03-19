@@ -19,7 +19,8 @@ namespace engine
 
         }
 
-#include "def/enum/app_interruption.def"
+#define ENGINE_APP_INTERRUPTION_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(type_t, __VA_ARGS__)
+#include "def/app_interruption.def"
 
         type_t get_type() const
         {
@@ -72,6 +73,9 @@ namespace engine
 
     };
 }
+
+#define ENGINE_APP_INTERRUPTION_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::interruption_t::type_t, __VA_ARGS__)
+#include "def/app_interruption.def"
 
 #include "global/core/app/interruption/terminate.hpp"
 

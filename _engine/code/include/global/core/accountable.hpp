@@ -11,7 +11,7 @@
 namespace engine
 {
 
-#define ENGINE_ACCOUNTABLE_DEF(type) \
+#define ENGINE_ACCOUNTABLE_IMPL(type) \
             class type##_t; \
             \
             class accountable_##type##_t { }; \
@@ -39,6 +39,7 @@ namespace engine
                     type##_t * type; \
             }; \
 
+#define ENGINE_ACCOUNTABLE_DEF(...) DEFINE_TYPE_PASS(ENGINE_ACCOUNTABLE_IMPL, __VA_ARGS__)
 #include "def/accountable.def"
 
 }

@@ -2,6 +2,10 @@
 #define ENGINE_OS_DEF(...)
 #endif
 
-ENGINE_OS_DEF(windows)
+ENGINE_OS_DEF( (windows) )
+
+#ifdef ENGINE_OS_IMPL
+#undef ENGINE_OS_IMPL
+#endif
 
 #undef ENGINE_OS_DEF

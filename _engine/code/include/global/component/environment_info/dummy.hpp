@@ -17,7 +17,8 @@ namespace engine
 			return ""_u;
 		}
 
-#define ENGINE_ENVIRONMENT_INFO_DEF(key, name, type) ::type get_##key() const final { return from_string<::type>(""_u); }
+#define ENGINE_ENVIRONMENT_INFO_IMPL(key, name, type) ::type get_##key() const final { return from_string<::type>(""_u); }
+#define ENGINE_ENVIRONMENT_INFO_DEF(...) DEFINE_TYPE_PASS(ENGINE_ENVIRONMENT_INFO_IMPL, __VA_ARGS__)
 #include "def/environment_info.def"
 		  
 		status_t status(type_t key) const final

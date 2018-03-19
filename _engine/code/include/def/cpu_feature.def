@@ -2,15 +2,19 @@
 #define ENGINE_CPU_FEATURE_DEF(...)
 #endif
 
-ENGINE_CPU_FEATURE_DEF(_3d_now, "3DNow!"_u)
-ENGINE_CPU_FEATURE_DEF(avx, "AVX"_u)
-ENGINE_CPU_FEATURE_DEF(alti_vec, "AltiVec"_u)
-ENGINE_CPU_FEATURE_DEF(mmx, "MMX"_u)
-ENGINE_CPU_FEATURE_DEF(rdtsc, "RDTSC"_u)
-ENGINE_CPU_FEATURE_DEF(sse, "SSE"_u)
-ENGINE_CPU_FEATURE_DEF(sse2, "SSE2"_u)
-ENGINE_CPU_FEATURE_DEF(sse3, "SSE3"_u)
-ENGINE_CPU_FEATURE_DEF(sse41, "SSE4.1"_u)
-ENGINE_CPU_FEATURE_DEF(sse42, "SSE4.2"_u)
+ENGINE_CPU_FEATURE_DEF( (_3d_now, "3DNow!"_u),
+                        (avx, "AVX"_u),
+                        (alti_vec, "AltiVec"_u),
+                        (mmx, "MMX"_u),
+                        (rdtsc, "RDTSC"_u),
+                        (sse, "SSE"_u),
+                        (sse2, "SSE2"_u),
+                        (sse3, "SSE3"_u),
+                        (sse41, "SSE4.1"_u),
+                        (sse42, "SSE4.2"_u) )
+
+#ifdef ENGINE_CPU_FEATURE_IMPL
+#undef ENGINE_CPU_FEATURE_IMPL
+#endif
 
 #undef ENGINE_CPU_FEATURE_DEF

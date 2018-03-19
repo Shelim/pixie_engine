@@ -17,7 +17,8 @@ namespace engine
     namespace console
     {
 
-#include "def/enum/console_accounter.def"
+#define ENGINE_CONSOLE_ACCOUNTABLE_TYPE_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(accountable_type_t, __VA_ARGS__)
+#include "def/console.def"
 
         template<class object_t> class accountable_item_t : public messenger::msg_console_t::actual_t
         {
@@ -83,7 +84,7 @@ namespace engine
 }
 
 
-#define ENGINE_ENUM_HEADER_TO_USE "def/enum/console_accounter.def"
-#include "global/core/utility/enum_to_string.hpp"
+#define ENGINE_CONSOLE_ACCOUNTABLE_TYPE_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::console::accountable_type_t, __VA_ARGS__)
+#include "def/console.def"
 
 #endif

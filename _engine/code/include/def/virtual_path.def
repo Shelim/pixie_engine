@@ -2,18 +2,12 @@
 #define ENGINE_VIRTUAL_PATH_DEF(...)
 #endif
 
-#ifndef ENGINE_ASSET_PATH_DEF
-#define ENGINE_ASSET_PATH_DEF(...)
+#define GAME_APP_IMPL(app) app_##app
+#define GAME_APP_DEF(...) DEFINE_TYPE_MULTIPASS_WITH_DEF_ARGS(ENGINE_VIRTUAL_PATH_DEF, ( (config), (common), (crash_dumps), (saves), (logs), (unknown) ), GAME_APP_IMPL, __VA_ARGS__)
+#include "def/app.def"
+
+#ifdef ENGINE_VIRTUAL_PATH_IMPL
+#undef ENGINE_VIRTUAL_PATH_IMPL
 #endif
 
-ENGINE_VIRTUAL_PATH_DEF(config)
-ENGINE_VIRTUAL_PATH_DEF(common)
-ENGINE_VIRTUAL_PATH_DEF(crash_dumps)
-#define GAME_APP_DEF(app) ENGINE_VIRTUAL_PATH_DEF(app_##app)
-#include "def/app.def"
-ENGINE_VIRTUAL_PATH_DEF(saves)
-ENGINE_VIRTUAL_PATH_DEF(logs)
-ENGINE_VIRTUAL_PATH_DEF(unknown)
-
-#undef ENGINE_ASSET_PATH_DEF
 #undef ENGINE_VIRTUAL_PATH_DEF

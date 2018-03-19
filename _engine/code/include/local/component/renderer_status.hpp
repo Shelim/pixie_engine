@@ -12,7 +12,6 @@
 #include <thread>
 #include <chrono>
 #include <sstream>
-#include <SDL.h>
 #include <pugixml.hpp>
 #include "utility/text/ustring.hpp"
 #include "utility/container/sync_queue.hpp"

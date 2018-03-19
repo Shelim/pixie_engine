@@ -2,7 +2,6 @@
 #define ENGINE_COMMON_DEFAULT_ENVIRONMENT_INFO_HPP
 #pragma once
 
-#include <SDL.h>
 #include <cstdio>
 #include <cstdlib>
 #include "bootstrapper.hpp"

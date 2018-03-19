@@ -2,21 +2,13 @@
 #define ENGINE_TERMINAL_COLOR_DEF(...)
 #endif
 
-ENGINE_TERMINAL_COLOR_DEF(red_dark)
-ENGINE_TERMINAL_COLOR_DEF(red_light)
-ENGINE_TERMINAL_COLOR_DEF(green_dark)
-ENGINE_TERMINAL_COLOR_DEF(green_light)
-ENGINE_TERMINAL_COLOR_DEF(blue_dark)
-ENGINE_TERMINAL_COLOR_DEF(blue_light)
-ENGINE_TERMINAL_COLOR_DEF(gray_dark)
-ENGINE_TERMINAL_COLOR_DEF(gray_light)
-ENGINE_TERMINAL_COLOR_DEF(white)
-ENGINE_TERMINAL_COLOR_DEF(black)
-ENGINE_TERMINAL_COLOR_DEF(yellow_dark)
-ENGINE_TERMINAL_COLOR_DEF(yellow_light)
-ENGINE_TERMINAL_COLOR_DEF(pink_dark)
-ENGINE_TERMINAL_COLOR_DEF(pink_light)
-ENGINE_TERMINAL_COLOR_DEF(teal_dark)
-ENGINE_TERMINAL_COLOR_DEF(teal_light)
+ENGINE_TERMINAL_COLOR_DEF(  (red_dark), (red_light), (green_dark), (green_light), 
+                            (blue_dark), (blue_light), (gray_dark), (gray_light),
+                            (white), (black), (yellow_dark), (yellow_light),
+                            (pink_dark), (pink_light), (teal_dark), (teal_light) )
+
+#ifdef ENGINE_TERMINAL_COLOR_IMPL
+#undef ENGINE_TERMINAL_COLOR_IMPL
+#endif
 
 #undef ENGINE_TERMINAL_COLOR_DEF
