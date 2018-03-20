@@ -312,7 +312,7 @@ namespace engine
 						handle_app_created_event(static_cast<app_created_event_t*>(event.get()));
 					break;
 					case event_t::type_t::app_destroyed:
-						handle_app_destroyed_event(static_cast<app_destroyed_event_tc*>(event.get()));
+						handle_app_destroyed_event(static_cast<app_destroyed_event_t*>(event.get()));
 					break;
 				}
 				check_for_completion();
