@@ -58,6 +58,12 @@ namespace engine
 			return std::move(front);
 		}
 
+		bool is_empty()
+		{
+			std::lock_guard<std::mutex> lock(mutex);
+			return queue.empty();
+		}
+
 	private:
 		std::queue<T> queue;
 		mutable std::mutex mutex;

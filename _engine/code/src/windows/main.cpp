@@ -39,7 +39,7 @@ int main(int argc, char * argv[])
     std::shared_ptr<engine::program_t> program = windows.ignite_from_main(argc, argv);
     if(!program) return EXIT_FAILURE; // Failed to ignite (for example different instance is running)
 
-    program->get_app_accounter()->wait_for_completion();
+    program->get_app_overseer()->wait_for_completion();
     return program->get_extinguisher()->get_return_code();
 }
 

@@ -2,7 +2,7 @@
 #define ENGINE_GLOBAL_COMPONENT_DEF(...)
 #endif
 
-ENGINE_GLOBAL_COMPONENT_DEF( (app_accounter), (app_interrupter), (app_resolver),
+ENGINE_GLOBAL_COMPONENT_DEF( (app_accounter), (app_interrupter), (app_overseer), (app_resolver),
                              (config), (config_monitor), (config_storage),
                              (debug_symbols), (environment_info), (extinguisher),
                              (filesystem), (logger), (profiler),
