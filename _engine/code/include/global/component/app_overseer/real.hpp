@@ -9,6 +9,7 @@
 #include "global/core/process/service.hpp"
 #include "utility/container/concurrent_queue.hpp"
 #include "utility/concurrention/signal.hpp"
+#include "global/core/process/runner.hpp"
 #include <memory>
 
 namespace engine
@@ -19,7 +20,7 @@ namespace engine
 
 	public:
 
-		app_overseer_actual_t(std::shared_ptr<logger_t> logger, std::shared_ptr<app_interrupter_t> app_interrupter) : logger(logger), app_interrupter(app_interrupter)
+		app_overseer_actual_t(std::shared_ptr<logger_t> logger, std::shared_ptr<app_interrupter_t> app_interrupter, std::shared_ptr<process::runner_spawn_factory_t> runner_spawn_factory) : logger(logger), app_interrupter(app_interrupter), runner_spawn_factory(runner_spawn_factory), termination_runner_id(0)
 		{
 			
 		}
@@ -278,6 +279,8 @@ namespace engine
 
 		std::shared_ptr<logger_t> logger;
 		std::shared_ptr<app_interrupter_t> app_interrupter;
+		std::shared_ptr<process::runner_spawn_factory_t> runner_spawn_factory;
+		std::size_t termination_runner_id;
 		std::vector<std::shared_ptr<app_meta_t> > apps_meta;
 
 		enum class flag_t
@@ -294,6 +297,31 @@ namespace engine
 			{
 				flags.set_flag(flag_t::is_done, true);
 				signal_completion.signal();
+			}
+		}
+		
+		void handle_run_app_event(run_app_event_t * event)
+		{
+
+		}
+		
+		void handle_terminate_app_event(terminate_app_event_t * event)
+		{
+			auto instance_id = event->get_instance();
+			auto iter = std::find_if(apps_meta.begin(), apps_meta.end(), [instance_id](std::shared_ptr<app_meta_t> app_meta){ return app_meta->get_instance_id() == instance_id; });
+			if(iter == apps_meta.end())
+				event->move_on_completed()();
+			else
+			{
+				app_interrupter->send_interruption(std::make_unique<interruption_terminate_t>(event->get_instance()));
+				std::unique_ptr<process::runner_spawn_t> runner_spawn = runner_spawn_factory->create((*iter)->get_app(), (*iter)->get_instance_id(), format_string("Termination runner ###1#"_u, ++termination_runner_id));
+				
+				runner_spawn->add_task(std::make_unique<task_func_t>(std::bind([](process::token_t* token, app_overseer_t::callback_void_t on_completed, std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<app_meta_t> app_meta){
+					app_meta->wait_till_completed();
+					on_completed();
+					return task_base_t::result_t::completed;
+				}, std::placeholders::_1, std::move(event->move_on_completed()), event->get_actual(), *iter), format_string("Waiting for termination of #1####2#"_u, (*iter)->get_app(), (*iter)->get_instance_id())));
+
 			}
 		}
 
@@ -326,6 +354,12 @@ namespace engine
 			{
 				switch(event->get_type())
 				{
+					case event_t::type_t::run_app:
+						handle_run_app_event(static_cast<run_app_event_t*>(event.get()));
+					break;
+					case event_t::type_t::terminate_app:
+						handle_terminate_app_event(static_cast<terminate_app_event_t*>(event.get()));
+					break;
 					case event_t::type_t::close_app:
 						handle_close_app_event(static_cast<close_app_event_t*>(event.get()));
 					break;

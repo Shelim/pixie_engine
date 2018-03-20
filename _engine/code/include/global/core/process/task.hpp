@@ -48,7 +48,8 @@ namespace engine
 
 	public:
 
-		typedef std::function<result_t(process::token_t*)> func_t;
+		using func_signature_t = result_t(process::token_t*);
+		typedef std::function<func_signature_t> func_t;
 
 		task_func_t(func_t func, const ustring_t & name) : func(func), name(name)
 		{
