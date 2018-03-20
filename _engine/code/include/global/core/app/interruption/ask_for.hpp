@@ -15,6 +15,12 @@ namespace engine
 
             typedef std::function<void()> callback_t;
 
+            enum class default_t
+            {
+                allowed,
+                refused
+            };
+
             class handle_t
             {
                 public:
@@ -106,12 +112,6 @@ namespace engine
             }
 
         protected:
-
-            enum class default_t
-            {
-                allowed,
-                refused
-            };
 
             interruption_ask_for_t(type_t type, app_t::instance_id_t target, default_t default_is, callback_t on_allowed = [](){}, callback_t on_refused = [](){}) : interruption_t(type, target), handle(std::make_unique<handle_t>(default_is, std::move(on_allowed), std::move(on_refused)))
             {
