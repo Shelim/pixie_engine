@@ -25,7 +25,7 @@ namespace engine
 
 		args_t get_args_for_app_kind(app_t::kind_t kind) final
 		{
-			return engine::clinet::startup_args_for_app(kind);
+			return engine::client::startup_args_for_app(kind);
 		}
 
 	private:

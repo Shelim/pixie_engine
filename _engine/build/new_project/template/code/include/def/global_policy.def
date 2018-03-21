@@ -2,7 +2,7 @@
 #define GAME_ALLOW_POLICY_DEF(...)
 #endif
 
-GAME_ALLOW_POLICY_DEF(  (instances_application, single), (instances_application, multiple),
+GAME_ALLOW_POLICY_DEF(  (instances_application, single), (instances_application, single_given_kind), (instances_application, multiple),
                         (instances_program, single), (instances_program, multiple),
                         (renderer_thread, detached), (renderer_thread, callable_by_platform) )
 
