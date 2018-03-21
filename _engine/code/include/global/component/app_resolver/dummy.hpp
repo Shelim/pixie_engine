@@ -22,6 +22,11 @@ namespace engine
 			return app_t::kind_t::_engine;
 		}
 
+		args_t get_args_for_app_kind(app_t::kind_t kind) final
+		{
+			return args_t("");
+		}
+
 	private:
 
 	};

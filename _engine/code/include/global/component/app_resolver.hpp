@@ -18,6 +18,7 @@ namespace engine
         }
 
         virtual app_t::kind_t get_app_kind_for_given_context(app_context_t * context) = 0;
+        virtual args_t get_args_for_app_kind(app_t::kind_t kind) = 0;
 
     };
 

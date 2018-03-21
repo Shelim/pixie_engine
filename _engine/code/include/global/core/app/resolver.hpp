@@ -9,6 +9,7 @@ namespace engine
 	namespace client
 	{
 		app_t::kind_t resolve_app(app_context_t * context);
+		args_t engine::client::startup_args_for_app(app_t::kind_t kind);
 	}
 
 }

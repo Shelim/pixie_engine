@@ -24,5 +24,6 @@ namespace engine
 
 #include "global/core/policy/instances_application/multiple.hpp"
 #include "global/core/policy/instances_application/single.hpp"
+#include "global/core/policy/instances_application/single_given_kind.hpp"
 
 #endif

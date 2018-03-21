@@ -10,6 +10,7 @@
 #include "utility/container/concurrent_queue.hpp"
 #include "utility/concurrention/signal.hpp"
 #include "global/core/process/runner.hpp"
+#include "global/core/policy/instances_application.hpp"
 #include <memory>
 
 namespace engine
@@ -20,7 +21,7 @@ namespace engine
 
 	public:
 
-		app_overseer_actual_t(std::shared_ptr<logger_t> logger, std::shared_ptr<app_interrupter_t> app_interrupter, std::shared_ptr<process::runner_spawn_factory_t> runner_spawn_factory, std::shared_ptr<app_factory_t> app_factory) : logger(logger), app_interrupter(app_interrupter), runner_spawn_factory(runner_spawn_factory), app_factory(app_factory), termination_runner_id(0), app_runner_id(0)
+		app_overseer_actual_t(std::shared_ptr<logger_t> logger, std::shared_ptr<app_interrupter_t> app_interrupter, std::shared_ptr<process::runner_spawn_factory_t> runner_spawn_factory, std::shared_ptr<app_factory_t> app_factory, std::shared_ptr<instances_application_t> policy_instances_application) : logger(logger), app_interrupter(app_interrupter), runner_spawn_factory(runner_spawn_factory), app_factory(app_factory), policy_instances_application(policy_instances_application), termination_runner_id(0), app_runner_id(0)
 		{
 			
 		}
@@ -281,6 +282,7 @@ namespace engine
 		std::shared_ptr<app_interrupter_t> app_interrupter;
 		std::shared_ptr<process::runner_spawn_factory_t> runner_spawn_factory;
 		std::shared_ptr<app_factory_t> app_factory;
+		std::shared_ptr<instances_application_t> policy_instances_application;
 		std::size_t termination_runner_id;
 		std::size_t app_runner_id;
 		std::vector<std::shared_ptr<app_meta_t> > apps_meta;
@@ -318,24 +320,32 @@ namespace engine
 		
 		void handle_run_app_event(run_app_event_t * event)
 		{
-			std::vector<std::shared_ptr<app_meta_t> > apps_meta_running;
-			apps_meta_running.reserve(apps_meta.size());
-
-			for(auto app_meta : apps_meta)
+			if(policy_instances_application->allow_application_instance_start(event->get_kind()))
 			{
-				if(app_meta->get_app() == event->get_kind())
+
+				std::vector<std::shared_ptr<app_meta_t> > apps_meta_running;
+				apps_meta_running.reserve(apps_meta.size());
+
+				for(auto app_meta : apps_meta)
 				{
-					apps_meta_running.push_back(app_meta);
+					if(app_meta->get_app() == event->get_kind())
+					{
+						apps_meta_running.push_back(app_meta);
+					}
 				}
-			}
 
-			if(apps_meta_running.empty())
-			{
-				event->move_on_app_running()(run_app_from_handler(event->get_kind(), std::move(event->move_context())));
+				if(apps_meta_running.empty())
+				{
+					event->move_on_app_running()(run_app_from_handler(event->get_kind(), std::move(event->move_context())));
+				}
+				else
+				{
+					// Check what we can do about it!
+				}
 			}
 			else
 			{
-				// ToDo!
+				// attempt to start new engine instance with args
 			}
 		}
 		

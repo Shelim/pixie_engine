@@ -7,8 +7,8 @@
 #if PIXIE_WINDOWS
 
 #define USE_STANDARD_POLICIES() \
-    PLATFORM_ALLOWS_POLICIES(instances_application, multiple, single) \
-    PLATFORM_ALLOWS_POLICIES(instances_program, single) \
+    PLATFORM_ALLOWS_POLICIES(instances_application, multiple, single_given_kind, single) \
+    PLATFORM_ALLOWS_POLICIES(instances_program, single, multiple) \
     PLATFORM_ALLOWS_POLICIES(renderer_thread, detached) 
 
 #define USE_STANDARD_GLOBAL_PROVIDERS() \
