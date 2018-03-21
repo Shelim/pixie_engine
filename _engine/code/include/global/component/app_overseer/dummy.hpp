@@ -29,6 +29,14 @@ namespace engine
 		{
 			
 		}
+        void terminate_all(callback_void_t on_completed = [](){}) final
+		{
+			
+		}
+        void close_all(callback_void_t on_all_accepted = [](){}, callback_app_instance_t on_given_accepted = [](app_t::instance_id_t){}, callback_app_instance_t on_given_rejected = [](app_t::instance_id_t){}) final
+		{
+			
+		}
         void wait_for_completion() final
 		{
 

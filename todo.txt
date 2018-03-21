@@ -1,6 +1,10 @@
  - Most urgent
 	 - Apps
 		 - Overseer
+			 -> close_all
+			 -> terminate_all
+			 -> run_app
+			 -> run_app from other program
      - Debug_symbol should be a global module
 		 - Ability to read from .PDB and .Map
 		 - Ability to dump information about callstack POST-MORTEM (!)

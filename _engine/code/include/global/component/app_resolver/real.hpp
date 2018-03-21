@@ -23,9 +23,9 @@ namespace engine
 			return engine::client::resolve_app(context);
 		}
 
-		args_t get_args_for_app_kind(app_t::kind_t kind) final
+		args_t get_startup_args_to_run_new_instance_of(app_t::kind_t kind) final
 		{
-			return engine::client::startup_args_for_app(kind);
+			return engine::client::startup_args_to_run_new_instance_of(kind);
 		}
 
 	private:
