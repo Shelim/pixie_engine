@@ -12,6 +12,18 @@ namespace engine
 
     public:
 
+        class policy_implementation_single_t : public policy_implementation_t
+        {
+
+        public:
+
+            void on_program_instance_start() final
+            {
+                
+            }
+
+        };
+
     };
 
 }

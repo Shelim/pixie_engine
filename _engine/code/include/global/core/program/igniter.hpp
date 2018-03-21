@@ -72,6 +72,13 @@ namespace engine
 #define ENGINE_GLOBAL_FACTORABLE_IMPL(factorable) boost::di::bind<ifactory<factorable>>().to(factory<factorable>{}),
 #define ENGINE_GLOBAL_FACTORABLE_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_FACTORABLE_IMPL, __VA_ARGS__)
 #include "def/global_factorable.def"
+
+#define ENGINE_POLICY_IMPL2(policy, value) boost::di::bind<ifactory<engine::policy##_##value##_t::policy_implementation_##value##_t>>().to(factory<engine::policy##_##value##_t::policy_implementation_##value##_t>{}),
+#define ENGINE_POLICY_IMPL(policy, ...) DEFINE_TYPE_PASS_WTIH_ARG(ENGINE_POLICY_IMPL2, policy, __VA_ARGS__)
+#define ENGINE_POLICY_DEF(...) DEFINE_TYPE_PASS(ENGINE_POLICY_IMPL, __VA_ARGS__)
+#include "def/policy.def"
+#undef ENGINE_POLICY_IMPL2
+
             boost::di::make_injector());
     };
 

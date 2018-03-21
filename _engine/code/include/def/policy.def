@@ -2,7 +2,7 @@
 #define ENGINE_POLICY_DEF(...)
 #endif
 
-ENGINE_POLICY_DEF( (instances_application), (instances_program), (renderer_thread) )
+ENGINE_POLICY_DEF( (instances_application, single, multiple), (instances_program, single, multiple), (renderer_thread, detached, callable_by_platform) )
 
 #ifdef ENGINE_POLICY_IMPL
 #undef ENGINE_POLICY_IMPL

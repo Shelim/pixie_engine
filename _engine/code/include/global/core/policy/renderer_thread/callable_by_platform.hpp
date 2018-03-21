@@ -12,6 +12,13 @@ namespace engine
 
     public:
 
+        class policy_implementation_callable_by_platform_t : public policy_implementation_t
+        {
+
+        public:
+
+        };
+
     };
 
 }

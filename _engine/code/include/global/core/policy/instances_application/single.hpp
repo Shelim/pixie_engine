@@ -12,6 +12,18 @@ namespace engine
 
     public:
 
+        class policy_implementation_single_t : public policy_implementation_t
+        {
+
+        public:
+
+            bool allow_application_instance_start(app_t::kind_t kind) final
+            {
+                return true;
+            }
+
+        };
+
     };
 
 }

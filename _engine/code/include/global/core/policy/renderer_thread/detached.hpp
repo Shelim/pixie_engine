@@ -12,6 +12,13 @@ namespace engine
 
     public:
 
+        class policy_implementation_detached_t : public policy_implementation_t
+        {
+
+        public:
+
+        };
+
     };
 
     

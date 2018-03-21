@@ -10,6 +10,18 @@ namespace engine
 
     public:
 
+        class policy_implementation_t
+        {
+
+        public:
+
+            virtual ~policy_implementation_t()
+            {
+                
+            }
+
+        };
+
         virtual ~renderer_thread_t()
         {
 
