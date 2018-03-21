@@ -12,6 +12,7 @@
     PLATFORM_ALLOWS_POLICIES(renderer_thread, detached) 
 
 #define USE_STANDARD_GLOBAL_PROVIDERS() \
+    USE_PROVIDERS_FOR(accountable_app, messenger) \
     USE_PROVIDERS_FOR(app_accounter, console) \
     USE_PROVIDER_FOR(config, config_storage) \
     USE_PROVIDERS_FOR(config_changed, messenger, logger) \

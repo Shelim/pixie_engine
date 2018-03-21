@@ -20,7 +20,7 @@ namespace engine
 
 	public:
 
-		app_overseer_actual_t(std::shared_ptr<logger_t> logger, std::shared_ptr<app_interrupter_t> app_interrupter, std::shared_ptr<process::runner_spawn_factory_t> runner_spawn_factory) : logger(logger), app_interrupter(app_interrupter), runner_spawn_factory(runner_spawn_factory), termination_runner_id(0)
+		app_overseer_actual_t(std::shared_ptr<logger_t> logger, std::shared_ptr<app_interrupter_t> app_interrupter, std::shared_ptr<process::runner_spawn_factory_t> runner_spawn_factory, std::shared_ptr<app_factory_t> app_factory) : logger(logger), app_interrupter(app_interrupter), runner_spawn_factory(runner_spawn_factory), app_factory(app_factory), termination_runner_id(0), app_runner_id(0)
 		{
 			
 		}
@@ -280,7 +280,9 @@ namespace engine
 		std::shared_ptr<logger_t> logger;
 		std::shared_ptr<app_interrupter_t> app_interrupter;
 		std::shared_ptr<process::runner_spawn_factory_t> runner_spawn_factory;
+		std::shared_ptr<app_factory_t> app_factory;
 		std::size_t termination_runner_id;
+		std::size_t app_runner_id;
 		std::vector<std::shared_ptr<app_meta_t> > apps_meta;
 
 		enum class flag_t
@@ -299,10 +301,42 @@ namespace engine
 				signal_completion.signal();
 			}
 		}
+
+		std::shared_ptr<app_t> run_app_from_handler(app_t::kind_t kind, std::unique_ptr<app_context_t> context)
+		{
+			std::shared_ptr<app_t> app = app_factory->create(kind, std::move(context));
+
+			std::unique_ptr<process::runner_spawn_t> runner_spawn = runner_spawn_factory->create(app->get_meta()->get_app(), app->get_meta()->get_instance_id(), format_string("App runner ###1#"_u, ++app_runner_id));
+				
+			runner_spawn->add_task(std::make_unique<task_func_t>(std::bind([](process::token_t* token, std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<app_t> app){
+					app->get_meta()->wait_till_completed();
+					return task_base_t::result_t::completed;
+				}, std::placeholders::_1, shared_from_this(), app), format_string("Running #1####2#"_u, app->get_meta()->get_app(), app->get_meta()->get_instance_id())));
+
+			return app;
+		}
 		
 		void handle_run_app_event(run_app_event_t * event)
 		{
+			std::vector<std::shared_ptr<app_meta_t> > apps_meta_running;
+			apps_meta_running.reserve(apps_meta.size());
 
+			for(auto app_meta : apps_meta)
+			{
+				if(app_meta->get_app() == event->get_kind())
+				{
+					apps_meta_running.push_back(app_meta);
+				}
+			}
+
+			if(apps_meta_running.empty())
+			{
+				event->move_on_app_running()(run_app_from_handler(event->get_kind(), std::move(event->move_context())));
+			}
+			else
+			{
+				// ToDo!
+			}
 		}
 		
 		void handle_terminate_app_event(terminate_app_event_t * event)

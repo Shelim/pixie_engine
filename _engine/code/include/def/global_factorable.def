@@ -2,7 +2,9 @@
 #define ENGINE_GLOBAL_FACTORABLE_DEF(...)
 #endif
 
-ENGINE_GLOBAL_FACTORABLE_DEF( (process::runner_spawn_t) )
+#define GAME_APP_IMPL(app) client::app_##app##_t
+#define GAME_APP_DEF(...) DEFINE_TYPE_MULTIPASS_WITH_DEF_ARGS(ENGINE_GLOBAL_FACTORABLE_DEF, ( (process::runner_spawn_t) ), GAME_APP_IMPL, __VA_ARGS__)
+#include "def/app.def"
 
 #ifdef ENGINE_GLOBAL_FACTORABLE_IMPL
 #undef ENGINE_GLOBAL_FACTORABLE_IMPL
