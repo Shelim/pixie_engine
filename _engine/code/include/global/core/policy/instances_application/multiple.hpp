@@ -12,17 +12,10 @@ namespace engine
 
     public:
 
-        class policy_implementation_multiple_t : public policy_implementation_t
+        bool allow_application_instance_start(app_t::kind_t kind) final
         {
-
-        public:
-
-            bool allow_application_instance_start(app_t::kind_t kind) final
-            {
-                return true;
-            }
-
-        };
+            return true;
+        }
 
     };
 

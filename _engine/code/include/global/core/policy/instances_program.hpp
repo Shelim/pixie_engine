@@ -10,26 +10,12 @@ namespace engine
 
     public:
 
-        class policy_implementation_t
-        {
-
-        public:
-
-            virtual ~policy_implementation_t()
-            {
-                
-            }
-
-            virtual void on_program_instance_start() = 0;
-
-        };
-
         virtual ~instances_program_t()
         {
 
         }
 
-        virtual std::unique_ptr<policy_implementation_t> get_implementation() { }
+        virtual void on_program_instance_start() = 0;
 
     };
 
