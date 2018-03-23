@@ -6,7 +6,7 @@
 #define ENGINE_APP_OVERSEER_RUN_OTHER_DEF(...)
 #endif
 
-ENGINE_APP_OVERSEER_RUN_INSTANCE_DEF( (force_single), (allow_multiple) )
+ENGINE_APP_OVERSEER_RUN_INSTANCE_DEF( (force_single), (force_single_given_kind), (allow_multiple) )
 
 ENGINE_APP_OVERSEER_RUN_OTHER_DEF( (keep), (close_and_if_impossible_fail), (terminate) )
 
