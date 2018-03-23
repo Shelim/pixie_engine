@@ -17,7 +17,7 @@ namespace engine
 
 		}
 
-		void run_app(app_t::kind_t kind, std::unique_ptr<app_context_t> context, run_app_instance_t instance = run_app_instance_t::allow_multiple, run_app_other_t other = run_app_other_t::keep, callback_app_t app_running = [](std::shared_ptr<app_t>){}, callback_void_t run_failed = [](){}) final
+		void run_app(app_t::kind_t kind, std::unique_ptr<app_context_t> context, run_app_instance_t instance = run_app_instance_t::allow_multiple, run_app_other_t other = run_app_other_t::keep, run_app_program_t program = run_app_program_t::if_possible_same_instance_if_not_new_instance, callback_app_t app_running = [](std::shared_ptr<app_t>){}, callback_void_t run_failed = [](){}, callback_void_t run_succeed_in_new_program_instance = [](){}) final
 		{
 			
 		}

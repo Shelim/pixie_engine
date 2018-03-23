@@ -12,9 +12,9 @@ namespace engine
 
     public:
 
-        void on_program_instance_start() final
+        instances_program_single_t() : instances_program_t(type_t::force_single)
         {
-            
+
         }
 
     };

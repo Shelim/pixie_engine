@@ -12,6 +12,11 @@ namespace engine
 
     public:
 
+        instances_application_multiple_t() : instances_application_t(type_t::allow_multiple)
+        {
+            
+        }
+
         bool allow_application_instance_start(app_t::kind_t kind) final
         {
             return true;

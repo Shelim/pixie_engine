@@ -6,17 +6,39 @@
 #define ENGINE_APP_OVERSEER_RUN_OTHER_DEF(...)
 #endif
 
+#ifndef ENGINE_APP_OVERSEER_RUN_PROGRAM_DEF
+#define ENGINE_APP_OVERSEER_RUN_PROGRAM_DEF(...)
+#endif
+
+#ifndef ENGINE_APP_OVERSEER_EVENT_TYPE_DEF
+#define ENGINE_APP_OVERSEER_EVENT_TYPE_DEF(...)
+#endif
+
 ENGINE_APP_OVERSEER_RUN_INSTANCE_DEF( (force_single), (force_single_given_kind), (allow_multiple) )
 
 ENGINE_APP_OVERSEER_RUN_OTHER_DEF( (keep), (close_and_if_impossible_fail), (terminate) )
 
+ENGINE_APP_OVERSEER_RUN_PROGRAM_DEF( (force_same_instance), (if_possible_same_instance_if_not_new_instance), (force_new_instance) )
+
+ENGINE_APP_OVERSEER_EVENT_TYPE_DEF( (run_app), (terminate_app), (close_app), (terminate_all_of), (close_all_of), (terminate_all), (close_all), (app_created), (app_destroyed) )
+
 #ifdef ENGINE_APP_OVERSEER_RUN_INSTANCE_IMPL
 #undef ENGINE_APP_OVERSEER_RUN_INSTANCE_IMPL
+#endif 
+
+#ifdef ENGINE_APP_OVERSEER_RUN_PROGRAM_IMPL
+#undef ENGINE_APP_OVERSEER_RUN_PROGRAM_IMPL
 #endif 
 
 #ifdef ENGINE_APP_OVERSEER_RUN_OTHER_IMPL
 #undef ENGINE_APP_OVERSEER_RUN_OTHER_IMPL
 #endif 
 
+#ifdef ENGINE_APP_OVERSEER_EVENT_TYPE_IMPL
+#undef ENGINE_APP_OVERSEER_EVENT_TYPE_IMPL
+#endif 
+
+#undef ENGINE_APP_OVERSEER_EVENT_TYPE_DEF
+#undef ENGINE_APP_OVERSEER_RUN_PROGRAM_DEF
 #undef ENGINE_APP_OVERSEER_RUN_OTHER_DEF
 #undef ENGINE_APP_OVERSEER_RUN_INSTANCE_DEF

@@ -11,12 +11,11 @@ namespace engine
 
     public:
 
-
-        void on_program_instance_start() final
+        instances_program_multiple_t() : instances_program_t(type_t::allow_multiple)
         {
-            
-        }
 
+        }
+        
     };
 
 }

@@ -6,7 +6,7 @@ ENGINE_GLOBAL_COMPONENT_DEF( (app_accounter), (app_interrupter), (app_overseer),
                              (config), (config_monitor), (config_storage),
                              (debug_symbols), (environment_info), (extinguisher),
                              (filesystem), (logger), (profiler),
-                             (program_args), (program_instances_communicator_client),
+                             (program_args), (program_instancer), (program_instances_communicator_client),
                              (program_instances_communicator_host), (program_instances_detection),
                              (thread_accounter), (thread_program) )
 

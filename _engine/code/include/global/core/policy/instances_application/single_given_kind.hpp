@@ -12,7 +12,7 @@ namespace engine
 
     public:
 
-        instances_application_single_given_kind_t(std::shared_ptr<messenger_accountable_app_t> messenger_accountable_app) : messenger_accountable_app(messenger_accountable_app)
+        instances_application_single_given_kind_t(std::shared_ptr<messenger_accountable_app_t> messenger_accountable_app) : instances_application_t(type_t::force_single_given_kind), messenger_accountable_app(messenger_accountable_app)
         {
             messenger_instance = messenger_accountable_app->register_callback([this](messenger::msg_accountable_app_t* msg){on_accountable_changed(msg);}, messenger::history_t::dump_if_available);
         }

@@ -24,9 +24,10 @@ namespace engine
 
 #define ENGINE_APP_OVERSEER_RUN_INSTANCE_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(run_app_instance_t, __VA_ARGS__)
 #define ENGINE_APP_OVERSEER_RUN_OTHER_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(run_app_other_t, __VA_ARGS__)
+#define ENGINE_APP_OVERSEER_RUN_PROGRAM_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(run_app_program_t, __VA_ARGS__)
 #include "def/app_overseer.def"
 
-        virtual void run_app(app_t::kind_t kind, std::unique_ptr<app_context_t> context, run_app_instance_t instance = run_app_instance_t::allow_multiple, run_app_other_t other = run_app_other_t::keep, callback_app_t app_running = [](std::shared_ptr<app_t>){}, callback_void_t run_failed = [](){}) = 0;
+        virtual void run_app(app_t::kind_t kind, std::unique_ptr<app_context_t> context, run_app_instance_t instance = run_app_instance_t::allow_multiple, run_app_other_t other = run_app_other_t::keep, run_app_program_t program = run_app_program_t::if_possible_same_instance_if_not_new_instance, callback_app_t app_running = [](std::shared_ptr<app_t>){}, callback_void_t run_failed = [](){}, callback_void_t run_succeed_in_new_program_instance = [](){}) = 0;
         virtual void terminate_app(app_t::instance_id_t instance, callback_void_t on_completed = [](){}) = 0;
         virtual void close_app(app_t::instance_id_t instance, callback_void_t on_accepted = [](){}, callback_void_t on_rejected = [](){}) = 0;
         virtual void terminate_all_of(app_t::kind_t app, callback_void_t on_completed = [](){}) = 0;
@@ -41,6 +42,7 @@ namespace engine
 
 #define ENGINE_APP_OVERSEER_RUN_INSTANCE_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::app_overseer_t::run_app_instance_t, __VA_ARGS__)
 #define ENGINE_APP_OVERSEER_RUN_OTHER_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::app_overseer_t::run_app_other_t, __VA_ARGS__)
+#define ENGINE_APP_OVERSEER_RUN_PROGRAM_DEF(...) DEFINE_ENUM_ONLY_1ST_TO_STRING(engine::app_overseer_t::run_app_program_t, __VA_ARGS__)
 #include "def/app_overseer.def"
 
 #include "global/component/app_overseer/dummy.hpp"

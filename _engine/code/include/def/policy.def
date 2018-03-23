@@ -2,10 +2,32 @@
 #define ENGINE_POLICY_DEF(...)
 #endif
 
+#ifndef ENGINE_POLICY_INSTANCE_APPLICATION_DEF
+#define ENGINE_POLICY_INSTANCE_APPLICATION_DEF(...)
+#endif
+
+#ifndef ENGINE_POLICY_INSTANCE_PROGRAM_DEF
+#define ENGINE_POLICY_INSTANCE_PROGRAM_DEF(...)
+#endif
+
+ENGINE_POLICY_INSTANCE_APPLICATION_DEF( (force_single), (force_single_given_kind), (allow_multiple) )
+
+ENGINE_POLICY_INSTANCE_PROGRAM_DEF( (force_single), (allow_multiple) )
+
 ENGINE_POLICY_DEF( (instances_application, single, single_given_kind, multiple), (instances_program, single, multiple), (renderer_thread, detached, callable_by_platform) )
+
+#ifdef ENGINE_POLICY_INSTANCE_PROGRAM_IMPL
+#undef ENGINE_POLICY_INSTANCE_PROGRAM_IMPL
+#endif
+
+#ifdef ENGINE_POLICY_INSTANCE_APPLICATION_IMPL
+#undef ENGINE_POLICY_INSTANCE_APPLICATION_IMPL
+#endif
 
 #ifdef ENGINE_POLICY_IMPL
 #undef ENGINE_POLICY_IMPL
 #endif
 
+#undef ENGINE_POLICY_INSTANCE_PROGRAM_DEF
+#undef ENGINE_POLICY_INSTANCE_APPLICATION_DEF
 #undef ENGINE_POLICY_DEF

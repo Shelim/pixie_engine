@@ -21,6 +21,7 @@
 #include "global/component/filesystem.hpp"
 #include "global/component/logger.hpp"
 #include "global/component/program_args.hpp"
+#include "global/component/program_instancer.hpp"
 #include "global/component/program_instances_communicator_client.hpp"
 #include "global/component/program_instances_communicator_host.hpp"
 #include "global/component/program_instances_detection.hpp"
