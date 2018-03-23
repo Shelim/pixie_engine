@@ -3,6 +3,7 @@
 #pragma once
 
 #include "global/core/app.hpp"
+#include "utility/platform/args.hpp"
 
 namespace engine
 {
@@ -16,6 +17,8 @@ namespace engine
         {
 
         }
+
+        virtual args_t get_program_args() = 0;
 
     };
 

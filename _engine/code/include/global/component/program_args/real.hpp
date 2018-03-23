@@ -17,6 +17,13 @@ namespace engine
 
 		}
 
+		args_t get_program_args() final
+		{
+			// ToDo!
+			args_t ret("");
+			return ret;
+		}
+
 	private:
 
 	};

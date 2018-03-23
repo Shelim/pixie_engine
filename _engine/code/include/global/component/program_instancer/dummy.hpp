@@ -22,19 +22,9 @@ namespace engine
 			return false;
 		}
 
-        void terminate_this_then_run_new_program(args_t args) final
-		{
-
-		}
-
         bool run_new_program(app_t::kind_t app) final
 		{
 			return false;
-		}
-		
-        void terminate_this_then_run_new_program(app_t::kind_t app)
-		{
-
 		}
 
 	private:

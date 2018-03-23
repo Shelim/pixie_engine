@@ -70,6 +70,19 @@ namespace engine
             return ret;
         }
 
+        ustring_t get_cmd_line() const
+        {
+            ustring_t ret;
+
+            for(int i = 0; i < arg_collection_raw.size(); i++)
+            {
+                if(i > 0) ret.append(" "_u);
+                ret.append(arg_collection_raw[i]);
+            }
+
+            return ret;
+        }
+
     private:
 
         ustring_collection_t arg_collection_raw;

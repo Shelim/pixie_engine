@@ -18,9 +18,7 @@ namespace engine
         }
 
         virtual bool run_new_program(args_t args) = 0;
-        virtual void terminate_this_then_run_new_program(args_t args) = 0;
         virtual bool run_new_program(app_t::kind_t app) = 0;
-        virtual void terminate_this_then_run_new_program(app_t::kind_t app) = 0;
 
     };
 

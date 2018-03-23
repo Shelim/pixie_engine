@@ -6,7 +6,19 @@
 
 namespace engine
 {
+	class program_instancer_provider_generic_t : public program_instancer_provider_base_t
+	{
 
+        public:
+        
+            bool run_new_program(args_t args) final
+            {
+                ustring_t cmd = args.get_cmd_line();
+                system(cmd.get_cstring());
+                return true;
+            }
+
+    };
 }
 
 #endif

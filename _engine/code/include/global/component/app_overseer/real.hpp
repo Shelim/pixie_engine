@@ -453,7 +453,6 @@ namespace engine
 
 		std::shared_ptr<app_t> run_app_from_handler(app_t::kind_t kind, std::unique_ptr<app_context_t> context)
 		{
-			// ToDo: Send signal to all instnaces of kind if we can instantiate this kind
 			std::shared_ptr<app_t> app = app_factory->create(kind, std::move(context));
 
 			std::unique_ptr<process::runner_spawn_t> runner_spawn = runner_spawn_factory->create(app->get_meta()->get_app(), app->get_meta()->get_instance_id(), format_string("App runner ###1#"_u, ++app_runner_id));

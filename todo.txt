@@ -5,6 +5,9 @@
 			 -> terminate_all
 			 -> run_app
 			 -> run_app from other program
+		 - ignite_from_main passing args
+		 - program_args
+		 - App object for given functions (client side)
      - Debug_symbol should be a global module
 		 - Ability to read from .PDB and .Map
 		 - Ability to dump information about callstack POST-MORTEM (!)

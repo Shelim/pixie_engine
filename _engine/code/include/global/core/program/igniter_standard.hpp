@@ -22,7 +22,8 @@
     USE_PROVIDERS_FOR(accountable_thread, messenger) \
     USE_PROVIDER_FOR(thread_stats, windows) \
     USE_PROVIDERS_FOR(thread_accounter, console) \
-    USE_PROVIDER_FOR(profiler, remotery)
+    USE_PROVIDER_FOR(profiler, remotery) \
+    USE_PROVIDER_FOR(program_instancer, windows)
 
 #if PIXIE_IS_DEBUG_BUILD
 
