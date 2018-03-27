@@ -6,6 +6,7 @@
 #include <functional>
 #include <fstream>
 #include "boost/di.hpp"
+#include "boost/di/extension/scopes/shared.hpp"
 #include "utility/pattern/provider.hpp"
 #include "utility/pattern/class_settings.hpp"
 #include "utility/pattern/enum.hpp"
@@ -52,31 +53,6 @@ namespace engine
    
 	namespace
 	{
-		
-		class shared_scope {
-		public:
-			template <class, class T>
-			class scope {
-			public:
-				template <class T_>
-				using is_referable = typename boost::di::wrappers::shared<shared_scope, T>::template is_referable<T_>;
-
-				template <class, class, class TProvider>
-				static auto try_create(const TProvider& provider)
-					-> decltype(boost::di::wrappers::shared<shared_scope, T>{std::shared_ptr<T>{provider.get()}});
-
-				template <class, class, class TProvider>
-				auto create(const TProvider& provider) {
-					if (!object_) {
-						object_ = std::shared_ptr<T>{ provider.get() };
-					}
-					return boost::di::wrappers::shared<shared_scope, T>{object_};
-				}
-
-			private:
-				std::shared_ptr<T> object_;
-			};
-		};
 
 		static constexpr shared_scope shared{};
 

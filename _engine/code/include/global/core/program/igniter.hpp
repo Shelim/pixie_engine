@@ -100,7 +100,7 @@ namespace engine
 
             std::shared_ptr<program_t> ignite_from_main(int argc, char * argv[])
             {
-                return std::make_shared<program_t>(std::move(injector));
+                return std::make_shared<program_t>(boost::di::make_injector(boost::di::bind<args_t>().in(engine::shared).to(args_t(argc, argv)), std::move(injector)));
             }
 
             std::shared_ptr<program_t> ignite_for_tests()

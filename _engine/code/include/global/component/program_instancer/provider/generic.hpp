@@ -13,7 +13,7 @@ namespace engine
         
             bool run_new_program(args_t args) final
             {
-                ustring_t cmd = args.get_cmd_line();
+                ustring_t cmd = args.get_args();
                 system(cmd.get_cstring());
                 return true;
             }

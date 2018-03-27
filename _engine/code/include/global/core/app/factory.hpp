@@ -4,7 +4,7 @@
 
 #include "global/core/app.hpp"
 #include "global/core/app/main.hpp"
-#include "utility/pattern/factory.hpp"
+#include "boost/di/extension/injections/shared_factory.hpp"
 
 namespace engine
 {

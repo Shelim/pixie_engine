@@ -12,19 +12,19 @@ namespace engine
 
 	public:
 
-		program_args_real_t()
+		program_args_real_t(args_t args) : args(args)
 		{
 
 		}
 
 		args_t get_program_args() final
 		{
-			// ToDo!
-			args_t ret("");
-			return ret;
+			return args;
 		}
 
 	private:
+
+		args_t args;
 
 	};
 }

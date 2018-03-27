@@ -19,8 +19,7 @@ namespace engine
 
 		args_t get_program_args() final
 		{
-			args_t ret("");
-			return ret;
+			return args_t("");
 		}
 
 	private:
