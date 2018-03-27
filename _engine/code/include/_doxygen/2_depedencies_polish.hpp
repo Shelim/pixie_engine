@@ -1,39 +1,55 @@
 /**
-* \~English @page depedencies Depedencies
+* \~Polish @page depedencies Zależności
 * @tableofcontents
-* @section dependency_dashboard (All depedencies)
+* @section dependency_dashboard (Wszystkie zależności)
 * <center><table>
-* <caption id="dependency_angelcode_dashboard_table">List of all depedencies</caption>
-* <tr><th>Name<th>Role<th>License<th>Author
-* <tr><td>@ref dependency_angelcode "AngelCode Scripting Library"<td>Scripting language provider<td>zlib<td>Andreas J&ouml;nsson
-* <tr><td>@ref dependency_anttweakbar "AntTweakBar"<td>Tweaker UI provider<td>zlib/libpng<td>Philippe Decaudin
-* <tr><td>@ref dependency_apacheant "Apache Ant"<td>Crossplatform build system<td>Apache License, Version 2.0<td>The Apache Software Foundation
-* <tr><td>@ref dependency_blowfish "Blowfish"<td>Fast encryption module<td>The Microsoft Public License (Ms-PL)<td>George Anescu
-* <tr><td>@ref dependency_di "Boost Dependency Injection"<td>Depedency Injection framework<td>Boost Software License, Version 1.0<td>Kris Jusiak
-* <tr><td>@ref dependency_cereal "cereal"<td>Serialization framework<td>BSD license<td>Randolph Voorhies, Shane Grant
-* <tr><td>@ref dependency_cg "cg"<td>Shader language<td>License For Customer Use of NVIDIA Software<td>NVIDIA
-* <tr><td>@ref dependency_debugbreak "debugbreak"<td>Crossplatform software breakpoints<td>MIT/X11<td>Scott Tsai
-* <tr><td>@ref dependency_directx "directx"<td>Renderer backend<td>Propertiary<td>Microsoft
-* <tr><td>@ref dependency_doxygen "doxygen"<td>Docs generator<td>GNU GPL (No source code included)<td>Dimitri van Heesch
-* <tr><td>@ref dependency_git "git"<td>Source control system and changelog support<td>GNU LGPL v2.1<td>Linus Torvalds, Junio Hamano and others
-* <tr><td>@ref dependency_glew "glew"<td>Extensions for OpenGL<td>Khronos License (MIT)<td>Lev Povalahev and others
-* <tr><td>@ref dependency_googletest "Google Test"<td>Autmated tests for engine<td>BSD 3-clauses<td>Google Inc.
-* <tr><td>@ref dependency_html_help_workshop "HTML Help Workshop"<td>Tool for generating chm documentation for @ref dependency_doxygen "doxygen"<td>HTML Help End-User License Agreement<td>Microsoft
-* <tr><td>@ref dependency_jdk "JDK 1.8"<td>Required by @ref dependency_apacheant "Apache Ant"<td>Sun License<td>Oracle Corporation
-* <tr><td>@ref dependency_librocket "libRocket"<td>HTML/CSS GUI-in-renderer<td>MIT/X11<td>CodePoint Ltd, Shift Technology Ltd, and contributors
-* <tr><td>@ref dependency_vlc "libVLC"<td>Movie playback<td>GNU LGPL 2<td>VideoLAN
-* <tr><td>@ref dependency_minizip "miniZip"<td>Archive compression/deompression<td>BSD Variant<td>Nathan Moinvaziri
-* <tr><td>@ref dependency_nsis "NSIS"<td>Setup on Windows platform<td>zlib/libpng<td>Open Source Contributors
-* <tr><td>@ref dependency_openal_soft "OpenAL (Software)"<td>Sound support module<td>GNU LPGL<td>kcat
-* <tr><td>@ref dependency_pugixml "pugixml"<td>Fast XML loader and parser<td>MIT/X11<td>Arseny Kapoulkine
-* <tr><td>@ref dependency_sdl "SDL 2.0"<td>Cross-platform application base<td>zlib<td>Open Source Contributors
-* <tr><td>@ref dependency_sdl_net "SDL NET 2.0"<td>Cross-platform network support<td>GNU LGPL<td>Open Source Contributors
-* <tr><td>@ref dependency_stackwalker "Stackwalker"<td>Cross-platform callstack dumper<td>New BSD License<td>Jochen Kalmbach
-* <tr><td>@ref dependency_stb "stb"<td>Simple single-header only tools<td>Public Domain<td>Sean Barrett
-* <tr><td>@ref dependency_thttpd "thttpd"<td>Simple HTTP server for update testing<td>BSD licenses variant<td>Jef Poskanzer
-* <tr><td>@ref dependency_upx "UPX"<td>Universal Executable Packer, reducing size of binary files<td>BSD licenses variant<td>Markus F.X.J. Oberhumer, L&aacute;szl&oacute; Moln&aacute;r & John F. Reiser.
-* <tr><td>@ref dependency_wxwidgets "wxWidgets"<td>GUI for editor/lanucher/etc.<td>wxWindows Licence<td>Open Source Contributors
+* <caption id="dependency_angelcode_dashboard_table">Lista wszystkich zależności</caption>
+* <tr><th>Nazwa<th>Rola w projekcie<th>Licencja<th>Twórca
+* <tr><td>@ref dependency_angelcode "AngelCode"<td>Dostawca języka skryptowego<td>zlib<td>Andreas J&ouml;nsson
+* <tr><td>@ref dependency_anttweakbar "AntTweakBar"<td>Dostawca podstawowych narzędzi poprawiania UI<td>zlib/libpng<td>Philippe Decaudin
+* <tr><td>@ref dependency_apacheant "Apache Ant"<td>Wieloplaformowy system kompilacji<td>Licencja Apache, wersja 2.0<td>The Apache Software Foundation
+* <tr><td>@ref dependency_blowfish "Blowfish"<td>Szybki moduł szyfrujący<td>The Microsoft Public License (Ms-PL)<td>George Anescu
+* <tr><td>@ref dependency_boost "Boost"<td>Zestaw nagłówków wspierających tworzenie aplikacji C++<td>Licencja Boost Software, wersja 1.0<td>Open Source Contributors
+* <tr><td>@ref dependency_di "Boost Dependency Injection"<td>Zestaw narzędzi wstrzykujący zależności<td>Licencja Boost Software, wersja 1.0<td>Kris Jusiak
+* <tr><td>@ref dependency_cereal "cereal"<td>Narzędzia serializacji<td>Licencja BSD<td>Randolph Voorhies, Shane Grant
+* <tr><td>@ref dependency_cg "cg"<td>Język jednostki ceniującej GPU<td>Wykorzystanie klienckie NVIDIA Software<td>NVIDIA
+* <tr><td>@ref dependency_cppcheck "C++ Check"<td>Statyczny walidator kodu C++<td>GNU GPL (Bez włączenia kodów źródłowych do projektu)<td>Daniel Marjam&auml;ki
+* <tr><td>@ref dependency_debugbreak "debugbreak"<td>Wieloplatformowe programowe instrukcje przerwania<td>MIT/X11<td>Scott Tsai
+* <tr><td>@ref dependency_dia "dia"<td>(Używany wewnętrznie przez LLVM)<td>GNU GPL (Bez włączenia kodów źródłowych do projektu)<td>Open Source Contributors
+* <tr><td>@ref dependency_dot "dot"<td>(Używany wewnętrznie przez doxygen)<td>The Common Public License (Bez włączenia kodów źródłowych do projektu)<td>AT &amp;T
+* <tr><td>@ref dependency_doxygen "doxygen"<td>Narzędzia do generowania dokumentacji<td>GNU GPL (Bez włączenia kodów źródłowych do projektu)<td>Dimitri van Heesch
+* <tr><td>@ref dependency_fastbuild "FastBuild"<td>Akcelelator systemu budowania C++<td>Wariant BSD<td>Franta Fulin 
+* <tr><td>@ref dependency_git "git"<td>System kontroli wersji<td>GNU LGPL v2.1<td>Linus Torvalds, Junio Hamano and others
+* <tr><td>@ref dependency_glew "glew"<td>Rozszerzenia dla OpenGL<td>Licencja Khronos (MIT)<td>Lev Povalahev and others
+* <tr><td>@ref dependency_googlemock "Google Mock"<td>Automatyczne testy makietowe<td>BSD 3-punktowa<td>Google Inc.
+* <tr><td>@ref dependency_googletest "Google Test"<td>Automatyczne testy jednostkowe<td>BSD 3-punktowa<td>Google Inc.
+* <tr><td>@ref dependency_gtest_runner "Google Test runner"<td>Host automatycznych testów jednostkowych<td>MIT/X11<td>Nic Holthaus
+* <tr><td>@ref dependency_html_help_workshop "HTML Help Workshop"<td>Narzędzie do generowania dokumentacji chm dla narzędzia @ref dependency_doxygen "doxygen"<td>Licencja końcowego użytkownika HTML Help<td>Microsoft
+* <tr><td>@ref dependency_levenshtein "Levenshtein distance calculator"<td>Obliczanie odległości Levenshteina między dwoma dowolnymi kolekcjami<td>???<td>Keith Schwarz
+* <tr><td>@ref dependency_jdk "JDK 1.8"<td>Wymagane przez @ref dependency_apacheant "Apache Ant"<td>Licencja Sun<td>Oracle Corporation
+* <tr><td>@ref dependency_llvm "LLVM"<td>LLVM: środowisko kompilujące Pixie Engine (kompilator, linker, debugger)<td>Licencja LLVM (Bez włączenia kodów źródłowych do projektu)<td>LLVM Team
+* <tr><td>@ref dependency_mathjax "mathjax"<td>Renderer wyrażeń matematycznych w przeglądarce<td>Licencja Apache, wersja 2.0<td>American Mathematical Society &amp; Society for Industrial and Applied Mathematics
+* <tr><td>@ref dependency_vlc "libVLC"<td>Odtwarzanie filmów<td>GNU LGPL 2<td>VideoLAN
+* <tr><td>@ref dependency_minizip "miniZip"<td>Kompresor/dekompresor archiwów<td>Wariant BSD<td>Nathan Moinvaziri
+* <tr><td>@ref dependency_mingw "MinGW"<td>Kompilator plików zasobów na platformie Windows<td>MIT/X11<td>Open Source Contributors
+* <tr><td>@ref dependency_msxsl "msxsl"<td>Transformator XML / XSLT działający z wiersza polecenia<td>???<td>msxsl
+* <tr><td>@ref dependency_multiconsoles "Multiple Consoles"<td>Pomocnicza aplikacja umożliwiająca alokację więcej niż jednego okna konsoli dla jednego procesu<td>Domena publiczna<td>Zvika Ferentz
+* <tr><td>@ref dependency_nsis "NSIS"<td>Instalator na platformie Windows<td>zlib/libpng<td>Open Source Contributors
+* <tr><td>@ref dependency_openal_soft "OpenAL (Software)"<td>Moduł wspierający odtwarzanie dźwięków<td>GNU LPGL<td>kcat
+* <tr><td>@ref dependency_open_cpp_coverage "Open C++ Coverage"<td>Aplikacja wyliczająca pokrycie kodu testami na podstawie symboli odpluskwiacza PDB<td>>GNU GPL (Bez włączenia kodów źródłowych do projektu)<td>OpenCppCoverage Team
+* <tr><td>@ref dependency_pugixml "pugixml"<td>Szybki wczytywacz i parser dokumentów XML<td>MIT/X11<td>Arseny Kapoulkine
+* <tr><td>@ref dependency_python "Python 3.5"<td>Używany przez @ref dependency_llvm "LLVM" na potrzeby odpluskwiania aplikacji<td>PSF license agreement for Python<td>Python Software Foundation
+* <tr><td>@ref dependency_remotery "Remotery"<td>Zewnętrzny profiler w formie strony www<td>Licencja Apache, wersja 2.0<td>Don Williamson
+* <tr><td>@ref dependency_sdl "SDL 2.0"<td>Wieloplatformowa baza aplikacji<td>zlib<td>Open Source Contributors
+* <tr><td>@ref dependency_sdl_net "SDL NET 2.0"<td>Wieloplatformowe wsparcie dla sieci<td>GNU LGPL<td>Open Source Contributors
+* <tr><td>@ref dependency_stb "stb"<td>Proste pojedynczo nagłówkowe narzędzia<td>Domena publiczna<td>Sean Barrett
+* <tr><td>@ref dependency_texlive "texLIVE"<td>Kompilator dokumentacji do formatu PDF<td>Licencja TL<td>Karl Berry
+* <tr><td>@ref dependency_thttpd "thttpd"<td>Prosty serwer HTTP do testowania funkcjonalności aktualizacji<td>Wariant BSD<td>Jef Poskanzer
+* <tr><td>@ref dependency_upx "UPX"<td>Uniwersalny kompresor plików binarnych, zmniejszający rozmiar plików wykonywalnych<td>Wariant BSD<td>Markus F.X.J. Oberhumer, L&aacute;szl&oacute; Moln&aacute;r & John F. Reiser.
+* <tr><td>@ref dependency_wxwidgets "wxWidgets"<td>GUI dla narzędzi<td>Licencja wxWindows<td>Open Source Contributors
+* <tr><td>@ref dependency_vscode "Visual Studio Code"<td>Główny edytor w którym powstaje Pixie Engine<td>MIT/X11<td>Microsoft
 * </table></center>
+* @todo Napisać po parę zdań o powyższych modułach
 *
 * @section dependency_angelcode AngelCode Scripting Library
 * The AngelCode Scripting Library, or AngelScript as it is also known, is an extremely flexible cross-platform scripting library designed to allow applications to extend their functionality through external scripts. It has been designed from the beginning to be an easy to use component, both for the application programmer and the script writer.

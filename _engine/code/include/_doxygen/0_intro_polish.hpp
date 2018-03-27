@@ -1,5 +1,5 @@
 /**
-* \~Polish @mainpage The Pixie Engine Introduction
+* \~Polish @mainpage Wprowadzenie do Pixie Engine
 *
 * @verbatim
 *  #############################################################\
@@ -15,105 +15,171 @@
 *  \___________________________________________________________\|
 *
 *
-*  "Do not go where the path may lead;
-*  Go instead where there is no path
-*  and leave a trail"
+*  "Nie podążaj dokąd prowadzi cię ścieżka;
+*  Idź tam gdzie jej nie ma
+*  i samemu przetrzyj szlak"
 *
 *                       Ralph Waldo Emerson
 * @endverbatim
 *
-* @section pixie_intro Introduction
-*     The fourth release of awesome 2D engine for video games.
-*     Written in modern C++. Powerful, flexible and extendable. And completely stand-alone!
+* @section pixie_intro Wprowadzenie
+*     	Niniejsza dokumentacja opisuje czwartą już iterację silnika Pixie Engine; Projektu stworzonego we współczesnym C++,
+*       wykorzystującym najnowsze standardy i przestrzegającym wszystkich obecnie stosowanych w praktyce wzorców projektowych.
 *
-* @section pixie_features Features
-* @subsection pixie_features_component Components
-*     - @ref components "Build based on components". Each can be disabled, replacing core functionality with dummy class
-*     - Major components
-*         - @ref engine::config_t "Configuration component" with real-time config update notfiications
-*         - @ref engine::data_source_t "Data provider" monitoring VFS for real-time data files changes
-*         - @ref engine::logger_t "Logger" allowing multiple logging outputs, formatting and raporting to user
-*         - @ref engine::terminal_writer_t "Terminal writer" to standard output (usually the system console)
-*     - Minor components
-*         - @ref engine::environment_info_t "Environmnet info" provider for logging purpouses
-*         - @ref engine::renderer_status_t "Frame Notifier" allowing querying data for renderer status
-*         - @ref engine::logger_file_writer_t "Log file writer" for quick and robust log output, available even when full @ref engine::data_provieder_t "data provider" is unavailable
-* @subsection pixie_features_provider Information providers
-*     - @ref engine::common_filenames_provider_t "Common filenames" on given platform (like logger output filename)
-*     - @ref engine::save_location_provider_t "Save location" for given platform (full path)
-*     - @ref engine::scanners_provider_t "Scanner provider" for @ref virtual_path VFS on given platform
-* @subsection pixie_features_utilities Utilities
-*     - Concurrention
-*         - @ref engine::thread_pool_t "Thread pool"
-*     - Containers
-*         - @ref engine::compile_time_map_t "Compile-time key-value map"
-*         - @ref engine::concurrent_queue_t "Concurrent queue"
-*         - @ref engine::sync_queue_t "Sync queue"
-*         - @ref engine::sync_vector_t "Sync vector"
-*     - @ref data "Data input/output utilities"
-*     - Debugging tools
-*         - @ref engine::platform::dump_callstack "Callstack dumps"
-*     - @ref messenger "Multithreaded messenger" for internal components communication
-*     - Design patterns
-*         - @ref settings "Compile-time engine-wide settings"
-*         - @ref engine::factory_t "Abstract Factory"
-*         - @ref engine::flags_t "Flags" (based on enum classes)
-*         - @ref engine::id_t "FourCC IDs"
-*         - @ref engine::instance_lifetime_guard "Lifetime guards" (for platforms that cannot handle stack unwinding during exceptions)
-*         - @ref components_provider "Providers subsystem for components"
-*     - Platform
-*         - @ref engine::compilation_t "Compilation-time switches"
-*     - Renderer helpers
-*         - @ref engine::color_t "sRGB color class"
-*     - Security helpers
-*         - @ref engine::crc32_t "Fast CRC32 calculator"
-*     - Text utilities
-*         - @ref engine::ustring_t "UTF-8 strings"
-*         - @ref ustring_format "Text formatters"
-* @subsection pixie_features_other Other features
-*     - @ref settings "Compile-time engine settings"
-*     - @ref bootstrapper "Bootstrapper for initialization"
-*     - ~10,000 LoC as of August, 1st, 2017
+*       Silnik jest przeznaczony do tworzenia gier 2D (choć nie jest wykluczone dodanie renderera 3D),
+*       szczególnie takich których stworzenie jest trudne bądź niemożliwe używając innych silników i narzędzi
+*       (zobacz sekcję @ref pixie_why "Dlaczego kolejny silnik?").
 *
-* @section pixie_platforms Supported Platforms
-* @subsection pixie_platforms_win Windows XP/Vista/7/8/8.1/10
-*    - Both x86 and x64
-*    - OpenGL renderer
-*    - DirectX 9.0c renderer
+*       Projekt jest aktywnie rozwjany od 2016 i liczy sobie obecnie
+*       ponad 22 000 linii kodu w ponad 250 plikach źródłowych. Lista głównych cech silnika znajduje się poniżej.
+*
+* @section pixie_features Cechy
+*       @todo Uzupenić sekcję cechy
+*
+* @section pixie_platforms Wspierane platformy
+* @subsection pixie_platforms_win Windows Vista/7/8/8.1/10
+*       @todo Rozwinąć sekcję platformy
+*    - 64-bitowa architektura AMD
+*    - Renderer OpenGL oraz DirectX 11.0
 * @subsection pixie_platforms_lin Linux
-*    (Expected, not yet working)
+*    (Spodziewana, jeszcze nie zaimplementowana)
 * @subsection pixie_platforms_osx OS X
-*    (Expected, not yet working)
+*    (Spodziewana, jeszcze nie zaimplementowana)
 *
-* @section pixe_depedencies Depedencies
+* @section pixie_why Dlaczego kolejny silnik?
+*      @todo Rozwinąć ten opis
+*      Obecnie na rynku znajduje się wiele bardzo dobrych, komercyjnie-gotowych silników gier,
+*      także takich o otwartych źródłach lub zamkniętych lecz posiadających permisywne licencje.
+*      Ogromna większość z tych narzędzi jest jednak nastawiona na gry akcji, gry zręcznościowe
+*      bądź zręcznościowo-sieciowe.
+*      Motywacją za powstaniem Pixie Engine był brak dedykowanej technologii do gier strategicznych,
+*      fabularnych bądź wielkoskalowych.
+*
+*      Kuriozalnym przykładem jest wsparcie serializacji w najpopularniejszym obecnie silniku gier,
+*      Unity – serializacja nie była w stanie sforsować więcej niż 5 poziomów zagłębień referencji
+*      i próbowała alokować obiekty nawet jeżeli serializowane dane zawierały pustą referencję (`null`).
+*      Z tego powodu poniższy przykładowy kod:
+* @code{.cs}
+* Class Foo
+* {
+*     Foo f1 = null;
+*     Foo f2 = null;
+*     Foo f3 = null;
+* }
+* Foo f = new Foo();
+* // Serializuj i natychmiast deserializuj f
+* @endcode
+*      Wygeneruje dokładnie 243 (= \f$3^5\f$) alokacje klasy Foo.
+*      Jeżeli rozpatrujemy grę wielkoskalową (duży graf obiektów, który wymaga strumieniowania danych z dysku twardego),
+*      takie rozwiązanie jest całkowicie nieakceptowalne.
+*
+*      Wywiad środowiska i ograniczenia istniejących silników zostały zebrane poniżej:
+*
+* @subsection pixie_why_example Problemy z istniejącymi rozwiązaniami
+* @subsubsection pixie_why_example_unity Unity
+* Unity to dojrzały, aktywnie rozwijany silnik 3D wykorzystujący C#/VBasic i obsługujący wszystkie platformy
+* wspierane aktywnie przez Mono. Unity jest bezpłatny do określonego pułapu rocznych przychodów studia; 
+* Potem należy zapłacić stawkę zależną od liczby osób zatrudnianych przez studio, ale niezależną od jego przychodów 
+* z tytułu wydania gry napisanej w Unity.
+* 
+* Problemy z obecną wersją Unity obejmują przede wszystkim:
+*    - Bardzo słaby serializator (jak wspomniano wyżej)
+*    - Brak wsparcia dla fanowskich modyfikacji
+*    - Z powodu wykorzystana języka zarządzanego: opóźnienia związane z odśmieciarką (zwłaszcza dla skomplikowanych grafów obiektów)
+*    - Duże problemy z grą sieciową czasu rzeczywistego (brak przewidywania martwych pakietów, brak interpolacji czasowej)
+* 
+* @subsubsection pixie_why_example_unrealengine Unreal Engine
+* @todo Uzupełnić opis braków UnrealEngine
+* @subsubsection pixie_why_example_ligdx LibGDX
+* LibGDX jest frameworkiem wspierającym tworzenie gier w OpenGLu na platformach mobilnych i stacjonarnych.
+* Oryginalna implementacja była dedykowana platformie Android, ale późniejsze warianty wspierały też innych dostawców
+* oraz komputery osobiste. LibGDX jest całkowicie darmowe i posiadające otwarte źródła (na licencji `apache2`).
+* 
+* Problemy z obecną wersją LibGDX obejmują przede wszystkim:
+*    - Brak wsparcia dla fanowskich modyfikacji
+*    - Z powodu wykorzystana języka zarządzanego: opóźnienia związane z odśmieciarką (zwłaszcza dla skomplikowanych grafów obiektów)
+*    - Duże problemy z budowaniem i wykonywaniem projektu na komputerach osobistych
+*    - Bardzo proste i zarazem ograniczone API; Wymaga często 'surowych' komend OpenGLa
+* 
+* @subsubsection pixie_why_example_c4 C4 (Terathon)
+* C4 firmy Terathon to nowoczesny, dojrzały silnik napisany całkowicie w kodzie natywnym (C++) i wspierający wszystkie popularne
+* platformy stacjonarne oraz konsole gier. Narzędzie wspiera wszystkie popularne wzorce projektowe i posiada zaawansowane edytory.
+* Jest to także jedyny silnik na rynku implementujący przenikanie poziomów detalu map wokselowych.
+* 
+* Obecnie jedynie komercyjne licencje C4 są dostępne.
+* 
+* Problemy z obecną wersją C4 obejmują przede wszystkim:
+*    - Brak wsparcia dla fanowskich modyfikacji
+*    - Brak darmowej licencji
+*    - Brak temporalnego wygładzenia grafu sceny
+*    - Podejście serwer-pierwszy przy implementacji gry wieloosobowej (wprowadzające opóźnienia przy akceptowaniu poleceń)
+*
+* @todo Uzupełnić kolejne przykłady
+* @subsection pixie_why_us Odpowiedź na problemy
+* @todo Rozwinąć ten opis
+* Pixie Engine wychodzi naprzeciw opisanym problemom dostarczając zarówno pełne wsparcie dla grup modyfikujących
+* (uwzględniając @ref assets_hotreload "przeładowanie zasobów na gorąco"), maksymalne wykorzystanie języka natywnego
+* (w celu osiągnięcia maksymalnej wydajności gdy tylko jest to możliwe), wsparcie dla skryptowych języków zarządzanych
+* (krótkie kody które korzystają z zalet automatycznej odśmieciarki), wsparcie dla różnych menadżerów sceny
+* (uwzględniający przewidywanie martwych pakietów, interpolację czasową i temporalne wygładzenie) oraz dostępu do
+* natywnych narzędzi gdy tylko jest to możliwe.
+*
+* @subsection pixie_why_limitations Ograniczenia silnika
+* @todo Rozwinąć ten opis
+* Oczywiście w sytuacji rywalizujących zasobów niemożliwe jest zawarcie wszystkich możliwych cech w jednym rozwiązaniu.
+* Z tego powodu z góry przyjęto ograniczenia, jakie wprowadzono do Pixie Engine:
+*    - Akceptowalne czasy kompilacji; W chwili obecnej około 10 minut pracy jednego rdzenia (np. 2,5 minuty przy 4 rdzeniach)
+*    - Preferuj kod natywny nad zarządzanym (ograniczenia modyfikacji w zamian za zwiększenie wydajności)
+*    - Wykorzystuj inteligentne wskaźniki (niewielki narzut na wykonanie w zamian za stabilność implementacji)
+*    - Preferuj ustalenia czasu kompilacji nad ustawieniami czasu wykonania (przyspiesza wykonanie poprzed eliminację zbędnego kodu na etapie kompilacji kosztem utraty modyfikowalności niektórych ustawień)
+*
+* @section pixie_depedencies Zależności
+* @subsection pixie_depedencies_libraries Biblioteki
 *     - @ref dependency_angelcode "AngelCode"
 *     - @ref dependency_anttweakbar "AntTweakBar"
-*     - @ref dependency_apacheant "Apache Ant"
 *     - @ref dependency_blowfish "Blowfish"
+*     - @ref dependency_boost "Boost"
 *     - @ref dependency_di "Boost Dependency Injection"
 *     - @ref dependency_cereal "cereal"
 *     - @ref dependency_cg "cg"
 *     - @ref dependency_debugbreak "debugbreak"
-*     - @ref dependency_directx "directx"
-*     - @ref dependency_doxygen "doxygen"
-*     - @ref dependency_git "git"
 *     - @ref dependency_glew "glew"
+*     - @ref dependency_googlemock "Google Mock"
 *     - @ref dependency_googletest "Google Test"
-*     - @ref dependency_html_help_workshop "HTML Help Workshop"
-*     - @ref dependency_jdk "JDK 1.8"
-*     - @ref dependency_librocket "libRocket"
+*     - @ref dependency_levenshtein "Levenshtein distance calculator"
 *     - @ref dependency_vlc "libVLC"
-*     - @ref dependency_nsis "NSIS"
+*     - @ref dependency_minizip "miniZIP"
+*     - @ref dependency_multiconsoles "Multiple Consoles"
 *     - @ref dependency_openal_soft "OpenAL (Software)"
 *     - @ref dependency_pugixml "pugixml"
+*     - @ref dependency_remotery "Remotery"
 *     - @ref dependency_sdl "SDL 2.0"
 *     - @ref dependency_sdl_net "SDL NET 2.0"
-*     - @ref dependency_stackwalker "Stackwalker"
 *     - @ref dependency_stb "stb"
-*     - @ref dependency_thttpd "thttpd"
-*     - @ref dependency_upx "UPX"
 *     - @ref dependency_wxwidgets "wxWidgets"
+* @subsection pixie_depedencies_other Inne
+*     - @ref dependency_apacheant "Apache Ant"
+*     - @ref dependency_cppcheck "C++ Check"
+*     - @ref dependency_dia "Dia"
+*     - @ref dependency_dot "dot"
+*     - @ref dependency_doxygen "Doxygen"
+*     - @ref dependency_fastbuild "FastBuild"
+*     - @ref dependency_git "git"
+*     - @ref dependency_gtest_runner "Google Test runner"
+*     - @ref dependency_html_help_workshop "HTML Help Workshop"
+*     - @ref dependency_jdk "JDK 1.8"
+*     - @ref dependency_llvm "LLVM"
+*     - @ref dependency_mathjax "mathjax"
+*     - @ref dependency_mingw "MinGW"
+*     - @ref dependency_msxsl "msxsl"
+*     - @ref dependency_nsis "NSIS"
+*     - @ref dependency_open_cpp_coverage "Open C++ Coverage"
+*     - @ref dependency_python "Python 3.5"
+*     - @ref dependency_texlive "texLIVE"
+*     - @ref dependency_thttpd "thttpd"
+*     - @ref dependency_upxw "upxw"
+*     - @ref dependency_vscode "Visual Studio Code"
 *
-* @section pixe_copyrights Copyrights
-*    This engine is written and maintained by Kosek.com
+* @section pixe_copyrights Prawa autorskie
+*    Ten silnik jest napisany i utrzymywany przez Kosek.com
 */

@@ -1,23 +1,24 @@
  /**
- * \~English @page code_convention Code Convention
+ * \~Polish @page code_convention Konwencje kodu
  * @tableofcontents
- * @section code_convention_naming Naming conventions
+ * @section code_convention_naming Konwencje nazw
  *
- *  1. All names are lowercase with underscores as word separator (ie. `hello_world`)
- *  2. Basic name pattern:
- *      - `object_property` (ie. `game_name`)
- *      - `action_object_property` (ie. `new_window_handle`)
- *      - More than one words allowed with underscore as well (ie. `new_game_window_handle`)
- *      - All types have `_t` suffix, like `game_handle_t`
- *      - No Hungarian Notation!
- *  3. Naming list:
- *      - `asset` -> Any non-hardcoded piece of data that can be modded. See `content`
- *      - `build_number` -> Number incremented each time a compilation is run (debug/hybrid/final)
- *      - `changelog` -> Directory containg all past final builds, for auto-updater
- *      - `component` -> Single-responsible part of application. All components can be turned off by replacing its functionality with simple dummies
- *      - `concurrention` -> Multi threaded-aware piece of code
- *      - `config` -> Runtime user-modificable configuration of application. Usually stored in platform storage
- *      - `console` -> In-game I/O terminal
+ *  1. Wszystkie nazwy są pisane małymi literami alfabetu łacińskiego z podkreślnkiem jako separatorem (np. `hello_world`)
+ *  2. Podstawowe wzorce nazw:
+ *      - `obiekt_właściwość` (np. `game_name`)
+ *      - `akcja_obiekt_właściwość` (np. `new_window_handle`)
+ *      - Więcej niż jedno słowo może być rozdzielane dodatkowym podkreślnikiem (np. `new_game_window_handle`)
+ *      - Wszystkie typy mają przyrostek `_t` (np. `game_handle_t`)
+ *      - Nie używa się notacji węgierskiej!
+ *  3. Ustandaryzowane nazwy:
+ *      - `asset` -> Każda nie wpisana na stałe do kodu źródłowego dana która może być modyfikowana. Zobacz `content`
+ *      - `build_number` -> Numer zwiększany za każdym przebiegiem kompilacji (współdzielony przez wszystkie typy kompilacji)
+ *      - `changelog` -> Katalog zawierający meta-informacje o zmianach we wszystkich poprzednich kompilacjach (wykorzystywany przez automatycznego aktualizera)
+ *      - `component` -> Pojedynczy element aplikacji (kodu źródłowego). Komponenty dzielą się na globalne (współdzielone między aplikacjami) i lokalne (należące do konkretnej instancji aplikacji). Wszystkie komponenty mogą być włączone i wyłączonane poprzez zastąpienie ich funkcjonalności wariantem pustym (`dummy`) bądź makietą (`mockup`) - na potrzeby testów
+ *      - `concurrention` -> Kod dedykowany wielowątkowości
+ *      - `config` -> Ustawienia czasu wykonania (nie mylić z `settings`) które zwykle przechowuje się w sposób zależny od platformy
+ *      - `console` -> Wewnątrzna konsola wypisująca dane tekstowe i reagująca na wprowadzanie danych tekstowych
+ *      - @todo Uzupełnić i przetłumaczyć listę nazw
  *      - `container` -> Usually C++'s Standard Template Library container, or custom one
  *      - `content` -> All `assets`
  *      - `data` -> Piece of information for engine. Common term for `assets`, `config` files, user profiles, saves, etc.

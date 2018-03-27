@@ -1,11 +1,11 @@
 /**
-* \~English @page license License
+* \~Polish @page license Licencja
 *
-* @section license_pixie The Pixie Engine
+* @section license_pixie Pixie Engine
 *
-* MIT License
+* Licencja MIT
 *
-* Copyright &copy; 2017 Piotr Kosek
+* Copyright &copy; 2016 - 2018 Piotr Kosek
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 *
