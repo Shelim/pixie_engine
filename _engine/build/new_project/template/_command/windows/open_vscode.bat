@@ -49,6 +49,21 @@ echo Setting up paths...
 rem * Setup paths
 call setup_path.bat
 
+rem * Verify that we have admin rights
+call check_admin_rights.bat
+
+rem * Should we fail here...
+if %ERRORLEVEL% == 0 goto ok1 
+
+	rem * Output some info
+	echo We need admin rights!
+
+	rem * Fail execution
+	goto failed
+
+rem * Ok, we did not fail!
+:ok1
+
 rem * Jump '\_engine\build\windows' -> '\_engine\dependency\other\visual_studio_code\windows'
 cd ..\..\dependency\other\visual_studio_code\windows
 
@@ -63,6 +78,36 @@ color 2F
 
 rem * Opening VS Code Insider
 start "" "Code - Insiders.exe" "..\..\..\..\..\$UNIX_PROJECT_NAME$\$UNIX_PROJECT_NAME$.code-workspace" --user-data-dir "%cd%\..\..\..\..\..\$UNIX_PROJECT_NAME$\.vscode-user" --extensionHomePath "%cd%\extensions"
+
+rem * Finalize successfully
+goto ok
+
+rem * In case of failure
+:failed
+
+rem * Set color to red
+color CF
+
+rem * Output some info
+echo Failed!
+
+rem * Keep console Window open
+pause
+
+rem * End script
+endlocal
+	
+rem * Get back current directory
+popd
+
+rem * Kill batch script
+exit 1
+
+rem * Ok, we did not fail!
+:ok
+
+rem * Set color to green
+color 2F
 
 rem * Output some info
 echo All Done!

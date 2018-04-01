@@ -1,6 +1,6 @@
 @echo off
 rem *******************************************************************
-rem * Simple script that will setup system path for other script
+rem * Simple script that will verify if user has admin rights
 rem * 
 rem * REQUIRES:
 rem *     - (Nothing)
@@ -11,11 +11,11 @@ rem *     Piotr Kosek <piotr@kosek.com>
 rem * LICENSE:
 rem *     MIT/X11 License
 rem * CHANGELOG:
-rem *     0.1 [September, 6th 2017]:
+rem *     0.1 [April, 1st 2018]:
 rem *         - Initial version
 rem *******************************************************************
 rem * CONSTRAINS:
-rem *     - It should be the only place to setup path and paths-related environment variables inside project
+rem *     - Returns 1 when lack of admin rights is detected
 rem *******************************************************************
 rem * Copyright (c) 2017 Piotr Kosek
 rem * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -38,15 +38,41 @@ rem *******************************************************************
 rem * Mark current directory
 pushd %~dp0
 
-rem * Jump '\_engine\build\windows' -> '\_engine'
-cd ..\..
+rem * Jump '\_engine\build\windows' -> '\'
+cd ..\..\..
 
-rem * Set path
-set path=C:\Windows\System32;%cd%\dependency\other\texlive\bin\win32;%cd%\dependency\other\jdk1.8.0_131\bin;%cd%\dependency\other\llvm\windows\bin;%cd%\dependency\other\python-3.5\windows;%cd%\dependency\other\mingw\windows\bin;%cd%\dependency\other\apache_ant\bin;%cd%\dependency\other\doxygen\windows;%cd%\dependency\other\dot\windows;%cd%\dependency\other\fastbuild\windows;%cd%\dependency\other\cppcheck\windows;%cd%\dependency\other\dia;%cd%\dependency\other\open_cpp_coverage\windows;%cd%\dependency\other\msxsl\windows;%cd%\dependency\other\windbg\windows
-set JAVA_HOME=%cd%\dependency\other\jdk1.8.0_131\windows
-set PYTHONPATH=%cd%\dependency\other\python-3.5\windows;%cd%\dependency\other\python-3.5\windows\Lib;%cd%\dependency\other\python-3.5\windows\Lib\site-packages
-set PYTHONHOME=%cd%\dependency\other\python-3.5\windows
-set PYTHON_HOME=%cd%\dependency\other\python-3.5\windows
+rem * Check for admin rights
+net session>nul 2>&1
+
+rem * Should we fail here...
+if %ERRORLEVEL% == 0 goto ok1 
+
+	rem * Output some info
+	echo This script requires admin rights!
+
+	rem * Fail execution
+	goto failed
+
+rem * Ok, we did not fail!
+:ok1
+
+rem * Finalize successfully
+goto ok
+
+rem * In case of failure
+:failed
+	
+rem * Get back current directory
+popd
+
+rem * Kill batch script
+exit /B 1
+
+rem * Ok, we did not fail!
+:ok
 
 rem * Get back current directory
 popd
+
+rem * Return OK
+exit /B 0
