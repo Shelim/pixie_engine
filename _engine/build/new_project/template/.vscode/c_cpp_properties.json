@@ -95,6 +95,7 @@
                 "_UNICODE",
                 "WXUSINGDLL",
                 "__WXMSW__",
+                "_WINSOCK_DEPRECATED_NO_WARNINGS",
                 "WINDOWS"
             ],
             "intelliSenseMode": "msvc-x64",

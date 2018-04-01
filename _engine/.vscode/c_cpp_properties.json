@@ -94,6 +94,7 @@
                 "_UNICODE",
                 "WXUSINGDLL",
                 "__WXMSW__",
+                "_WINSOCK_DEPRECATED_NO_WARNINGS",
                 "WINDOWS"
             ],
             "intelliSenseMode": "msvc-x64",
@@ -128,7 +129,9 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${workspaceRoot}/../_engine/!build/vscode/symbol.db"
-            }
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         }
     ],
     "version": 3
