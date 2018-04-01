@@ -48,21 +48,21 @@ namespace engine
 
     auto injector_igniter_disabled = [] {
         return boost::di::make_injector(
-#define ENGINE_GLOBAL_COMPONENT_IMPL(component) boost::di::bind<component##_t>().in(shared).to<component##_dummy_t>(),
+#define ENGINE_GLOBAL_COMPONENT_IMPL(component) boost::di::bind<component##_t>().in(boost::di::extension::scoped).to<component##_dummy_t>(),
 #define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/global_component.def"
             boost::di::make_injector());
     };
     auto injector_igniter_mockup = [] {
         return boost::di::make_injector(
-#define ENGINE_GLOBAL_COMPONENT_IMPL(component) boost::di::bind<component##_t>().in(shared).to<component##_mockup_t>(),
+#define ENGINE_GLOBAL_COMPONENT_IMPL(component) boost::di::bind<component##_t>().in(boost::di::extension::scoped).to<component##_mockup_t>(),
 #define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 //#include "def/global_component.def"
             boost::di::make_injector());
     };
     auto injector_igniter_enabled = [] {
         return boost::di::make_injector(
-#define ENGINE_GLOBAL_COMPONENT_IMPL(component) boost::di::bind<component##_t>().in(shared).to<component##_real_t>(),
+#define ENGINE_GLOBAL_COMPONENT_IMPL(component) boost::di::bind<component##_t>().in(boost::di::extension::scoped).to<component##_real_t>(),
 #define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/global_component.def"
             boost::di::make_injector());
@@ -75,47 +75,44 @@ namespace engine
             boost::di::make_injector());
     };
 
-#define BEGIN_PLATFORM_CONFIGURATION(name) auto name = engine::igniter_t(boost::di::make_injector(
+#define BEGIN_PLATFORM_CONFIGURATION(name) auto name = engine::make_igniter(std::move(boost::di::make_injector(
 #define PLATFORM_ALLOWS_POLICIES(item, ...) boost::di::bind<engine::item##_t>().to<typename engine::ignition_implementation_real_t<engine::item##_t EXPAND(EXPAND(_GET_NTH_ARG(item, __VA_ARGS__, IGNITER_IMPLEMENTATION_9, IGNITER_IMPLEMENTATION_8, IGNITER_IMPLEMENTATION_7, IGNITER_IMPLEMENTATION_6, IGNITER_IMPLEMENTATION_5, IGNITER_IMPLEMENTATION_4, IGNITER_IMPLEMENTATION_3, IGNITER_IMPLEMENTATION_2, IGNITER_IMPLEMENTATION_1, IGNITER_IMPLEMENTATION_0))(item, __VA_ARGS__))>::type>(),
 #define ALL_GLOBAL_COMPONENTS_BY_DEFAULT_ARE(type) engine::injector_igniter_##type(),
-#define ENABLE_GLOBAL_COMPONENT(component) boost::di::bind<engine::component##_t>().in(engine::shared).to <engine::component##_real_t>()[boost::di::override],
-#define MOCKUP_GLOBAL_COMPONENT(component) boost::di::bind<engine::component##_t>().in(engine::shared).to <engine::component##_mockup_t>()[boost::di::override],
-#define DISABLE_GLOBAL_COMPONENT(component) boost::di::bind<engine::component##_t>().in(engine::shared).to <engine::component##_dummy_t>()[boost::di::override],
-#define END_PLATFORM_CONFIGURATION() engine::injector_igniter_factorable() ));
+#define ENABLE_GLOBAL_COMPONENT(component) boost::di::bind<engine::component##_t>().in(boost::di::extension::scoped).to <engine::component##_real_t>()[boost::di::override],
+#define MOCKUP_GLOBAL_COMPONENT(component) boost::di::bind<engine::component##_t>().in(boost::di::extension::scoped).to <engine::component##_mockup_t>()[boost::di::override],
+#define DISABLE_GLOBAL_COMPONENT(component) boost::di::bind<engine::component##_t>().in(boost::di::extension::scoped).to <engine::component##_dummy_t>()[boost::di::override],
+#define END_PLATFORM_CONFIGURATION() engine::injector_igniter_factorable() )));
 
-
-    class igniter_t
+    template<class injector_t> class igniter_t
     {
 
         public:
 
-            igniter_t(boost::di::injector<
-#define ENGINE_GLOBAL_COMPONENT_IMPL(component) std::shared_ptr<component##_t>,
-#define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
-#include "def/global_component.def"
-            program_t::unused_t> injector) : injector(std::move(injector))
+            igniter_t(injector_t injector) : injector(std::move(injector))
             {
 
             }
 
-            std::shared_ptr<program_t> ignite_from_main(int argc, char * argv[])
+            std::shared_ptr<program_t> ignite_from_main(int argc, const char * argv[])
             {
-                return std::make_shared<program_t>(boost::di::make_injector(boost::di::bind<args_t>().in(engine::shared).to(args_t(argc, argv)), std::move(injector)));
+                return make_program(boost::di::make_injector(boost::di::extension::make_extensible(injector), boost::di::bind<engine::args_t>().to(std::make_shared<engine::args_t>(argc, argv))));
             }
 
             std::shared_ptr<program_t> ignite_for_tests()
             {
-                return std::make_shared<program_t>(std::move(injector));
+                return make_program(boost::di::make_injector(boost::di::extension::make_extensible(injector), boost::di::bind<engine::args_t>().to(std::make_shared<engine::args_t>(""))));
             }
 
         private:
 
-            boost::di::injector<
-#define ENGINE_GLOBAL_COMPONENT_IMPL(component) std::shared_ptr<component##_t>,
-#define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
-#include "def/global_component.def"
-            program_t::unused_t> injector;
+            injector_t injector;
+
     };
+
+    template<class injector_t> igniter_t<injector_t> make_igniter(injector_t injector)
+    {
+        return igniter_t<injector_t>(std::move(injector));
+    }
 
 }
 

@@ -36,7 +36,7 @@ int main(int argc, char * argv[])
 #endif
     END_PLATFORM_CONFIGURATION()
 
-    std::shared_ptr<engine::program_t> program = windows.ignite_from_main(argc, argv);
+    std::shared_ptr<engine::program_t> program = windows.ignite_from_main(argc, const_cast<const char**>(argv));
     if(!program) return EXIT_FAILURE; // Failed to ignite (for example different instance is running)
 
     program->get_app_overseer()->wait_for_completion();

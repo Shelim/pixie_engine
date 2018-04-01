@@ -14,17 +14,21 @@ namespace engine
 
     public:
 
-        args_t(int argc, char * argv[]): raw(argc, argv)
+        args_t(int argc, const char * argv[]): raw(argc, argv)
         {
             parsed = parse_args(raw);
             raw = parsed.construct_raw();
         }
-        args_t(char * args): raw(args)
+        args_t(const char * args): raw(args)
         {
             parsed = parse_args(raw);
             raw = parsed.construct_raw();
         }
         args_t(const args_t & other) : parsed(other.parsed), raw(other.raw)
+        {
+
+        }
+        args_t(args_t && other) : parsed(std::move(other.parsed)), raw(std::move(other.raw))
         {
 
         }
@@ -94,11 +98,11 @@ namespace engine
         {
             public:
 
-                raw_t(int argc, char * argv[])
+                raw_t(int argc, const char * argv[])
                 {
                     set(argc, argv);
                 }
-                raw_t(char * args)
+                raw_t(const char * args)
                 {
                     set(args);
                 }
@@ -108,7 +112,7 @@ namespace engine
                 }
 
 
-                void set(int argc, char * argv[])
+                void set(int argc, const char * argv[])
                 {
                     args_array.reserve(argc);
 
@@ -137,7 +141,7 @@ namespace engine
                         index = args_merged.index_of(' ', index + 1);
                     }
                 }
-                void set(char * args)
+                void set(const char * args)
                 {
                     set(ustring_t::from_utf8(args));
                 }

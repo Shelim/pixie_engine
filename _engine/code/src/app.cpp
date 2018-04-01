@@ -2,9 +2,15 @@
 #include "global/core/app.hpp"
 #include "global/core/thread/thread.hpp"
 #include "global/core/accountable.hpp"
+#include "global/component/program_args.hpp"
 
 int32_t engine::app_context_t::next_instance_id = 1;
 engine::instance_id_t engine::instance_id;
+
+engine::program_args_real_t::program_args_real_t(std::shared_ptr<engine::args_t> args) : args(*(args.get()))
+{
+
+}
 
 engine::app_t::app_t(std::unique_ptr<app_actual_t> app, std::unique_ptr<app_context_t> context, std::shared_ptr<holder_t<accountable_app_t> > notifier, std::shared_ptr<thread_factory_t> thread_factory) : context(context.get()), app(std::move(app)), meta(std::make_shared<app_meta_t>(this->app->get_app(), std::move(context)))
 {

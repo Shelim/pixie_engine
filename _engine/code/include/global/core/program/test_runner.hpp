@@ -31,7 +31,7 @@ namespace engine
                 worker.join();
         }
 
-        void run_test(int argc, char * argv[])
+        void run_test(int argc, const char * argv[])
         {
             args = std::make_unique<args_t>(argc, argv);
 

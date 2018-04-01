@@ -6,7 +6,8 @@
 #include <functional>
 #include <fstream>
 #include "boost/di.hpp"
-#include "boost/di/extension/scopes/shared.hpp"
+#include "boost/di/extension/injections/extensible_injector.hpp"
+#include "boost/di/extension/scopes/scoped.hpp"
 #include "utility/pattern/provider.hpp"
 #include "utility/pattern/class_settings.hpp"
 #include "utility/pattern/enum.hpp"
@@ -54,26 +55,24 @@ namespace engine
 	namespace
 	{
 
-		static constexpr shared_scope shared{};
-
 
 		auto injector_disabled = [] {
 			return boost::di::make_injector(
-#define ENGINE_COMPONENT_IMPL(component)	boost::di::bind<component##_t>().in(shared).to <component##_dummy_t>(),
+#define ENGINE_COMPONENT_IMPL(component)	boost::di::bind<component##_t>().to <component##_dummy_t>().in(boost::di::extension::scoped),
 #define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/component.def"
 				boost::di::make_injector());
 		};
 		auto injector_mockup = [] {
 			return boost::di::make_injector(
-#define ENGINE_COMPONENT_IMPL(component)	boost::di::bind<component##_t>().in(shared).to <component##_mockup_t>(),
+#define ENGINE_COMPONENT_IMPL(component)	boost::di::bind<component##_t>().to <component##_mockup_t>().in(boost::di::extension::scoped),
 #define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 //#include "def/component.def"
 				boost::di::make_injector());
 		};
 		auto injector_enabled = [] {
 			return boost::di::make_injector(
-#define ENGINE_COMPONENT_IMPL(component)	boost::di::bind<component##_t>().in(shared).to <component##_real_t>(),
+#define ENGINE_COMPONENT_IMPL(component)	boost::di::bind<component##_t>().to <component##_real_t>().in(boost::di::extension::scoped),
 #define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/component.def"
 				boost::di::make_injector());
@@ -84,6 +83,9 @@ namespace engine
 #define ENGINE_FACTORABLE_IMPL(factorable) boost::di::bind<ifactory<factorable>>().to(factory<factorable>{}),
 #define ENGINE_FACTORABLE_DEF(...) DEFINE_TYPE_PASS(ENGINE_FACTORABLE_IMPL, __VA_ARGS__)
 #include "def/factorable.def"
+#define ENGINE_GLOBAL_FACTORABLE_IMPL(factorable) boost::di::bind<ifactory<factorable>>().to(factory<factorable>{}),
+#define ENGINE_GLOBAL_FACTORABLE_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_FACTORABLE_IMPL, __VA_ARGS__)
+#include "def/global_factorable.def"
 				boost::di::make_injector());
 		};
 
@@ -117,13 +119,14 @@ namespace engine
 			{
 
 			}
+			
 #define ENGINE_GLOBAL_COMPONENT_IMPL(component) std::shared_ptr<engine::component##_t> get_##component() { return injector.create<std::shared_ptr<engine::component##_t> >(); }
 #define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/global_component.def"
 #define ENGINE_COMPONENT_IMPL(component) std::shared_ptr<engine::component##_t> get_##component() { return injector.create<std::shared_ptr<engine::component##_t> >(); }
 #define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/component.def"
-
+			
 		private:
 		
 			boost::di::injector<
@@ -145,9 +148,9 @@ namespace engine
 
 #define BEGIN_BOOTSTRAPPER(name, context) auto name = engine::boostrapper_t(std::move(boost::di::make_injector(engine::injector_context(context), 
 #define ALL_COMPONENTS_BY_DEFAULT_ARE(type) engine::injector_##type(),
-#define ENABLE_COMPONENT(component) boost::di::bind<engine::component##_t>().in(engine::shared).to <engine::component##_real_t>()[boost::di::override],
-#define MOCKUP_COMPONENT(component) boost::di::bind<engine::component##_t>().in(engine::shared).to <engine::component##_mockup_t>()[boost::di::override],
-#define DISABLE_COMPONENT(component) boost::di::bind<engine::component##_t>().in(engine::shared).to <engine::component##_dummy_t>()[boost::di::override],
+#define ENABLE_COMPONENT(component) boost::di::bind<engine::component##_t>().in(boost::di::extension::scoped).to <engine::component##_real_t>()[boost::di::override],
+#define MOCKUP_COMPONENT(component) boost::di::bind<engine::component##_t>().in(boost::di::extension::scoped).to <engine::component##_mockup_t>()[boost::di::override],
+#define DISABLE_COMPONENT(component) boost::di::bind<engine::component##_t>().in(boost::di::extension::scoped).to <engine::component##_dummy_t>()[boost::di::override],
 #define USE_SETTINGS(owner, id) boost::di::bind<engine::settings_t<engine::owner> >().to <engine::settings_implementation_t<engine::owner, engine::settings_metadata_##owner##_##id##_t> >(),
 #define USE_PROVIDER_FOR(provider_type, provider) boost::di::bind<engine::holder_t<engine::provider_type##_t>>().to < engine::holder_implementation_t<engine::provider_type##_t INTERNAL_PROVIDER_1(provider_type, provider)> >(),
 #define USE_PROVIDERS_FOR(...) EXPAND(INTERNAL_PROVIDER_INIT(__VA_ARGS__)) EXPAND(EXPAND(_GET_NTH_ARG(__VA_ARGS__, INTERNAL_PROVIDER_9, INTERNAL_PROVIDER_8, INTERNAL_PROVIDER_7, INTERNAL_PROVIDER_6, INTERNAL_PROVIDER_5, INTERNAL_PROVIDER_4, INTERNAL_PROVIDER_3, INTERNAL_PROVIDER_2, INTERNAL_PROVIDER_1, INTERNAL_PROVIDER_0))(__VA_ARGS__)) > >(),

@@ -12,19 +12,16 @@ namespace engine
 
 	public:
 
-		program_args_real_t(args_t args) : args(args)
-		{
+		program_args_real_t(std::shared_ptr<engine::args_t> args);
 
-		}
-
-		args_t get_program_args() final
+		engine::args_t get_program_args() final
 		{
 			return args;
 		}
 
 	private:
 
-		args_t args;
+		engine::args_t args;
 
 	};
 }
