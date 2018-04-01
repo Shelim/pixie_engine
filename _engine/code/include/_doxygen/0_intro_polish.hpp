@@ -38,16 +38,17 @@
 *
 * @section pixie_platforms Wspierane platformy
 * @subsection pixie_platforms_win Windows Vista/7/8/8.1/10
-*       @todo Rozwinąć sekcję platformy
 *    - 64-bitowa architektura AMD
 *    - Renderer OpenGL oraz DirectX 11.0
+*    - Wsparcie dla zrzucania informacji z symboli odpluskwiacza (na potrzeby odpluskwiania post-mortem)
+*    - Dwie drogi implementacji dostawców: generyczna i dedykowana platformie
+*    - Wsparcie dla jednoczesnego wyświetlania wielu okienek terminalowych
 * @subsection pixie_platforms_lin Linux
 *    (Spodziewana, jeszcze nie zaimplementowana)
 * @subsection pixie_platforms_osx OS X
 *    (Spodziewana, jeszcze nie zaimplementowana)
 *
 * @section pixie_why Dlaczego kolejny silnik?
-*      @todo Rozwinąć ten opis
 *      Obecnie na rynku znajduje się wiele bardzo dobrych, komercyjnie-gotowych silników gier,
 *      także takich o otwartych źródłach lub zamkniętych lecz posiadających permisywne licencje.
 *      Ogromna większość z tych narzędzi jest jednak nastawiona na gry akcji, gry zręcznościowe
@@ -116,22 +117,21 @@
 *
 * @todo Uzupełnić kolejne przykłady
 * @subsection pixie_why_us Odpowiedź na problemy
-* @todo Rozwinąć ten opis
 * Pixie Engine wychodzi naprzeciw opisanym problemom dostarczając zarówno pełne wsparcie dla grup modyfikujących
 * (uwzględniając @ref assets_hotreload "przeładowanie zasobów na gorąco"), maksymalne wykorzystanie języka natywnego
 * (w celu osiągnięcia maksymalnej wydajności gdy tylko jest to możliwe), wsparcie dla skryptowych języków zarządzanych
 * (krótkie kody które korzystają z zalet automatycznej odśmieciarki), wsparcie dla różnych menadżerów sceny
 * (uwzględniający przewidywanie martwych pakietów, interpolację czasową i temporalne wygładzenie) oraz dostępu do
-* natywnych narzędzi gdy tylko jest to możliwe.
+* natywnych narzędzi gdy tylko jest to możliwe. Dokładny opis tych elementów znajduje się w rodziale @ref pixie_features "cechy".
 *
 * @subsection pixie_why_limitations Ograniczenia silnika
-* @todo Rozwinąć ten opis
 * Oczywiście w sytuacji rywalizujących zasobów niemożliwe jest zawarcie wszystkich możliwych cech w jednym rozwiązaniu.
 * Z tego powodu z góry przyjęto ograniczenia, jakie wprowadzono do Pixie Engine:
 *    - Akceptowalne czasy kompilacji; W chwili obecnej około 10 minut pracy jednego rdzenia (np. 2,5 minuty przy 4 rdzeniach)
 *    - Preferuj kod natywny nad zarządzanym (ograniczenia modyfikacji w zamian za zwiększenie wydajności)
 *    - Wykorzystuj inteligentne wskaźniki (niewielki narzut na wykonanie w zamian za stabilność implementacji)
 *    - Preferuj ustalenia czasu kompilacji nad ustawieniami czasu wykonania (przyspiesza wykonanie poprzed eliminację zbędnego kodu na etapie kompilacji kosztem utraty modyfikowalności niektórych ustawień)
+*    - Akceptuj narzut na uruchomienie związany z wstrzykiwaniem zależności
 *
 * @section pixie_depedencies Zależności
 * @subsection pixie_depedencies_libraries Biblioteki

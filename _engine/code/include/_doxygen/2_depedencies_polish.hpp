@@ -3,7 +3,7 @@
 * @tableofcontents
 * @section dependency_dashboard (Wszystkie zależności)
 * <center><table>
-* <caption id="dependency_angelcode_dashboard_table">Lista wszystkich zależności</caption>
+* <caption id="dependency_dashboard_table">Lista wszystkich zależności</caption>
 * <tr><th>Nazwa<th>Rola w projekcie<th>Licencja<th>Twórca
 * <tr><td>@ref dependency_angelcode "AngelCode"<td>Dostawca języka skryptowego<td>zlib<td>Andreas J&ouml;nsson
 * <tr><td>@ref dependency_anttweakbar "AntTweakBar"<td>Dostawca podstawowych narzędzi poprawiania UI<td>zlib/libpng<td>Philippe Decaudin
@@ -51,19 +51,24 @@
 * </table></center>
 * @todo Napisać po parę zdań o powyższych modułach
 *
-* @section dependency_angelcode AngelCode Scripting Library
-* The AngelCode Scripting Library, or AngelScript as it is also known, is an extremely flexible cross-platform scripting library designed to allow applications to extend their functionality through external scripts. It has been designed from the beginning to be an easy to use component, both for the application programmer and the script writer.
-*
-* Efforts have been made to let it call standard C functions and C++ methods with little to no need for proxy functions. The application simply registers the functions, objects, and methods that the scripts should be able to work with and nothing more has to be done with your code. The same functions used by the application internally can also be used by the scripting engine, which eliminates the need to duplicate functionality.
-*
-* For the script writer the scripting language follows the widely known syntax of C/C++, but without the need to worry about pointers and memory leaks. Contrary to most scripting languages, AngelScript uses the common C/C++ datatypes for more efficient communication with the host application.
-*
-* AngelScript is completely free, released under the zlib license. I only ask for your recognition, nothing else. However, if you would like to make a donation I would be very grateful. Your donation gives me more inspiration and will allow me to spend more time working with AngelScript.
-*
-* Give the library a try, and let me know how you like it.
-*
-* Regards,
-* Andreas J&ouml;nsson
+* @section dependency_angelcode AngelCode
+* Angelscript (albo Biblioteka Skryptowa AngelCode) to dojrzały, aktywnie rozwijany język skryptowy o składni opartej częściowo
+* o C++ udostępniany na wolnej licencji zlib.
+* 
+* Wybór konkretnego języka skryptowego nie jest łatwy w dzisiejszych czasach z racji obecności na rynku wielu
+* dojrzałych i gotowych-do-produkcji rozwiązań. W szczególności mogłoby zostać zadane pytanie czemu nie została wybrana Lua albo Python,
+* najpopularniejsze obecnie języki skryptowe stosowane w grach; Prawdą jest, że o ile wydajnościowo Lua nieznacznie sprawuje
+* się lepiej niż AngelScript, Angelscript z racji swojej C++ składni jest nieporównywalnie łatwiejszy do podpięcia do natywnego
+* systemu klas (zwykle także z pominięciem konieczności istnienia obiektów proxy). Python jako język w tym samym zestawieniu
+* wydajności sprawdza się o wiele gorzej a i jego zdolność do odwzorowania konstrukcji C++ wypada źle.
+* 
+* <center><table>
+* <caption id="dependency_angelcode_benchmark_table">Wydajność języków skryptowych w przebiegu testowym</caption>
+* <tr><th>Nazwa<th>Czas wykonania<th>Względem Lua
+* <tr><td>Lua<td>1,341 s.<td>100%
+* <tr><td>Angelscript<td>1,859 s.<td>72%
+* <tr><td>Python<td>2,842 s.<td>47%
+* </table>źródło: https://github.com/r-lyeh-archived/scriptorium</center>
 *
 * @section dependency_anttweakbar AntTweakBar
 * AntTweakBar is a small and easy-to-use C/C++ library that allows programmers to quickly add a light and intuitive graphical user interface into graphic applications based on OpenGL (compatibility and core profiles), DirectX 9, DirectX 10 or DirectX 11 to interactively tweak parameters on-screen. 
