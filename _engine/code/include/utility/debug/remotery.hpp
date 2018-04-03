@@ -25,7 +25,11 @@ namespace engine
 
         ~remotery_t()
         {
-            rmt_DestroyGlobalInstance(rmt);
+            if(rmt)
+            {
+                rmt_DestroyGlobalInstance(rmt);
+                rmt = nullptr;
+            }
         }
 
         void prof_begin_section(const char * name)
