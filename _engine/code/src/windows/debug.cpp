@@ -171,6 +171,8 @@ namespace
 					return false;
 				}
 
+				SymUnloadModule64(process, BaseOfDll);
+
 				SymCleanup(process);
 				return true;
 			}
@@ -190,11 +192,13 @@ namespace
 
 				module_t * module = reinterpret_cast<module_t*>(UserContext);
 
-				if(SymGetLineFromAddr64(GetCurrentProcess(), pSymInfo->Address - module->BaseOfDll, &LineDisplacement, &LineInfo))
+				if(SymGetLineFromAddr64(GetCurrentProcess(), pSymInfo->Address, &LineDisplacement, &LineInfo))
 				{
 					file = engine::ustring_t::from_utf8(LineInfo.FileName);
 					line = LineInfo.LineNumber;
 				}
+
+				DWORD error = GetLastError();
 
 				module->symbols.emplace(pSymInfo->Address - module->BaseOfDll, symbol_t(pSymInfo->Address - module->BaseOfDll, engine::ustring_t::from_utf8(pSymInfo->Name), file, line));
 

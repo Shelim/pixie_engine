@@ -8,9 +8,6 @@
 		 - ignite_from_main passing args
 		 - program_args
 		 - App object for given functions (client side)
-     - Debug_symbol should be a global module
-		 - Ability to read from .Map
-		 - Ability to dump information about callstack POST-MORTEM (!)
 	 - Cleanup parser
 		 - Error detection (Intellisense): https://stackoverflow.com/questions/47354226/how-to-provider-user-with-autocomplete-suggestions-for-given-boostspirit-gramm
 		 - Common elements should be in common

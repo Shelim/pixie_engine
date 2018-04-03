@@ -15,7 +15,6 @@
 #include "global/component/config.hpp"
 #include "global/component/config_monitor.hpp"
 #include "global/component/config_storage.hpp"
-#include "global/component/debug_symbols.hpp"
 #include "global/component/environment_info.hpp"
 #include "global/component/extinguisher.hpp"
 #include "global/component/filesystem.hpp"

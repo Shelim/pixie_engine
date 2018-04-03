@@ -2,8 +2,8 @@
 #define ENGINE_COMMON_UTILITY_DEBUG_CALLSTACK_HPP
 
 #include "utility/text/ustring.hpp"
-#include "utility/pattern/flags.hpp"
 #include "utility/platform/debug.hpp"
+#include "utility/pattern/flags.hpp"
 
 #pragma once
 
@@ -49,7 +49,7 @@ namespace engine
 			 * @param[in] line Line to be used in given stack item. Usually you pass @c __LINE__
 			 * @param[in] function Function name to be used in given stack frame. Usually you pass @c __FUNCTION__
 			 */
-			item_t(intptr_t address, ustring_t module = ""_u, ustring_t file = ""_u, int line = 0, ustring_t function = ""_u) : address(address), module(module), file(file), line(line), function(function)
+			item_t(intptr_t address, ustring_t module = ""_u, ustring_t file = ""_u, int line = -1, ustring_t function = ""_u) : address(address), module(module), file(file), line(line), function(function)
 			{
 				if(!module.is_empty())
 					flags.set_flag(flag_t::is_module_available);
@@ -69,7 +69,7 @@ namespace engine
 			 * @param[in] line Line to be used in given stack item. Usually you pass @c __LINE__
 			 * @param[in] function Function name to be used in given stack frame. Usually you pass @c __FUNCTION__
 			*/
-			void add_debug_info(ustring_t module = ""_u, ustring_t file = ""_u, int line = 0, ustring_t function = ""_u)
+			void add_debug_info(ustring_t module = ""_u, ustring_t file = ""_u, int line = -1, ustring_t function = ""_u)
 			{
 				if(!module.is_empty())
 				{

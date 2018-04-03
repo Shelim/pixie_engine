@@ -9,6 +9,7 @@
 #include "global/core/program/igniter.hpp"
 #include "global/core/program.hpp"
 #include "global/core/program/test_runner.hpp"
+#include "utility/platform/debug.hpp"
 
 #if PIXIE_IS_TESTER_BUILD
 
