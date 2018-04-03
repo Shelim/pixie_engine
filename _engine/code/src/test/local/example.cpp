@@ -15,7 +15,7 @@ TEST(LocalExample, Sample)
     
     ASSERT_TRUE(program);
 
-    std::unique_ptr<engine::app_context_t> context = std::make_unique<engine::app_context_t>(program, engine::args_t(""));
+    std::unique_ptr<engine::app_context_t> context = std::make_unique<engine::app_context_t>(program.get(), engine::args_t(""));
 
     BEGIN_BOOTSTRAPPER(test_app, context.get())
     ALL_COMPONENTS_BY_DEFAULT_ARE(disabled)

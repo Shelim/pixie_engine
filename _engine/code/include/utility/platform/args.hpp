@@ -17,12 +17,12 @@ namespace engine
         args_t(int argc, const char * argv[]): raw(argc, argv)
         {
             parsed = parse_args(raw);
-            raw = parsed.construct_raw();
+//            raw = parsed.construct_raw();
         }
         args_t(const char * args): raw(args)
         {
             parsed = parse_args(raw);
-            raw = parsed.construct_raw();
+//            raw = parsed.construct_raw();
         }
         args_t(const args_t & other) : parsed(other.parsed), raw(other.raw)
         {
@@ -258,7 +258,8 @@ namespace engine
         static nice_t parse_args(const raw_t & args)
         {
             nice_t ret;
-            ret.set_executable(args.get_argv(0));
+            if(args.get_argc() > 0)
+                ret.set_executable(args.get_argv(0));
             return ret;
         }
 

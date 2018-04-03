@@ -17,7 +17,7 @@ int main(int argc, char * argv[])
 {
     engine::test_runner_t runner;
 
-    runner.run_test(argc, argv);
+    runner.run_test(argc, const_cast<const char**>(argv));
     runner.wait_till_completed();
 
     return runner.get_return_code();

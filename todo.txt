@@ -1,13 +1,7 @@
  - Most urgent
 	 - Apps
 		 - Overseer
-			 -> close_all
-			 -> terminate_all
-			 -> run_app
-			 -> run_app from other program
-		 - ignite_from_main passing args
-		 - program_args
-		 - App object for given functions (client side)
+			 -> refactor!!!
 	 - Cleanup parser
 		 - Error detection (Intellisense): https://stackoverflow.com/questions/47354226/how-to-provider-user-with-autocomplete-suggestions-for-given-boostspirit-gramm
 		 - Common elements should be in common

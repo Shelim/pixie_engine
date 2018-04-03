@@ -20,12 +20,12 @@ namespace engine
 
     public:
 
-        app_context_t(std::shared_ptr<program_t> program, const args_t & args) : program(program), args(args), instance_id(next_instance_id++)
+        app_context_t(program_t* program, const args_t & args) : program(program), args(args), instance_id(next_instance_id++)
         {
 
         }
 
-        std::shared_ptr<program_t> get_program()
+        program_t* get_program()
         {
             return program;
         }
@@ -42,7 +42,7 @@ namespace engine
 
     private:
 
-        std::shared_ptr<program_t> program;
+        program_t* program;
         args_t args;
         int32_t instance_id;
         static int32_t next_instance_id;

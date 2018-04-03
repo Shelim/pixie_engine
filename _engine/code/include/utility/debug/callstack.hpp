@@ -134,8 +134,6 @@ namespace engine
 			 * 
 			 * The information may be unavailable due to compiler not producing complete debugging symbols
 			 * 
-			 * @todo Currently LLVM is unable to emit file information :-(
-			 * 
 			 * @return true if file information is available
 			 */
 			bool is_file_available() const
@@ -160,8 +158,6 @@ namespace engine
 			 * @brief Returns true if line information is available
 			 * 
 			 * The information may be unavailable due to compiler not producing complete debugging symbols
-			 * 
-			 * @todo Currently LLVM is unable to emit line information :-(
 			 * 
 			 * @return true if line information is available
 			 */

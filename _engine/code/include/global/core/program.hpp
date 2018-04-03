@@ -78,7 +78,12 @@ namespace engine
 
     template<class injector_t> std::shared_ptr<program_t> make_program(injector_t injector)
     {
-        return std::make_shared<program_real_t<injector_t> >(std::move(injector));
+        std::shared_ptr<program_t> ret = std::make_shared<program_real_t<injector_t> >(std::move(injector));
+        
+        std::unique_ptr<app_context_t> app_context = std::make_unique<app_context_t>(ret.get(), ret->get_program_args()->get_program_args());
+        ret->get_app_overseer()->run_app(ret->get_app_resolver()->get_app_kind_for_given_context(app_context.get()), std::move(app_context));
+
+        return ret;
     }
     
 

@@ -91,7 +91,7 @@ namespace engine
 
 		auto injector_context = [] (app_context_t* context){
 			return boost::di::make_injector(
-#define ENGINE_GLOBAL_COMPONENT_IMPL(component) boost::di::bind<engine::component##_t>().to(context->get_program()->get_##component()),
+#define ENGINE_GLOBAL_COMPONENT_IMPL(component) boost::di::bind<>().to(context->get_program()->get_##component()),
 #define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/global_component.def"
 				boost::di::bind<app_t::instance_id_t>().named(engine::instance_id).to(context->get_instance_id()),

@@ -65,7 +65,6 @@ namespace engine
 
         void wait_for_completion()
 		{
-			check_for_completion();
 			signal_completion.wait();
 		}
 
@@ -97,6 +96,7 @@ namespace engine
 	private:
 
 		signal_t signal_completion;
+		std::mutex event_being_handled_mutex;
 
 		class event_t
 		{
@@ -714,24 +714,314 @@ namespace engine
 			}, std::move(event->move_on_refused()), event->get_actual())));
 		}
 
-		void handle_terminate_all_event(terminate_all_event_t * event)
+		class terminate_operation_t
 		{
-			// Todo!
+
+			public:
+
+				class item_t
+				{
+
+					public:
+
+						void run(app_overseer_t::callback_void_t on_completed)
+						{
+							std::lock_guard<std::mutex> guard(mutex);
+
+							flags.set_flag(flag_t::is_running, true);
+							this->on_completed.push_back(std::move(on_completed));
+						}
+
+						bool is_running() const
+						{
+							std::lock_guard<std::mutex> guard(mutex);
+							return flags.is_flag(flag_t::is_running);
+						}
+
+						void complete()
+						{
+							std::lock_guard<std::mutex> guard(mutex);
+
+							for(auto & item : on_completed)
+								item();
+
+							on_completed.clear();
+
+							flags.set_flag(flag_t::is_running, false);
+						}
+
+					private:
+
+						enum class flag_t
+						{
+							is_running,
+							count
+						};
+
+						flags_t<flag_t> flags;
+						mutable std::mutex mutex;
+
+						std::vector<app_overseer_t::callback_void_t> on_completed;
+
+				};
+
+				item_t * all()
+				{
+					return &terminate_all;
+				}
+
+				item_t * kind(app_t::kind_t kind)
+				{
+					return &terminate_kind[value_of(kind)];
+				}
+
+			private:
+
+				item_t terminate_all;
+				std::array<item_t, value_of(app_t::kind_t::count)> terminate_kind;
+
+		};
+
+		terminate_operation_t terminate_operation;
+
+		bool is_being_terminated(app_t::kind_t kind)
+		{
+			if(terminate_operation.all()->is_running()) return true;
+			if(terminate_operation.kind(kind)->is_running()) return true;
+			return false;
 		}
 
-		void handle_close_all_event(close_all_event_t * event)
+		void run_terminate_operations()
 		{
-			// Todo!
+			if(terminate_operation.all()->is_running())
+			{
+				if(apps_meta.empty())
+					terminate_operation.all()->complete();
+			}
+			for(std::size_t i = 0; i < value_of(app_t::kind_t::count); i++)
+			{
+				if(terminate_operation.kind(static_cast<app_t::kind_t>(i))->is_running())
+				{
+					int total = 0;
+					for(auto meta : apps_meta)
+					{
+						if(meta->get_app() == static_cast<app_t::kind_t>(i))
+						{
+							++total;
+							break;
+						}
+					}
+					if(!total) terminate_operation.kind(static_cast<app_t::kind_t>(i))->complete();
+				}
+			}
+		}
+
+		void handle_terminate_all_event(terminate_all_event_t * event)
+		{
+			terminate_operation.all()->run(std::bind([](app_overseer_t::callback_void_t on_completed, std::shared_ptr<app_overseer_actual_t> actual){
+					on_completed();
+				}, std::move(event->move_on_completed()), event->get_actual()));
+
+			for(auto app_meta : apps_meta)
+			{
+				terminate_app(app_meta->get_instance_id());
+			}
 		}
 
 		void handle_terminate_all_of_event(terminate_all_of_event_t * event)
 		{
-			// Todo!
+			terminate_operation.kind(event->get_app())->run(std::bind([](app_overseer_t::callback_void_t on_completed, std::shared_ptr<app_overseer_actual_t> actual){
+					on_completed();
+				}, std::move(event->move_on_completed()), event->get_actual()));
+
+			for(auto app_meta : apps_meta)
+			{
+				if(app_meta->get_app() == event->get_app())
+					terminate_app(app_meta->get_instance_id());
+			}
+		}
+
+		class close_operation_t
+		{
+
+			public:
+
+				class item_t
+				{
+
+					public:
+
+						void run(app_overseer_t::callback_void_t on_completed, app_overseer_t::callback_app_instance_t on_given_accepted, app_overseer_t::callback_app_instance_t on_given_rejected)
+						{
+							std::lock_guard<std::mutex> guard(mutex);
+
+							flags.set_flag(flag_t::is_running, true);
+							this->on_completed.push_back(std::move(on_completed));
+							this->on_given_accepted.push_back(std::move(on_given_accepted));
+							this->on_given_rejected.push_back(std::move(on_given_rejected));
+						}
+
+						bool is_running() const
+						{
+							std::lock_guard<std::mutex> guard(mutex);
+							return flags.is_flag(flag_t::is_running);
+						}
+
+						void given_accepted(app_t::instance_id_t id)
+						{
+							std::lock_guard<std::mutex> guard(mutex);
+							if(flags.is_flag(flag_t::is_running))
+							{
+								for(auto & item : on_given_accepted)
+									item(id);
+							}
+						}
+
+						void given_rejected(app_t::instance_id_t id)
+						{
+							std::lock_guard<std::mutex> guard(mutex);
+							if(flags.is_flag(flag_t::is_running))
+							{
+								for(auto & item : on_given_rejected)
+									item(id);
+
+								on_completed.clear();
+								on_given_accepted.clear();
+								on_given_rejected.clear();
+
+								flags.set_flag(flag_t::is_running, false);
+							}
+						}
+
+						void complete()
+						{
+							std::lock_guard<std::mutex> guard(mutex);
+
+							for(auto & item : on_completed)
+								item();
+
+							on_completed.clear();
+							on_given_accepted.clear();
+							on_given_rejected.clear();
+
+							flags.set_flag(flag_t::is_running, false);
+						}
+
+					private:
+
+						enum class flag_t
+						{
+							is_running,
+							count
+						};
+
+						flags_t<flag_t> flags;
+						mutable std::mutex mutex;
+
+						std::vector<app_overseer_t::callback_void_t> on_completed;
+						std::vector<app_overseer_t::callback_app_instance_t> on_given_accepted;
+						std::vector<app_overseer_t::callback_app_instance_t> on_given_rejected;
+
+				};
+
+				item_t * all()
+				{
+					return &terminate_all;
+				}
+
+				item_t * kind(app_t::kind_t kind)
+				{
+					return &terminate_kind[value_of(kind)];
+				}
+
+			private:
+
+				item_t terminate_all;
+				std::array<item_t, value_of(app_t::kind_t::count)> terminate_kind;
+
+		};
+
+		close_operation_t close_operation;
+
+		bool is_being_closed(app_t::kind_t kind)
+		{
+			if(close_operation.all()->is_running()) return true;
+			if(close_operation.kind(kind)->is_running()) return true;
+			return false;
+		}
+
+		void run_close_operations()
+		{
+			if(close_operation.all()->is_running())
+			{
+				if(apps_meta.empty())
+					close_operation.all()->complete();
+			}
+			for(std::size_t i = 0; i < value_of(app_t::kind_t::count); i++)
+			{
+				if(close_operation.kind(static_cast<app_t::kind_t>(i))->is_running())
+				{
+					int total = 0;
+					for(auto meta : apps_meta)
+					{
+						if(meta->get_app() == static_cast<app_t::kind_t>(i))
+						{
+							++total;
+							break;
+						}
+					}
+					if(!total) close_operation.kind(static_cast<app_t::kind_t>(i))->complete();
+				}
+			}
+		}
+
+		void handle_close_all_event(close_all_event_t * event)
+		{
+			close_operation.all()->run(std::bind([](app_overseer_t::callback_void_t on_all_accepted, std::shared_ptr<app_overseer_actual_t> actual){
+					on_all_accepted();
+				}, std::move(event->move_on_all_accepted()), event->get_actual()),
+				std::bind([](app_t::instance_id_t instance, app_overseer_t::callback_app_instance_t on_given_accepted, std::shared_ptr<app_overseer_actual_t> actual){
+					on_given_accepted(instance);
+				}, std::placeholders::_1, std::move(event->move_on_given_accepted()), event->get_actual()),
+				std::bind([](app_t::instance_id_t instance, app_overseer_t::callback_app_instance_t on_given_rejected, std::shared_ptr<app_overseer_actual_t> actual){
+					on_given_rejected(instance);
+				}, std::placeholders::_1, std::move(event->move_on_given_rejected()), event->get_actual()));
+
+			for(auto app_meta : apps_meta)
+			{
+				close_app(app_meta->get_instance_id(), std::bind([](std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance, app_t::kind_t kind){
+					actual->close_operation.all()->given_accepted(instance);
+					actual->close_operation.kind(kind)->given_accepted(instance);
+				}, event->get_actual(), app_meta->get_instance_id(), app_meta->get_app()), std::bind([](std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance, app_t::kind_t kind){
+					actual->close_operation.all()->given_rejected(instance);
+					actual->close_operation.kind(kind)->given_rejected(instance);
+				}, event->get_actual(), app_meta->get_instance_id(), app_meta->get_app()));
+			}
 		}
 
 		void handle_close_all_of_event(close_all_of_event_t * event)
 		{
-			// Todo!
+			close_operation.kind(event->get_app())->run(std::bind([](app_overseer_t::callback_void_t on_all_accepted, std::shared_ptr<app_overseer_actual_t> actual){
+					on_all_accepted();
+				}, std::move(event->move_on_all_accepted()), event->get_actual()),
+				std::bind([](app_t::instance_id_t instance, app_overseer_t::callback_app_instance_t on_given_accepted, std::shared_ptr<app_overseer_actual_t> actual){
+					on_given_accepted(instance);
+				}, std::placeholders::_1, std::move(event->move_on_given_accepted()), event->get_actual()),
+				std::bind([](app_t::instance_id_t instance, app_overseer_t::callback_app_instance_t on_given_rejected, std::shared_ptr<app_overseer_actual_t> actual){
+					on_given_rejected(instance);
+				}, std::placeholders::_1, std::move(event->move_on_given_rejected()), event->get_actual()));
+
+			for(auto app_meta : apps_meta)
+			{
+				if(app_meta->get_app() == event->get_app())
+					close_app(app_meta->get_instance_id(), std::bind([](std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance, app_t::kind_t kind){
+						actual->close_operation.all()->given_accepted(instance);
+						actual->close_operation.kind(kind)->given_accepted(instance);
+					}, event->get_actual(), app_meta->get_instance_id(), app_meta->get_app()), std::bind([](std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance, app_t::kind_t kind){
+						actual->close_operation.all()->given_rejected(instance);
+						actual->close_operation.kind(kind)->given_rejected(instance);
+					}, event->get_actual(), app_meta->get_instance_id(), app_meta->get_app()));
+			}
 		}
 
 		void handle_app_created_event(app_created_event_t * event)
@@ -739,6 +1029,18 @@ namespace engine
 			auto iter = std::find(apps_meta.begin(), apps_meta.end(), event->get_meta());
 			if(iter == apps_meta.end())
 				apps_meta.push_back(event->get_meta());
+
+			if(is_being_terminated(event->get_meta()->get_app()))
+				terminate_app(event->get_meta()->get_instance_id());
+				
+			if(is_being_closed(event->get_meta()->get_app()))
+				close_app(event->get_meta()->get_instance_id(), std::bind([](std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance, app_t::kind_t kind){
+					actual->close_operation.all()->given_accepted(instance);
+					actual->close_operation.kind(kind)->given_accepted(instance);
+				}, event->get_actual(), event->get_meta()->get_instance_id(), event->get_meta()->get_app()), std::bind([](std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance, app_t::kind_t kind){
+					actual->close_operation.all()->given_rejected(instance);
+					actual->close_operation.kind(kind)->given_rejected(instance);
+				}, event->get_actual(), event->get_meta()->get_instance_id(), event->get_meta()->get_app()));
 		}
 
 		void handle_app_destroyed_event(app_destroyed_event_t * event)
@@ -761,6 +1063,8 @@ namespace engine
 
 				}
 				check_for_completion();
+				run_terminate_operations();
+				run_close_operations();
 			}
 		}
 
