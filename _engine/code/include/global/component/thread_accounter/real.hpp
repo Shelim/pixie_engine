@@ -56,9 +56,9 @@ namespace engine
 					for(auto & thread_meta : threads_collection)
 					{
 						if(thread_meta->are_stats_available())
-							logger->log_global_msg(threads, "Thread #1# [id: #2#]; Total time: #3#/#4# (#5#% CPU) in #6####7# is not yet accounted for"_u, thread_meta->get_name(), thread_meta->get_id(), thread_meta->get_total_busy_time(), thread_meta->get_total_time(), static_cast<int>((thread_meta->get_total_busy_time() / thread_meta->get_total_time()) * 100.0), thread_meta->get_app(), thread_meta->get_app_instance_id());
+							logger->log_global_msg(threads, "Thread #1# [id: #2#]; Total time: #3#/#4# (#5#% CPU) in #6#:#7# is not yet accounted for"_u, thread_meta->get_name(), thread_meta->get_id(), thread_meta->get_total_busy_time(), thread_meta->get_total_time(), static_cast<int>((thread_meta->get_total_busy_time() / thread_meta->get_total_time()) * 100.0), thread_meta->get_app(), thread_meta->get_app_instance_id());
 						else
-							logger->log_global_msg(threads, "Thread #1# [id: #2#]; Total time: #3# (unknown CPU) in #4####5# is not yet accounted for"_u, thread_meta->get_name(), thread_meta->get_id(), thread_meta->get_total_time(), thread_meta->get_app(), thread_meta->get_app_instance_id());
+							logger->log_global_msg(threads, "Thread #1# [id: #2#]; Total time: #3# (unknown CPU) in #4#:#5# is not yet accounted for"_u, thread_meta->get_name(), thread_meta->get_id(), thread_meta->get_total_time(), thread_meta->get_app(), thread_meta->get_app_instance_id());
 					}
 				}
 				logger->log_global_task_done(task_id);	
@@ -87,7 +87,7 @@ namespace engine
 			if(msg->get_object()->get_thread_meta()->get_app() == app_t::kind_t::_engine)
 				logger->log_global_msg(threads, "New global thread was just created: #1# [id: #2#]"_u, msg->get_object()->get_thread_meta()->get_name(), msg->get_object()->get_thread_meta()->get_id());
 			else
-				logger->log_global_msg(threads, "New thread was just created for #3####4#: #1# [id: #2#]"_u, msg->get_object()->get_thread_meta()->get_name(), msg->get_object()->get_thread_meta()->get_id(), msg->get_object()->get_thread_meta()->get_app(), msg->get_object()->get_thread_meta()->get_app_instance_id());
+				logger->log_global_msg(threads, "New thread was just created for #3#:#4#: #1# [id: #2#]"_u, msg->get_object()->get_thread_meta()->get_name(), msg->get_object()->get_thread_meta()->get_id(), msg->get_object()->get_thread_meta()->get_app(), msg->get_object()->get_thread_meta()->get_app_instance_id());
 			
 			for(auto & thread_meta : threads_collection)
 			{
@@ -119,9 +119,9 @@ namespace engine
 			else
 			{
 				if(msg->get_object()->get_thread_meta()->are_stats_available())
-					logger->log_global_msg(threads, "Thread was just destroyed for #6####7#: #1# [id: #2#]; Total time: #3#/#4# (#5#% CPU)"_u, msg->get_object()->get_thread_meta()->get_name(), msg->get_object()->get_thread_meta()->get_id(), msg->get_object()->get_thread_meta()->get_total_busy_time(), msg->get_object()->get_thread_meta()->get_total_time(), static_cast<int>((msg->get_object()->get_thread_meta()->get_total_busy_time() / msg->get_object()->get_thread_meta()->get_total_time()) * 100.0), msg->get_object()->get_thread_meta()->get_app(), msg->get_object()->get_thread_meta()->get_app_instance_id());
+					logger->log_global_msg(threads, "Thread was just destroyed for #6#:#7#: #1# [id: #2#]; Total time: #3#/#4# (#5#% CPU)"_u, msg->get_object()->get_thread_meta()->get_name(), msg->get_object()->get_thread_meta()->get_id(), msg->get_object()->get_thread_meta()->get_total_busy_time(), msg->get_object()->get_thread_meta()->get_total_time(), static_cast<int>((msg->get_object()->get_thread_meta()->get_total_busy_time() / msg->get_object()->get_thread_meta()->get_total_time()) * 100.0), msg->get_object()->get_thread_meta()->get_app(), msg->get_object()->get_thread_meta()->get_app_instance_id());
 				else
-					logger->log_global_msg(threads, "Thread was just destroyed for #6####7#: #1# [id: #2#]; Total time: #3# (unknown CPU)"_u, msg->get_object()->get_thread_meta()->get_name(), msg->get_object()->get_thread_meta()->get_id(), msg->get_object()->get_thread_meta()->get_total_time(), msg->get_object()->get_thread_meta()->get_app(), msg->get_object()->get_thread_meta()->get_app_instance_id());
+					logger->log_global_msg(threads, "Thread was just destroyed for #6#:#7#: #1# [id: #2#]; Total time: #3# (unknown CPU)"_u, msg->get_object()->get_thread_meta()->get_name(), msg->get_object()->get_thread_meta()->get_id(), msg->get_object()->get_thread_meta()->get_total_time(), msg->get_object()->get_thread_meta()->get_app(), msg->get_object()->get_thread_meta()->get_app_instance_id());
 			}
 				
 			for(auto iter = threads_collection.begin(); iter != threads_collection.end(); iter++)

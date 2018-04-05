@@ -37,7 +37,11 @@ namespace engine
                 {
                     FILETIME creation_time, exit_time, kernel_busy, user_busy;
 
-                    GetThreadTimes(native_handle, &creation_time, &exit_time, &kernel_busy, &user_busy);
+                    if(!GetThreadTimes(native_handle, &creation_time, &exit_time, &kernel_busy, &user_busy))
+                    {
+                        DWORD error = GetLastError();
+                        return std::chrono::duration<double>::zero();
+                    }
 
                     return std::chrono::duration<double>(static_cast<double>((convert(kernel_busy) + convert(user_busy)) / 10000000.0l));
                 }

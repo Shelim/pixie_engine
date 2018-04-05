@@ -96,7 +96,6 @@ namespace engine
 	private:
 
 		signal_t signal_completion;
-		std::mutex event_being_handled_mutex;
 
 		class event_t
 		{
@@ -460,7 +459,7 @@ namespace engine
 			runner_spawn->add_task(std::make_unique<task_func_t>(std::bind([](process::token_t* token, std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<app_t> app){
 					app->get_meta()->wait_till_completed();
 					return task_base_t::result_t::completed;
-				}, std::placeholders::_1, shared_from_this(), app), format_string("Running #1####2#"_u, app->get_meta()->get_app(), app->get_meta()->get_instance_id())));
+				}, std::placeholders::_1, shared_from_this(), app), format_string("Running #1#:#2#"_u, app->get_meta()->get_app(), app->get_meta()->get_instance_id())));
 
 			return app;
 		}
@@ -700,7 +699,7 @@ namespace engine
 					app_meta->wait_till_completed();
 					on_completed();
 					return task_base_t::result_t::completed;
-				}, std::placeholders::_1, std::move(event->move_on_completed()), event->get_actual(), *iter), format_string("Waiting for termination of #1####2#"_u, (*iter)->get_app(), (*iter)->get_instance_id())));
+				}, std::placeholders::_1, std::move(event->move_on_completed()), event->get_actual(), *iter), format_string("Waiting for termination of #1#:#2#"_u, (*iter)->get_app(), (*iter)->get_instance_id())));
 
 			}
 		}

@@ -53,7 +53,7 @@ namespace engine
 					else
 						logger->log_global_msg(apps, "#1# apps are still not accounted for. Will release them after accounter has died. List of them follows:"_u, apps_collection.size());
 					for(auto & app_meta : apps_collection)
-						logger->log_global_msg(apps, "App #1####2#; Total time: #3# is not yet accounted for"_u, app_meta->get_app(), app_meta->get_instance_id(), app_meta->get_total_time());
+						logger->log_global_msg(apps, "App #1#:#2#; Total time: #3# is not yet accounted for"_u, app_meta->get_app(), app_meta->get_instance_id(), app_meta->get_total_time());
 				}
 				logger->log_global_task_done(task_id);	
 			}
@@ -78,14 +78,14 @@ namespace engine
 		{
 			std::lock_guard<std::mutex> guard(mutex);
 
-			logger->log_global_msg(apps, "New app was just created: #1####2#"_u, msg->get_object()->get_meta()->get_app(), msg->get_object()->get_meta()->get_instance_id());
+			logger->log_global_msg(apps, "New app was just created: #1#:#2#"_u, msg->get_object()->get_meta()->get_app(), msg->get_object()->get_meta()->get_instance_id());
 			
 			for(auto & app_meta : apps_collection)
 			{
 				if(app_meta == msg->get_object()->get_meta() &&
 					app_meta->get_instance_id() == msg->get_object()->get_meta()->get_instance_id())
 					{
-						logger->log_global_warn(apps, "The app #1####2# attempted to account itself second time (original total time: #3#)"_u, msg->get_object()->get_meta()->get_app(), msg->get_object()->get_meta()->get_instance_id(), app_meta->get_total_time());
+						logger->log_global_warn(apps, "The app #1#:#2# attempted to account itself second time (original total time: #3#)"_u, msg->get_object()->get_meta()->get_app(), msg->get_object()->get_meta()->get_instance_id(), app_meta->get_total_time());
 					}
 			}
 
@@ -100,7 +100,7 @@ namespace engine
 		{
 			std::lock_guard<std::mutex> guard(mutex);
 
-			logger->log_global_msg(apps, "App #1####2#; Total time: #3# was just destroyed"_u, msg->get_object()->get_meta()->get_app(), msg->get_object()->get_meta()->get_instance_id(), msg->get_object()->get_meta()->get_total_time());
+			logger->log_global_msg(apps, "App #1#:#2#; Total time: #3# was just destroyed"_u, msg->get_object()->get_meta()->get_app(), msg->get_object()->get_meta()->get_instance_id(), msg->get_object()->get_meta()->get_total_time());
 			
 				
 			for(auto iter = apps_collection.begin(); iter != apps_collection.end(); iter++)
@@ -119,7 +119,7 @@ namespace engine
 				}
 			}
 			
-			logger->log_global_warn(apps, "The app #1####2#; Total time: #3# attempted to free itself, while it was not registered in the first place"_u, msg->get_object()->get_meta()->get_app(), msg->get_object()->get_meta()->get_instance_id(), msg->get_object()->get_meta()->get_total_time());
+			logger->log_global_warn(apps, "The app #1#:#2#; Total time: #3# attempted to free itself, while it was not registered in the first place"_u, msg->get_object()->get_meta()->get_app(), msg->get_object()->get_meta()->get_instance_id(), msg->get_object()->get_meta()->get_total_time());
 		}
 		
 		void on_accountable_changed(messenger::msg_accountable_app_t* msg)
