@@ -49,21 +49,6 @@ echo Setting up paths...
 rem * Setup paths
 call setup_path.bat
 
-rem * Verify that we have admin rights
-call check_admin_rights.bat
-
-rem * Should we fail here...
-if %ERRORLEVEL% == 0 goto ok1 
-
-	rem * Output some info
-	echo We need admin rights!
-
-	rem * Fail execution
-	goto failed
-
-rem * Ok, we did not fail!
-:ok1
-
 rem * Jump '\_engine\build\windows' -> '\_engine\dependency\other\visual_studio_code\windows'
 cd ..\..\dependency\other\visual_studio_code\windows
 
