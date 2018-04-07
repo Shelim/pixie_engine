@@ -163,7 +163,6 @@ namespace engine
             {
                 if(msg)
                 {
-                    std::lock_guard<std::mutex> guard(mutex);
                     queue_msg.push(std::make_unique<msg_t<msg_actual_t>>(msg));
                 }
             }

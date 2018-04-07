@@ -47,6 +47,8 @@ engine::logger_real_t::item_id_t engine::logger_real_t::log_local(engine::consol
 {
 	size_t item_id;
 	{
+		std::lock_guard<std::mutex> guard(mutex);
+
 		if (source == engine::console::logger_item_t::source_t::unknown && link < cache.size())
 		{
 			source = cache[link].get_source();

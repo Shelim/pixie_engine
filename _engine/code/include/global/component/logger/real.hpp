@@ -39,6 +39,7 @@ namespace engine
 	private:
 
 		engine::console::logger_items_t cache;
+		std::mutex mutex;
 		
 		std::unique_ptr<holder_t<logger_t> > logger_providers;
 
