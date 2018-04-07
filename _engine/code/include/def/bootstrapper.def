@@ -1,0 +1,11 @@
+#ifndef ENGINE_BOOTSTRAPPER_DEF
+#define ENGINE_BOOTSTRAPPER_DEF(...)
+#endif
+
+ENGINE_BOOTSTRAPPER_DEF( (program_reference), (console_writer), (messenger_console) )
+
+#ifdef ENGINE_BOOTSTRAPPER_IMPL
+#undef ENGINE_BOOTSTRAPPER_IMPL
+#endif 
+
+#undef ENGINE_BOOTSTRAPPER_DEF

@@ -40,10 +40,12 @@ namespace engine
 
         }
 
-        std::shared_ptr<program_reference_t> get_program_reference() { return program_reference; }
 #define ENGINE_GLOBAL_COMPONENT_IMPL(component) std::shared_ptr<component##_t> get_##component() { return component; }
 #define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/global_component.def"
+#define ENGINE_BOOTSTRAPPER_IMPL(component) std::shared_ptr<component##_t> get_##component() { return component; }
+#define ENGINE_BOOTSTRAPPER_DEF(...) DEFINE_TYPE_PASS(ENGINE_BOOTSTRAPPER_IMPL, __VA_ARGS__)
+#include "def/bootstrapper.def"
 
     protected:
 
@@ -52,10 +54,12 @@ namespace engine
 
         }
 
-        std::shared_ptr<program_reference_t> program_reference;
 #define ENGINE_GLOBAL_COMPONENT_IMPL(component) std::shared_ptr<component##_t> component;
 #define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/global_component.def"
+#define ENGINE_BOOTSTRAPPER_IMPL(component) std::shared_ptr<component##_t> component;
+#define ENGINE_BOOTSTRAPPER_DEF(...) DEFINE_TYPE_PASS(ENGINE_BOOTSTRAPPER_IMPL, __VA_ARGS__)
+#include "def/bootstrapper.def"
 
 
     };
@@ -67,11 +71,13 @@ namespace engine
 
         program_real_t(injector_t injector)
         {
-            this->program_reference = std::make_shared<program_reference_t>(this);
-            auto injector_with_reference = boost::di::make_injector(std::move(injector), boost::di::bind<>().to(program_reference));
+            auto injector_with_reference = boost::di::make_injector(std::move(injector), boost::di::bind<>().to(static_cast<program_t*>(this)));
 #define ENGINE_GLOBAL_COMPONENT_IMPL(component) this->component = injector_with_reference.create<std::shared_ptr<component##_t> >();
 #define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/global_component.def"
+#define ENGINE_BOOTSTRAPPER_IMPL(component) this->component = injector_with_reference.create<std::shared_ptr<component##_t> >();
+#define ENGINE_BOOTSTRAPPER_DEF(...) DEFINE_TYPE_PASS(ENGINE_BOOTSTRAPPER_IMPL, __VA_ARGS__)
+#include "def/bootstrapper.def"
         }
 
     };

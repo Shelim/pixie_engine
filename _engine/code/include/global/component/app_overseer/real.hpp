@@ -24,7 +24,7 @@ namespace engine
 
 		app_overseer_actual_t(std::shared_ptr<logger_t> logger, std::shared_ptr<app_interrupter_t> app_interrupter, std::shared_ptr<process::runner_spawn_factory_t> runner_spawn_factory, std::shared_ptr<app_factory_t> app_factory, std::shared_ptr<instances_application_t> policy_instances_application, std::shared_ptr<program_instancer_t> program_instancer) : logger(logger), app_interrupter(app_interrupter), runner_spawn_factory(runner_spawn_factory), app_factory(app_factory), policy_instances_application(policy_instances_application), program_instancer(program_instancer), termination_runner_id(0), app_runner_id(0)
 		{
-			
+
 		}
 
 		void run_app(app_t::kind_t kind, std::unique_ptr<app_context_t> context, app_overseer_t::run_app_instance_t instance = app_overseer_t::run_app_instance_t::allow_multiple, app_overseer_t::run_app_other_t other = app_overseer_t::run_app_other_t::keep, app_overseer_t::run_app_program_t program = app_overseer_t::run_app_program_t::if_possible_same_instance_if_not_new_instance, app_overseer_t::callback_app_t app_running = [](std::shared_ptr<app_t>){}, app_overseer_t::callback_void_t run_failed = [](){}, app_overseer_t::callback_void_t run_succeed_in_new_program_instance = [](){})
@@ -450,6 +450,8 @@ namespace engine
 			}
 		}
 
+		std::vector<std::unique_ptr<process::runner_spawn_t> > runners_apps;
+
 		std::shared_ptr<app_t> run_app_from_handler(app_t::kind_t kind, std::unique_ptr<app_context_t> context)
 		{
 			std::shared_ptr<app_t> app = app_factory->create(kind, std::move(context));
@@ -460,6 +462,8 @@ namespace engine
 					app->get_meta()->wait_till_completed();
 					return task_base_t::result_t::completed;
 				}, std::placeholders::_1, shared_from_this(), app), format_string("Running #1#:#2#"_u, app->get_meta()->get_app(), app->get_meta()->get_instance_id())));
+
+			runners_apps.push_back(std::move(runner_spawn));
 
 			return app;
 		}

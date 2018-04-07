@@ -22,6 +22,8 @@
 #include "global/component/logger.hpp"
 #include "global/component/profiler.hpp"
 #include "global/component/thread_accounter.hpp"
+#include "global/core/program/reference.hpp"
+#include "global/core/console/writer.hpp"
 #include "local/core/manifest/app.hpp"
 #include "local/component/renderer_status.hpp"
 #include "local/component/terminal.hpp"
@@ -94,6 +96,9 @@ namespace engine
 #define ENGINE_GLOBAL_COMPONENT_IMPL(component) boost::di::bind<>().to(context->get_program()->get_##component()),
 #define ENGINE_GLOBAL_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_GLOBAL_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/global_component.def"
+#define ENGINE_BOOTSTRAPPER_IMPL(component) boost::di::bind<>().to(context->get_program()->get_##component()),
+#define ENGINE_BOOTSTRAPPER_DEF(...) DEFINE_TYPE_PASS(ENGINE_BOOTSTRAPPER_IMPL, __VA_ARGS__)
+#include "def/bootstrapper.def"
 				boost::di::bind<app_t::instance_id_t>().named(engine::instance_id).to(context->get_instance_id()),
 				boost::di::bind<>().to(context));
 		};
@@ -115,6 +120,9 @@ namespace engine
 #define ENGINE_COMPONENT_IMPL(component) std::shared_ptr<component##_t>,
 #define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/component.def"
+#define ENGINE_BOOTSTRAPPER_IMPL(component) std::shared_ptr<component##_t>,
+#define ENGINE_BOOTSTRAPPER_DEF(...) DEFINE_TYPE_PASS(ENGINE_BOOTSTRAPPER_IMPL, __VA_ARGS__)
+#include "def/bootstrapper.def"
 			unused_t> injector) : injector(std::move(injector))
 			{
 
@@ -126,6 +134,9 @@ namespace engine
 #define ENGINE_COMPONENT_IMPL(component) std::shared_ptr<engine::component##_t> get_##component() { return injector.create<std::shared_ptr<engine::component##_t> >(); }
 #define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/component.def"
+#define ENGINE_BOOTSTRAPPER_IMPL(component) std::shared_ptr<engine::component##_t> get_##component() { return injector.create<std::shared_ptr<engine::component##_t> >(); }
+#define ENGINE_BOOTSTRAPPER_DEF(...) DEFINE_TYPE_PASS(ENGINE_BOOTSTRAPPER_IMPL, __VA_ARGS__)
+#include "def/bootstrapper.def"
 			
 		private:
 		
@@ -136,6 +147,9 @@ namespace engine
 #define ENGINE_COMPONENT_IMPL(component) std::shared_ptr<component##_t>,
 #define ENGINE_COMPONENT_DEF(...) DEFINE_TYPE_PASS(ENGINE_COMPONENT_IMPL, __VA_ARGS__)
 #include "def/component.def"
+#define ENGINE_BOOTSTRAPPER_IMPL(component) std::shared_ptr<component##_t>,
+#define ENGINE_BOOTSTRAPPER_DEF(...) DEFINE_TYPE_PASS(ENGINE_BOOTSTRAPPER_IMPL, __VA_ARGS__)
+#include "def/bootstrapper.def"
 			unused_t> injector;
 
 		};
