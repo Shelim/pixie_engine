@@ -229,7 +229,7 @@ namespace engine
 
 				app_overseer_t::callback_void_t move_on_completed()
 				{
-					std::move(on_completed);
+					return std::move(on_completed);
 				}
 
 			private:
@@ -251,7 +251,7 @@ namespace engine
 
 				app_overseer_t::callback_void_t move_on_completed()
 				{
-					std::move(on_completed);
+					return std::move(on_completed);
 				}
 
 			private:
@@ -278,7 +278,7 @@ namespace engine
 
 				app_overseer_t::callback_void_t move_on_completed()
 				{
-					std::move(on_completed);
+					return std::move(on_completed);
 				}
 
 			private:
