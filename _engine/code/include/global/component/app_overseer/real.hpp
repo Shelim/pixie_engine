@@ -22,7 +22,7 @@ namespace engine
 
 	public:
 
-		app_overseer_actual_t(std::shared_ptr<logger_t> logger, std::shared_ptr<app_interrupter_t> app_interrupter, std::shared_ptr<process::runner_spawn_factory_t> runner_spawn_factory, std::shared_ptr<app_factory_t> app_factory, std::shared_ptr<instances_application_t> policy_instances_application, std::shared_ptr<program_instancer_t> program_instancer) : logger(logger), app_interrupter(app_interrupter), runner_spawn_factory(runner_spawn_factory), app_factory(app_factory), policy_instances_application(policy_instances_application), program_instancer(program_instancer), termination_runner_id(0), app_runner_id(0)
+		app_overseer_actual_t(std::shared_ptr<logger_t> logger, std::shared_ptr<app_interrupter_t> app_interrupter, std::shared_ptr<thread_factory_t> thread_factory, std::shared_ptr<app_factory_t> app_factory, std::shared_ptr<instances_application_t> policy_instances_application, std::shared_ptr<program_instancer_t> program_instancer) : logger(logger), app_interrupter(app_interrupter), app_factory(app_factory), policy_instances_application(policy_instances_application), program_instancer(program_instancer), app_runner_id(0)
 		{
 
 		}
@@ -88,9 +88,18 @@ namespace engine
 			for(;;)
 			{
 				std::unique_ptr<event_t> event = std::move(events.pop());
-				if(!event) return task_base_t::result_t::completed;
+				if(!event)
+				{
+					complete_run();
+					return task_base_t::result_t::completed;
+				}
 				handle_event(std::move(event));
 			}
+		}
+
+		std::shared_ptr<app_interrupter_t> get_app_interrupter()
+		{
+			return app_interrupter;
 		}
 
 	private:
@@ -423,15 +432,271 @@ namespace engine
 				std::shared_ptr<app_meta_t> meta;
 		};
 
+		class app_running_t
+		{
+			public:
+
+				app_running_t(std::shared_ptr<app_meta_t> app_meta) : app_meta(app_meta)
+				{
+
+				}
+
+				~app_running_t()
+				{
+					std::lock_guard<std::mutex> guard(terminate_mutex);
+
+					if(flags.is_flag(flag_t::being_terminated))
+					{
+						for(auto & handler : on_completed)
+						{
+							handler();
+						}
+					}
+				}
+
+				std::shared_ptr<app_meta_t> get_app_meta()
+				{
+					return app_meta;
+				}
+
+				app_t::instance_id_t get_instance_id()
+				{
+					return app_meta->get_instance_id();
+				}
+
+				void terminate(std::shared_ptr<app_overseer_actual_t> actual, app_overseer_t::callback_void_t on_completed)
+				{
+					this->on_completed.push_back(std::move(on_completed));
+
+					std::lock_guard<std::mutex> guard(terminate_mutex);
+
+					if(!flags.is_flag(flag_t::being_terminated))
+						actual->get_app_interrupter()->send_interruption(std::make_unique<interruption_terminate_t>(get_instance_id()));
+
+					flags.set_flag(flag_t::being_terminated, true);
+				}
+
+				void close(std::shared_ptr<app_overseer_actual_t> actual, app_overseer_t::callback_void_t on_completed, app_overseer_t::callback_void_t on_refused)
+				{
+					actual->get_app_interrupter()->send_interruption(std::make_unique<interruption_ask_for_close_t>(get_instance_id(), std::bind([](app_overseer_t::callback_void_t on_completed, std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance){
+						actual->terminate_app(instance, std::move(on_completed));
+					}, std::move(on_completed), actual, get_instance_id()), std::bind([](app_overseer_t::callback_void_t on_refused, std::shared_ptr<app_overseer_actual_t> actual){
+						on_refused();
+					}, std::move(on_refused), actual)));
+				}
+
+			private:
+
+				std::mutex terminate_mutex;
+				std::shared_ptr<app_meta_t> app_meta;
+				std::vector<app_overseer_t::callback_void_t> on_completed;
+
+				enum class flag_t
+				{
+					being_terminated,
+					count
+				};
+
+				flags_t<flag_t> flags;
+
+		};
+
+		class kind_running_t
+		{
+			public:
+
+				app_running_t * get_app(app_t::instance_id_t instance_id)
+				{
+					auto iter = std::find_if(apps_running.begin(), apps_running.end(), [instance_id](std::shared_ptr<app_running_t> app_running){ return app_running->get_instance_id() == instance_id; });
+					if(iter == apps_running.end())
+						return nullptr;
+
+					return iter->get();
+				}
+
+				void add_app(std::shared_ptr<app_running_t> app_running)
+				{
+					apps_running.push_back(app_running);
+				}
+
+				void remove_app(app_t::instance_id_t instance_id)
+				{
+					auto iter = std::find_if(apps_running.begin(), apps_running.end(), [instance_id](std::shared_ptr<app_running_t> app_running){ return app_running->get_instance_id() == instance_id; });
+					if(iter != apps_running.end())
+						apps_running.erase(iter);
+
+					if(apps_running.empty())
+					{
+						if(flags.is_flag(flag_t::being_closed))
+						{
+							flags.set_flag(flag_t::being_closed, false);	
+							for(auto & item : on_close_all_completed)
+								item();
+							on_close_all_completed.clear();
+							on_close_given_completed.clear();
+							on_close_given_rejected.clear();
+						}
+						if(flags.is_flag(flag_t::being_terminated))
+						{
+							flags.set_flag(flag_t::being_terminated, false);	
+							for(auto & item : on_terminate_all_completed)
+								item();
+							on_terminate_all_completed.clear();
+						}
+					}
+				}
+
+				bool is_empty()
+				{
+					return apps_running.empty();
+				}
+
+				bool is_being_closed()
+				{
+					return flags.is_flag(flag_t::being_closed);
+				}
+
+				bool is_being_terminated()
+				{
+					return flags.is_flag(flag_t::being_terminated);
+				}
+
+
+				void close_all(std::shared_ptr<app_overseer_actual_t> actual, app_overseer_t::callback_void_t on_all_accepted, app_overseer_t::callback_app_instance_t on_given_accepted, app_overseer_t::callback_app_instance_t on_given_rejected)
+				{
+					on_close_all_completed.push_back(std::move(on_all_accepted));
+					flags.set_flag(flag_t::being_closed, true);
+					for(auto & app_running : apps_running)
+					{
+						auto instance_id = app_running->get_instance_id();
+						app_running->close(actual, [instance_id, on_given_accepted](){ on_given_accepted(instance_id); }, [instance_id, on_given_rejected](){ on_given_rejected(instance_id); });
+					}
+				}
+
+				void terminate_all(std::shared_ptr<app_overseer_actual_t> actual, app_overseer_t::callback_void_t on_all_accepted)
+				{
+					on_terminate_all_completed.push_back(std::move(on_all_accepted));
+					flags.set_flag(flag_t::being_terminated, true);
+					for(auto & app_running : apps_running)
+					{
+						app_running->terminate(actual, [](){});
+					}
+				}
+
+				void given_closed(app_t::instance_id_t instance_id)
+				{
+					if(flags.is_flag(flag_t::being_closed))
+					{
+						for(auto & item : on_close_given_completed)
+							item(instance_id);
+					}
+				}
+
+				void given_not_closed(app_t::instance_id_t instance_id)
+				{
+					if(flags.is_flag(flag_t::being_closed))
+					{
+						for(auto & item : on_close_given_rejected)
+							item(instance_id);
+					}
+					flags.set_flag(flag_t::being_closed, false);
+				}
+
+			private:
+
+				enum class flag_t
+				{
+					being_closed,
+					being_terminated,
+					count
+				};
+
+				flags_t<flag_t> flags;
+				std::vector<std::shared_ptr<app_running_t> > apps_running;
+				std::vector<app_overseer_t::callback_app_instance_t> on_close_given_completed;
+				std::vector<app_overseer_t::callback_app_instance_t> on_close_given_rejected;
+				std::vector<app_overseer_t::callback_void_t> on_close_all_completed;
+				std::vector<app_overseer_t::callback_void_t> on_terminate_all_completed;
+
+		};
+
+		class runner_t
+		{
+			public:
+
+				app_running_t * get_app(app_t::instance_id_t instance_id)
+				{
+					return apps_running[value_of(app_t::kind_t::_engine)].get_app(instance_id);
+				}
+
+				void add_app(std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<app_running_t> app_running)
+				{
+					apps_running[value_of(app_t::kind_t::_engine)].add_app(app_running);
+					apps_running[value_of(app_running->get_app_meta()->get_app())].add_app(app_running);
+
+					if(apps_running[value_of(app_t::kind_t::_engine)].is_being_terminated() || apps_running[value_of(app_running->get_app_meta()->get_app())].is_being_terminated())
+					{
+						app_running->terminate(actual, [](){});
+					}
+					else if(apps_running[value_of(app_t::kind_t::_engine)].is_being_closed() || apps_running[value_of(app_running->get_app_meta()->get_app())].is_being_closed())
+					{
+						auto instance_id = app_running->get_instance_id();
+						auto & global = apps_running[value_of(app_t::kind_t::_engine)];
+						auto & local = apps_running[value_of(app_running->get_app_meta()->get_app())];
+						app_running->close(actual, [instance_id, &global, &local](){ global.given_closed(instance_id); local.given_closed(instance_id); }, [instance_id, &global, &local](){ global.given_not_closed(instance_id); local.given_not_closed(instance_id); });
+					}
+				}
+
+				void remove_app(app_t::instance_id_t instance_id)
+				{
+					for(auto & item : apps_running)
+					{
+						item.remove_app(instance_id);
+					}
+				}
+
+				bool is_empty()
+				{
+					return apps_running[value_of(app_t::kind_t::_engine)].is_empty();
+				}
+
+				bool is_empty_kind(app_t::kind_t kind)
+				{
+					return apps_running[value_of(kind)].is_empty();
+				}
+
+				void terminate_all(std::shared_ptr<app_overseer_actual_t> actual, app_overseer_t::callback_void_t on_all_accepted)
+				{
+					apps_running[value_of(app_t::kind_t::_engine)].terminate_all(actual, std::move(on_all_accepted));
+				}
+
+				void terminate_all_of(app_t::kind_t kind, std::shared_ptr<app_overseer_actual_t> actual, app_overseer_t::callback_void_t on_all_accepted)
+				{
+					apps_running[value_of(kind)].terminate_all(actual, std::move(on_all_accepted));
+				}
+
+				void close_all(std::shared_ptr<app_overseer_actual_t> actual, app_overseer_t::callback_void_t on_all_accepted, app_overseer_t::callback_app_instance_t on_given_accepted, app_overseer_t::callback_app_instance_t on_given_rejected)
+				{
+					apps_running[value_of(app_t::kind_t::_engine)].close_all(actual, std::move(on_all_accepted), std::move(on_given_accepted), std::move(on_given_rejected));
+				}
+
+				void close_all_of(app_t::kind_t kind, std::shared_ptr<app_overseer_actual_t> actual, app_overseer_t::callback_void_t on_all_accepted, app_overseer_t::callback_app_instance_t on_given_accepted, app_overseer_t::callback_app_instance_t on_given_rejected)
+				{
+					apps_running[value_of(kind)].close_all(actual, std::move(on_all_accepted), std::move(on_given_accepted), std::move(on_given_rejected));
+				}
+
+			private:
+			
+				std::array<kind_running_t, value_of(app_t::kind_t::count)> apps_running;
+		};
+
 		std::shared_ptr<logger_t> logger;
 		std::shared_ptr<app_interrupter_t> app_interrupter;
-		std::shared_ptr<process::runner_spawn_factory_t> runner_spawn_factory;
 		std::shared_ptr<app_factory_t> app_factory;
 		std::shared_ptr<instances_application_t> policy_instances_application;
 		std::shared_ptr<program_instancer_t> program_instancer;
-		std::size_t termination_runner_id;
 		std::size_t app_runner_id;
-		std::vector<std::shared_ptr<app_meta_t> > apps_meta;
+		runner_t runner;
 
 		enum class flag_t
 		{
@@ -440,32 +705,24 @@ namespace engine
 		};
 
 		flags_t<flag_t> flags;
+		std::mutex mutex_complete_run;
 
-		void check_for_completion()
+		void complete_run()
 		{
-			if(apps_meta.empty() && events.is_empty())
+			std::lock_guard<std::mutex> guard(mutex_complete_run);
+			if(!flags.is_flag(flag_t::is_done))
 			{
 				flags.set_flag(flag_t::is_done, true);
 				signal_completion.signal();
 			}
 		}
 
-		std::vector<std::unique_ptr<process::runner_spawn_t> > runners_apps;
-
-		std::shared_ptr<app_t> run_app_from_handler(app_t::kind_t kind, std::unique_ptr<app_context_t> context)
+		void check_for_completion()
 		{
-			std::shared_ptr<app_t> app = app_factory->create(kind, std::move(context));
-
-			std::unique_ptr<process::runner_spawn_t> runner_spawn = runner_spawn_factory->create(app->get_meta()->get_app(), app->get_meta()->get_instance_id(), format_string("App runner ###1#"_u, ++app_runner_id));
-				
-			runner_spawn->add_task(std::make_unique<task_func_t>(std::bind([](process::token_t* token, std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<app_t> app){
-					app->get_meta()->wait_till_completed();
-					return task_base_t::result_t::completed;
-				}, std::placeholders::_1, shared_from_this(), app), format_string("Running #1#:#2#"_u, app->get_meta()->get_app(), app->get_meta()->get_instance_id())));
-
-			runners_apps.push_back(std::move(runner_spawn));
-
-			return app;
+			if(runner.is_empty() && events.is_empty())
+			{
+				complete_run();
+			}
 		}
 
 		class context_holder_t
@@ -489,89 +746,78 @@ namespace engine
 
 		};
 
-		void run_app_internal(app_t::kind_t kind, app_overseer_t::run_app_instance_t instance_policy, app_overseer_t::run_app_other_t other_policy, app_overseer_t::run_app_program_t program_policy, std::unique_ptr<app_context_t> context, app_overseer_t::callback_app_t on_app_running, app_overseer_t::callback_void_t on_run_failed, app_overseer_t::callback_void_t on_run_succeed_in_new_program_instance)
+		std::shared_ptr<app_t> run_app_from_handler(app_t::kind_t kind, std::unique_ptr<app_context_t> context)
+		{
+			std::shared_ptr<app_t> app = app_factory->create(kind, std::move(context));
+
+			std::thread holder(std::bind([](std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<app_t> app){
+					app->get_meta()->wait_till_completed();
+				}, shared_from_this(), app));
+
+			try
+			{
+				holder.detach();
+			}
+			catch (const std::system_error& e) {}
+
+			return app;
+		}
+
+		void run_app_actual(std::shared_ptr<app_overseer_actual_t> actual, app_t::kind_t kind, app_overseer_t::run_app_instance_t instance_policy, app_overseer_t::run_app_other_t other_policy, app_overseer_t::run_app_program_t program_policy, std::unique_ptr<app_context_t> context, app_overseer_t::callback_app_t on_app_running, app_overseer_t::callback_void_t on_run_failed, app_overseer_t::callback_void_t on_run_succeed_in_new_program_instance)
 		{
 			std::shared_ptr<context_holder_t> context_holder = std::make_shared<context_holder_t>(std::move(context));
-			std::vector<std::shared_ptr<app_meta_t> > apps_meta_running;
-			apps_meta_running.reserve(apps_meta.size());
 
-			for(auto app_meta : apps_meta)
+			if(program_policy == app_overseer_t::run_app_program_t::force_new_instance)
 			{
-				if(app_meta->get_app() == kind)
-				{
-					apps_meta_running.push_back(app_meta);
-				}
-			}
-
-			if((policy_instances_application->get_type() == instances_application_t::type_t::allow_multiple || 
-				(policy_instances_application->get_type() == instances_application_t::type_t::force_single_given_kind && apps_meta_running.empty()) ||
-				(policy_instances_application->get_type() == instances_application_t::type_t::force_single && apps_meta.empty()))
-				&&
-				(instance_policy == app_overseer_t::run_app_instance_t::allow_multiple || 
-				(instance_policy == app_overseer_t::run_app_instance_t::force_single_given_kind && apps_meta_running.empty()) ||
-				(instance_policy == app_overseer_t::run_app_instance_t::force_single && apps_meta.empty())))
-			{
-				if(program_policy == app_overseer_t::run_app_program_t::force_new_instance)
-				{
-					bool success = program_instancer->run_new_program(kind);
-					if(success)
-						on_run_succeed_in_new_program_instance();
-					else
-						on_run_failed();
-				}
+				bool success = program_instancer->run_new_program(kind);
+				if(success)
+					on_run_succeed_in_new_program_instance();
 				else
-					on_app_running(run_app_from_handler(kind, std::move(context_holder->move_context())));
+					on_run_failed();
 			}
 			else
 			{
-				if(other_policy == app_overseer_t::run_app_other_t::keep)
+				if((policy_instances_application->get_type() == instances_application_t::type_t::allow_multiple || 
+					(policy_instances_application->get_type() == instances_application_t::type_t::force_single_given_kind && runner.is_empty_kind(kind)) ||
+					(policy_instances_application->get_type() == instances_application_t::type_t::force_single && runner.is_empty()))
+					&&
+					(instance_policy == app_overseer_t::run_app_instance_t::allow_multiple || 
+					(instance_policy == app_overseer_t::run_app_instance_t::force_single_given_kind && runner.is_empty_kind(kind)) ||
+					(instance_policy == app_overseer_t::run_app_instance_t::force_single && runner.is_empty())))
+						on_app_running(run_app_from_handler(kind, std::move(context_holder->move_context())));
+				else
 				{
-					if(program_policy == app_overseer_t::run_app_program_t::force_same_instance)
-						on_run_failed();
-					else
+					if(other_policy == app_overseer_t::run_app_other_t::keep)
 					{
-						bool success = program_instancer->run_new_program(kind);
-						if(success)
-							on_run_succeed_in_new_program_instance();
-						else
+						if(program_policy == app_overseer_t::run_app_program_t::force_same_instance)
 							on_run_failed();
-					}
-
-				}
-				else if(other_policy == app_overseer_t::run_app_other_t::close_and_if_impossible_fail)
-				{
-					if(policy_instances_application->get_type() == instances_application_t::type_t::allow_multiple &&
-						instance_policy == app_overseer_t::run_app_instance_t::allow_multiple)
-					{
-						if(program_policy == app_overseer_t::run_app_program_t::force_new_instance)
-						{
-							bool success = program_instancer->run_new_program(kind);
-							if(success)
-								on_run_succeed_in_new_program_instance();
-							else
-								on_run_failed();
-						}
-						else if(program_policy == app_overseer_t::run_app_program_t::force_same_instance ||
-						 		program_policy == app_overseer_t::run_app_program_t::if_possible_same_instance_if_not_new_instance)
-						{
-							on_app_running(run_app_from_handler(kind, std::move(context_holder->move_context())));
-						}
-					}
-					else if(policy_instances_application->get_type() == instances_application_t::type_t::force_single_given_kind &&
-						instance_policy == app_overseer_t::run_app_instance_t::force_single_given_kind)
-					{
-						if(program_policy == app_overseer_t::run_app_program_t::force_new_instance)
-						{
-							bool success = program_instancer->run_new_program(kind);
-							if(success)
-								on_run_succeed_in_new_program_instance();
-							else
-								on_run_failed();
-						}
 						else
 						{
+							bool success = program_instancer->run_new_program(kind);
+							if(success)
+								on_run_succeed_in_new_program_instance();
+							else
+								on_run_failed();
+						}
+
+					}
+					else if(other_policy == app_overseer_t::run_app_other_t::close_and_if_impossible_fail)
+					{
+						if(policy_instances_application->get_type() == instances_application_t::type_t::allow_multiple &&
+							instance_policy == app_overseer_t::run_app_instance_t::allow_multiple)
+						{
+							if(program_policy == app_overseer_t::run_app_program_t::force_same_instance ||
+									program_policy == app_overseer_t::run_app_program_t::if_possible_same_instance_if_not_new_instance)
+							{
+								on_app_running(run_app_from_handler(kind, std::move(context_holder->move_context())));
+							}
+						}
+						else if(policy_instances_application->get_type() == instances_application_t::type_t::force_single_given_kind &&
+							instance_policy == app_overseer_t::run_app_instance_t::force_single_given_kind)
+						{
+							
 							close_all_of(kind, std::bind([kind, instance_policy, other_policy, program_policy](app_overseer_t::callback_app_t on_app_running, app_overseer_t::callback_void_t on_run_failed, app_overseer_t::callback_void_t on_run_succeed_in_new_program_instance, std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<context_holder_t> context_holder){
-								actual->run_app_internal(kind, instance_policy, other_policy, program_policy, std::move(context_holder->move_context()), std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance));
+								actual->run_app_actual(actual, kind, instance_policy, other_policy, program_policy, std::move(context_holder->move_context()), std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance));
 							}, std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance), shared_from_this(), context_holder),
 							[](app_t::instance_id_t) {},
 							std::bind([kind, instance_policy, other_policy, program_policy](app_t::instance_id_t instance, app_overseer_t::callback_app_t on_app_running, app_overseer_t::callback_void_t on_run_failed, app_overseer_t::callback_void_t on_run_succeed_in_new_program_instance, std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<context_holder_t> context_holder){
@@ -589,22 +835,11 @@ namespace engine
 
 							}, std::placeholders::_1, std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance), shared_from_this(), context_holder)
 							);
-						}
-					}
-					else
-					{
-						if(program_policy == app_overseer_t::run_app_program_t::force_new_instance)
-						{
-							bool success = program_instancer->run_new_program(kind);
-							if(success)
-								on_run_succeed_in_new_program_instance();
-							else
-								on_run_failed();
 						}
 						else
 						{
 							close_all(std::bind([kind, instance_policy, other_policy, program_policy](app_overseer_t::callback_app_t on_app_running, app_overseer_t::callback_void_t on_run_failed, app_overseer_t::callback_void_t on_run_succeed_in_new_program_instance, std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<context_holder_t> context_holder){
-								actual->run_app_internal(kind, instance_policy, other_policy, program_policy, std::move(context_holder->move_context()), std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance));
+								actual->run_app_actual(actual, kind, instance_policy, other_policy, program_policy, std::move(context_holder->move_context()), std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance));
 							}, std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance), shared_from_this(), context_holder),
 							[](app_t::instance_id_t) {},
 							std::bind([kind, instance_policy, other_policy, program_policy](app_t::instance_id_t instance, app_overseer_t::callback_app_t on_app_running, app_overseer_t::callback_void_t on_run_failed, app_overseer_t::callback_void_t on_run_succeed_in_new_program_instance, std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<context_holder_t> context_holder){
@@ -624,58 +859,28 @@ namespace engine
 							);
 						}
 					}
-				}
-				else if(other_policy == app_overseer_t::run_app_other_t::terminate)
-				{
-					if(policy_instances_application->get_type() == instances_application_t::type_t::allow_multiple &&
-						instance_policy == app_overseer_t::run_app_instance_t::allow_multiple)
+					else if(other_policy == app_overseer_t::run_app_other_t::terminate)
 					{
-						if(program_policy == app_overseer_t::run_app_program_t::force_new_instance)
+						if(policy_instances_application->get_type() == instances_application_t::type_t::allow_multiple &&
+							instance_policy == app_overseer_t::run_app_instance_t::allow_multiple)
 						{
-							bool success = program_instancer->run_new_program(kind);
-							if(success)
-								on_run_succeed_in_new_program_instance();
-							else
-								on_run_failed();
+							if(program_policy == app_overseer_t::run_app_program_t::force_same_instance ||
+									program_policy == app_overseer_t::run_app_program_t::if_possible_same_instance_if_not_new_instance)
+							{
+								on_app_running(run_app_from_handler(kind, std::move(context_holder->move_context())));
+							}
 						}
-						else if(program_policy == app_overseer_t::run_app_program_t::force_same_instance ||
-						 		program_policy == app_overseer_t::run_app_program_t::if_possible_same_instance_if_not_new_instance)
-						{
-							on_app_running(run_app_from_handler(kind, std::move(context_holder->move_context())));
-						}
-					}
-					else if(policy_instances_application->get_type() == instances_application_t::type_t::force_single_given_kind &&
-						instance_policy == app_overseer_t::run_app_instance_t::force_single_given_kind)
-					{
-						if(program_policy == app_overseer_t::run_app_program_t::force_new_instance)
-						{
-							bool success = program_instancer->run_new_program(kind);
-							if(success)
-								on_run_succeed_in_new_program_instance();
-							else
-								on_run_failed();
-						}
-						else
+						else if(policy_instances_application->get_type() == instances_application_t::type_t::force_single_given_kind &&
+							instance_policy == app_overseer_t::run_app_instance_t::force_single_given_kind)
 						{
 							terminate_all_of(kind, std::bind([kind, instance_policy, other_policy, program_policy](app_overseer_t::callback_app_t on_app_running, app_overseer_t::callback_void_t on_run_failed, app_overseer_t::callback_void_t on_run_succeed_in_new_program_instance, std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<context_holder_t> context_holder){
-								actual->run_app_internal(kind, instance_policy, other_policy, program_policy, std::move(context_holder->move_context()), std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance));
+								actual->run_app_actual(actual, kind, instance_policy, other_policy, program_policy, std::move(context_holder->move_context()), std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance));
 							}, std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance), shared_from_this(), context_holder));
-						}
-					}
-					else
-					{
-						if(program_policy == app_overseer_t::run_app_program_t::force_new_instance)
-						{
-							bool success = program_instancer->run_new_program(kind);
-							if(success)
-								on_run_succeed_in_new_program_instance();
-							else
-								on_run_failed();
 						}
 						else
 						{
 							terminate_all(std::bind([kind, instance_policy, other_policy, program_policy](app_overseer_t::callback_app_t on_app_running, app_overseer_t::callback_void_t on_run_failed, app_overseer_t::callback_void_t on_run_succeed_in_new_program_instance, std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<context_holder_t> context_holder){
-								actual->run_app_internal(kind, instance_policy, other_policy, program_policy, std::move(context_holder->move_context()), std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance));
+								actual->run_app_actual(actual, kind, instance_policy, other_policy, program_policy, std::move(context_holder->move_context()), std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance));
 							}, std::move(on_app_running), std::move(on_run_failed), std::move(on_run_succeed_in_new_program_instance), shared_from_this(), context_holder));
 						}
 					}
@@ -685,372 +890,60 @@ namespace engine
 		
 		void handle_run_app_event(run_app_event_t * event)
 		{
-			run_app_internal(event->get_kind(), event->get_instance(), event->get_other(), event->get_program(), std::move(event->move_context()), std::move(event->move_on_app_running()), std::move(event->move_on_run_failed()), std::move(event->move_on_run_succeed_in_new_program_instance()));
+			run_app_actual(event->get_actual(), event->get_kind(), event->get_instance(), event->get_other(), event->get_program(), std::move(event->move_context()), std::move(event->move_on_app_running()), std::move(event->move_on_run_failed()), std::move(event->move_on_run_succeed_in_new_program_instance()));
 		}
 		
 		void handle_terminate_app_event(terminate_app_event_t * event)
 		{
-			auto instance_id = event->get_instance();
-			auto iter = std::find_if(apps_meta.begin(), apps_meta.end(), [instance_id](std::shared_ptr<app_meta_t> app_meta){ return app_meta->get_instance_id() == instance_id; });
-			if(iter == apps_meta.end())
-				event->move_on_completed()();
-			else
-			{
-				app_interrupter->send_interruption(std::make_unique<interruption_terminate_t>(event->get_instance()));
-				std::unique_ptr<process::runner_spawn_t> runner_spawn = runner_spawn_factory->create((*iter)->get_app(), (*iter)->get_instance_id(), format_string("Termination runner ###1#"_u, ++termination_runner_id));
-				
-				runner_spawn->add_task(std::make_unique<task_func_t>(std::bind([](process::token_t* token, app_overseer_t::callback_void_t on_completed, std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<app_meta_t> app_meta){
-					app_meta->wait_till_completed();
-					on_completed();
-					return task_base_t::result_t::completed;
-				}, std::placeholders::_1, std::move(event->move_on_completed()), event->get_actual(), *iter), format_string("Waiting for termination of #1#:#2#"_u, (*iter)->get_app(), (*iter)->get_instance_id())));
+			auto on_completed = event->move_on_completed();
+			auto app_running = runner.get_app(event->get_instance());
 
-			}
+			if(!app_running)
+				on_completed();
+			else
+				app_running->terminate(event->get_actual(), std::move(on_completed));
 		}
 
 		void handle_close_app_event(close_app_event_t * event)
 		{
-			app_interrupter->send_interruption(std::make_unique<interruption_ask_for_close_t>(event->get_instance(), std::bind([](app_overseer_t::callback_void_t on_allowed, std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance){
-				actual->terminate_app(instance, std::move(on_allowed));
-			}, std::move(event->move_on_allowed()), event->get_actual(), event->get_instance()), std::bind([](app_overseer_t::callback_void_t on_refused, std::shared_ptr<app_overseer_actual_t> actual){
-				on_refused();
-			}, std::move(event->move_on_refused()), event->get_actual())));
-		}
+			auto on_allowed = event->move_on_allowed();
+			auto on_refused = event->move_on_refused();
+			auto app_running = runner.get_app(event->get_instance());
 
-		class terminate_operation_t
-		{
-
-			public:
-
-				class item_t
-				{
-
-					public:
-
-						void run(app_overseer_t::callback_void_t on_completed)
-						{
-							std::lock_guard<std::mutex> guard(mutex);
-
-							flags.set_flag(flag_t::is_running, true);
-							this->on_completed.push_back(std::move(on_completed));
-						}
-
-						bool is_running() const
-						{
-							std::lock_guard<std::mutex> guard(mutex);
-							return flags.is_flag(flag_t::is_running);
-						}
-
-						void complete()
-						{
-							std::lock_guard<std::mutex> guard(mutex);
-
-							for(auto & item : on_completed)
-								item();
-
-							on_completed.clear();
-
-							flags.set_flag(flag_t::is_running, false);
-						}
-
-					private:
-
-						enum class flag_t
-						{
-							is_running,
-							count
-						};
-
-						flags_t<flag_t> flags;
-						mutable std::mutex mutex;
-
-						std::vector<app_overseer_t::callback_void_t> on_completed;
-
-				};
-
-				item_t * all()
-				{
-					return &terminate_all;
-				}
-
-				item_t * kind(app_t::kind_t kind)
-				{
-					return &terminate_kind[value_of(kind)];
-				}
-
-			private:
-
-				item_t terminate_all;
-				std::array<item_t, value_of(app_t::kind_t::count)> terminate_kind;
-
-		};
-
-		terminate_operation_t terminate_operation;
-
-		bool is_being_terminated(app_t::kind_t kind)
-		{
-			if(terminate_operation.all()->is_running()) return true;
-			if(terminate_operation.kind(kind)->is_running()) return true;
-			return false;
-		}
-
-		void run_terminate_operations()
-		{
-			if(terminate_operation.all()->is_running())
-			{
-				if(apps_meta.empty())
-					terminate_operation.all()->complete();
-			}
-			for(std::size_t i = 0; i < value_of(app_t::kind_t::count); i++)
-			{
-				if(terminate_operation.kind(static_cast<app_t::kind_t>(i))->is_running())
-				{
-					int total = 0;
-					for(auto meta : apps_meta)
-					{
-						if(meta->get_app() == static_cast<app_t::kind_t>(i))
-						{
-							++total;
-							break;
-						}
-					}
-					if(!total) terminate_operation.kind(static_cast<app_t::kind_t>(i))->complete();
-				}
-			}
+			if(!app_running)
+				on_allowed();
+			else
+				app_running->close(event->get_actual(), std::move(on_allowed), std::move(on_refused));
 		}
 
 		void handle_terminate_all_event(terminate_all_event_t * event)
 		{
-			terminate_operation.all()->run(std::bind([](app_overseer_t::callback_void_t on_completed, std::shared_ptr<app_overseer_actual_t> actual){
-					on_completed();
-				}, std::move(event->move_on_completed()), event->get_actual()));
-
-			for(auto app_meta : apps_meta)
-			{
-				terminate_app(app_meta->get_instance_id());
-			}
+			runner.terminate_all(event->get_actual(), event->move_on_completed());
 		}
 
 		void handle_terminate_all_of_event(terminate_all_of_event_t * event)
 		{
-			terminate_operation.kind(event->get_app())->run(std::bind([](app_overseer_t::callback_void_t on_completed, std::shared_ptr<app_overseer_actual_t> actual){
-					on_completed();
-				}, std::move(event->move_on_completed()), event->get_actual()));
-
-			for(auto app_meta : apps_meta)
-			{
-				if(app_meta->get_app() == event->get_app())
-					terminate_app(app_meta->get_instance_id());
-			}
-		}
-
-		class close_operation_t
-		{
-
-			public:
-
-				class item_t
-				{
-
-					public:
-
-						void run(app_overseer_t::callback_void_t on_completed, app_overseer_t::callback_app_instance_t on_given_accepted, app_overseer_t::callback_app_instance_t on_given_rejected)
-						{
-							std::lock_guard<std::mutex> guard(mutex);
-
-							flags.set_flag(flag_t::is_running, true);
-							this->on_completed.push_back(std::move(on_completed));
-							this->on_given_accepted.push_back(std::move(on_given_accepted));
-							this->on_given_rejected.push_back(std::move(on_given_rejected));
-						}
-
-						bool is_running() const
-						{
-							std::lock_guard<std::mutex> guard(mutex);
-							return flags.is_flag(flag_t::is_running);
-						}
-
-						void given_accepted(app_t::instance_id_t id)
-						{
-							std::lock_guard<std::mutex> guard(mutex);
-							if(flags.is_flag(flag_t::is_running))
-							{
-								for(auto & item : on_given_accepted)
-									item(id);
-							}
-						}
-
-						void given_rejected(app_t::instance_id_t id)
-						{
-							std::lock_guard<std::mutex> guard(mutex);
-							if(flags.is_flag(flag_t::is_running))
-							{
-								for(auto & item : on_given_rejected)
-									item(id);
-
-								on_completed.clear();
-								on_given_accepted.clear();
-								on_given_rejected.clear();
-
-								flags.set_flag(flag_t::is_running, false);
-							}
-						}
-
-						void complete()
-						{
-							std::lock_guard<std::mutex> guard(mutex);
-
-							for(auto & item : on_completed)
-								item();
-
-							on_completed.clear();
-							on_given_accepted.clear();
-							on_given_rejected.clear();
-
-							flags.set_flag(flag_t::is_running, false);
-						}
-
-					private:
-
-						enum class flag_t
-						{
-							is_running,
-							count
-						};
-
-						flags_t<flag_t> flags;
-						mutable std::mutex mutex;
-
-						std::vector<app_overseer_t::callback_void_t> on_completed;
-						std::vector<app_overseer_t::callback_app_instance_t> on_given_accepted;
-						std::vector<app_overseer_t::callback_app_instance_t> on_given_rejected;
-
-				};
-
-				item_t * all()
-				{
-					return &terminate_all;
-				}
-
-				item_t * kind(app_t::kind_t kind)
-				{
-					return &terminate_kind[value_of(kind)];
-				}
-
-			private:
-
-				item_t terminate_all;
-				std::array<item_t, value_of(app_t::kind_t::count)> terminate_kind;
-
-		};
-
-		close_operation_t close_operation;
-
-		bool is_being_closed(app_t::kind_t kind)
-		{
-			if(close_operation.all()->is_running()) return true;
-			if(close_operation.kind(kind)->is_running()) return true;
-			return false;
-		}
-
-		void run_close_operations()
-		{
-			if(close_operation.all()->is_running())
-			{
-				if(apps_meta.empty())
-					close_operation.all()->complete();
-			}
-			for(std::size_t i = 0; i < value_of(app_t::kind_t::count); i++)
-			{
-				if(close_operation.kind(static_cast<app_t::kind_t>(i))->is_running())
-				{
-					int total = 0;
-					for(auto meta : apps_meta)
-					{
-						if(meta->get_app() == static_cast<app_t::kind_t>(i))
-						{
-							++total;
-							break;
-						}
-					}
-					if(!total) close_operation.kind(static_cast<app_t::kind_t>(i))->complete();
-				}
-			}
+			runner.terminate_all_of(event->get_app(), event->get_actual(), event->move_on_completed());
 		}
 
 		void handle_close_all_event(close_all_event_t * event)
 		{
-			close_operation.all()->run(std::bind([](app_overseer_t::callback_void_t on_all_accepted, std::shared_ptr<app_overseer_actual_t> actual){
-					on_all_accepted();
-				}, std::move(event->move_on_all_accepted()), event->get_actual()),
-				std::bind([](app_t::instance_id_t instance, app_overseer_t::callback_app_instance_t on_given_accepted, std::shared_ptr<app_overseer_actual_t> actual){
-					on_given_accepted(instance);
-				}, std::placeholders::_1, std::move(event->move_on_given_accepted()), event->get_actual()),
-				std::bind([](app_t::instance_id_t instance, app_overseer_t::callback_app_instance_t on_given_rejected, std::shared_ptr<app_overseer_actual_t> actual){
-					on_given_rejected(instance);
-				}, std::placeholders::_1, std::move(event->move_on_given_rejected()), event->get_actual()));
-
-			for(auto app_meta : apps_meta)
-			{
-				close_app(app_meta->get_instance_id(), std::bind([](std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance, app_t::kind_t kind){
-					actual->close_operation.all()->given_accepted(instance);
-					actual->close_operation.kind(kind)->given_accepted(instance);
-				}, event->get_actual(), app_meta->get_instance_id(), app_meta->get_app()), std::bind([](std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance, app_t::kind_t kind){
-					actual->close_operation.all()->given_rejected(instance);
-					actual->close_operation.kind(kind)->given_rejected(instance);
-				}, event->get_actual(), app_meta->get_instance_id(), app_meta->get_app()));
-			}
+			runner.close_all(event->get_actual(), event->move_on_all_accepted(), event->move_on_given_accepted(), event->move_on_given_rejected());
 		}
 
 		void handle_close_all_of_event(close_all_of_event_t * event)
 		{
-			close_operation.kind(event->get_app())->run(std::bind([](app_overseer_t::callback_void_t on_all_accepted, std::shared_ptr<app_overseer_actual_t> actual){
-					on_all_accepted();
-				}, std::move(event->move_on_all_accepted()), event->get_actual()),
-				std::bind([](app_t::instance_id_t instance, app_overseer_t::callback_app_instance_t on_given_accepted, std::shared_ptr<app_overseer_actual_t> actual){
-					on_given_accepted(instance);
-				}, std::placeholders::_1, std::move(event->move_on_given_accepted()), event->get_actual()),
-				std::bind([](app_t::instance_id_t instance, app_overseer_t::callback_app_instance_t on_given_rejected, std::shared_ptr<app_overseer_actual_t> actual){
-					on_given_rejected(instance);
-				}, std::placeholders::_1, std::move(event->move_on_given_rejected()), event->get_actual()));
-
-			for(auto app_meta : apps_meta)
-			{
-				if(app_meta->get_app() == event->get_app())
-					close_app(app_meta->get_instance_id(), std::bind([](std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance, app_t::kind_t kind){
-						actual->close_operation.all()->given_accepted(instance);
-						actual->close_operation.kind(kind)->given_accepted(instance);
-					}, event->get_actual(), app_meta->get_instance_id(), app_meta->get_app()), std::bind([](std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance, app_t::kind_t kind){
-						actual->close_operation.all()->given_rejected(instance);
-						actual->close_operation.kind(kind)->given_rejected(instance);
-					}, event->get_actual(), app_meta->get_instance_id(), app_meta->get_app()));
-			}
+			runner.close_all_of(event->get_app(), event->get_actual(), event->move_on_all_accepted(), event->move_on_given_accepted(), event->move_on_given_rejected());
 		}
 
 		void handle_app_created_event(app_created_event_t * event)
 		{
-			auto iter = std::find(apps_meta.begin(), apps_meta.end(), event->get_meta());
-			if(iter == apps_meta.end())
-				apps_meta.push_back(event->get_meta());
-
-			if(is_being_terminated(event->get_meta()->get_app()))
-				terminate_app(event->get_meta()->get_instance_id());
-				
-			if(is_being_closed(event->get_meta()->get_app()))
-				close_app(event->get_meta()->get_instance_id(), std::bind([](std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance, app_t::kind_t kind){
-					actual->close_operation.all()->given_accepted(instance);
-					actual->close_operation.kind(kind)->given_accepted(instance);
-				}, event->get_actual(), event->get_meta()->get_instance_id(), event->get_meta()->get_app()), std::bind([](std::shared_ptr<app_overseer_actual_t> actual, app_t::instance_id_t instance, app_t::kind_t kind){
-					actual->close_operation.all()->given_rejected(instance);
-					actual->close_operation.kind(kind)->given_rejected(instance);
-				}, event->get_actual(), event->get_meta()->get_instance_id(), event->get_meta()->get_app()));
+			runner.add_app(event->get_actual(), std::make_shared<app_running_t>(event->get_meta()));
 		}
 
 		void handle_app_destroyed_event(app_destroyed_event_t * event)
 		{
-			auto iter = std::find(apps_meta.begin(), apps_meta.end(), event->get_meta());
-			if(iter != apps_meta.end())
-				apps_meta.erase(iter);
+			runner.remove_app(event->get_meta()->get_instance_id());
 		}
 
 		void handle_event(std::unique_ptr<event_t> event)
@@ -1066,8 +959,6 @@ namespace engine
 
 				}
 				check_for_completion();
-				run_terminate_operations();
-				run_close_operations();
 			}
 		}
 
