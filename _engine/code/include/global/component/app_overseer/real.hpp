@@ -521,10 +521,15 @@ namespace engine
 
 				void remove_app(app_t::instance_id_t instance_id)
 				{
+					flags.set_flag(flag_t::not_empty_till_next_terminate, false);
+
 					auto iter = std::find_if(apps_running.begin(), apps_running.end(), [instance_id](std::shared_ptr<app_running_t> app_running){ return app_running->get_instance_id() == instance_id; });
 					if(iter != apps_running.end())
 						apps_running.erase(iter);
+				}
 
+				void call_remove_app_handlers(app_t::instance_id_t instance_id)
+				{
 					if(apps_running.empty())
 					{
 						if(flags.is_flag(flag_t::being_closed))
@@ -548,7 +553,12 @@ namespace engine
 
 				bool is_empty()
 				{
-					return apps_running.empty();
+					return apps_running.empty() && !flags.is_flag(flag_t::not_empty_till_next_terminate);
+				}
+
+				void mark_as_not_empty_till_next_terminate()
+				{
+					flags.set_flag(flag_t::not_empty_till_next_terminate, true);
 				}
 
 				bool is_being_closed()
@@ -606,6 +616,7 @@ namespace engine
 
 				enum class flag_t
 				{
+					not_empty_till_next_terminate,
 					being_closed,
 					being_terminated,
 					count
@@ -623,6 +634,12 @@ namespace engine
 		class runner_t
 		{
 			public:
+
+				void mark_as_not_empty_till_next_terminate(app_t::kind_t kind)
+				{
+					apps_running[value_of(app_t::kind_t::_engine)].mark_as_not_empty_till_next_terminate();
+					apps_running[value_of(kind)].mark_as_not_empty_till_next_terminate();
+				}
 
 				app_running_t * get_app(app_t::instance_id_t instance_id)
 				{
@@ -652,6 +669,10 @@ namespace engine
 					for(auto & item : apps_running)
 					{
 						item.remove_app(instance_id);
+					}
+					for(auto & item : apps_running)
+					{
+						item.call_remove_app_handlers(instance_id);
 					}
 				}
 
@@ -748,6 +769,7 @@ namespace engine
 
 		std::shared_ptr<app_t> run_app_from_handler(app_t::kind_t kind, std::unique_ptr<app_context_t> context)
 		{
+			runner.mark_as_not_empty_till_next_terminate(kind);
 			std::shared_ptr<app_t> app = app_factory->create(kind, std::move(context));
 
 			std::thread holder(std::bind([](std::shared_ptr<app_overseer_actual_t> actual, std::shared_ptr<app_t> app){
