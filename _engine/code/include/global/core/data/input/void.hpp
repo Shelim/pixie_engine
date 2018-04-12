@@ -37,15 +37,15 @@ namespace engine
 
 			}
 
-			void skip(int32_t pos) final
+			void skip(int64_t pos) final
 			{
 				
 			}
-			void go_back(int32_t pos) final
+			void go_back(int64_t pos) final
 			{
 				
 			}
-			uint32_t read(uint8_t * buffer, uint32_t size) final
+			uint64_t read(uint8_t * buffer, uint64_t size) final
 			{
 				return 0;
 			}
@@ -54,7 +54,7 @@ namespace engine
 				return true;
 			}
 
-			uint32_t position() final
+			uint64_t position() final
 			{
 				return 0;
 			}

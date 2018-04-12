@@ -33,7 +33,7 @@ namespace engine
 				filesystem->move_file(tmp_file, target_file);
 			}
 
-			uint32_t write(const uint8_t * buffer, uint32_t size) final
+			uint64_t write(const uint8_t * buffer, uint64_t size) final
 			{
 				return output->write(buffer, size);
 			}

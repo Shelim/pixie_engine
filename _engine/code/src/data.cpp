@@ -20,8 +20,8 @@
 #include "global/core/data/results.hpp"
 #include "global/core/data/scanner/directory.hpp"
 #include "global/core/data/provider_actual/archive.hpp"
-#include "global/component/data_source.hpp"
-#include "global/component/data_source/msg_scanner_found_item.hpp"
+#include "global/component/data_manipulator.hpp"
+#include "global/component/data_manipulator/msg_scanner_found_item.hpp"
 #include "global/core/data/changes.hpp"
 
 
@@ -118,7 +118,7 @@ engine::data::changes_t engine::data::state_t::calculate_changes(state_t & curre
 }
 
 
-void engine::data_source_real_actual_t::refresh_virtual_path_type_changes()
+void engine::data_manipulator_real_actual_t::refresh_virtual_path_type_changes()
 {
 	type_changes.clear();
 
@@ -129,7 +129,7 @@ void engine::data_source_real_actual_t::refresh_virtual_path_type_changes()
 	}
 }
 
-void engine::data_source_real_actual_t::rescan()
+void engine::data_manipulator_real_actual_t::rescan()
 {
 	std::lock_guard<std::recursive_mutex> guard(mutex_database_next);
 	if (requested_rescan)

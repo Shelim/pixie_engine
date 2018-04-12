@@ -722,7 +722,7 @@ int main(int arg, char * argv[])
 		ENABLE_COMPONENT(config),
 		ENABLE_COMPONENT(environment_info),
 		ENABLE_COMPONENT(logger_file_writer),
-		ENABLE_COMPONENT(data_source),
+		ENABLE_COMPONENT(data_manipulator),
 		ENABLE_COMPONENT(data_archives),
 		ENABLE_COMPONENT(storage),
 
@@ -760,7 +760,7 @@ int main(int arg, char * argv[])
 	std::shared_ptr<engine::logger_t> logger = bootstrapper.construct_component<engine::logger_t>();
 	std::shared_ptr<engine::config_t> config = bootstrapper.construct_component<engine::config_t>();
 	std::shared_ptr<engine::environment_info_t> environment_info = bootstrapper.construct_component<engine::environment_info_t>();
-	std::shared_ptr<engine::data_source_t> data_source = bootstrapper.construct_component<engine::data_source_t>();
+	std::shared_ptr<engine::data_manipulator_t> data_manipulator = bootstrapper.construct_component<engine::data_manipulator_t>();
 	std::shared_ptr<engine::thread_pool_t<4>> thread_pool = bootstrapper.construct_component<engine::thread_pool_t<4>>();
 	std::shared_ptr<engine::process::runner_engine_thread_t<engine::process::runner_thread_t::engine_update> > runner_update = bootstrapper.construct_component<engine::process::runner_engine_thread_t<engine::process::runner_thread_t::engine_update> >();
 

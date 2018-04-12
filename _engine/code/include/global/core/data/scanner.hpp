@@ -10,7 +10,6 @@ namespace engine
 {
 	namespace data
 	{
-		class results_t;
 
 		class scanner_t
 		{
@@ -27,9 +26,11 @@ namespace engine
 			scanner_t& operator=(scanner_t const&) = delete;
 			scanner_t& operator=(scanner_t &&) = default;
 
-			void scan(results_t  * results)
+			typedef std::function<void(std::unique_ptr<provider_actual_t>)> callback_t;
+
+			void scan(callback_t on_found)
 			{
-				scan_local(results);
+				scan_local(std::move(on_found));
 			}
 
 		protected:
@@ -43,7 +44,7 @@ namespace engine
 			
 			friend class scanners_t;
 
-			virtual void scan_local(results_t  * results)
+			virtual void scan_local(callback_t on_found)
 			{
 
 			}

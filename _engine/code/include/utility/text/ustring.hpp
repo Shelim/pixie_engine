@@ -1046,7 +1046,7 @@ namespace engine
 		 * @return Length of ustring_t (in glyphs)
 		 * @see is_empty
 		 */
-		uint_fast32_t len() const;
+		uint_fast64_t len() const;
 		/**
 		 * @brief Check if ustring_t is empty
 		 *
@@ -1349,7 +1349,7 @@ namespace engine
 
 		void _encode(usymbol_t symbol);
 		static usymbol_t _decode(const char *& pos);
-		static uint_fast32_t _symbol_size(const char * pos);
+		static uint_fast64_t _symbol_size(const char * pos);
 
 		template <class archive_t> std::string save_minimal(archive_t const &) const
 		{

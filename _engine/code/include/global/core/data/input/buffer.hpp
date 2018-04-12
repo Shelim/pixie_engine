@@ -36,20 +36,20 @@ namespace engine
 
 			void jump_to_end() final
 			{
-				this->pos = static_cast<int32_t>(data.size()) - 1;
+				this->pos = static_cast<int64_t>(data.size()) - 1;
 			}
 
-			void skip(int32_t pos) final
+			void skip(int64_t pos) final
 			{
-				this->pos = std::max(0, std::min(static_cast<int32_t>(data.size()) - 1, this->pos + pos));
+				this->pos = std::max(0ll, std::min(static_cast<int64_t>(data.size()) - 1, this->pos + pos));
 			}
-			void go_back(int32_t pos) final
+			void go_back(int64_t pos) final
 			{
-				this->pos = std::max(0, std::min(static_cast<int32_t>(data.size()) - 1, this->pos - pos));
+				this->pos = std::max(0ll, std::min(static_cast<int64_t>(data.size()) - 1, this->pos - pos));
 			}
-			uint32_t read(uint8_t * buffer, uint32_t size) final
+			uint64_t read(uint8_t * buffer, uint64_t size) final
 			{
-				uint32_t len = std::min(data.size(), this->pos + size) - this->pos;
+				uint64_t len = std::min(data.size(), this->pos + size) - this->pos;
 				memcpy(buffer, &data[this->pos], len);
 				this->pos += len;
 				return len;
@@ -59,14 +59,14 @@ namespace engine
 				return pos >= data.size();
 			}
 
-			uint32_t position() final
+			uint64_t position() final
 			{
 				return pos;
 			}
 
 		private:
 
-			int32_t pos;
+			int64_t pos;
 
 			buffer_t data;
 		};

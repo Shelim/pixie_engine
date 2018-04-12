@@ -16,6 +16,7 @@ namespace engine
         
             bool run_new_program(args_t args) final
             {
+                return true;
                 /*
                 STARTUPINFO si;     
                 PROCESS_INFORMATION pi;

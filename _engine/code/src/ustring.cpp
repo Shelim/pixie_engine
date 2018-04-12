@@ -76,8 +76,8 @@ engine::ustring_t engine::ustring_t::from_symbol(usymbol_t str)
 
 engine::ustring_t engine::ustring_t::trim_string(const engine::ustring_t & str)
 {
-	uint_fast32_t left = 0;
-	uint_fast32_t right = str._str.length();
+	uint_fast64_t left = 0;
+	uint_fast64_t right = str._str.length();
 
 	while (left < right && is_whitespace_ascii(str._str[left]))
 		++left;
@@ -91,8 +91,8 @@ engine::ustring_t engine::ustring_t::trim_string(const engine::ustring_t & str)
 
 engine::ustring_t engine::ustring_t::left_trim_string(const engine::ustring_t & str)
 {
-	uint_fast32_t left = 0;
-	uint_fast32_t right = str._str.length();
+	uint_fast64_t left = 0;
+	uint_fast64_t right = str._str.length();
 
 	while (left < right && is_whitespace_ascii(str._str[left]))
 		++left;
@@ -104,7 +104,7 @@ engine::ustring_t engine::ustring_t::left_trim_string(const engine::ustring_t & 
 
 engine::ustring_t engine::ustring_t::right_trim_string(const engine::ustring_t & str)
 {
-	uint_fast32_t right = str._str.length();
+	uint_fast64_t right = str._str.length();
 
 	while (right > 0 && is_whitespace_ascii(str._str[right]))
 		--right;
@@ -183,7 +183,7 @@ engine::ustring_t & engine::ustring_t::append(const engine::ustring_t & str)
 
 engine::ustring_t engine::ustring_t::substr_string(const engine::ustring_t & str, int_fast32_t pos)
 {
-	const uint_fast32_t length = str.len();
+	const uint_fast64_t length = str.len();
 
 	if (pos >= 0)
 	{
@@ -208,8 +208,8 @@ engine::ustring_t engine::ustring_t::substr_string(const engine::ustring_t & str
 	const int_fast32_t length = (int_fast32_t)str.len();
 	ustring_t ret;
 
-	uint_fast32_t first;
-	uint_fast32_t last;
+	uint_fast64_t first;
+	uint_fast64_t last;
 
 	if (pos > length) pos = length;
 	if (-pos > length) pos = 0;
@@ -227,12 +227,12 @@ engine::ustring_t engine::ustring_t::substr_string(const engine::ustring_t & str
 
 	const char * it = str._str.c_str();
 
-	for (uint_fast32_t i = 0; i < first; ++i)
+	for (uint_fast64_t i = 0; i < first; ++i)
 	{
 		it += _symbol_size(it);
 	}
 
-	for (uint_fast32_t i = first; i < last; ++i)
+	for (uint_fast64_t i = first; i < last; ++i)
 	{
 		ret._encode(_decode(it));
 	}
@@ -244,12 +244,12 @@ engine::ustring_t engine::ustring_t::substr_string(const engine::ustring_t & str
 
 engine::ustring_t engine::ustring_t::basename_string(const engine::ustring_t & str)
 {
-	uint_fast32_t len = str._str.length();
+	uint_fast64_t len = str._str.length();
 
 	if (len > 0 && is_path_separator_ascii(str._str[len - 1]))		// This cut last dir separator
 		--len;
 
-	uint_fast32_t i = len;
+	uint_fast64_t i = len;
 	while (i > 0)
 	{
 		if (is_path_separator_ascii(str._str[i - 1]))
@@ -295,11 +295,11 @@ engine::ustring_t::~ustring_t()
 
 //////////////////////////////////////////////////////////////////////////
 
-uint_fast32_t engine::ustring_t::len() const
+uint_fast64_t engine::ustring_t::len() const
 {
 	const char * it = _str.c_str();
 
-	uint_fast32_t ret = 0;
+	uint_fast64_t ret = 0;
 	while (*it)
 	{
 		++ret;
@@ -323,7 +323,7 @@ int_fast32_t engine::ustring_t::index_of(usymbol_t symbol, int_fast32_t first /*
 	for (int i = 0; (*it) && i < first; i++)
 		it += _symbol_size(it);
 
-	uint_fast32_t index = first;
+	uint_fast64_t index = first;
 
 	while (*it)
 	{
@@ -338,7 +338,7 @@ int_fast32_t engine::ustring_t::index_of(usymbol_t symbol, int_fast32_t first /*
 
 int_fast32_t engine::ustring_t::index_of(const engine::ustring_t & str, int_fast32_t first /*= 0*/) const
 {
-	const uint_fast32_t len = str.len();
+	const uint_fast64_t len = str.len();
 
 	const char * it = _str.c_str();
 
@@ -347,8 +347,8 @@ int_fast32_t engine::ustring_t::index_of(const engine::ustring_t & str, int_fast
 
 	const char * it2 = str._str.c_str();
 
-	uint_fast32_t comp = 0;
-	uint_fast32_t index = first;
+	uint_fast64_t comp = 0;
+	uint_fast64_t index = first;
 
 	while (*it)
 	{
@@ -376,9 +376,9 @@ int_fast32_t engine::ustring_t::last_index_of(usymbol_t symbol, int_fast32_t las
 {
 	const char * it = _str.c_str();
 
-	uint_fast32_t index = 0;
-	uint_fast32_t ret = -1;
-	uint_fast32_t end = len() - last;
+	uint_fast64_t index = 0;
+	uint_fast64_t ret = -1;
+	uint_fast64_t end = len() - last;
 
 	while (*it)
 	{
@@ -396,16 +396,16 @@ int_fast32_t engine::ustring_t::last_index_of(usymbol_t symbol, int_fast32_t las
 
 int_fast32_t engine::ustring_t::last_index_of(const engine::ustring_t & str, int_fast32_t last /*= 0*/) const
 {
-	const uint_fast32_t len = str.len();
+	const uint_fast64_t len = str.len();
 
 	const char * it = _str.c_str();
 
 	const char * it2 = str._str.c_str();
 
-	uint_fast32_t comp = 0;
-	uint_fast32_t index = 0;
-	uint_fast32_t ret = -1;
-	uint_fast32_t end = this->len() - last;
+	uint_fast64_t comp = 0;
+	uint_fast64_t index = 0;
+	uint_fast64_t ret = -1;
+	uint_fast64_t end = this->len() - last;
 
 	while (*it)
 	{
@@ -591,9 +591,9 @@ engine::usymbol_t engine::ustring_t::_decode(const char *& pos)
 	return symbol;
 }
 
-uint_fast32_t engine::ustring_t::_symbol_size(const char * pos)
+uint_fast64_t engine::ustring_t::_symbol_size(const char * pos)
 {
-	uint_fast32_t symbol = (unsigned char)*pos;
+	uint_fast64_t symbol = (unsigned char)*pos;
 
 	if (symbol < 0xC0) return 1;
 	if (symbol < 0xE0) return 2;

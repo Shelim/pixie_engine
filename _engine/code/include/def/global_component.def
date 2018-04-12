@@ -4,6 +4,8 @@
 
 ENGINE_GLOBAL_COMPONENT_DEF( (app_accounter), (app_interrupter), (app_overseer), (app_resolver),
                              (config), (config_monitor), (config_storage),
+                             (data_archive), (data_creator), (data_items), 
+                             (data_manipulator), (data_monitor), (data_state),
                              (environment_info), (extinguisher),
                              (filesystem), (logger), (profiler),
                              (program_args), (program_instancer), (program_instances_communicator_client),

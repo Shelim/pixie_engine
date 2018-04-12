@@ -15,7 +15,7 @@ namespace engine
 
 		public:
 
-			virtual uint32_t write(const uint8_t * buffer, uint32_t size) = 0;
+			virtual uint64_t write(const uint8_t * buffer, uint64_t size) = 0;
 
 			enum result_t
 			{

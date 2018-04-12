@@ -20,11 +20,11 @@ namespace engine
 
 			virtual void jump_to_begin() = 0;
 			virtual void jump_to_end() = 0;
-			virtual void skip(int32_t pos) = 0;
-			virtual void go_back(int32_t pos) = 0;
-			virtual uint32_t read(uint8_t * buffer, uint32_t size) = 0;
+			virtual void skip(int64_t pos) = 0;
+			virtual void go_back(int64_t pos) = 0;
+			virtual uint64_t read(uint8_t * buffer, uint64_t size) = 0;
 			virtual bool is_eof() = 0;
-			virtual uint32_t position() = 0;
+			virtual uint64_t position() = 0;
 
 			virtual ~input_t() { }
 			
@@ -39,7 +39,7 @@ namespace engine
 				{
 					uint8_t packet[PACKET_SIZE + 1];
 
-					uint32_t size = read(packet, PACKET_SIZE);
+					uint64_t size = read(packet, PACKET_SIZE);
 					packet[size] = 0;
 					ret.append(reinterpret_cast<char*>(packet));
 				}
@@ -56,7 +56,7 @@ namespace engine
 				{
 					uint8_t packet[PACKET_SIZE + 1];
 
-					uint32_t size = read(packet, PACKET_SIZE);
+					uint64_t size = read(packet, PACKET_SIZE);
 					packet[size] = 0;
 					ret.insert(ret.end(), packet, packet + size);
 				}
@@ -74,7 +74,7 @@ namespace engine
 			input_t& operator=(input_t &&) = delete;
 			input_t& operator=(input_t const&) = delete;
 
-			std::unique_ptr<input_t> spawn_partial(int32_t size);
+			std::unique_ptr<input_t> spawn_partial(int64_t size);
 
 		protected:
 
@@ -105,22 +105,22 @@ namespace engine
 
 			void jump_to_end() final
 			{
-				this->pos = static_cast<int32_t>(buffer.size()) - 1;
+				this->pos = static_cast<int64_t>(buffer.size()) - 1;
 			}
 
-			void skip(int32_t pos) final
+			void skip(int64_t pos) final
 			{
-				this->pos = std::max(0, std::min(static_cast<int32_t>(buffer.size()) - 1, this->pos + pos));
+				this->pos = std::max(0ll, std::min(static_cast<int64_t>(buffer.size()) - 1, static_cast<int64_t>(this->pos) + pos));
 			}
 
-			void go_back(int32_t pos) final
+			void go_back(int64_t pos) final
 			{
-				this->pos = std::max(0, std::min(static_cast<int32_t>(buffer.size()) - 1, this->pos - pos));
+				this->pos = std::max(0ll, std::min(static_cast<int64_t>(buffer.size()) - 1, static_cast<int64_t>(this->pos) - pos));
 			}
 
-			uint32_t read(uint8_t * buffer, uint32_t size) final
+			uint64_t read(uint8_t * buffer, uint64_t size) final
 			{
-				uint32_t len = std::min(this->buffer.size(), this->pos + size) - this->pos;
+				uint64_t len = std::min(this->buffer.size(), this->pos + size) - this->pos;
 				memcpy(buffer, &this->buffer[this->pos], len);
 				return len;
 			}
@@ -130,14 +130,14 @@ namespace engine
 				return pos >= buffer.size();
 			}
 
-			uint32_t position() final
+			uint64_t position() final
 			{
 				return pos;
 			}
 
 		private:
 
-			int32_t pos;
+			uint64_t pos;
 			buffer_t buffer;
 		};
 

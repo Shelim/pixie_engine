@@ -14,6 +14,8 @@
      - Profiler
          - Practical usage (use remotery to profile code!)
          - Write/Read to console
+     - Program Instancer
+		 - Windows implemenetation
 	 
  - New dependencies:
 	 - Replace libRocket with CEF3 https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage
@@ -24,11 +26,6 @@
 +	 - config_storage
 +        - XML (?) inside game directory (for portable!)
 			 - Requires: XML
-	 - data_archives
-	 - data_creator
-	 - data_monitor
-	 - data_source
-	 - path_resolver
  - Utility / XML
 
  - Unit Tests

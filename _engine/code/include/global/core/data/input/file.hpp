@@ -41,15 +41,15 @@ namespace engine
 				input->seek(0, engine::filesystem_t::file_seek_origin_t::end);
 			}
 
-			void skip(int32_t pos) final
+			void skip(int64_t pos) final
 			{
 				input->seek(pos, engine::filesystem_t::file_seek_origin_t::current);
 			}
-			void go_back(int32_t pos) final
+			void go_back(int64_t pos) final
 			{
 				input->seek(-pos, engine::filesystem_t::file_seek_origin_t::current);
 			}
-			uint32_t read(uint8_t * buffer, uint32_t size) final
+			uint64_t read(uint8_t * buffer, uint64_t size) final
 			{
 				return input->read(buffer, size);
 			}
@@ -58,7 +58,7 @@ namespace engine
 				return input->is_eof();
 			}
 
-			uint32_t position() final
+			uint64_t position() final
 			{
 				return input->tell();
 			}

@@ -22,7 +22,10 @@ namespace engine
 
 		private:
 
-			void scan_local(results_t  * results) final;
+			void scan_local(callback_t on_found) final
+			{
+				
+			}
 
 			std::shared_ptr<filesystem_t> filesystem;
 			virtual_path_t base_virtual_path;
