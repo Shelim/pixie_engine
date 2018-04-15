@@ -28,9 +28,17 @@ namespace engine
 				scan_local(std::move(on_found));
 			}
 
+#define ENGINE_DATA_SCANNER_DEF(...) DEFINE_ENUM_ONLY_1ST_TYPE(kind_t, __VA_ARGS__)
+#include "def/data_scanner.def"
+
+			kind_t get_kind() const
+			{
+				return kind;
+			}
+
 		protected:
 
-			scanner_t()
+			scanner_t(kind_t kind) : kind(kind)
 			{
 
 			}
@@ -41,6 +49,7 @@ namespace engine
 			{
 
 			}
+			kind_t kind;
 
 		};
 
@@ -51,5 +60,25 @@ namespace engine
 
 #include "global/core/data/scanner/archive.hpp"
 #include "global/core/data/scanner/directory.hpp"
+
+namespace engine
+{
+	namespace data
+	{
+		bool operator==(const scanner_t & scanner1, const scanner_t & scanner2)
+		{
+			if(scanner1.get_kind() != scanner2.get_kind()) return false;
+			
+			switch(scanner1.get_kind())
+			{
+#define ENGINE_DATA_SCANNER_IMPL(name) case engine::data::scanner_t::kind_t::name: return static_cast<const engine::data::scanner_##name##_t &>(scanner1) == static_cast<const engine::data::scanner_##name##_t &>(scanner2);
+#define ENGINE_DATA_SCANNER_DEF(...) DEFINE_TYPE_PASS(ENGINE_DATA_SCANNER_IMPL, __VA_ARGS__)
+#include "def/data_scanner.def"
+			}
+			return false;
+		}
+	}
+}
+
 
 #endif
