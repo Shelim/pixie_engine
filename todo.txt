@@ -8,6 +8,8 @@
 		 - DataArchive
 			 - ZipOutputProvider
 			 
+	 - Renderer
+			 
 	 - Cleanup parser
 		 - Error detection (Intellisense): https://stackoverflow.com/questions/47354226/how-to-provider-user-with-autocomplete-suggestions-for-given-boostspirit-gramm
 		 - Common elements should be in common
@@ -49,16 +51,11 @@
      - Encrypted
          - Custom archive based on encryption key
          - The same rules apply
-  
- - DataItems	
-     - Basic item loading/saving (data item should only load data for parsing after that!)
-     - Softlinks
-     - Digital Sign-ing datafiles
-
- - Modules
-     - Manifests
-        - Modules
-        - Submodules
 
  - Asset Manager
      - Map asset_path_t -> virtual_path_t
+	 - Modules
+		 - Manifests
+			- Modules
+			- Submodules
+	 - Detaching and saving assets (for example game state)
