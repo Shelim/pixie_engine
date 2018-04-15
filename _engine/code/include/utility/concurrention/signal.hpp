@@ -32,13 +32,21 @@ namespace engine
             return released;
         }
 
-        void wait()
+        enum class reset_after_t
+        {
+            yes,
+            no
+        };
+
+        void wait(reset_after_t reset_after = reset_after_t::no)
         {
             std::unique_lock<std::mutex> lock(mutex);
             while(!released)
             {
                 condition_variable.wait(lock, [this]{return released;});
             }
+            if(reset_after == reset_after_t::yes)
+                released = false;
         }
         
         void signal()
