@@ -1,4 +1,13 @@
  - Most urgent
+     - Data
+		 - DataMonitor
+			 - SourceProvider
+		 - DataCreator
+		 - DataManipulator
+		 - DataItems
+		 - DataArchive
+			 - ZipOutputProvider
+			 
 	 - Cleanup parser
 		 - Error detection (Intellisense): https://stackoverflow.com/questions/47354226/how-to-provider-user-with-autocomplete-suggestions-for-given-boostspirit-gramm
 		 - Common elements should be in common

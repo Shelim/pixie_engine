@@ -21,11 +21,6 @@ namespace engine
 
 			}
 
-			scanner_t(scanner_t const&) = delete;
-			scanner_t(scanner_t &&) = default;
-			scanner_t& operator=(scanner_t const&) = delete;
-			scanner_t& operator=(scanner_t &&) = default;
-
 			typedef std::function<void(std::unique_ptr<provider_actual_t>)> callback_t;
 
 			void scan(callback_t on_found)
@@ -41,8 +36,6 @@ namespace engine
 			}
 			
 		private:
-			
-			friend class scanners_t;
 
 			virtual void scan_local(callback_t on_found)
 			{
@@ -50,10 +43,13 @@ namespace engine
 			}
 
 		};
+
+		typedef std::vector<std::unique_ptr<scanner_t> > scanners_t;
 	}
 
 }
 
+#include "global/core/data/scanner/archive.hpp"
 #include "global/core/data/scanner/directory.hpp"
 
 #endif

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "global/core/data/provider_actual.hpp"
-#include "utility/archive/zip.hpp"
+#include "global/core/data/archive/zip.hpp"
 
 namespace engine
 {
@@ -19,7 +19,7 @@ namespace engine
 				return true;
 			}
 
-			provider_actual_archive_t(const virtual_path_t & virtual_path, std::filesystem::file_time_type last_update, std::shared_ptr<archive::zip_input_t> zip_input, const ustring_t & archive_path) : provider_actual_t(virtual_path, last_update), zip_input(zip_input), archive_path(archive_path)
+			provider_actual_archive_t(const virtual_path_t & virtual_path, std::filesystem::file_time_type last_update, std::shared_ptr<archive::zip_input_t> zip_input, const ustring_t & archive_path) : provider_actual_t(kind_t::archive, virtual_path, last_update), zip_input(zip_input), archive_path(archive_path)
 			{
 
 			}

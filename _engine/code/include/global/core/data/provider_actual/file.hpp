@@ -34,7 +34,7 @@ namespace engine
 				no
 			};
 
-			provider_actual_file_t(std::shared_ptr<filesystem_t> filesystem, const virtual_path_t & virtual_path, const std::filesystem::path & physical_path, read_only_t read_only = read_only_t::yes, use_safe_output_t use_safe_output = use_safe_output_t::yes) : provider_actual_t(virtual_path, filesystem->get_mod_time(physical_path)), filesystem(filesystem), physical_path(physical_path)
+			provider_actual_file_t(std::shared_ptr<filesystem_t> filesystem, const virtual_path_t & virtual_path, const std::filesystem::path & physical_path, read_only_t read_only = read_only_t::yes, use_safe_output_t use_safe_output = use_safe_output_t::yes) : provider_actual_t(kind_t::file, virtual_path, filesystem->get_mod_time(physical_path)), filesystem(filesystem), physical_path(physical_path)
 			{
 				if (read_only == read_only_t::yes)
 					flags.set_flag(flag_t::is_read_only, true);

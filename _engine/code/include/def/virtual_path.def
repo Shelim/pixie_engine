@@ -3,7 +3,7 @@
 #endif
 
 #define GAME_APP_IMPL(app) app_##app
-#define GAME_APP_DEF(...) DEFINE_TYPE_MULTIPASS_WITH_DEF_ARGS(ENGINE_VIRTUAL_PATH_DEF, ( (config), (common), (crash_dumps), (saves), (logs), (unknown) ), GAME_APP_IMPL, __VA_ARGS__)
+#define GAME_APP_DEF(...) DEFINE_TYPE_MULTIPASS_WITH_DEF_ARGS(ENGINE_VIRTUAL_PATH_DEF, ( (config), (common), (crash_dumps), (keybinding), (saves), (logs), (unknown) ), GAME_APP_IMPL, __VA_ARGS__)
 #include "def/app.def"
 
 #ifdef ENGINE_VIRTUAL_PATH_IMPL

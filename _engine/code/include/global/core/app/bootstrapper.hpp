@@ -28,6 +28,7 @@
 #include "local/component/renderer_status.hpp"
 #include "local/component/terminal.hpp"
 #include "settings/default_config.hpp"
+#include "settings/default_scanners.hpp"
 #include "global/core/app/context.hpp"
 #include "global/core/program.hpp"
 #include "global/core/policy/instances_application.hpp"

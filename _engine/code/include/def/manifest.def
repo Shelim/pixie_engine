@@ -22,7 +22,7 @@ ENGINE_MANIFEST_DEF(    ((common), ( (full_name) ) ),
                                     (install_dir),
                                     (install_shortcut),
                                     (install_registry),
-                                    (game_app_dir),
+                                    (app_data_sub_dir),
                                     (storage_registry) ) ) )
 
 #ifdef ENGINE_MANIFEST_TYPE_IMPL

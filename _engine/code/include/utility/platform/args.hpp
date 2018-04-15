@@ -75,6 +75,13 @@ namespace engine
             return parsed.get_executable();
         }
 
+        ustring_t get_executable_path() const
+        {
+            ustring_t ret = parsed.get_executable();
+            int last_slash = std::max(ret.last_index_of('/'), ret.last_index_of('\\'));
+            return ret.substr(0, last_slash);
+        }
+
         void set_executable(ustring_t value)
         {
             parsed.set_executable(value);

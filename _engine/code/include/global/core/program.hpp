@@ -16,6 +16,8 @@
 #include "global/component/config_monitor.hpp"
 #include "global/component/config_storage.hpp"
 #include "global/component/data_archive.hpp"
+#include "global/component/data_common/filesystem_paths_provider.hpp"
+#include "global/component/data_common/scanners_provider.hpp"
 #include "global/component/data_creator.hpp"
 #include "global/component/data_items.hpp"
 #include "global/component/data_manipulator.hpp"

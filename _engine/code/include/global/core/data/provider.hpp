@@ -7,6 +7,7 @@
 #include "global/core/data/output/void.hpp"
 #include "global/component/data_creator.hpp"
 #include <set>
+#include <mutex>
 
 namespace engine
 {
@@ -16,29 +17,26 @@ namespace engine
 		{
 
 		public:
-			
-			provider_t(provider_t const&) = delete;
-			provider_t(provider_t &&) = default;
-			provider_t& operator=(provider_t const&) = delete;
-			provider_t& operator=(provider_t &&) = default;
-
-			const virtual_path_t & get_virtual_path() const
-			{
-				return virtual_path;
-			}
 
 			provider_t()
 			{
 
 			}
 
+			const virtual_path_t & get_virtual_path() const
+			{
+				return virtual_path;
+			}
+
 			bool is_valid() const
 			{
+				std::lock_guard<std::recursive_mutex> guard(mutex);
 				return !providers.empty();
 			}
 
 			std::unique_ptr<input_t> construct_input() const
 			{
+				std::lock_guard<std::recursive_mutex> guard(mutex);
 				if (!is_valid()) return std::make_unique<input_void_t>(virtual_path);
 
 				return std::move((*providers.begin())->construct_input());
@@ -46,6 +44,7 @@ namespace engine
 
 			std::unique_ptr<output_t> construct_output(std::shared_ptr<data_creator_t> data_creator = nullptr) const
 			{
+				std::lock_guard<std::recursive_mutex> guard(mutex);
 				for (auto & iter : providers)
 				{
 					if (!iter->is_read_only())
@@ -54,11 +53,12 @@ namespace engine
 				if (!data_creator)
 					return std::move(std::make_unique<output_void_t>(virtual_path));
 
-				return std::move(data_creator->create_new_file(virtual_path));
+				return std::move(data_creator->create_new(virtual_path));
 			}
 
 			bool is_read_only() const
 			{
+				std::lock_guard<std::recursive_mutex> guard(mutex);
 				for (auto & iter : providers)
 				{
 					if (!iter->is_read_only()) return false;
@@ -68,6 +68,7 @@ namespace engine
 
 			bool is_deleted() const
 			{
+				std::lock_guard<std::recursive_mutex> guard(mutex);
 				for (auto & iter : providers)
 				{
 					if (!iter->is_deleted()) return false;
@@ -78,6 +79,7 @@ namespace engine
 
 			bool delete_newest()
 			{
+				std::lock_guard<std::recursive_mutex> guard(mutex);
 				for (auto & iter : providers)
 				{
 					if (!iter->is_deleted())
@@ -91,6 +93,7 @@ namespace engine
 
 			bool delete_all()
 			{
+				std::lock_guard<std::recursive_mutex> guard(mutex);
 				bool ret = true;
 				for (auto & iter : providers)
 				{
@@ -105,6 +108,7 @@ namespace engine
 
 			std::filesystem::file_time_type get_time_last_mod() const
 			{
+				std::lock_guard<std::recursive_mutex> guard(mutex);
 				if (!is_valid()) return std::filesystem::file_time_type::min();
 				return (*providers.begin())->get_time_last_mod();
 			}
@@ -127,6 +131,7 @@ namespace engine
 
 			const providers_t & get_all_providers() const
 			{
+				std::lock_guard<std::recursive_mutex> guard(mutex);
 				return providers;
 			}
 			
@@ -135,6 +140,7 @@ namespace engine
 			virtual_path_t virtual_path;
 
 			providers_t providers;
+			mutable std::recursive_mutex mutex;
 
 		};
 	}

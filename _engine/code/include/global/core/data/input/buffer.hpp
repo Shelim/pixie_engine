@@ -20,7 +20,7 @@ namespace engine
 
 		public:
 
-			input_buffer_t(const virtual_path_t & virtual_path, const buffer_t & data) : input_t(virtual_path), data(data), pos(0)
+			input_buffer_t(const virtual_path_t & virtual_path, std::unique_ptr<buffer_t> data) : input_t(virtual_path), data(std::move(data)), pos(0)
 			{
 			}
 
@@ -36,27 +36,27 @@ namespace engine
 
 			void jump_to_end() final
 			{
-				this->pos = static_cast<int64_t>(data.size()) - 1;
+				this->pos = static_cast<int64_t>(data->size()) - 1;
 			}
 
 			void skip(int64_t pos) final
 			{
-				this->pos = std::max(0ll, std::min(static_cast<int64_t>(data.size()) - 1, this->pos + pos));
+				this->pos = std::max(0ll, std::min(static_cast<int64_t>(data->size()) - 1, this->pos + pos));
 			}
 			void go_back(int64_t pos) final
 			{
-				this->pos = std::max(0ll, std::min(static_cast<int64_t>(data.size()) - 1, this->pos - pos));
+				this->pos = std::max(0ll, std::min(static_cast<int64_t>(data->size()) - 1, this->pos - pos));
 			}
 			uint64_t read(uint8_t * buffer, uint64_t size) final
 			{
-				uint64_t len = std::min(data.size(), this->pos + size) - this->pos;
-				memcpy(buffer, &data[this->pos], len);
+				uint64_t len = std::min(data->size(), this->pos + size) - this->pos;
+				memcpy(buffer, &(*(data.get()))[this->pos], len);
 				this->pos += len;
 				return len;
 			}
 			bool is_eof() final
 			{
-				return pos >= data.size();
+				return pos >= data->size();
 			}
 
 			uint64_t position() final
@@ -68,7 +68,7 @@ namespace engine
 
 			int64_t pos;
 
-			buffer_t data;
+			std::unique_ptr<buffer_t> data;
 		};
 	}
 

@@ -1,0 +1,53 @@
+
+#ifndef ENGINE_COMPONENT_DATA_COMMON_FILESYSTEM_PATHS_PROVIDER_WINDOWS_PORTABLE_HPP
+#define ENGINE_COMPONENT_DATA_COMMON_FILESYSTEM_PATHS_PROVIDER_WINDOWS_PORTABLE_HPP
+#pragma once
+
+#if PIXIE_WINDOWS
+
+#include "global/component/data_common/filesystem_paths_provider.hpp"
+#include "global/component/program_args.hpp"
+#include "global/component/data_common/filesystem_paths_provider/windows_common.hpp"
+
+namespace engine
+{
+
+	class filesystem_paths_provider_windows_portable_t : public filesystem_paths_provider_base_t
+	{
+
+	public:
+
+        filesystem_paths_provider_windows_portable_t(std::shared_ptr<filesystem_paths_windows_common_t> common) : common(common)
+        {
+
+        }
+
+        paths_t get_read_paths(const virtual_path_t & filename) final
+        {
+            paths_t ret;
+            ret.push_back(common->get_path_portable(filename));
+            return ret;
+        }
+
+        paths_t get_write_paths(const virtual_path_t & filename) final
+        {
+            paths_t ret;
+            ret.push_back(common->get_path_portable(filename));
+            return ret;
+        }
+
+        std::filesystem::path get_path_for_new_file(const virtual_path_t & filename) final
+        {
+            return common->get_path_portable(filename);
+        }
+
+    private:
+
+        std::shared_ptr<filesystem_paths_windows_common_t> common;
+
+	};
+
+}
+
+#endif
+#endif

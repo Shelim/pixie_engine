@@ -11,6 +11,6 @@
 	<install_dir>$FULL_PROJECT_NAME$</install_dir>
 	<install_shortcut>$FULL_PROJECT_NAME$.lnk</install_shortcut>
 	<install_registry>$FULL_PROJECT_NAME$</install_registry>
-	<game_app_dir>$FULL_PROJECT_NAME$</game_app_dir>
+	<app_data_sub_dir>$FULL_PROJECT_NAME$</app_data_sub_dir>
 	<storage_registry>$FULL_PROJECT_NAME$</storage_registry>
 </manifest_windows>
