@@ -22,7 +22,7 @@ ENGINE_CONSOLE_OUTPUT_KIND_DEF( (meta), (msg), (pending), (success), (failure), 
 
 ENGINE_CONSOLE_OUTPUT_TAG_DEF( (def, "0"_u), (meta, "_"_u), (important, "!"_u) )
 
-ENGINE_CONSOLE_SOURCE_DEF( (unknown), (threads), (apps), (config), (terminal), (user_input), (user_result) )
+ENGINE_CONSOLE_SOURCE_DEF( (unknown), (threads), (apps), (config), (data), (terminal), (user_input), (user_result) )
 
 ENGINE_CONSOLE_MSG_TYPE_DEF( (logger), (app_accountable), (thread_accountable) )
 

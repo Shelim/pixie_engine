@@ -104,7 +104,4 @@ namespace engine
 	}
 }
 
-#include "global/core/data/output/file.hpp"
-#include "global/core/data/output/void.hpp"
-
 #endif

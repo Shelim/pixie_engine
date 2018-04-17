@@ -6,7 +6,7 @@
 #define ENGINE_MESSENGER_MSG_BASE_TYPE_DEF(...)
 #endif
 
-ENGINE_MESSENGER_QUEUE_DEF( (console), (config_storage), (config),
+ENGINE_MESSENGER_QUEUE_DEF( (console), (config_storage), (config), (data_monitor),
                             (accountable_thread), (accountable_app), (threads_snapshot_updated) )
 
 ENGINE_MESSENGER_MSG_BASE_TYPE_DEF( (msg), (register_instance), (unregister_instance) )

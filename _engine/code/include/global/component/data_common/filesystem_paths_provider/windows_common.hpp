@@ -9,7 +9,8 @@
 #include "global/component/program_args.hpp"
 #include "global/core/manifest/manifest.hpp"
 #include <windows.h>
-
+#undef min
+#undef max
 namespace engine
 {
 

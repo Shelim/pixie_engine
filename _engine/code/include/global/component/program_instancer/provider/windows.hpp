@@ -6,6 +6,8 @@
 
 #include "global/component/program_instancer/real.hpp"
 #include <windows.h>
+#undef min
+#undef max
 
 namespace engine
 {

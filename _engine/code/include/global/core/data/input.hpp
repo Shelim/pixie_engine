@@ -219,9 +219,4 @@ namespace engine
 	}
 }
 
-#include "global/core/data/input/file.hpp"
-#include "global/core/data/input/ustring.hpp"
-#include "global/core/data/input/buffer.hpp"
-#include "global/core/data/input/void.hpp"
-
 #endif

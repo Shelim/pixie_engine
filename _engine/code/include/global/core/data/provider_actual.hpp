@@ -9,6 +9,7 @@
 #include "global/core/data/output.hpp"
 #include "global/core/data/input/void.hpp"
 #include "global/core/data/output/void.hpp"
+#include "utility/pattern/flags.hpp"
 
 namespace engine
 {

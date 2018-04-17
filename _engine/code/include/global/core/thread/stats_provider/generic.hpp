@@ -4,8 +4,6 @@
 
 #include "global/core/thread/stats_provider.hpp"
 
-#include <windows.h>
-
 namespace engine
 {
 

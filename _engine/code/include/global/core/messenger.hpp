@@ -7,6 +7,7 @@
 #include "global/core/messenger/msg/config_storage.hpp"
 #include "global/core/messenger/msg/config.hpp"
 #include "global/core/messenger/msg/console.hpp"
+#include "global/core/messenger/msg/data_monitor.hpp"
 
 
 namespace engine

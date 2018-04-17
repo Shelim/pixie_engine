@@ -1,4 +1,5 @@
 #include "global/core/data/archive.hpp"
+#include "global/core/data/input/buffer.hpp"
 
 void engine::data::archive::zip_input_t::read_archive()
 {
