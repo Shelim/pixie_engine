@@ -23,25 +23,25 @@
 * @endverbatim
 *
 * @section pixie_intro Wprowadzenie
-*     	Niniejsza dokumentacja opisuje czwartą już iterację silnika Pixie Engine; Projektu stworzonego we współczesnym C++,
-*       wykorzystującym najnowsze standardy i przestrzegającym wszystkich obecnie stosowanych w praktyce wzorców projektowych.
+*     	Niniejsza praca (dokumentacja, implementacja oraz przykładowa aplikacja) przedstawia czwartą już iterację silnika Pixie Engine;
+*       Projektu stworzonego we współczesnym C++, wykorzystującym najnowsze standardy i przestrzegającym wszystkich
+*       obecnie stosowanych w praktyce wzorców projektowych.
 *
 *       Silnik jest przeznaczony do tworzenia gier 2D (choć nie jest wykluczone dodanie renderera 3D),
 *       szczególnie takich których stworzenie jest trudne bądź niemożliwe używając innych silników i narzędzi
-*       (zobacz sekcję @ref pixie_why "Dlaczego kolejny silnik?").
+*       (zobacz sekcję @ref pixie_why "Dlaczego kolejny silnik?"). Ze wzlędu na ogromny zakres tematyki i ograniczenia
+*       czasowe, nie wszystkie elementy silnika zostały w tej pracy w pełni zaimplementowane (zobacz sekcję @ref pixie_missing "Brakujące elementy")
 *
-*       Projekt jest aktywnie rozwjany od 2016 i liczy sobie obecnie
-*       ponad 22 000 linii kodu w ponad 250 plikach źródłowych. Lista głównych cech silnika znajduje się poniżej.
-*
-* @section pixie_features Cechy
-*       @todo Uzupenić sekcję cechy
+*       Przedsięwzięcie Pixie Engine jest aktywnie rozwjane od 2016 w ramach działalności Kosek.com (jednoosobowej działalności gospodarczej, założonej
+*       przez autora niniejszej pracy), a obecna implementacja liczy sobie ponad 25 000 linii kodu w ponad 300 plikach źródłowych.
+*       Poprzednia wersja silnika została wykorzystana w wydanej na Steam przez Kosek.com grze Magician's Apprentice.
 *
 * @section pixie_platforms Wspierane platformy
 * @subsection pixie_platforms_win Windows Vista/7/8/8.1/10
 *    - 64-bitowa architektura AMD
 *    - Renderer OpenGL oraz DirectX 11.0
 *    - Wsparcie dla zrzucania informacji z symboli odpluskwiacza (na potrzeby odpluskwiania post-mortem)
-*    - Dwie drogi implementacji dostawców: generyczna i dedykowana platformie
+*    - Dwie drogi implementacji dostawców: rodzajowa i dedykowana platformie
 *    - Wsparcie dla jednoczesnego wyświetlania wielu okienek terminalowych
 * @subsection pixie_platforms_lin Linux
 *    (Spodziewana, jeszcze nie zaimplementowana)
@@ -50,7 +50,7 @@
 *
 * @section pixie_why Dlaczego kolejny silnik?
 *      Obecnie na rynku znajduje się wiele bardzo dobrych, komercyjnie-gotowych silników gier,
-*      także takich o otwartych źródłach lub zamkniętych lecz posiadających permisywne licencje.
+*      także takich o otwartych źródłach bądź też zamkniętych lecz posiadających permisywne licencje.
 *      Ogromna większość z tych narzędzi jest jednak nastawiona na gry akcji, gry zręcznościowe
 *      bądź zręcznościowo-sieciowe.
 *      Motywacją za powstaniem Pixie Engine był brak dedykowanej technologii do gier strategicznych,
@@ -85,12 +85,21 @@
 * 
 * Problemy z obecną wersją Unity obejmują przede wszystkim:
 *    - Bardzo słaby serializator (jak wspomniano wyżej)
-*    - Brak wsparcia dla fanowskich modyfikacji
+*    - Brak wsparcia dla fanowskich modyfikacji, czyli możliwości tworzenia dodatkowej zawartości przez fanów
 *    - Z powodu wykorzystana języka zarządzanego: opóźnienia związane z odśmieciarką (zwłaszcza dla skomplikowanych grafów obiektów)
 *    - Duże problemy z grą sieciową czasu rzeczywistego (brak przewidywania martwych pakietów, brak interpolacji czasowej)
 * 
 * @subsubsection pixie_why_example_unrealengine Unreal Engine
-* @todo Uzupełnić opis braków UnrealEngine
+* Unreal Engine to także dojrzały, aktywnie rozwijany silnik 3D oparty o C++ i własnościowy język UScript. W przeciwieństwie do Unity
+* jest przeznaczony przede wszystkim do produkcji wysokobudżetowych i posiada gorsze wsparcie do prototypowania. Jest także
+* nieco mniej stabilny, a część cech jest wciąż na etapie planowania i implementacji.
+*    
+* Problemy z obecną wersją Unreal Engine obejmują przede wszystkim:
+*    - Słabe wsparcie dla prototypowania
+*    - Dużo większe wymagania sprzętowe, szczególnie po stronie programistów i twórców zawartości
+*    - Trudniejszy do nauki
+*    - Niestabilny, zdarzają się twarde awarie i wyjście do pulpitu
+*   
 * @subsubsection pixie_why_example_ligdx LibGDX
 * LibGDX jest frameworkiem wspierającym tworzenie gier w OpenGLu na platformach mobilnych i stacjonarnych.
 * Oryginalna implementacja była dedykowana platformie Android, ale późniejsze warianty wspierały też innych dostawców
@@ -115,7 +124,6 @@
 *    - Brak temporalnego wygładzenia grafu sceny
 *    - Podejście serwer-pierwszy przy implementacji gry wieloosobowej (wprowadzające opóźnienia przy akceptowaniu poleceń)
 *
-* @todo Uzupełnić kolejne przykłady
 * @subsection pixie_why_us Odpowiedź na problemy
 * Pixie Engine wychodzi naprzeciw opisanym problemom dostarczając zarówno pełne wsparcie dla grup modyfikujących
 * (uwzględniając @ref assets_hotreload "przeładowanie zasobów na gorąco"), maksymalne wykorzystanie języka natywnego
@@ -127,59 +135,13 @@
 * @subsection pixie_why_limitations Ograniczenia silnika
 * Oczywiście w sytuacji rywalizujących zasobów niemożliwe jest zawarcie wszystkich możliwych cech w jednym rozwiązaniu.
 * Z tego powodu z góry przyjęto ograniczenia, jakie wprowadzono do Pixie Engine:
-*    - Akceptowalne czasy kompilacji; W chwili obecnej około 10 minut pracy jednego rdzenia (np. 2,5 minuty przy 4 rdzeniach)
+*    - Akceptowalne czasy kompilacji; W chwili obecnej około 15 minut pracy jednego rdzenia (np. ~3 minuty 45 sekund przy 4 rdzeniach)
 *    - Preferuj kod natywny nad zarządzanym (ograniczenia modyfikacji w zamian za zwiększenie wydajności)
 *    - Wykorzystuj inteligentne wskaźniki (niewielki narzut na wykonanie w zamian za stabilność implementacji)
 *    - Preferuj ustalenia czasu kompilacji nad ustawieniami czasu wykonania (przyspiesza wykonanie poprzed eliminację zbędnego kodu na etapie kompilacji kosztem utraty modyfikowalności niektórych ustawień)
 *    - Akceptuj narzut na uruchomienie związany z wstrzykiwaniem zależności
-*
-* @section pixie_depedencies Zależności
-* @subsection pixie_depedencies_libraries Biblioteki
-*     - @ref dependency_angelcode "AngelCode"
-*     - @ref dependency_anttweakbar "AntTweakBar"
-*     - @ref dependency_blowfish "Blowfish"
-*     - @ref dependency_boost "Boost"
-*     - @ref dependency_di "Boost Dependency Injection"
-*     - @ref dependency_cereal "cereal"
-*     - @ref dependency_cg "cg"
-*     - @ref dependency_debugbreak "debugbreak"
-*     - @ref dependency_glew "glew"
-*     - @ref dependency_googlemock "Google Mock"
-*     - @ref dependency_googletest "Google Test"
-*     - @ref dependency_levenshtein "Levenshtein distance calculator"
-*     - @ref dependency_vlc "libVLC"
-*     - @ref dependency_minizip "miniZIP"
-*     - @ref dependency_multiconsoles "Multiple Consoles"
-*     - @ref dependency_openal_soft "OpenAL (Software)"
-*     - @ref dependency_pugixml "pugixml"
-*     - @ref dependency_remotery "Remotery"
-*     - @ref dependency_sdl "SDL 2.0"
-*     - @ref dependency_sdl_net "SDL NET 2.0"
-*     - @ref dependency_stb "stb"
-*     - @ref dependency_wxwidgets "wxWidgets"
-* @subsection pixie_depedencies_other Inne
-*     - @ref dependency_apacheant "Apache Ant"
-*     - @ref dependency_cppcheck "C++ Check"
-*     - @ref dependency_dia "Dia"
-*     - @ref dependency_dot "dot"
-*     - @ref dependency_doxygen "Doxygen"
-*     - @ref dependency_fastbuild "FastBuild"
-*     - @ref dependency_git "git"
-*     - @ref dependency_gtest_runner "Google Test runner"
-*     - @ref dependency_html_help_workshop "HTML Help Workshop"
-*     - @ref dependency_jdk "JDK 1.8"
-*     - @ref dependency_llvm "LLVM"
-*     - @ref dependency_mathjax "mathjax"
-*     - @ref dependency_mingw "MinGW"
-*     - @ref dependency_msxsl "msxsl"
-*     - @ref dependency_nsis "NSIS"
-*     - @ref dependency_open_cpp_coverage "Open C++ Coverage"
-*     - @ref dependency_python "Python 3.5"
-*     - @ref dependency_texlive "texLIVE"
-*     - @ref dependency_thttpd "thttpd"
-*     - @ref dependency_upxw "upxw"
-*     - @ref dependency_vscode "Visual Studio Code"
+*    - Korzystaj z wstrzykiwania zależności i warstw pośrednich, nawet jeżeli zależności między modułami stają się bardziej widoczne (efektywnie zwiększa znacząco współczynnik utrzymywalności rozwiązania, kosztem niewielkiego narzutu)
 *
 * @section pixe_copyrights Prawa autorskie
-*    Ten silnik jest napisany i utrzymywany przez Kosek.com
+*    Ten silnik jest napisany i utrzymywany przez Kosek.com i jest dystrybuowany na otwartej licencji MIT/X11. Najnowsza wersja jest dostępna zawsze pod adresem https://github.com/Shelim/pixie_engine
 */
