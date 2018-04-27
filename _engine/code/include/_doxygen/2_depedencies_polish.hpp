@@ -48,7 +48,7 @@
 * <tr><td>@ref dependency_multiconsoles "Multiple Consoles"<td>Biblioteka<td>Pomocnicza aplikacja umożliwiająca alokację więcej niż jednego okna konsoli dla jednego procesu<td>Domena publiczna<td>Zvika Ferentz
 * <tr><td>@ref dependency_nsis "NSIS"<td>Inne<td>Instalator na platformie Windows<td>zlib/libpng<td>Open Source Contributors
 * <tr><td>@ref dependency_openal_soft "OpenAL (Software)"<td>Biblioteka<td>Moduł wspierający odtwarzanie dźwięków<td>GNU LPGL<td>kcat
-* <tr><td>@ref dependency_open_cpp_coverage "Open C++ Coverage"<td>Inne<td>Aplikacja wyliczająca pokrycie kodu testami na podstawie symboli odpluskwiacza PDB<td>>GNU GPL (Bez włączenia kodów źródłowych do projektu)<td>OpenCppCoverage Team
+* <tr><td>@ref dependency_open_cpp_coverage "Open C++ Coverage"<td>Inne<td>Aplikacja wyliczająca pokrycie kodu testami na podstawie symboli odpluskwiacza PDB<td>GNU GPL (Bez włączenia kodów źródłowych do projektu)<td>OpenCppCoverage Team
 * <tr><td>@ref dependency_pugixml "pugixml"<td>Biblioteka<td>Szybki wczytywacz i parser dokumentów XML<td>MIT/X11<td>Arseny Kapoulkine
 * <tr><td>@ref dependency_python "Python 3.5"<td>Inne<td>Używany przez @ref dependency_llvm "LLVM" na potrzeby odpluskwiania aplikacji<td>PSF license agreement for Python<td>Python Software Foundation
 * <tr><td>@ref dependency_remotery "Remotery"<td>Biblioteka<td>Zewnętrzny profiler w formie strony www<td>Licencja Apache, wersja 2.0<td>Don Williamson
@@ -88,8 +88,12 @@
 * wartości, na podstawie rozpoznanego typu (liczba, test, wektor, kolor, macierz, kwaternion). Biblioteka ta wspiera wszystkie współczesne stosowane
 * renderery (OpenGL, DirectX, SDL)
 * 
+* @image html dependency_anttweakbar_image.jpg "Przykładowy zrzut ekranu AntTweakBar"
+* @image latex dependency_anttweakbar_image.jpg "Przykładowy zrzut ekranu AntTweakBar" height=5cm
+* 
 * Motywacją za włączeniem AntTweakBar było udostępnienie prostego narzędzia, które pozwoli parametryzować rozgrywkę (głównie do wykorzystania
 * przy tworzeniu fanowski modyfikacji) bez opuszczania gry.
+*
 * @section dependency_apacheant Apache Ant
 * Apache Ant to system budujący oparty o język XML zaimplementowany w Javie z wykorzystaniem komend języka skryptowego JavaScript. Posiada rozbudowaną
 * bazę zadań (np. "wykonaj komendę na pliku", "skopiuj plik", "wgraj plik na serwer FTP", etc.), które można parametryzować z wykorzystaniem zmiennych.
@@ -99,7 +103,7 @@
 * i rozwiązaniach wewnętrznych. Rozwiązania różnią się filozofią tworzenia plików skryptowych, ale jako że różnice są bardziej kosmetyczne niż efektywne,
 * wybór konkretnego rozwiązania był podyktowany preferencją autora i względami historycznymi (wszystkie wersje Pixie Engine opierały się na Apache Ant,
 * z czego wynikała istniejąca baza skryptów którą można było po prostu zaadoptować do obecnego projektu)
-* 
+*
 * W Pixie Engine jest włączona jedynie binarna dystrybucja Apache Ant.  
 *
 * @section dependency_blowfish Blowfish
@@ -110,6 +114,23 @@
 * W Pixie Engine blowfish został włączony ze względu na potrzebę szybkiego, symetrycznego algorytmu szyfrującego dane, niezbędne do przesłania
 * przez sieć, bądź zapisania na dysku. Wybór konkretnego algorytmu był podyktowany względami dostępności - praktycznie każdy współczesny symetryczny szyfr blokowy
 * spełniałby wymogi stawiane przed algorytmem, ale istnieje prosta, efektywna i oparta o wolną licencję Ms-PL implementacja Blowfisha
+*
+* @section dependency_boost Boost - rozszerzone biblioteki C++
+* Jako iż standardowa biblioteka C++, nawet rozszerzona o funkcje C++11 i C++14 zawiera relatywnie ograniczony zestaw narzędzi, Pixie Engine wymaga
+* rozszerzonej nieoficjalnej biblioteki Boost. Boost jest dojrzałą, aktywnie rozwijaną i recenzowaną przez specjalistów biblioteką - lub raczej zbiorem bibliotek
+* umożliwiającą - i optymalizującą - wiele typowych operacji jakie można spotkać podczas tworzenia oprogramowania w C++.
+* Pełna lista komponentów Boost jest dostępna tutaj: https://www.boost.org/doc/libs/
+*
+* Na ten moment Pixie Engine korzysta m.in. z komponentu Spirit, umożliwającego parsowanie wyrażeń tekstowych, inteligentnych wskaźników oraz wyrażeń czasowych.
+* Kolejne komponenty będą integrowane w miarę potrzeb.
+*
+* @section dependency_di Boost Dependency Injection
+* Biblioteka wstrzykiwania zależności jest propozycją rozszerzenia Boost (obecnie oczekującą na recenzenta), ale do tej pory nie została włączona w zestaw bibliotek Boost
+* i pozostaje niezależnym produktem. Jest to relatywnie młoda biblioteka, wciąż aktywnie rozwijana przez twórców. Więcej informacji na temat wykorzystania
+* wstrzkiwania zależności i wykorzystania wzorca odwrócenia odpowiedzialności w Pixie Engine znajduje się w rozdziale @ref engine_architecture "architektura silnika".
+*
+* Podczas praktycznego wykorzystania Wstrzkiwania Zależności Boost natrafiono na ciekawy problem z tworzeniem fabryk abstrakcyjnych. Opis problemu i rozwiązanie
+* zaimplementowane przez twórcę Pixie Engine znajduje się w rozdziale @ref engine_problems_di "problem z wstrzykiwaniem zależności Boost".
 *
 * @todo Dokończyć sekcję zależności
 *
