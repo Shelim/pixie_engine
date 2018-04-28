@@ -8,7 +8,7 @@
 * aby pobrać je z serwera Kosek.com:
 *
 * - Na Windowsie: użyj skryptu z katalogu <tt>_command/windows/download_dependencies.bat</tt>. Potwierdź czas oczekiwania.
-* - Na Linuxe: TBD
+* - Na Linuxie: TBD
 * - Na OS X: TBD
 *
 * Lista zależności znajduje się poniżej:
@@ -131,6 +131,84 @@
 *
 * Podczas praktycznego wykorzystania Wstrzkiwania Zależności Boost natrafiono na ciekawy problem z tworzeniem fabryk abstrakcyjnych. Opis problemu i rozwiązanie
 * zaimplementowane przez twórcę Pixie Engine znajduje się w rozdziale @ref engine_problems_di "problem z wstrzykiwaniem zależności Boost".
+*
+* @section dependency_cereal cereal
+* cereal (uwaga - nazwa pisana jest z małej litery) to biblioteka łatwej serializacji danych C++ czyli zamiany drzewka referencji na strumień binarny bądź tekstowy
+* i vice versa. Cereal zostało wybrane ze względu na nieinwazyjną składnię, rozpoznawanie polimorfizmu (dzięki mechanizmom RTTI - rozpoznawania typów w trakcie
+* wykonania), relatywnie proste API, dużą wydajność oraz łatwość implementacji nowych strumieni wyjściowych. Jego największym ograniczeniem jest problem
+* z tworzeniem paska postępu zapisywania/wczytywania danych - istnieje tylko jeden przebieg i niewielkie możliwości podczepiania zdarzenia
+* pod wykrycie nowego obiektu (bez opcji detekcji liczby obiektów). Z tego powodu w praktycznym zastosowaniu cereal musi być uruchamiany
+* dwukrotnie (pierwszy przebieg jałowy, bez strumieniowania danych tylko po to by policzyć liczbę obiektów w grafie, i drugi - faktycznie serializujący)
+*
+* @section dependency_cg cg
+* cg (uwaga - nazwa pisana jest z małej litery) to autorska biblioteka firmy nVidia, nierozwijana i nieutrzymywana od kwietnia 2012, ale dostatecznie
+* dojrzała i stabilna by zyskać szerokie zastosowania. Cg to abstrakcyjny język jednostki cieniującej, umożliwiający transkompilację do kodu GLSL oraz HLSL
+* z wykorzystaniem konkretnych list cech danej wersji języka. W ten sposób programy jednostki cieniującej mogą zostać stworzone przez grafika jednorazowo
+* i być od razu dostępne na wszystkich wspieranych rendererach. Uzyskuje się w ten sposób warstwę niezależności zasobów nad konkretną implementacją.
+* 
+* @note Pomimo iż biblioteka nie jest dłużej wspierania, jest wciąż powszechnie wykorzystywana w branży, np. pełną integrację z cg oferuje Unity.
+*
+* @warning Ponieważ cg nie jest już dłużej rozwijane, nie oferuje on dostępu do podprogramów i procedur GLSL oraz HLSL powstałych po kwietniu 2012.
+*
+* @section dependency_cppcheck C++ Check
+* Jednym z najważniejszych wyzwań stawianych przed współczesnym oprogramowaniem jest jego stabilność. Testy możemy z grubsza podzielić na ręczne -
+* podczas których tester fizycznie próbuje "popsuć" program i zapamiętuje kroki niezbędne by taką sytuację powtórzyć, oraz automatyczne - gdy inny program
+* stara się "popsuć" nasz program. Istnieje wiele podejść do testów automatycznych, np. testy jednostkowe, które sprawdzają rezultat konkretnego
+* fragmentu kodu, testy makietowe (zaimplementowane w Pixie Engine przy użyciu biblioteki @ref dependency_googlemock "Google Mockup") które opierają
+* się o weryfikację komponentu w otoczeniu makiet innych komponentów, oraz testy integracyjne, które opierają się na całym systemie.
+*
+* Osobną gałąź stanowią testy statyczne, oparte wyłącznie na maszynowej analizie kodu źródłowego z pominięciem fazy kompilacji i uruchomienia programu.
+* Testy statyczne mogą być oparte o ręczną analizę, ale powstały narzędzia zdolne przeprowadzić taką analizę w sposób całkowicie nienadzorowany.
+*
+* Najważniejszym narzędziem tego typu jest C++ Check, statyczny analizator kodu źródłowego który wyłuskuje potencjalne błędy (np. niezainicjowane zmienne,
+* niezwolnioną pamięć, niezłapane wyjątki), posługując się wyłącznie oryginalnymi kodami źródłowymi z pominięciem budowania pliku wykonywalnego.
+* C++ Check jest z powodzeniem wykorzystywany w produkcyjnych aplikacjach (między innymi wykrył 27 błędów w jądrze Linuxa w wersji 2.6) i jest
+* uznany za dojrzałe, dodatkowe narzędzie weryfikujące kod. Minusem rozwiązania jest czas analizy - 6 rdzeni sprawdzało 34 pliki *.cpp Pixie w ciągu
+* blisko 45 minut.
+*
+* @note W przyszłości Pixie Engine może automatycznie uruchamiać C++ Check przy każdej prośbie o dołączenie kodu. W ten sposób jakość kodu
+* może zostać utrzymana przez analizę potencjalnych braków.
+* 
+* Więcej informacji na temat sposobów testowania Pixie Engine znajduje się w rozdziale @ref tests "testy".
+*
+* @section dependency_debugbreak DebugBreak
+* DebugBreak to niewielka - jednonagłówkowa - biblioteka zdolna przełączyć punkt zatrzymania za pomocą wstawki assembly (zwykle zaimplementowanej jako
+* pułapka bądź przerwanie procesora) na wszystkich wspieranych platformach. W projekcie jest wykorzystana głównie na etapie tworzenia oprogramowania
+* lub testów. Dzięki zastosowaniu DebugBreak programista może zobaczyć wykryty problem (np. nadpisanie pamięci) w chwili jest wystąpienia.
+*
+* DebugBreak *nie* jest włączony do finałowej kompilacji (ze względu na brak dołączanych symbol odpluskwiacza, jego obecność nie miałaby sensu),
+* dlatego w przypadku zawieszenia aplikacji na komputerze klienckim stosowane są inne mechanizmy zbierania i raportowania błędów. Więcej informacji
+* na ich temat znajduje się w rozdziale @ref debug "odpluskwianie".
+*
+* @section dependency_dia dia
+* dia (uwaga - nazwa pisana jest z małej litery) to framework niezbędny do poprawnego działania @ref dependency_llvm "LLVM/Clang". Poza zastosowaniem
+* w kompilatorze nie jest wykorzystywany bezpośrednio w projekcie.
+*
+* @section dependency_dot dot
+* dot (uwaga - nazwa pisana jest z małej litery) to niewielkie narzędzie do generowania graficznych diagramów używane wewnętrznie przez
+* @ref dependency_doxygen "doxygen". Poza wykorzystaniem przy tworzeniu dokumentacji nie jest wykorzystywane bezpośrednio w projekcie.
+*
+* @section dependency_doxygen doxygen
+* doxygen (uwaga - nazwa pisana jest z małej litery) stanowi dojrzały, stabilny system generowania dokumentacji bezpośrednio z kodu źródłowego.
+* Doxygen wyłuskuje otagowane specjalnymi komentarzami komendy i tworzy z nich opis programu wraz z informacjami wyciągniętymi bezpośrednio
+* z kodu źródłowego. Narzędzie jest w stanie wygenerować graf obiektów (także graficzny, z wykorzystaniem @ref dependency_dot "narzędzia dot"),
+* oraz odczytać podstawowe informacje z nagłówków klas, funkcji i metod. Doxygen jest udostępniany na licencji GNU GPL, ale w projekcie jest uwzględniona
+* wyłącznie jego binarna wersja (bez włączania kodów źródłowych samego doxygena).
+*
+* Wybór doxygena jako narzędzia generującego dokumentację był dość oczywisty - jest to obecnie najbardziej znane, najpowszechniej stosowane rozwiązanie
+* w przypadku tworzenia aplikacji C++. Posiada największą bazę odpowiedzi, najlepszą dokumentację i uchodzi za najbardziej stabilne spośród wszystkich
+* narzędzi dostępnych na rynku.
+*
+* @note doxygen jest zdolny do generowania dokumentacji w różnych językach i formatach wyjściowych, co zostało wykorzystane m.in. do opracowania
+* dokumentu który właśnie czytasz.
+*
+* @section dependency_fastbuild FastBuild
+* Jednym z najbardziej irytujących problemów na etapie tworzenia kodu Pixie Engine były długie czasy kompilacji projektu (ponad 15 minut na pełen cykl).
+* Ze względu na realny wpływ na czas prac nad silnikiem, została powzięta decyzja by znaleźć alternatywny sposób (nie oparty o @ref dependency_apacheant "Apache Ant")
+* sposób dokonywania szybkich, iteracyjnych kompilacji testowych, pozostawiając jednocześnie mechanizm pełnej rekompilacji do tworzenia finałowych
+* wersji plików wykonywalnych.
+*
+* @todo Dokończyć FastBuild
 *
 * @todo Dokończyć sekcję zależności
 *

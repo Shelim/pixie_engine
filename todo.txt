@@ -31,7 +31,6 @@
  - New dependencies:
 	 - Replace libRocket with CEF3 https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage
 	 - Add FlatBufffers dependency https://google.github.io/flatbuffers/index.html
-	 - Add WinDBG to list of OSS software inside docs
 
  - Work on components: 
 +	 - config_storage
