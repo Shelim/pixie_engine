@@ -33,7 +33,7 @@ namespace engine
 			provider_actual_file_t::use_safe_output_t use_safe_output;
 		};
 
-		bool operator==(const scanner_directory_t & scanner1, const scanner_directory_t & scanner2)
+		inline bool operator==(const scanner_directory_t & scanner1, const scanner_directory_t & scanner2)
 		{
 			return scanner1.base_virtual_path == scanner2.base_virtual_path &&
 					scanner1.base_physical_path == scanner2.base_physical_path &&

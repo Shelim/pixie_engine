@@ -65,7 +65,7 @@ namespace engine
 {
 	namespace data
 	{
-		bool operator==(const scanner_t & scanner1, const scanner_t & scanner2)
+		inline bool operator==(const scanner_t & scanner1, const scanner_t & scanner2)
 		{
 			if(scanner1.get_kind() != scanner2.get_kind()) return false;
 			
