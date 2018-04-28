@@ -220,8 +220,7 @@
 * FastBuild nie zmienia architektury operacji kompilowania i nie wpływa na proces konsolidacji. Z tego powodu jest on transparentny dla ewentualnych
 * problemów lub pluskiew, które mogą się pojawić w kodzie produkcyjnym i które mogłyby pozostać niezauważone do wykonania pełnego cyklu kompilacji.
 *
-* @note FastBuild pozwala także na rozłożenie kompilacji na więcej niż jedną fizyczną maszynę, ale na potrzeby niniejszej pracy taka funkcjonalność
-* przekraczałaby jej zasięg.
+* @note FastBuild pozwala także na rozłożenie kompilacji na więcej niż jedną fizyczną maszynę, ale taka funkcjonalność przekraczałaby zasięg niniejszej pracy.
 *
 * @todo Dokończyć sekcję zależności
 *
