@@ -203,12 +203,25 @@
 * dokumentu który właśnie czytasz.
 *
 * @section dependency_fastbuild FastBuild
-* Jednym z najbardziej irytujących problemów na etapie tworzenia kodu Pixie Engine były długie czasy kompilacji projektu (ponad 15 minut na pełen cykl).
+* Jednym z najbardziej irytujących problemów na etapie tworzenia kodu Pixie Engine były bardzo długie czasy kompilacji projektu (ponad 15 minut na pełen cykl).
 * Ze względu na realny wpływ na czas prac nad silnikiem, została powzięta decyzja by znaleźć alternatywny sposób (nie oparty o @ref dependency_apacheant "Apache Ant")
 * sposób dokonywania szybkich, iteracyjnych kompilacji testowych, pozostawiając jednocześnie mechanizm pełnej rekompilacji do tworzenia finałowych
 * wersji plików wykonywalnych.
 *
-* @todo Dokończyć FastBuild
+* Rozważano kilka rozwiązań spośród których wybrano właśnie narzędzie FastBuild. FastBuild to relatywnie młody, zaawansowany system budujący
+* oparty o proces iteracyjny z zachowaniem maksymalnej ilości danych między kompilacjami w pamięci podręcznej. W przeciwieństwie do innych rozważanych
+* rozwiązań jest niezależny od wybranego kompilatora (obecnie Pixie Engine jest kompilowany za pomocą @ref dependency_llvm "LLVM/CLang"), i potrafi się dobrze
+* integrować z istniejącymi systemami budowania. Fastbuild potrafi rozłożyć kompilację na wiele rdzeni, sprawdzić różnice plików na poziomie makr preprocesora
+* i wykryć zmiany bez stosowania mechanizmów prekompilacji nagłówków.
+*
+* Zastosowanie FastBuild skróciło podstawowy cykl kompilacji na 8-rdzeniowym procesorze 6x-7x razy, a przy minimalnej liczbie zmian kodu (budowa iteracyjna)
+* pozwolił osiągnąć blisko 20x-25x wzrost prędkości kompilacji.
+*
+* FastBuild nie zmienia architektury operacji kompilowania i nie wpływa na proces konsolidacji. Z tego powodu jest on transparentny dla ewentualnych
+* problemów lub pluskiew, które mogą się pojawić w kodzie produkcyjnym i które mogłyby pozostać niezauważone do wykonania pełnego cyklu kompilacji.
+*
+* @note FastBuild pozwala także na rozłożenie kompilacji na więcej niż jedną fizyczną maszynę, ale na potrzeby niniejszej pracy taka funkcjonalność
+* przekraczałaby jej zasięg.
 *
 * @todo Dokończyć sekcję zależności
 *
