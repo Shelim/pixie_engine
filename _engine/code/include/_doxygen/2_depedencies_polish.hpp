@@ -222,6 +222,36 @@
 *
 * @note FastBuild pozwala także na rozłożenie kompilacji na więcej niż jedną fizyczną maszynę, ale taka funkcjonalność przekraczałaby zasięg niniejszej pracy.
 *
+* @section dependency_git git
+* Podczas tworzenia jądra Linuxa jego twórcy stanęli przed problemem koordynowania prac w zespole rozproszonym po całym świecie z otwartą możliwością
+* kontrybuowania kodów źródłowych z zewnątrz zespołu. W takiej sytuacji oczywistym rozwiązaniem jest użycie systemu kontroli wersji, systemu który
+* zapewnia możliwość tworzenia kontrolowalnego repozytorium zdolnego do zapamiętania (i odwrócenia!) dowolnej zmiany w produkcie. W owych czasach
+* na rynku znajdowało się kilka produktów tej klasy, jednak żaden nie spełniał wymagań twórców Linuxa. Stojąc przed oczywistą blokadą, twórcy Linuxa podjęli
+* decyzję o stworzeniu autorskiego, własnego rozwiązania które nazwali właśnie gitem. Tak powstał obecnie najpopularniejszy - i wykorzystywany także w Pixie Engine -
+* zdecentralizowany system kontroli wersji, zdolny do łatwego scalania zmian pochodzących z różnych gałęzi i umożliwiający ocenę i akceptację kodu pochodzącego
+* z zewnątrz projektu (w formie tzw. próśb o ściągnięcie).
+*
+* Analogicznym rozwiązaniem do systemu kontroli git jest Mercurial (hg), posiadający bardzo podobny zestaw cech, ale w przeciwieństwie do gita operujący na
+* zmianach (ang. changes) a nie stanach (ang. snapshots). O ile preferencja autora niniejszej pracy kierowała wybór na system Mercurial, najpopularniejszy
+* serwis oprogramowania otwartych-źródeł, github, nie dopuszczał repozytoriów hg (w momencie rozpoczynania projektu). Migracja z git do hg nie została do dziś
+* wykonana...
+*
+* Dodatkowym problemem z gitem jest ilość binarnych plików (np. 4,7 gb zależności) jakie naturalnie pojawiają się w projektach gier. Git rozwiązuje problem
+* częściowo za pomocą rozszerzenia Magazyn Dużych Plików (Large File Storage - LFS), jednak jego wsparcie w środowisku produkcyjnym nie jest w pełni
+* stabilne (np. wspomniany github dopuszcza jedynie 1 gb plików binarnych). Z tego powodu zależności muszą być utrzymywane osobno; obecnie są przechowywane
+* *poza* systemem wersjonowania na serwerze Kosek.com; Więcej informacji znajduje się w rozdziale @ref engine_architecture_dependency "polityka zależności".
+*
+* Oczywiście utrzymywanie plików źródłowych git w projekcie nie miałoby sensu - Pixie Engine używa jedynie binarnej wersji gita.
+*
+* @section dependency_glew glew
+* OpenGL, jeden z dwóch rendererów wspieranych przez Pixie Engine do niedawna był niemal całkowicie zamrożony w produkcji - konsorcjum twórców OpenGL
+* nie dopuszczało zmian standardu, poza tworzeniem (np. przez producentów kart graficznych) autorskich rozszerzeń. O ile sytuacja ta zmieniła się niedawno,
+* o tyle wciąż ogromna część elementów OpenGL jest zaimplementowana właśnie jako wspomniane rozszerzenia (z których cześć stała się de facto elementami
+* standardu). Sprawdzanie dostępności rozszerzeń na danej architekturze i weryfikowanie możliwości kart graficznych stało się dość niewdzięcznym zadaniem - 
+* zwłaszcza iż ta sama funkcjonalność potrafiła być zawarta w różnych rozszerzeniach zależenie od producenta danej karty graficznej (a czasem różnić
+* się w detalach implementacyjnych!). GLEW (OpenGL Extension Wrangler Library), to zestaw nagłówków i bibliotek które uproszczają proces sprawdzania i uruchamiania
+* opisanych rozszerzeń.
+* 
 * @todo Dokończyć sekcję zależności
 *
 */
