@@ -252,6 +252,87 @@
 * się w detalach implementacyjnych!). GLEW (OpenGL Extension Wrangler Library), to zestaw nagłówków i bibliotek które uproszczają proces sprawdzania i uruchamiania
 * opisanych rozszerzeń.
 * 
+* @section dependency_googlemock Google Mock
+* Google Mock to zaawansowana biblioteka do tworzenia makiet (ang. mockups) kodu na potrzeby testowania modułów. Makiety, to niewielkie "wydmuszkowe" klasy
+* które nie posiadają faktycznej implementacji, a są zdolne do odnotowania aktu wywołania dowolnej z własnych metod, lub dostępu do akcesorów.
+*
+* Przykładem zastosowania Google Mock może być następująca sytuacja: rozważmy moduł ustawień. Akt zapamiętania ustawienia powinien wywołać funkcję zapisu
+* magazynu ustawień. Możemy wywołać metodę zapamiętania ustawień na faktycznej implementacji menadżera ustawień przy jednoczesnym wstrzyknięciu makiety magazynu.
+* Oczywiście makieta powinna odnotować prośbę o zapis - brak takiej prośby powinien być zgłoszony jako błąd.
+*
+* Więcej informacji na temat sposobów testowania znajduje się w rozdziale @ref tests "testy"
+*
+* @section dependency_googletest Google Test
+* Google Test to rozbudowane narzędzie Google do tworzenia testów jednostkowych. O ile Google Test i opisany powyżej Google Mock zaczęły jako osobne projekty, obecnie
+* są wykorzystywane niemal zawsze wspólnie. Google Test pozwala na tworzenie przypadków testowych, ewaluowania środowiska testowego i sprawdzanie warunków korzystając
+* z bogatej biblioteki asercji. Testy wykonywane są jeden po drugim na wyczyszczonym środowisku testowym, co pozwala na ewaluacje i późniejszą agregację danych z wielu
+* przebiegów testowych
+*
+* Więcej informacji na temat sposobów testowania znajduje się w rozdziale @ref tests "testy"
+*
+* @section dependency_gtest_runner Google Test runner
+* Google Test runner to niewielkie narzędzie wbrew nazwie *nie* tworzone przez Google ani powiązane podmioty; Narzędzie to pozwala na uruchamianie testów
+* stworzonych za pomocą Google Test i generowanie na podstawie przebiegów raportów w formacie XML. Pixie Engine wykorzystuje jedynie wariant z linii komend, ale oczywiście
+* nic nie uniemożliwia uruchomienia tego narzędzia ręcznie w trybie graficznym.
+*
+* Więcej informacji na temat sposobów testowania znajduje się w rozdziale @ref tests "testy"
+*
+* @section dependency_html_help_workshop HTML Help Workshop
+* HTML Help Workshop to bezpłatne narzędzie Microsoftu zdolne przygotować skompilowany plik pomocy (chm) z zadanych źródeł przygotowanych w formie 
+* strony internetowej (html). HTML Help Workshop jest wykorzystywany w Pixie Engine jedynie jako narzędzie z wiersza polecenia przez @ref dependency_doxygen "doxygena"
+* na potrzeby generowania dokumentacji na platformie Windows.
+* 
+* W Pixie Engine jest włączona jedynie binarna dystrybucja HTML Help Workshop. 
+* 
+* @section dependency_levenshtein Kalkulator odległości Levenshteina
+* Odległość Levenshteina między dwoma ciągami danych to minimalna ilość operacji jednostkowych (dodania, zmiany, bądź usunięcia) na dowolnym ciągu
+* potrzebnych by oba ciągi stały się identyczne.
+* 
+* Przykład, dla danych ciągów:
+*  - abcb
+*  - ccb
+*
+* Odległość Levenshteina wynosi 2 (wystarczy usunąć literkę 'a' z przodu pierwszego i zamienić kolejną 'b' na 'c').
+*
+* Kalkulator odległości Levenshteina to prosta biblioteka o otwartych źródłach która oblicza wartość odległości dla dowolnych ciągów o porównywalnych elementach.
+* 
+* @section dependency_jdk JDK 1.8
+* Java Development Kit (JDK) to pełne SDK i platforma uruchomieniowa Javy, współczesnego języka zarządzanego. W projekcie jest używana wyłącznie wersja
+* prekompilowana w formie binarnej przenośnej - jest to zależność niezbędna do działania @ref dependency_apacheant "Apache Ant" i poza nim nie jest wykorzystywana.
+*
+* @section dependency_llvm LLVM
+* Kompilator języka C++ to jeden z najbardziej skomplikowanych programów jaki można współcześnie napisać. Na rynku, do niedawna, istniały tylko trzy
+* produkcyjne implementacje: GCC, MSVC i Intel C++ Compiler, spośród których tylko GCC był darmowy i posiadał otwarte źródła. Jedną z najbardziej problematycznych
+* cech GCC był styl jego wewnętrznej implementacji. Kompilator był tworzony bez żadnego planu i posiadał bardzo chaotycznie rozrzucony kod źródłowy, pełen
+* haków i skrótów utrudniających modyfikacje. 
+*
+* W 2000 roku na uniwersytecie Illinois założono nowy projekt LLVM (początkowo skrót rozwijał się do Low-Level Virtual Machine); Celem było sprawdzenie
+* metod optymalizacji kodu pośredniego przed etapem asemblacji. Wkrótce okazało się że ze względu na "czystą" implementację projekt posiada znacznie szerszą
+* gamę zastosowań. Pięć lat później powstała fasada CLang, kompilująca C++ do postaci pośredniej na potrzeby LLVM. W ten sposób oba projekty stworzyły podwalny
+* środowiska pod nową rodzinę kompilatorów. Obecnie LLVM to ponad 20 projektów (wliczając preprocesor, kompilator, konsolidator, linker, odpluskwiacz, assembler,
+* analizator, etc.) i jest produkcyjnie gotowy do kompilowania projektów na wszystkich wspieranych przez Pixie Engine platformach. Zastosowanie jednego kompilatora
+* znacząco upraszcza fazę odpluskwiania i testowania (nie ma np. problemów z miskompilacją generowaną przez różne narzędzia).
+* 
+* Jako ciekawostkę można zauważyć że od 2017 linker LLVM jest w stanie wygenerować symbole odpluskwiacza systemu Window (.pdb), tym samym można wykorzystać wszystkie
+* istniejące narzędzia odpluskwiania / testowania które nie są zgodne z symbolami stosowanymi w GCC. To pozwoliło m.in. na zastosowanie
+* @ref dependency_open_cpp_coverage "Open C++ Coverage" oraz zrzucania informacji o kodzie w przypadku niezłapanego wyjątku.
+*
+* @section dependency_mathjax mathjax
+* mathjax (uwaga - nazwa pisana jest z małej litery) to zaawansowany parser wyrażeń matematycznych w przeglądarce. W Pixie Engine jest wykorzystywany jako narzędzie
+* pomocnicze do generowania wzorów matematycznych w niniejszej dokumentacji. Tylko binarna wersja jest dołączona.
+*
+* @section dependency_vlc libVLC
+* VLC to wieloplatformowe środowisko odtwarzacza multimediów, zdolne do wyświetlania filmów w różnych formatach, konwersji i rekompresji strumieni.
+* Jedną z najważniejszych cech VLC jest brak założeń co do systemu w którym odtwarzacz jest uruchamiany - podstawa kodowa zawiera wszystkie realnie liczące się
+* kompresory i dekompresory (tzw. kodeki), filtry oraz zasoby generujące strumienie wyjściowe.
+*
+* libVLC to biblioteka C++ na bazie której odtwarzacz VLC jest skonstruowany. Pixie Engine wykorzystuje libVLC do odtwarzania filmów bezpośrednio w grze
+* (np. logo producenta, przerywniki filmowe). libVLC wspiera zarówno wyświetlanie filmu bezpośrednio na ekranie jak i strumieniowanie do tekstury (DirectX i OpenGL).
+* libVLC pozwala też na zrzucanie filmu bezpośrednio z ekranu (przechwytywanie wideo) i tworzenie zrzutów ekranów.
+* 
+* @section dependency_minizip miniZip
+* 
+*
 * @todo Dokończyć sekcję zależności
 *
 */
