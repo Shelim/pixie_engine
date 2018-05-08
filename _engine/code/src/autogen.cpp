@@ -13,7 +13,11 @@
 #if PIXIE_IS_PORTABLE_BUILD
 #include "autogen_windows_x64_debug_portable.cc"
 #else
+#if PIXIE_IS_DEPLOY_BUILD
+#include "autogen_windows_x64_debug_deploy.cc"
+#else
 #include "autogen_windows_x64_debug.cc"
+#endif
 #endif
 
 #elif PIXIE_IS_FINAL_BUILD

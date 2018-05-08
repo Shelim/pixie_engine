@@ -13,7 +13,11 @@
 #if PIXIE_IS_PORTABLE_BUILD
 #include "resources_windows_x64_debug_portable.hpp"
 #else
+#if PIXIE_IS_DEPLOY_BUILD
+#include "resources_windows_x64_debug_deploy.hpp"
+#else
 #include "resources_windows_x64_debug.hpp"
+#endif
 #endif
 
 #elif PIXIE_IS_FINAL_BUILD
