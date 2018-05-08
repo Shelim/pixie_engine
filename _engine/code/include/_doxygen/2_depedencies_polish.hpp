@@ -331,8 +331,220 @@
 * libVLC pozwala też na zrzucanie filmu bezpośrednio z ekranu (przechwytywanie wideo) i tworzenie zrzutów ekranów.
 * 
 * @section dependency_minizip miniZip
-* 
+* Wczytywanie wielu plików z dysku (twardego, DVD, etc.) wiąże się z narzutem potrzebnym systemowi plików na odszukanie ścieżki na urządzeniu, otwarcie
+* deskryptora zabezpieczeń i wreszcie otwarcie uchwytu do samego pliku. Z tego powodu łatwo zauważyć że jeden plik o rozmiarze 100 mb będzie kopiowany bądź
+* czytany znacznie szybciej niż sto plików o rozmiarze 1 mb każdy. Ponieważ - jak już zauważono - gra to setki tysięcy zasobów - aby przyspieszyć czas wczytywania
+* danych, powiązane zasoby najlepiej jest spakować w jedno (bądź kilka) archiwum. Dla @ref vfs "wirtualnego systemu plików" Pixie Engine archiwum staje się transparentne
+* i dostęp do danych w środku jest równie łatwy jak w przypadku niezależnych plików. Badania wykazały jednak że wczytując dane z archiwum można skrócić czasy ładowania
+* o około 10%-15%.
 *
-* @todo Dokończyć sekcję zależności
+* Oczywiście kwestią otwartą pozostaje sam format archiwum. W początkowej fazie rozważano archiwum tar, jako najprostszy format zdolny przechować połączone pliki.
+* Wiele gier korzysta z własnych formatów opracowanych przez ich twórców, czasem jednak stosuje się popularne formaty maskując je innym rozszerzeniem.
+* Np. archiwum PK3 używane w Quake to po prostu archiwum zip.
+*
+* Opracowanie własnego formatu archiwum przekroczyłoby zakres niniejszej pracy, dlatego po rozważeniu za i przeciw wybrano jako format archiwum właśnie zip.
+* Za tym formatem przemawia:
+* - łatwe dodawanie plików bez potrzeby przepisania całego archiwum
+* - bardzo szybkie czasy szukania po archiwum
+* - wsparcie dla kompresji (zwykle nieużywane ze względu na narzut ładowania, ale przydatne przy przesyłaniu archiwum przez sieć)
+* - wsparcie dla szyfrowania
+* - szerokie wsparcie narzędzi
+*
+* miniZip to otwarta biblioteka umożliwiająca zapisywanie i czytanie archiwum zip (także z wykorzystaniem funkcji zwrotnych).
+*
+* @section dependency_mingw MinGW
+* Opisany powyżej @ref dependency_llvm "LLVM" ma jedno zasadnicze ograniczenie na platformie Windows - nie posiada natywnego kompilatora zasobów
+* (pików rc), niezbędnych by dołączyć dodatkowe informacje do plików wykonywalnych na tej platformie. Potrzebny był zewnętrzny program 
+* posiadający taką funkcjonalność. W chwili obecnej na rynku znajdują się tylko dwa kompilatory zasobów: MSVC (komercyjny) i program wchodzący
+* w skład MinGW (Minimalistyczne Gnu dla Windows). Z oczywistych względów - licencji i przenośności - do Pixie Engine włączono ten drugi.
+* 
+* Poza kompilatorem zasobów, MinGW *nie* jest wykorzystywane w projekcie - w szczególności nie jest wykorzystywany kompilator GCC który wchodzi w jego skład.
+*
+* W Pixie Engine jest włączona jedynie binarna wersja MinGW
+* 
+* @section dependency_msxsl msxsl
+* Ponieważ raporty @ref dependency_gtest_runner "Google Test runner" są tworzone w formacie XML, istniała potrzeba konwersji do formatu bardziej czytelnego
+* dla użytkownika nietechnicznego. Najprostszą opcją jest zastosowanie transformaty XSLT która generuje dokument HTML, czytelne przez każdą przeglądarkę stron
+* internetowych na każdej wspieranej platformie. XSLT mógł zostać uruchomiony bezpośrednio w przeglądarce, ale testy wykazały że przeglądarki posiadają
+* spore ograniczenia (np. MSIE nie pozwoli na uruchomienie transformaty na dokumencie lokalnym). Jedynym sensownym rozwiązaniem było zastosowanie osobnego
+* programu który wykona pełen przebieg transformacji. Na platformie Windows wybrano do tego celu msxml (Microsoft XML), darmowy program uruchamiany z linii
+* komend. Jest on obecnie podpięty do systemu @ref tests "testów" i uruchamiany automatycznie po każdym przebiegu testowym.
+*
+* @section dependency_multiconsoles Multiple Consoles
+* Standardowo na platformie Windows nie ma możliwości alokowania więcej niż jednej konsoli dla programu. Istnieje także szereg ograniczeń, których nie da
+* się łatwo ominąć, np. po wciśnięciu kombinacji klawiszy ctrl + break w konsoli system Windows zabije aplikację w ciągu 5 sekund, jeżeli ona sama nie
+* wyłączy się wcześniej (tego mechanizmu nie da się w żaden sposób obejść ani wyłączyć).
+*
+* Jedynym sposobem na rozwiązanie tych problemów jest stworzenie zewnętrznej aplikacji (pliku wykonywalnego) która otwierałaby własną konsolę i przyjmowałaby
+* polecenia na drukowanie wiadomości (np. poprzez gniazdo lub strumień komunikacyjny). Oczywiście taką aplikację można by uruchamiać kilkukrotnie aby
+* uzyskać efekt wielu konsoli. Zamknięcie tej aplikacji nie wpływałoby też na zamknięcie głównego programu.
+*
+* Oczywiście jak przystało na środowisko otwartych źródeł, ktoś zrealizował już taką bibliotekę przed Pixie Engine. Tym samym zamiast tworzyć ponowną
+* implementację, po prostu włączono taką bibliotekę - w tym wypadku jest ona autorstwa Zvika Ferentza i udostępniana na wolnej licencji.
+*
+* @section dependency_nsis NSIS
+* Pierwszą rzeczą jaką zobaczy użytkownik danej gry jest jej program instalacyjny. Oczywiście na każdej platformie istnieją już gotowe wzorce
+* których użytkownik się spodziewa gdy instaluje nowy program - na platformie Windows takich wzorcowych implementacji jest kilka, poczynając od
+* InstallShield (komercyjny), idąc przez InstallMaker, a kończąc właśnie na otwarto źródłowym NSIS.
+*
+* Wybrano NSIS ze względu na dużą zdolność konfigurowalności, liberalną licencję, stabilny i dojrzały kod oraz dużą ilość materiałów dostępnych
+* w Internecie. Instalator NSIS opiera się o skrypty NSIS i jest zdolny do wykonania wszystkich poleceń potrzebnych do instalacji gry
+* (w tym np. rejestracji gry w panelu Gry Windows 7+), oraz do stworzenia interaktywnego deinstalatora. Program jest także zdolny do generowania
+* inkrementacyjnych łatek, które pozwalają poprawić pliki gry zawierając tylko niezbędne zmiany (i tym samym znacząco ograniczając rozmiar takiej łatki)
+* 
+* @image html dependency_nsis_image.jpg "Przykładowy zrzut ekranu NSIS"
+* @image latex dependency_nsis_image.jpg "Przykładowy zrzut ekranu NSIS" height=5cm
+*
+* @section dependency_openal_soft OpenAL (Software)
+* W latach 90, na wzór Otwartej Biblioteki Graficznej (OpenGL) powstała także Otwarta Biblioteka Audio (OpenAL). Projekt był rozwijany przez kilka
+* firm zajmujących się tworzeniem kart dźwiękowych do komputerów i ostatecznie został porzucony wraz z rozwojem kart zintegrowanych na rynku Koreańskim.
+*
+* Ponieważ interfejs programistyczny OpenAL był w miarę sensownie ułożony i ustandaryzowany, pojawiła się otwarta implementacja oparta całkowicie o
+* standardowy procesor (CPU), nie korzystająca ze wsparcia sprzętowego (m.in. SoundBlaster). W ten sposób projekt przetrwał do dnia dzisiejszego a
+* biblioteka OpenAL Software posiada pełną funkcjonalność droższych kart dźwiękowych, i jest w stanie realizować je całkowicie programowo.
+*
+* OpenAL został włączony do projektu jako zaplecze rendera dźwięku. Jego przewagą nad konkurencyjnymi rozwiązaniami jest jego pełna przenośność na 
+* wszystkich wspieranych przez Pixie Engine platfomrach.
+*
+* @section dependency_open_cpp_coverage Open C++ Coverage
+* Elementem testowania aplikacji jest sprawdzanie (metryka) pokrycia kodu testami. Oznacza ona stosunek linii w kodzie wykonanych przez testy
+* do wszystkich linii kodu w programie i najczęściej wyraża się w procentach.
+*
+* W językach wyposażonych w refleksję (jak np. C# lub Java) taki test jest wyjątkowo łatwy do przeprowadzenia; W C++ potrzeba dodatkowych informacji
+* odpluskwiacza by móc ustalić dokładną lokalizację wykonywanej linijki. Na szczęście wykorzystywany do kompilacji Pixie Engine LLVM jest w stanie stworzyć
+* takie symbole, a program Open C++ Coverage jest w stanie zrzucić z nich informacje o pokryciu w formacie XML (bezpośrednio integrującym się z
+* @ref dependency_vscode "Visual Studio Code"); Istnieje także możliwość przygotowania raportu HTML z wylistowaniem dokładnie które linijki były pokryte
+* a które nie.
+*
+* @image html dependency_open_cpp_coverage_image.jpg "Przykładowy raport Open C++ Coverage"
+* @image latex dependency_open_cpp_coverage_image.jpg "Przykładowy raport Open C++ Coverage" height=5cm
+*
+* @section dependency_pugixml pugixml
+* Wybranym metaformatem danych w Pixie Engine jest język XML. Istnieje duża ilość narzędzi i parserów do tego języka, poszukiwania skupiały się więc na
+* rozwiązaniu wydajnym i bezpiecznym. Obecnie istnieje ponad 20 (!) parserów, z których najszybszym jest rapidxml. Drugie miejsce w rankingu zajmuje
+* pugixml, który w przeciwieństwie do rapidxml jest parserem dużo bezpieczniejszym (np. nie używa pustych wskaźników jako brakujących pól, co znacząco
+* upraszcza kod sprawdzający potencjalne błędy bądź uszkodzone pliki). Oczywiście szybkość parsera wynika z jego podstawowego ogracznienia: jest to parser
+* destruktywny in-situ, który znakuje oryginalne dane zerowymi bajtami i tworzy drzewko odniesień do oryginalnego łańcucha znaków. Dzięki takiemu podejściu
+* pugixml jest zaledwie 3-4x wolniejszy niż użycie funkcji @c strlen() na tych samych danych.
+*
+* @section dependency_python Python 3.5
+* Python w wersji 3.5 jest używany wewnętrznie przez odpluskwiacz @ref dependency_llvm "LLVM". Poza wykorzystaniem przy odpluskwianiu
+* nie jest wykorzystywane bezpośrednio w projekcie.
+*
+* @section dependency_remotery Remotery
+* Remotery to współczesny profiler gier oparty o gniazda sieciowe. Jako biblioteka integruje się z aplikacją i wystawia na gnieździe TCP informacje o
+* czasach wykonania i próbkach renderera, a także informacje z dziennika i odpluskwiacza. Drugą częścią aplikacji jest strona www, która łączy się z portem
+* TCP za pomocą websocket, odbiera dane od aplikacji i przedstawia je w graficznej formie.
+*
+* Zaletą tego rozwiązania jest to że profiler i kokpit nie muszą być uruchomione na tej samej maszynie - nawet nie musi być to ta sama architektura (!).
+* Jedynym wymogiem jest by profiler był osiągalny przez sieć z komputera z kokpitem. W ten sposób można np. profilować konsole do gier, albo komórki.
+*
+* @image html dependency_remotery_image.jpg "Interfejs przeglądarkowy Remotery"
+* @image latex dependency_remotery_image.jpg "Interfejs przeglądarkowy Remotery" height=7.5cm
+*
+* @section dependency_sdl SDL 2.0
+* SDL to dojrzała, wieloplatformowa biblioteka podstawowa do tworzenia gier. Posiada standardowy zestaw funkcji zaimplementowany na każdej ze wspieranych
+* przez Pixie Engine platform, takich jak obsługa okien, sterowników sprzętowych, uruchamianie rendera, sprawdzanie platformy, obsługa klawiatury, myszy i 
+* kontrolerów gier, etc. SDL zostało wybrane ze względu na otwarte źródła, dużą ilość dostępnych materiałów, dojrzałość kodu i stabilność implementacji.
+*
+* 
+* @section dependency_sdl_net SDL NET 2.0
+* Uwaga - nie mylić z SDL .NET!
+*
+* SDL NET to wtyczka do SDL umożliwiająca programowanie wieloplatformowe gniazd sieciowych (TCP/UDP). W Pixie Engine SDL NET jest wybraną platformą do
+* programowania gier siecowych i odpytywania serwera HTTP w celu sprawdzenia dostępności aktualizacji. SDL NET dostarcza warstwę abstrakcji nad
+* surowe gniazda sieciowe na danej platformie. Biblioteka jest niskopoziomowa i pozwala na bezpośrednie wysyłanie i odbieranie ramek/pakietów oraz tworzenie
+* i przywiązywanie gniazd sieciowych.
+*
+* Biblioteka jest całkowicie synchroniczna, z tego powodu aby była użyteczna w środowisku growym musi być opakowana w obiekty wielowątkowe.
+*
+* @section dependency_stb stb
+* Biblioteki Sean T. Barrett (STB) to zbiór jedno nagłówkowych narzędzi programistycznych napisanych w czystym C. Cechuje je brak zewnętrznych zależności,
+* prostota implementacji i duża wydajność.
+*
+* Narzędzia stb są opublikowane jako własność publiczna i są otwarte na nowe zgłoszenia kodu.
+* 
+* <center><table>
+* <caption id="dependency_stb_table">Komponenty stb wykorzystywane w Pixie Engine</caption>
+* <tr><th>Nazwa<th>Wersja<th>Linie kodu<th>Opis
+* <tr><td>stb_image.h <td> 2.19<td>7462<td>Wczytywanie z plików/pamięci: JPG, PNG, TGA, BMP, PSD, GIF, HDR, PIC
+* <tr><td>stb_truetype.h <td> 1.19<td>4853<td>Parser, rasteryzer i dekoder fontów truetype
+* <tr><td>stb_image_write.h <td> 1.09<td>1568<td>Zapisuje obrazki na dysk w formatach: PNG, TGA, BMP
+* <tr><td>stb_image_resize.h <td> 0.95<td>2627<td>Skaluje obrazki w pamięci w dobrej jakości
+* <tr><td>stb_rect_pack.h <td> 0.11<td>624<td>Generator dynamicznych atlasów tekstur
+* <tr><td>stb_textedit.h <td> 1.12<td>1404<td>Podstawy pod implementację własnego edytora tekstowego
+* <tr><td>stb_perlin.h <td> 0.3<td>316<td>Generator szumu perlina
+* <tr><td>stb_easy_font.h <td> 1.0<td>303<td>Prosty font do drukowania napisów odpluskwiacza
+* </table>źródło: https://github.com/nothings/stb#stb_libs</center>
+*
+* @section dependency_texlive texLIVE
+* texLIVE to darmowa, prosta wersja LaTeXa na platformę Windows służąca do generowania dokumentacji pdf bezpośrednio z kodu źródłowego.
+* Poza włączeniem w system budowania dokumentacji nie jest używana w projekcie.
+*
+* @section dependency_thttpd thttpd
+* thttpd (uwaga - nazwa pisana jest z małej litery) to bardzo prostu serwer HTTP używany w projekcie wyłącznie do testowania funkcjonalności aktualizacji.
+* W wersji finałowej aplikacja odpytuje serwer twórcy danej gry szukając potencjalnych aktualizacji; Na potrzeby testów zapytania zewnętrzne byłyby kłopotliwe
+* (np. trudno jest symulować awarię zdalnego serwera), dlatego na potrzeby testów adres serwera jest przepięty na adres thttpd, uruchamianego
+* lokalnie. Dzięki takiemu podejściu można kontrolować i odpluskwiać oba końce połączenia.
+*
+* Nie jest łatwo znaleźć dobry, pozbawiony zależności serwer HTTP. Thttpd został wybrany ze względu na jego nieinwazyjność (nie wymaga instalacji usługi,
+* pozwala na wybór powiązanego portu i nie wykonuje aktywnie żadnego ze skryptów CGI).
+*
+* @section dependency_upx UPX
+* Ponieważ pliki binarne Pixie Engine potrafią osiągnąć spore rozmiary (w tej chwili ponad 55 mb głównego pliku exe) aby przyspieszyć ich ładowanie do
+* pamięci i ułatwić proces łatkowania potrzebne było narzędzie które skompresuje je dynamicznie.
+* 
+* W chwili obecnej na rynku znajduje się tylko jeden system pakujący pliki wykonywalne - właśnie UPX (Universal Packer for eXecutables), zdolny pakować
+* pliki wykonywalne wszystkich wspieranych przez Pixie Engine platform. UPX jest uruchomiony na ostatnim etapie budowania wersji handlowych gry
+* i w wariancie BRUTAL zmniejszył rozmiar wspomnianego pliku exe prawie dziesięciokrotnie (do 6 mb).
+*
+* Pliki spakowane UPXem są wciąż poprawnymi plikami wykonywalnymi danej platformy i zawierają prosty program rozruchowy, który wypakowuje je do pamięci
+* dynamicznej, po czym uruchamia właściwy program. Cały proces jest transparentny dla użytkownika.
+*
+* UPX powoduje też że próby wstecznej inżynierii kodu są nieco trudniejsze niż przy zastosowaniu "czystych" plików wykonywalnych.
+*
+* @section dependency_vscode Visual Studio Code
+* Poprzednie wersje Pixie Engine powstały w Visual Studio Community Edition (MSVC). Z takim podejściem wiązało się sporo problemów: po pierwsze MSVC jest dostępny
+* jedynie na platformę Windows, po drugie jest nieprzenośny (w znaczeniu: wymaga instalacji), a po trzecie ma bardzo wysokie wymagania sprzętowe, szczególnie
+* jeżeli chodzi o ilość zajmowanego miejsca (pełna instalacja MSVC zabiera 133 gb).
+* 
+* Z chwilą upowszechnienia się wersji stabilnej VS Code pojawił się pomysł przepięcia środowiska; Za VS Code przemawiało przede wszystkim możliwość
+* stworzenia wersji przenośnej dołączonej bezpośrednio do projektu, ogromną bazę darmowych wtyczek, otwarte źródła i wsparcie jednej z największych firm sektora IT,
+* czyli Microsoftu. Zmiana środowiska nastąpiła pod koniec 2017 roku i okazała się strzałem w dziesiątkę. W tej chwili VS Code stanowi podstawowy edytor
+* kodu na wszystkich wspieranych przez Pixie Engine platformach (sam edytor jest w pełni wieloplatformowy).
+*
+* @section dependency_wxwidgets wxWidgets
+* wxWidgets to wieloplatforma biblioteka GUI, służąca w Pixie Engine za podstawę interfejsu aplikacji nie związanej z grą (np. edytora plansz, odpalacza - ang. launcher).
+* 
+* W chwili obecnej na rynku znajdują się dwie podstawowe biblioteki GUI: wxWidgets i qt. Porównanie obu znajduje się poniżej:
+* 
+* <center><table>
+* <caption id="dependency_wxwidgets_table">Porównanie wxWidgets i qt</caption>
+* <tr><th>wxWidgets<th>qt
+* <tr><td>
+* - Bardzo dobra jakość aplikacji końcowej (+9)
+* - Natywny wygląd na każdej ze wspieranych platform (+3)
+* - Łatwość integracji z biblioteką (+7)
+* - Modułowość (+2)
+* - Słabe API (szczególnie rozmiarowe, ang. sizer) (-5)
+* </td><td>
+* - Ujednolicony wygląd aplikacji na każdej ze wspieranych platform (-1)
+* - Problemy z integracją w C++ (-9)
+* - Modułowość (+2)
+* - Dedykowany edyot okienek (+5)
+* - Lepsze API (+2)
+* </td></tr>
+* <tr><td>+16<td>-1
+* </table>Wynik analizy: wxWidets wygrywa przewagą 17 punktów</center>
+*
+* wxWidgets jest zintegrowany bezpośrednio z głównym modułem gry (więcej informacji znajduje się w rozdziale @ref engine_architecture "architektura silnika")
+*
+* @section dependency_windbg WinDBG (Debugging Tools for Windows)
+* WinDBG to prosty, darmowy odpluskwiacz C++ integrujący się z VS Code. Poza odpluskwianiem na platformie Windows nie jest używany w projekcie.
+*
+* WinDBG został wybrany ponad LLDB (Odpluskwiaczem LLVM) ze względu na brakującą implementację tego drugiego; W chwili obecnej LLDB nie jest w stanie
+* realnie pracować nad aplikacją Windowsa skompilowaną w architekturze x64. Twórcy LLVM znają ten problem od Marca 2017
+* (https://bugs.llvm.org/show_bug.cgi?id=32343) jednak do dziś nie powstała implementacja naprawiająca.
+* 
 *
 */
