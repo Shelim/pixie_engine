@@ -519,7 +519,7 @@
 * W chwili obecnej na rynku znajdują się dwie podstawowe biblioteki GUI: wxWidgets i qt. Porównanie obu znajduje się poniżej:
 * 
 * <center><table>
-* <caption id="dependency_wxwidgets_table">Porównanie wxWidgets i qt</caption>
+* <caption id="dependency_wxwidgets_table">Analiza porównawcza wxWidgets i qt</caption>
 * <tr><th>wxWidgets<th>qt
 * <tr><td>
 * - Bardzo dobra jakość aplikacji końcowej (+9)

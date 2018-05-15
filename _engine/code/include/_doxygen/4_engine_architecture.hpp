@@ -1,6 +1,6 @@
 
 /**
-* @page engine_architecture Engine Architecture
+* \~English @page engine_architecture Engine Architecture
 * @tableofcontents
 * @section engine_architecture_intro Introduction
 *		
