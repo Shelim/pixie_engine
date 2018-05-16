@@ -192,7 +192,65 @@
 *  - Informacje o systemie operacyjnym
 *  - Manifest silnika (zobacz rozdział @ref manifest silnika)
 *  - Wersję silnika
+*
 * @subsubsection engine_architecture_core_global_messenger Komunikator
-* @todo Dokończyć sekcję rdzenia
-
+* Jednym z największych wyzwań stojących przed budową komponentową (w znaczeniu rozproszoną) była konieczność synchronizacji transferu informacji między
+* poszczególnymi komponentami. W pierwszej fazie implementacji rozważano po prostu przekazywanie wskaźników na komponenty do konstruktorów
+* (za pomocą wstrzykiwania zależności) co wygenerowało bardzo poważny problem: cykliczne zależności. Takie grafy obiektów były niemożliwe do
+* stworzenia i generowały zawieszenie się aplikacji podczas startu - do tego były to zawieszenia bardzo trudne do złapania odpluskwiaczem
+* (długie szablonowe stosy wywołań). Jedynym rozwiązaniem było znalezienie sposobu na rozdzielenie komunikacji od faktycznych komponentów.
+* Wzorzec komunikatora jest tutaj idealnym rozwiązaniem.
+*
+* Komunikator jest w tym wypadku szablonową klasą opartą o @ref kolejkę wielu-producentów jeden-konsument i posiada cztery warianty implementacji
+* (synchroniczne i asynchroniczne wysyłanie i odbieranie komunikatów). Warianty synchroniczne generują najmniejsze opóźnienia ale nie są przeznaczone
+* do przesyłania dużych ilości wiadomości (gdyż sam akt wysyłania generuje blokadę wątkową). Implementacja danego typu wiadomości może zdecydować
+* który wariant kolejki zostanie do niej przypisany (za pomocą wyrażeń typu `constexpr`).
+*
+* @subsubsection engine_architecture_core_global_platform Platformowe
+* Ta sekcja rdzenia zawiera elementy które - jak ktoś mógłby zauważyć - należą bardziej do @ref narzędzi pomocniczych niż klas średniego poziomu.
+* W praktyce jednak okazało się że ich implementacja wymaga dostępu do SDLa - który włączony jest do projektu właśnie na poziomie rdzenia.
+* Dlatego ostatecznie wylądowały w tej części silnika. W chwili obecnej są to tylko dwa narzędzia:
+*  - Detektor cech CPU
+*  - Zestaw zaawansowanych danych o platformie (szerokość linii cache L1, wersja systemu, etc.)
+* 
+* @subsubsection engine_architecture_core_global_policy Polityki
+* O ile sam silnik nie nakłada zbyt wielu ograniczeń na twórcę gier, o tyle niektóre platformy posiadają silniejsze obostrzenia. Dla przykładu
+* niemal wszystkie implementacje OpenGL pozwalają na wywołania graficznego interfejsu programistycznego tylko z jednego wątku. W przypadku
+* jednoczesnego prowadzenia wielu aplikacji w jednym kontenerze stanowiłoby to kłopot;  Kłopot którego jedynym rozwiązaniem jest stworzenie
+* komponentu globalnego na wszelkie wywołania renderera, z wszystkich aplikacji. Takie podejście jest jednak jeszcze bardziej ograniczone
+* na niektórych platformach mobilnych: tam renderer może być wywołany tylko z jednego konkretnego, zadanego przez system wątku. W ten sposób
+* narodziły się dwa warianty polityki Wątek Renderera: odczepiony i wołany przez platformę. Analogiczne ograniczenia dotyczą liczby instancji
+* aplikacji i programu które stworzyły kolejne dwie polityki (pojedyncze, pojedyncze zadanego typu, wielokrotne).
+*
+* @subsubsection engine_architecture_core_global_process Procesy
+* Procesy to zestaw wielowątkowych narzędzi na których bazuje praktycznie cała implementacja wyższego poziomu. W początkowej wersji rozważano
+* po prostu współbieżność w oparciu o wątki, ale takie podejście bardzo utrudniało rzeczywiste zastosowanie, np. w ładowaniu zasobów. Proces
+* ładowania wymaga koordynacji między wątkami i przeskakiwania między wątkiem czytającym z dysku a wątkiem renderera. Sytuację rozwiązało skupienie
+* się na zadaniach i gońcach. Zadanie, to pojedyncze wyzwanie przed systemem współbieżnym. Istnieje podział na zadania proste (jak np. wspomniane
+* wczytanie zasobu) jak i zadania długotrwałe (nazwane właśnie procesami). Goniec to aktywny wykonywacz zadania. Każde zadanie składa się z elementów
+* z których każdy wykonywany jest na jednym gońcu. Elementy można kolejkować i uzależniać od siebie (np. wysłanie obrazu do karty graficznej nastąpi
+* po jego wczytaniu z dysku). W chwili obecnej istnieją cztery typy gońców:
+*  - Główny wątek; W tym momencie jedynie renderer. Zadania przydzielone temu gońcowi zostaną zakolejkowane na zadanym wątku (kolejką priorytetową)
+*  - Wątek oddzielony; Każde zadanie dostanie nowy, dedykowany wątek który zostanie zniszczony po jego wykonaniu. Nie jest to zalecane dla zadań które 
+*    często się powtarzają (koszt stworzenia wątku jest dość znaczący)
+*  - Synchroniczny; Zadanie zostanie wykonane w wątku wywołującym, bez zrównoleglania
+*  - Baza wątków (ang. thread pool); Określona ilość wątków (domyślnie tyle ile rdzeni w komputerze) kolejkujące zadania i wykonujące je na pierwszym wolnym wątku.
+* 
+* @subsubsection engine_architecture_core_global_program Program (kontener)
+* Program to zestaw trzech narzędzi: @ref rozrusznik, odpowiedzialny za start całej aplikacji, uruchamiacz testów stanowiący rodzaj rozrusznika,
+* ale tylko na potrzeby @ref Google Test Framework oraz referencja, czyli obiekt przechowujący instancję programu (prosząc o niego w konstruktorze
+* gra dostaje dostęp do wszystkich globalnych komponentów)
+*
+* @subsubsection engine_architecture_core_global_thread Wątki
+* Wątki to baza dla modułu @ref procesów. Ten fragment rdzenia odpowiada za tworzenie i zliczanie istniejących wątków z uwzględnieniem statystyk
+* ich wykonania. Standardowo stosuje się do tego bibliotekę standardową C++ 11 (z opcją rozszerzenia o dodatkowe informacje dostarczane przez platformę)
+* 
+* @subsubsection engine_architecture_core_global_vfs Wirtualny System Plików
+* Ostatni element globalnego rdzenia to po prostu klasa opakowująca wirtualną ścieżkę. Więcej informacji znajduje się w rozdziale @ref wirtualny system plików
+* @subsection engine_architecture_core_local Lokalne
+* @subsubsection engine_architecture_core_local_manifest Manifest aplikacji
+* To jedyna jak na razie klasa rdzenia lokalnego. Zawiera informacje o:
+*  - Typie aktualnej aplikacji
+*  - Numerze jej instancji
+*  - Kontekście wykonania
 */
