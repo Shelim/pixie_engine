@@ -253,4 +253,29 @@
 *  - Typie aktualnej aplikacji
 *  - Numerze jej instancji
 *  - Kontekście wykonania
+*
+* @section engine_architecture_component Komponenty
+* Komponent, jak już zostało powiedziane w poprzednich rozdziałach, to podstawowy budulec silnika Pixie Engine. Komponent jest (zwykle) małą klasą o pojedynczej
+* funkcjonalności i odpowiedzialności, która niezbędne informacje (w ramach swojego pola działania) zdobywa od innych komponentów lub (poza swoim polem działania)
+* od @ref komunikatora z rdzenia silnika. W szczególności komponent jest całkowicie nieświadomy istnienia innych komponentów poza swoim polem działania.
+* 
+* Jak już zostało wspomniane każdy komponent posiada trzy implementacje:
+*  - Normalną, zawierającą pełną wersję implementacji
+*  - Makietową, opakowaną w makra @ref Google Mockup
+*  - Pustą, zawierającą puste metody
+* @subsection engine_architecture_component_kind Rodzaje komponentów
+* Nie było to zamysłem twórcy, ale dość szybko na etapie implementacji konkretnych komponentów wykrystalizowało sie kilka modeli w które komponenty się wpasowują.
+* O ile opisanie wszystkich powstałych komponentów byłoby trudne (w tej chwili 27 globalnych i 2 lokalne) można je z grubsza podzielić na następujące kategorie:
+* @subsubsection engine_architecture_component_kind_monitor Monitory
+* To komponenty operujące tylko na @ref komunikatorach i zwykle nie posiadające żadnej publicznej metody ani własności. Ich celem jest skanowanie – na
+* zadany wyzwalacz (np. czasowy) – sprawdzają czy dany element środowiska się nie zmienił. Najbardziej modelowym przykładem jest skaner zasobów sprawdzający
+* czy nie trzeba ich przeładować na gorąco (zobacz rozdzał o @ref zasobach).
+* @subsubsection engine_architecture_component_kind_service Usługi
+* To mniejsze komponenty pracujące w wydzielonych wątkach, których celem jest dokonywanie aktywnych obliczeń. Najlepszym przykładem jest
+* tu na przykład usługa profilera (w tym celu wykorzystane jest @ref remotery)
+* @subsubsection engine_architecture_component_kind_facade Fasady
+* To komponenty przyjmujące polecnia z reszty silnika za pomocą komunikatorów i dystrybuujące je do innych komponentów w ramach tego samego obszaru.
+* @subsubsection engine_architecture_component_kind_standard Standardy
+* Czyli najbardziej typowe komponenty posiadające jasno zadeklarowaną funkcjonalność i publiczne API w formie metod wirtualnych.
+*
 */
