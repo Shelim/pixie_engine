@@ -1,76 +1,75 @@
 
 /**
-* \~Polish @page vfs Virtual File System (VFS)
+* \~Polish @page vfs Wirtualny System Plików (VFS)
 * @tableofcontents
-* @section vfs_intro Introduction
-*		Pixie (as many other game engines) uses VFS (Virtual File System).
-*		VFS allows layer of abstraction of asset path over physical file system.
-*		This feature is composed out of a few features described below.
+* @section vfs_intro Wprowadzenie
+* Pixie Engine (jak wiele innych silników) stosuje wirtualny system plików (VFS), czyli warstwę abstrakcji ponad fizycznym
+* systemem plików. Niniejszy rozdział opisuje wszystkie cechy VFS zaimplementowanego w tym silniku.
+* 
+* VFS Pixie Engine opiera się nie tylko na wczytywaniu danych, ale pozwala na swobodne modyfikowanie zasobów
+* na przykład do wykorzystaniu przez edytor. Zasoby są przeładowywane dynamicznie w trakcie wykonania silnika
+* i mogą zostać zaktualizowane przez dowolną aplikację Pixie Engine bądź fizycznie przez użytkownika poza silnikiem.
 *
-*		The Pixie's VFS serve not only input, but allows modyfing of any asset
-*		effectivly serving as game-consumer and editor-producer at the same time.
-*		The assets are reloaded dynamically during execution and can be updated
-*		by any of Pixie application as well as physically by user.
+* @section vfs_vpath Wirtualna ścieżka
+* Wirtualna ścieżka (vpath) reprezentuje nazwę zasobu wewnątrz VFS. Vpath składa się z dwóch elementów:
+* @ref engine::virtual_path_t::type_t "typu" i adresu. Typ reprezentuje miejsce poszukiwania fizycznego pliku,
+* podczas gdy adres przybliża nazwę tego pliku.
+* 
+* W praktyce vpath może opisywać więcej niż jeden fizyczny plik, lub nawet brak pliku. Jeżeli vpath odpowiada więcej
+* niż jednemu plikowi próby tworzenia akcesora pliku wykorzystają zawsze najnowszy, spełniający warunki zasób.
+* Dla wczytywania wystarczy warunek czytalności, podczas gdy do zapisu wymaganiem jest zarówno czytalność jak
+* i zapisywalność. Jeżeli żaden plik nie spełnia warunku zapisywalności (np. istnieje tylko jedna kopia ulokowana
+* na płycie CD), przy próbie tworzenia akcesora pliku zostanie stworzony nowy zasób w lokacji określonej przez platformę.
+* 
+* Spostrzegawczy użytkownik zauważy że dane czytane i zapisywane mogą lądować w dwóch różnych plikach fizycznych.
+* W praktyce jednak po zapisie zaktualizowana zostanie data ostatniej modyfikacji, i tym samym ten plik przeskoczy
+* na początek kolejki czytania (stąd wymóg czytalności od takiego pliku)
+* @see engine::virtual_path_t
 *
-* @section vfs_vpath Virtual path
-*		Virtual path (vpath) represents asset inside VFS. Vpath is composed
-*		out of two elements: @ref engine::virtual_path_t::type_t "type" and address.
-*		Type represent search target for physical file, while address represents
-*		simplified name of the file.
+* @section vfs_input_output Wprowadzenie/Wyprowadzenie
+* Wprowadzene i wyprowadzenie to rodzina klas dostarczająca rodzajowy sposób czytania lub zapisywania danych.
+* Z perspektywy użytkownika nie ma znaczenia co znajduje się w konkretnej implementacji, polega się wyłącznie
+* na interfejsie. Popularne implementacje obejmują: plik, strumień sieciowy, FTP, archiwum ZIP, etc.
+* 
+* Nie istnieje wymóg żeby każde wprowadzenie danych miało odpowiednik wyprowadzenia (np. czytanie danych
+* po HTTP nie wymaga zapisu). Silnik ściśle wymaga natomiast żeby cały ruch danych był prowadzony przez
+* te klasy ze względów bezpieczeństwa. Jedynym wyjątkiem jest wyjście pliku dla dziennika, ponieważ musi
+* być w stanie zanotować błędy krytyczne związane z samym systemem wyprowadzania danych.
+* 
+* Silnik dostarcza także opakowanie dla strumieni - klasy 
+* @ref engine::data::input_streambuf_t dla wprowadzania i @ref engine::data::output_streambuf_t
+*  dla wyprowadzenia. Obie bazują na std::streambuf i pozwalają na tworzenie własnych strumieni C++
+* 
+* Istnieje także opcja stworzenia 'częściowego' wprowadzania. Jeżeli wiadomo że źródłowy plik zawiera
+* więcej niż jeden zasób (np. kilka różnych poziomów detali tekstury), można rozkazać wprowadzaczowi
+* żeby przeczytał dane o określonej długości do bufora, a następnie użył go do stworzenia nowego wprowadzacza.
+* Źródłowy strumień pozostanie nie zmodyfikowany, a tak stworzony wprowadzacz operuje na kopii, więc może
+* przeżyć oryginalnego wprowadzacza. Utworzony wprowadzacz ma dostęp tylko do tej porcji danych która była
+* zażądana przy jego tworzeniu. Zobacz metodę @ref engine::data::input_t::spawn_partial.
+* @see engine::data::input_t, engine::data::output_t
 *
-*		In general Vpath may represent more than one physical file, or even
-*		no file at all (when it comes outside of @ref engine::data::state_t "state database").
+* @section vfs_providers Dostawcy
+* Dostawca to klasa opisująca sposób tworzenia wprowadzacza/wyprowadzacza dla danego zasobu. Zwyczajowy dostawcy
+* są zbierani i używani przez wewnętrzne komponenty silnika i nie ma powodu manipulacja przy nich z poziomu aplikacji. 
+* @warning Wprowadzacz i Wyprowadzacz mogą, w niektórych przypadkach, wskazywać na różne lokacje, nawet jeżeli vpath obu lokacji jest taki sam!
+* Dla przykładu można czytać dane z pliku CD i zapisywć do Lokalnych Danych Aplikacji.
+* 
+* Standardowo każdy dostawca właściwy posiada możliwość podania ostatniej daty modyfikacji zasobu.
+* Ostatecznie klasa zbiorcza dostawy zawsze wybierze najnowszego dostawcę (do zapisu dostawca musi
+* wskazywać na zasób zdolny do zarówno zapisu jak i odczytu).
+* 
+* Jeżeli żaden dostawca nie spełnia takiego warunku, nowy zostanie stworzony za pomocą funkcji @ref engine::platform::create_new
+* 
+* Jeżeli dany zasób jest niemożliwy do zapisania, można zwrócic obiekt @ref engine::data::output_void_t który symuluje zapis,
+* wysyłając dane w nicość (analogicznie do Linuxowego pliku `/dev/null`)
+* @see engine::data::provider_t, engine::data::provider_actual_t
 *
-*		Vpath will always resolve to the newest file satisfying requirenments. For input
-*		the requirenment is to be readable. For output the requirenment is to be both readable and writable.
+* @section vfs_scanners Skanery
+* Skaner to niewielka klasa przeglądająca zasoby w regularnych odstępach czasowych (rzędu setek milisekund) aby sprawdzić
+* ich datę modyfikacji. Zmiany zostają odnotowane i zaktualizowane w formie nowych dostawców. Lista dostępnych skanerów
+* jest udostępniona jako ustawienia @ref engine_startup_platform "Rozrusznika" i zwykle zawiera kilka
+* @ref engine::data::scanner_directory_t "skanerów katalogów" ze ścieżkami w jakich można się spodziewać zasobów.
 *
-*		Because of that, input and output may point to different files on target machine.
-*		After saving, the newly saved file will usually have the highest modification date,
-*		and will be noted to reload for input operation.
-*
-*		@see engine::virtual_path_t
-*
-* @section vfs_input_output Input/Output
-*       Input and Output classes provides generic way to read or write `data`. From the user perspective
-*       it does not matter which provider is present underneath. It can be file, network stream, ftp, etc.
-*       All reading should be done via @ref engine::data::input_t input_t and @ref engine::data::output_t output_t
-*       classes. The only exception is logger file writer, because it has to be able to notify about errors on `data`
-*       subsystem initialization
-*
-*       Engine provides standard wrappers for streams - @ref engine::data::input_streambuf_t input_streambuf_t
-*       for input and @ref engine::data::output_streambuf_t output_streambuf_t for output. Both are based
-*       on std::streambuf and allows to create custom C++ streams
-*
-*       It is also possible to spawn 'partial' input. If you know that single `data` contains more than one
-*       asset (for example different LODs on texture), you can ask input_t to read data of given length to buffer
-*       then use it to construct new input_t. Original stream position *will not be affected*.
-*       Spawned input_t operates on copy, so it can outlive orignal input_t; Spawned input_t has access only
-*       to this portion of data requested originally from @ref engine::data::input_t::spawn_partial spawn_partial method.
-*
-*		@see engine::data::input_t, engine::data::output_t
-*
-* @section vfs_providers Providers
-*       Provider is a way to construct Input/Output classes for given `data` item. It is usually accessed from `data`
-*       engine and does not require manual tampering.
-*       @warning Input and Output may, in some cases point to different locations, even if virtual path for them is the same!
-*       For example you could be reading input from CD then writing output to Local App Data.
-*       Actual providers note last modification time. Final povider will always choose the newest provider available
-*       (for output the provider must be able to write data).
-*       If no provider for output is available, the new one will be constructed by @ref engine::platform::create_new create_new
-*       platform function. If it is impossible to write any `data` at all, @ref engine::data::output_void_t output_void_t
-*       object will be constructed and returned.
-*
-*		@see engine::data::provider_t, engine::data::provider_actual_t
-*
-* @section vfs_scanners Scanners
-*       Scanner is a small class that constantly search for modification date of content. The process is completely
-*       automatic and executed at small time interval.
-*       Changes found from previous update called are available in @ref engine::data_manipulator_t::get_changes data_manipulator_t::get_changes
-*       method. `Data` subsystem will reload them on the fly without any action required, using new Input created from new provider.
-*       List of scanners is provided via @ref settings settings to bootstrapper. Usually includes @ref engine::data::scanner_directory_t scanner_directory_t
-*       that recursivly checks physical filesystem.
-*       @warning Only files that have changed their modification time since last scan will be reloaded.
-*
-*		@see engine::data::scanner_t, engine::data::scanners_t
+* @see engine::data::scanner_t, engine::data::scanners_t
 *
 */
