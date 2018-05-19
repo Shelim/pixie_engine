@@ -44,7 +44,7 @@
 * 
 * W praktyce okazało się jednak że takie podejście ma kilka poważnych wad: po pierwsze, koordynowanie stanu uruchomienia kilku programów o kilku
 * różnych plikach wykonywalnych nie jest łatwe; Wymaga gniazd, potoków bądź systemowych blokad wykluczających. Po drugie ponieważ każda z tych
-* aplikacji działa niezależnie, rywalizują w dostępie do zasobów (generując dodatkowe wydarzenia monitorów, zobacz @ref engine_architecture_monitor "monitory").
+* aplikacji działa niezależnie, rywalizują w dostępie do zasobów (generując dodatkowe wydarzenia monitorów, zobacz @ref engine_architecture_component_kind_monitor "monitory").
 * Po trzecie system Windows traktuje takie aplikacje jako niezależne, tym samym nie pozwala np. na przenoszenie metodą przeciągnij-i-upuść kontrolek 
 * i zasobów między nimi (ograniczałoby to możliwości edytora uruchomionego jednocześnie z grą).
 * 
@@ -131,12 +131,12 @@
 * Funkcje wyliczające skrót CRC32 dowolnych danych
 * @subsection engine_architecture_utilities_test Testowe
 * @subsubsection engine_architecture_utilities_test_print_to Drukuj do
-* Pomocnicze funkcje do drukowania silnikowych @ref ustring_t "łańcuchów znaków" na potrzeby @ref dependency_googletest "Google Test Framework"
+* Pomocnicze funkcje do drukowania silnikowych @ref engine::ustring_t "łańcuchów znaków" na potrzeby @ref dependency_googletest "Google Test Framework"
 * @subsection engine_architecture_utilities_text Tekstowe
 * @subsubsection engine_architecture_utilities_text_difference Różnica
 * Oblicza @ref dependency_levenshtein "odległość Levenshteina" dwóch silnikowych @ref ustring_t "łańcuchów znaków"
 * @subsubsection engine_architecture_utilities_text_expand Rozwinięcie
-* Konwertuje serię dowolnych argumnetów w tablicę silnikowych @ref ustring_t "łańcuchów znaków". Wykorzystywane m.in. do formatowania tekstu
+* Konwertuje serię dowolnych argumnetów w tablicę silnikowych @ref engine::ustring_t "łańcuchów znaków". Wykorzystywane m.in. do formatowania tekstu
 * (jako generator argumentów)
 * @subsubsection engine_architecture_utilities_text_parser Parser
 * Zbiór narzędzi do wykorzystania w parserze Spirit (część biblioteki @ref dependency_boost "boost")
@@ -168,7 +168,7 @@
 * Przerwanie aplikacji to np. informacja o tym że użytkownik poprosił aplikację o wyłączenie, albo nowa instancja właśnie próbuje być uruchomiona
 * (niektóre aplikacje mogą nie chcieć wspierać więcej niż jednej instancji, aczkolwiek ten prosty scenariusz może być obsłużony w inny sposób - te bardziej
 * rozbudowane wymagają przerwania). Ten element rdzenia zawiera także bootstrappera odpowiedzialnego za rozruch danej aplikacji
-* (zobacz niżej @ref Igniter i Bootstrapper)
+* (zobacz niżej @ref engine_startup_app "Bootstrapper")
 * w aktualnej chwili programu.
 * 
 * @subsubsection engine_architecture_core_global_console Konsola
@@ -180,17 +180,17 @@
 * W przeciwieństwie jednak do innych gier, konsola Pixie Engine trzyma wewnętrznie obiekty a nie tekst. Dzięki takiemu podejściu można np. przeformatować
 * dane w zależności od potrzeb, lub uzyskać dodatkowe informacje na temat każdej linijki.
 * 
-* Jeżeli chodzi o parsowanie wejścia, wykorzystana jest biblioteka @ref Boost Spirit z autorską implementacją systemu na wzór intellisense
+* Jeżeli chodzi o parsowanie wejścia, wykorzystana jest biblioteka @ref ustring_format_spirit "Boost Spirit" z autorską implementacją systemu na wzór intellisense
 * poprawiającą błędy wejścia i posiadająca funkcjonalność autouzupełniania poleceń (zobacz https://stackoverflow.com/a/47383910/151150 )
 * 
 * @subsubsection engine_architecture_core_global_data Dane
-* To zbiór klas stanowiący bazę @ref wirtualnego systemu plików. W tej chwili w skład rdzenia należą: strumienie wejścia/wyjścia,
+* To zbiór klas stanowiący bazę @ref vfs "wirtualnego systemu plików". W tej chwili w skład rdzenia należą: strumienie wejścia/wyjścia,
 * dostawcy strumieni, skanery i archiwa.
 * 
 * @subsubsection engine_architecture_core_global_manifest Manifest
 * Manifest obejmuje metadane platformy na której uruchomiony jest Pixie Engine jak i samego silnika. W chwili obecnej obejmuje on:
 *  - Informacje o systemie operacyjnym
-*  - Manifest silnika (zobacz rozdział @ref manifest silnika)
+*  - Manifest silnika (zobacz rozdział @ref manifest "manifest silnika")
 *  - Wersję silnika
 *
 * @subsubsection engine_architecture_core_global_messenger Komunikator
@@ -201,13 +201,13 @@
 * (długie szablonowe stosy wywołań). Jedynym rozwiązaniem było znalezienie sposobu na rozdzielenie komunikacji od faktycznych komponentów.
 * Wzorzec komunikatora jest tutaj idealnym rozwiązaniem.
 *
-* Komunikator jest w tym wypadku szablonową klasą opartą o @ref kolejkę wielu-producentów jeden-konsument i posiada cztery warianty implementacji
+* Komunikator jest w tym wypadku szablonową klasą opartą o @ref engine_architecture_utilities_container_concurrent_queue "kolejkę wielu-producentów jeden-konsument" i posiada cztery warianty implementacji
 * (synchroniczne i asynchroniczne wysyłanie i odbieranie komunikatów). Warianty synchroniczne generują najmniejsze opóźnienia ale nie są przeznaczone
 * do przesyłania dużych ilości wiadomości (gdyż sam akt wysyłania generuje blokadę wątkową). Implementacja danego typu wiadomości może zdecydować
 * który wariant kolejki zostanie do niej przypisany (za pomocą wyrażeń typu `constexpr`).
 *
 * @subsubsection engine_architecture_core_global_platform Platformowe
-* Ta sekcja rdzenia zawiera elementy które - jak ktoś mógłby zauważyć - należą bardziej do @ref narzędzi pomocniczych niż klas średniego poziomu.
+* Ta sekcja rdzenia zawiera elementy które - jak ktoś mógłby zauważyć - należą bardziej do @ref engine_architecture_utilities "narzędzi pomocniczych" niż klas średniego poziomu.
 * W praktyce jednak okazało się że ich implementacja wymaga dostępu do SDLa - który włączony jest do projektu właśnie na poziomie rdzenia.
 * Dlatego ostatecznie wylądowały w tej części silnika. W chwili obecnej są to tylko dwa narzędzia:
 *  - Detektor cech CPU
@@ -237,16 +237,16 @@
 *  - Baza wątków (ang. thread pool); Określona ilość wątków (domyślnie tyle ile rdzeni w komputerze) kolejkujące zadania i wykonujące je na pierwszym wolnym wątku.
 * 
 * @subsubsection engine_architecture_core_global_program Program (kontener)
-* Program to zestaw trzech narzędzi: @ref rozrusznik, odpowiedzialny za start całej aplikacji, uruchamiacz testów stanowiący rodzaj rozrusznika,
-* ale tylko na potrzeby @ref Google Test Framework oraz referencja, czyli obiekt przechowujący instancję programu (prosząc o niego w konstruktorze
+* Program to zestaw trzech narzędzi: @ref engine_startup_platform rozrusznik, odpowiedzialny za start całej aplikacji, uruchamiacz testów stanowiący rodzaj rozrusznika,
+* ale tylko na potrzeby @ref dependency_googletest "Google Test Framework" oraz referencja, czyli obiekt przechowujący instancję programu (prosząc o niego w konstruktorze
 * gra dostaje dostęp do wszystkich globalnych komponentów)
 *
 * @subsubsection engine_architecture_core_global_thread Wątki
-* Wątki to baza dla modułu @ref procesów. Ten fragment rdzenia odpowiada za tworzenie i zliczanie istniejących wątków z uwzględnieniem statystyk
+* Wątki to baza dla modułu @ref engine_architecture_core_global_process procesów. Ten fragment rdzenia odpowiada za tworzenie i zliczanie istniejących wątków z uwzględnieniem statystyk
 * ich wykonania. Standardowo stosuje się do tego bibliotekę standardową C++ 11 (z opcją rozszerzenia o dodatkowe informacje dostarczane przez platformę)
 * 
 * @subsubsection engine_architecture_core_global_vfs Wirtualny System Plików
-* Ostatni element globalnego rdzenia to po prostu klasa opakowująca wirtualną ścieżkę. Więcej informacji znajduje się w rozdziale @ref wirtualny system plików
+* Ostatni element globalnego rdzenia to po prostu klasa opakowująca wirtualną ścieżkę. Więcej informacji znajduje się w rozdziale @ref vfs "wirtualny system plików"
 * @subsection engine_architecture_core_local Lokalne
 * @subsubsection engine_architecture_core_local_manifest Manifest aplikacji
 * To jedyna jak na razie klasa rdzenia lokalnego. Zawiera informacje o:
@@ -257,25 +257,37 @@
 * @section engine_architecture_component Komponenty
 * Komponent, jak już zostało powiedziane w poprzednich rozdziałach, to podstawowy budulec silnika Pixie Engine. Komponent jest (zwykle) małą klasą o pojedynczej
 * funkcjonalności i odpowiedzialności, która niezbędne informacje (w ramach swojego pola działania) zdobywa od innych komponentów lub (poza swoim polem działania)
-* od @ref komunikatora z rdzenia silnika. W szczególności komponent jest całkowicie nieświadomy istnienia innych komponentów poza swoim polem działania.
+* od @ref engine_architecture_core_global_messenger "komunikatora" z rdzenia silnika. W szczególności komponent jest całkowicie nieświadomy istnienia innych komponentów poza swoim polem działania.
 * 
 * Jak już zostało wspomniane każdy komponent posiada trzy implementacje:
 *  - Normalną, zawierającą pełną wersję implementacji
-*  - Makietową, opakowaną w makra @ref Google Mockup
+*  - Makietową, opakowaną w makra @ref dependency_googlemock "Google Mockup"
 *  - Pustą, zawierającą puste metody
 * @subsection engine_architecture_component_kind Rodzaje komponentów
 * Nie było to zamysłem twórcy, ale dość szybko na etapie implementacji konkretnych komponentów wykrystalizowało sie kilka modeli w które komponenty się wpasowują.
 * O ile opisanie wszystkich powstałych komponentów byłoby trudne (w tej chwili 27 globalnych i 2 lokalne) można je z grubsza podzielić na następujące kategorie:
 * @subsubsection engine_architecture_component_kind_monitor Monitory
-* To komponenty operujące tylko na @ref komunikatorach i zwykle nie posiadające żadnej publicznej metody ani własności. Ich celem jest skanowanie – na
+* To komponenty operujące tylko na @ref engine_architecture_core_global_messenger "komunikatorach" i zwykle nie posiadające żadnej publicznej metody ani własności. Ich celem jest skanowanie – na
 * zadany wyzwalacz (np. czasowy) – sprawdzają czy dany element środowiska się nie zmienił. Najbardziej modelowym przykładem jest skaner zasobów sprawdzający
-* czy nie trzeba ich przeładować na gorąco (zobacz rozdzał o @ref zasobach).
+* czy nie trzeba ich przeładować na gorąco (zobacz rozdział o @ref vfs_assets "zasobach").
 * @subsubsection engine_architecture_component_kind_service Usługi
 * To mniejsze komponenty pracujące w wydzielonych wątkach, których celem jest dokonywanie aktywnych obliczeń. Najlepszym przykładem jest
-* tu na przykład usługa profilera (w tym celu wykorzystane jest @ref remotery)
+* tu na przykład usługa profilera (w tym celu wykorzystane jest @ref dependency_remotery "remotery")
 * @subsubsection engine_architecture_component_kind_facade Fasady
-* To komponenty przyjmujące polecnia z reszty silnika za pomocą komunikatorów i dystrybuujące je do innych komponentów w ramach tego samego obszaru.
+* To komponenty przyjmujące polecenia z reszty silnika za pomocą komunikatorów i dystrybuujące je do innych komponentów w ramach tego samego obszaru.
 * @subsubsection engine_architecture_component_kind_standard Standardy
 * Czyli najbardziej typowe komponenty posiadające jasno zadeklarowaną funkcjonalność i publiczne API w formie metod wirtualnych.
 *
+* @section engine_architecture_provider Dostawcy
+* Ostatnim elementem architektury silnika jest koncept dostawcy. Ponieważ wiele komponentów posiada osobne warianty implementacji
+* bądź może produkować (lub zdobywać) zasoby na kilka sposobów pojawił się problem kombinatoryczny rosnącej wykładniczo ich liczby.
+* Aby ominąć tę pułapkę wprowadzono ideę dostawców kodu.
+* 
+* Dostawca to niesamodzielny element kodu dostarczający funkcjonalność komponentowi. Przykładem dostawcy jest dostawca wyjścia
+* dziennika: konsola, plik, strumień. Istnieją też dostawcy funkcjonalności z których tylko jeden może być aktywny w danej chwili
+* (np. dostawca danych o wątkach: rodzajowy, korzystający wyłącznie z biblioteki standardowej/boost i Windowsowy, korzystający
+* z WinAPI aby zdobyć pełne informacje)
+* 
+* Dostawcy muszą być zarejestrowani na etapie kompilacji i za ich rejestrację odpowiada @ref engine_startup_platform "rozrusznik" lub @ref engine_startup_app "bootstrapper". 
+* 
 */

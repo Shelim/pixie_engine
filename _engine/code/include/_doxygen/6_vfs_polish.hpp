@@ -1,6 +1,6 @@
 
 /**
-* @page vfs Virtual File System (VFS)
+* \~Polish @page vfs Virtual File System (VFS)
 * @tableofcontents
 * @section vfs_intro Introduction
 *		Pixie (as many other game engines) uses VFS (Virtual File System).
