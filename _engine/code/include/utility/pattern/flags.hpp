@@ -11,7 +11,7 @@
 namespace engine
 {
 	/**
-	 * @brief Class for managing flags based on given strongly-typed enumerations
+	 * \~English @brief Class for managing flags based on given strongly-typed enumerations
 	 * 
 	 * This class allows making dynamic flags based on strongly-typed, sequencial enums
 	 * 
@@ -39,7 +39,7 @@ namespace engine
 	public:
 
 		/**
-		 * @brief Sets given flag to value val
+		 * \~English @brief Sets given flag to value val
 		 * 
 		 * @param[in] flag to set
 		 * @param[in] val true to set, false to clear
@@ -50,7 +50,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Checks if given flag is set
+		 * \~English @brief Checks if given flag is set
 		 * 
 		 * @param[in] flag to check
 		 * @return true if flag is set, false otherwise
@@ -61,7 +61,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Resets all flags to the @c clear status
+		 * \~English @brief Resets all flags to the @c clear status
 		 */
 		void clear_all()
 		{

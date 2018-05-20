@@ -14,14 +14,14 @@ namespace engine
 	{
 
 		/**
-		 * @brief Triggers platform-specific breakpoint
+		 * \~English @brief Triggers platform-specific breakpoint
 		 * 
 		 * @warning this function may result in hard-crash if debugger is not present!
 		 */
 		void trigger_breakpoint();
 
 		/**
-		 * @brief This function canonize @c __FILE__ into something that can be safely displayed to end-user
+		 * \~English @brief This function canonize @c __FILE__ into something that can be safely displayed to end-user
 		 * 
 		 * It is strictly platform-specific; You can assume that it will (at least):
 		 *  - Remove leading path that may contain personal directory name or directory structure
@@ -33,7 +33,7 @@ namespace engine
 		ustring_t canonize_debug_filename(const ustring_t & filename);
 
 		/**
-		 * @brief Dumps current callstack, removing optionally some frames from top
+		 * \~English @brief Dumps current callstack, removing optionally some frames from top
 		 * 
 		 * This function is intended for debugging hard-crashes only. Each function call occupy one frame in resulting callstack_t
 		 * 

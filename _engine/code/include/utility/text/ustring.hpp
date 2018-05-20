@@ -33,12 +33,12 @@ engine::ustring_t operator""_u(const char * str, std::size_t);
 namespace engine
 {
 	/**
-	 * @brief Unicode Symbol (32-bit unsigned value)
+	 * \~English @brief Unicode Symbol (32-bit unsigned value)
 	 */
 	typedef int_least32_t usymbol_t;
 
 	/**
-	* @brief Converts usymbol_t into uppercaseR
+	* \~English @brief Converts usymbol_t into uppercaseR
 	*
 	* It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 	*
@@ -49,7 +49,7 @@ namespace engine
 	usymbol_t to_upper(usymbol_t item);
 
 	/**
-	* @brief Converts usymbol_t into lowercase
+	* \~English @brief Converts usymbol_t into lowercase
 	*
 	* It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 	*
@@ -60,7 +60,7 @@ namespace engine
 	usymbol_t to_lower(usymbol_t item);
 
 	/**
-	* @brief Check if given usymbol_t contains whitespace
+	* \~English @brief Check if given usymbol_t contains whitespace
 	*
 	* It will first try to use platform specific library, failing to simple @c ASCII check if none are present
 	*
@@ -70,7 +70,7 @@ namespace engine
 	bool is_whitespace_ascii(char item);
 
 	/**
-	* @brief Check if given usymbol_t contains path separator
+	* \~English @brief Check if given usymbol_t contains path separator
 	*
 	* @remark This function MAY BE platform depedent!
 	*
@@ -80,7 +80,7 @@ namespace engine
 	bool is_path_separator_ascii(char ch);
 
 	/**
-	* @brief Check if given usymbol_t contains number
+	* \~English @brief Check if given usymbol_t contains number
 	*
 	* @remark This function is platform independeant
 	*
@@ -90,7 +90,7 @@ namespace engine
 	bool is_numeric(char ch);
 
 	/**
-	* @brief Check if given usymbol_t contains ASCII character (a-z or A-Z)
+	* \~English @brief Check if given usymbol_t contains ASCII character (a-z or A-Z)
 	*
 	* @remark This function is platform independeant
 	*
@@ -100,7 +100,7 @@ namespace engine
 	bool is_character_ascii(char ch);
 
 	/**
-	 * @brief Class for handling @c UTF-8 string
+	 * \~English @brief Class for handling @c UTF-8 string
 	 */
 	class ustring_t final
 	{
@@ -110,7 +110,7 @@ namespace engine
 		friend class iterator_t;
 
 		/**
-		 * @brief Class for iterating @c UTF-8 string
+		 * \~English @brief Class for iterating @c UTF-8 string
 		 * 
 		 * @see ustring_t
 		 */
@@ -126,7 +126,7 @@ namespace engine
 			typedef std::forward_iterator_tag iterator_category;
 
 			/**
-			 * @brief Constuct iterator from other iterator
+			 * \~English @brief Constuct iterator from other iterator
 			 */
 			iterator_t(const iterator_t& other) : str(other.str), decoded_symbol(other.decoded_symbol), pos(other.pos)
 			{
@@ -134,7 +134,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Destructor
+			 * \~English @brief Destructor
 			 */
 			~iterator_t()
 			{
@@ -142,7 +142,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Copy-assign iterator from other iterator
+			 * \~English @brief Copy-assign iterator from other iterator
 			 * 
 			 * @param[in] other iterator to copy
 			 */
@@ -156,7 +156,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Go to the next usymbol_t in @c UTF-8 string
+			 * \~English @brief Go to the next usymbol_t in @c UTF-8 string
 			 */
 			iterator_t& operator++()
 			{
@@ -169,7 +169,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Get current usymbol_t in @c UTF-8 string
+			 * \~English @brief Get current usymbol_t in @c UTF-8 string
 			 */
 			reference operator*() const
 			{
@@ -177,7 +177,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Swap two iterators
+			 * \~English @brief Swap two iterators
 			 * 
 			 * @param[in] other iterator to swap
 			 */
@@ -189,7 +189,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Go to the next usymbol_t in @c UTF-8 string
+			 * \~English @brief Go to the next usymbol_t in @c UTF-8 string
 			 */
 			iterator_t operator++(int)
 			{
@@ -200,7 +200,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Get current usymbol_t in @c UTF-8 string
+			 * \~English @brief Get current usymbol_t in @c UTF-8 string
 			 */
 			value_type operator*()
 			{
@@ -208,7 +208,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Get current usymbol_t in @c UTF-8 string
+			 * \~English @brief Get current usymbol_t in @c UTF-8 string
 			 */
 			pointer operator->() const
 			{
@@ -216,7 +216,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Compare two iterators
+			 * \~English @brief Compare two iterators
 			 * 
 			 * @param[in] other iterator to compare
 			 * @return true for equality, false otherwise
@@ -263,28 +263,28 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		 * @brief Converts @c ASCII string into ustring_t
+		 * \~English @brief Converts @c ASCII string into ustring_t
 		 *
 		 * @param[in] str @c ASCII string to convert
 		 * @return Converted ustring_t
 		 */
 		static ustring_t from_ascii(const char * str);
 		/**
-		 * @brief Converts @c UTF-8 string into ustring_t
+		 * \~English @brief Converts @c UTF-8 string into ustring_t
 		 *
 		 * @param[in] str @c UTF-8 string to convert
 		 * @return Converted ustring_t
 		 */
 		static ustring_t from_utf8(const char * str);
 		/**
-		 * @brief Converts @c Wide string into ustring_t
+		 * \~English @brief Converts @c Wide string into ustring_t
 		 *
 		 * @param[in] str @c Wide string to convert
 		 * @return Converted ustring_t
 		 */
 		static ustring_t from_wide(const wchar_t * str);
 		/**
-		* @brief Converts @c usymbol_t literal into (1-element) ustring_t
+		* \~English @brief Converts @c usymbol_t literal into (1-element) ustring_t
 		*
 		* @param[in] str @c usymbol_t literal to convert
 		* @return Converted ustring_t
@@ -294,7 +294,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		 * @brief Get iterator to first usymbol_t in given @c UTF-8 string
+		 * \~English @brief Get iterator to first usymbol_t in given @c UTF-8 string
 		 * 
 		 * @return iterator to first usymbol_t
 		 */
@@ -304,7 +304,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Get iterator to one-past-end usymbol_t in given @c UTF-8 string
+		 * \~English @brief Get iterator to one-past-end usymbol_t in given @c UTF-8 string
 		 * 
 		 * @return iterator to one-past-end usymbol_t
 		 */
@@ -314,7 +314,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Get constant iterator to first usymbol_t in given @c UTF-8 string
+		 * \~English @brief Get constant iterator to first usymbol_t in given @c UTF-8 string
 		 * 
 		 * @return constant iterator to first usymbol_t
 		 */
@@ -324,7 +324,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Get constant iterator to one-past-end usymbol_t in given @c UTF-8 string
+		 * \~English @brief Get constant iterator to one-past-end usymbol_t in given @c UTF-8 string
 		 * 
 		 * @return constant iterator to one-past-end usymbol_t
 		 */
@@ -336,7 +336,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Removes any whitespace (only @c ASCII) from ustring_t
+		* \~English @brief Removes any whitespace (only @c ASCII) from ustring_t
 		*
 		* @note On some platform this can actually remove @c UTF-8 whitespace as well
 		*
@@ -349,7 +349,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Removes any whitespace (only @c ASCII) from ustring_t
+		 * \~English @brief Removes any whitespace (only @c ASCII) from ustring_t
 		 *
 		 * @note On some platform this can actually remove @c UTF-8 whitespace as well
 		 *
@@ -359,7 +359,7 @@ namespace engine
 		 */
 		static ustring_t trim_string(const ustring_t & str);
 		/**
-		 * @brief Removes any whitespace (only @c ASCII) from ustring_t
+		 * \~English @brief Removes any whitespace (only @c ASCII) from ustring_t
 		 *
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::trim
 		 *
@@ -374,7 +374,7 @@ namespace engine
 			return trim_string(from_ascii(str));
 		}
 		/**
-		 * @brief Removes any whitespace (only @c ASCII) from ustring_t
+		 * \~English @brief Removes any whitespace (only @c ASCII) from ustring_t
 		 *
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::trim
 		 *
@@ -389,7 +389,7 @@ namespace engine
 			return trim_string(from_utf8(str));
 		}
 		/**
-		 * @brief Removes any whitespace (only @c ASCII) from ustring_t
+		 * \~English @brief Removes any whitespace (only @c ASCII) from ustring_t
 		 *
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::trim
 		 *
@@ -407,7 +407,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Removes any whitespace (only @c ASCII) from left side of ustring_t
+		* \~English @brief Removes any whitespace (only @c ASCII) from left side of ustring_t
 		*
 		* @note On some platform this can actually remove @c UTF-8 whitespace as well
 		*
@@ -420,7 +420,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Removes any whitespace (only @c ASCII) from left side of ustring_t
+		 * \~English @brief Removes any whitespace (only @c ASCII) from left side of ustring_t
 		 *
 		 * @note On some platform this can actually remove @c UTF-8 whitespace as well
 		 *
@@ -430,7 +430,7 @@ namespace engine
 		 */
 		static ustring_t left_trim_string(const ustring_t & str);
 		/**
-		 * @brief Removes any whitespace (only @c ASCII) from left side of ustring_t
+		 * \~English @brief Removes any whitespace (only @c ASCII) from left side of ustring_t
 		 *
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::left_trim
 		 *
@@ -445,7 +445,7 @@ namespace engine
 			return left_trim_string(from_ascii(str));
 		}
 		/**
-		 * @brief Removes any whitespace (only @c ASCII) from left side of ustring_t
+		 * \~English @brief Removes any whitespace (only @c ASCII) from left side of ustring_t
 		 *
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::left_trim
 		 *
@@ -460,7 +460,7 @@ namespace engine
 			return left_trim_string(from_utf8(str));
 		}
 		/**
-		 * @brief Removes any whitespace (only @c ASCII) from left side of ustring_t
+		 * \~English @brief Removes any whitespace (only @c ASCII) from left side of ustring_t
 		 *
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::left_trim
 		 *
@@ -478,7 +478,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Removes any whitespace (only @c ASCII) from right side of ustring_t
+		* \~English @brief Removes any whitespace (only @c ASCII) from right side of ustring_t
 		*
 		* @note On some platform this can actually remove @c UTF-8 whitespace as well
 		*
@@ -491,7 +491,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Removes any whitespace (only @c ASCII) from right side of ustring_t
+		 * \~English @brief Removes any whitespace (only @c ASCII) from right side of ustring_t
 		 *
 		 * @note On some platform this can actually remove @c UTF-8 whitespace as well
 		 *
@@ -501,7 +501,7 @@ namespace engine
 		 */
 		static ustring_t right_trim_string(const ustring_t & str);
 		/**
-		 * @brief Removes any whitespace (only @c ASCII) from right side of ustring_t
+		 * \~English @brief Removes any whitespace (only @c ASCII) from right side of ustring_t
 		 *
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::right_trim
 		 *
@@ -516,7 +516,7 @@ namespace engine
 			return right_trim_string(from_ascii(str));
 		}
 		/**
-		 * @brief Removes any whitespace (only @c ASCII) from right side of ustring_t
+		 * \~English @brief Removes any whitespace (only @c ASCII) from right side of ustring_t
 		 *
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::right_trim
 		 *
@@ -531,7 +531,7 @@ namespace engine
 			return right_trim_string(from_utf8(str));
 		}
 		/**
-		 * @brief Removes any whitespace (only @c ASCII) from right side of ustring_t
+		 * \~English @brief Removes any whitespace (only @c ASCII) from right side of ustring_t
 		 *
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::right_trim
 		 *
@@ -549,7 +549,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Converts ustring_t into uppercase
+		* \~English @brief Converts ustring_t into uppercase
 		*
 		* It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 		*
@@ -562,7 +562,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Converts ustring_t into uppercase
+		 * \~English @brief Converts ustring_t into uppercase
 		 *
 		 * It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 		 *
@@ -572,7 +572,7 @@ namespace engine
 		 */
 		static ustring_t to_upper_string(const ustring_t & str);
 		/**
-		 * @brief Converts ustring_t into uppercase
+		 * \~English @brief Converts ustring_t into uppercase
 		 *
 		 * It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::to_upper
@@ -586,7 +586,7 @@ namespace engine
 			return to_upper_string(from_ascii(str));
 		}
 		/**
-		 * @brief Converts ustring_t into uppercase
+		 * \~English @brief Converts ustring_t into uppercase
 		 *
 		 * It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::to_upper
@@ -600,7 +600,7 @@ namespace engine
 			return to_upper_string(from_utf8(str));
 		}
 		/**
-		 * @brief Converts ustring_t into uppercase
+		 * \~English @brief Converts ustring_t into uppercase
 		 *
 		 * It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::to_upper
@@ -617,7 +617,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Converts ustring_t into lowercase
+		* \~English @brief Converts ustring_t into lowercase
 		*
 		* It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 		*
@@ -630,7 +630,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Converts ustring_t into lowercase
+		 * \~English @brief Converts ustring_t into lowercase
 		 *
 		 * It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 		 *
@@ -640,7 +640,7 @@ namespace engine
 		 */
 		static ustring_t to_lower_string(const ustring_t & str);
 		/**
-		 * @brief Converts ustring_t into lowercase
+		 * \~English @brief Converts ustring_t into lowercase
 		 *
 		 * It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::to_lower
@@ -654,7 +654,7 @@ namespace engine
 			return to_lower_string(from_ascii(str));
 		}
 		/**
-		 * @brief Converts ustring_t into lowercase
+		 * \~English @brief Converts ustring_t into lowercase
 		 *
 		 * It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::to_lower
@@ -668,7 +668,7 @@ namespace engine
 			return to_lower_string(from_utf8(str));
 		}
 		/**
-		 * @brief Converts ustring_t into lowercase
+		 * \~English @brief Converts ustring_t into lowercase
 		 *
 		 * It will first try to use platform specific library, failing to simple @c ASCII replacement if none are present
 		 * This converts first argument into ustring_t, then passes execution into ustring_t::to_lower
@@ -685,7 +685,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Replaces ALL occurence of from into to
+		* \~English @brief Replaces ALL occurence of from into to
 		*
 		* Returns changed string. This string remains unaffected
 		*
@@ -698,7 +698,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Appends given symbol to the end of this string
+		* \~English @brief Appends given symbol to the end of this string
 		*
 		* @param[in] symbol usymbol_t to append
 		*/
@@ -709,7 +709,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Appends given string to the end of this string
+		* \~English @brief Appends given string to the end of this string
 		*
 		* Appends given string to the end of this string. No conversion will be made
 		*
@@ -719,7 +719,7 @@ namespace engine
 		ustring_t & append(const ustring_t & str);
 
 		/**
-		* @brief Appends given string to the end of this string
+		* \~English @brief Appends given string to the end of this string
 		*
 		* Appends given string to the end of this string.
 		*
@@ -732,7 +732,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Appends given string to the end of this string
+		* \~English @brief Appends given string to the end of this string
 		*
 		* Appends given string to the end of this string.
 		*
@@ -745,7 +745,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Appends given string to the end of this string
+		* \~English @brief Appends given string to the end of this string
 		*
 		* Appends given string to the end of this string.
 		*
@@ -760,7 +760,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Return part of given ustring_t
+		* \~English @brief Return part of given ustring_t
 		*
 		* Returns the portion of string ranging from @c pos parameter till string end. @c pos argument can be negative, position will be then calculated based on the string ending
 		* @note this function is safe for all data, ie. calling it with @c pos > ustring_t::len is perfectly defined and will return emtpy string
@@ -773,7 +773,7 @@ namespace engine
 			return substr_string(*this, pos);
 		}
 		/**
-		* @brief Return part of given ustring_t
+		* \~English @brief Return part of given ustring_t
 		*
 		* Returns the portion of string ranging from @c pos parameter for @c len characters. @c pos argument can be negative, position will be then calculated based on the string ending. @c len argument can be also negative, length will be then calculated based on the string ending
 		* @note this function is safe for all data, ie. calling it with @c pos > ustring_t::len is perfectly defined and will return emtpy string
@@ -788,7 +788,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Return part of given ustring_t
+		 * \~English @brief Return part of given ustring_t
 		 *
 		 * Returns the portion of string ranging from @c pos parameter till string end. @c pos argument can be negative, position will be then calculated based on the string ending
 		 * @note this function is safe for all data, ie. calling it with @c pos > ustring_t::len is perfectly defined and will return emtpy string
@@ -799,7 +799,7 @@ namespace engine
 		 */
 		static ustring_t substr_string(const ustring_t & str, int_fast32_t pos);
 		/**
-		 * @brief Return part of given ustring_t
+		 * \~English @brief Return part of given ustring_t
 		 *
 		 * Returns the portion of string ranging from @c pos parameter for @c len characters. @c pos argument can be negative, position will be then calculated based on the string ending. @c len argument can be also negative, length will be then calculated based on the string ending
 		 * @note this function is safe for all data, ie. calling it with @c pos > ustring_t::len is perfectly defined and will return emtpy string
@@ -811,7 +811,7 @@ namespace engine
 		 */
 		static ustring_t substr_string(const ustring_t & str, int_fast32_t pos, int_fast32_t len);
 		/**
-		 * @brief Return part of given ustring_t
+		 * \~English @brief Return part of given ustring_t
 		 *
 		 * Returns the portion of string ranging from @c pos parameter till string end. @c pos argument can be negative, position will be then calculated based on the string ending
 		 *
@@ -829,7 +829,7 @@ namespace engine
 			return substr_string(from_ascii(str), pos);
 		}
 		/**
-		 * @brief Return part of given ustring_t
+		 * \~English @brief Return part of given ustring_t
 		 *
 		 * Returns the portion of string ranging from @c pos parameter for @c len characters. @c pos argument can be negative, position will be then calculated based on the string ending. @c len argument can be also negative, length will be then calculated based on the string ending
 		 *
@@ -848,7 +848,7 @@ namespace engine
 			return substr_string(from_ascii(str), pos, len);
 		}
 		/**
-		 * @brief Return part of given ustring_t
+		 * \~English @brief Return part of given ustring_t
 		 *
 		 * Returns the portion of string ranging from @c pos parameter till string end. @c pos argument can be negative, position will be then calculated based on the string ending
 		 *
@@ -866,7 +866,7 @@ namespace engine
 			return substr_string(from_utf8(str), pos);
 		}
 		/**
-		 * @brief Return part of given ustring_t
+		 * \~English @brief Return part of given ustring_t
 		 *
 		 * Returns the portion of string ranging from @c pos parameter for @c len characters. @c pos argument can be negative, position will be then calculated based on the string ending. @c len argument can be also negative, length will be then calculated based on the string ending
 		 *
@@ -885,7 +885,7 @@ namespace engine
 			return substr_string(from_utf8(str), pos, len);
 		}
 		/**
-		 * @brief Return part of given ustring_t
+		 * \~English @brief Return part of given ustring_t
 		 *
 		 * Returns the portion of string ranging from @c pos parameter till string end. @c pos argument can be negative, position will be then calculated based on the string ending
 		 *
@@ -903,7 +903,7 @@ namespace engine
 			return substr_string(from_wide(str), pos);
 		}
 		/**
-		 * @brief Return part of given ustring_t
+		 * \~English @brief Return part of given ustring_t
 		 *
 		 * Returns the portion of string ranging from @c pos parameter for @c len characters. @c pos argument can be negative, position will be then calculated based on the string ending. @c len argument can be also negative, length will be then calculated based on the string ending
 		 *
@@ -925,7 +925,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Returns filename from path given in str
+		* \~English @brief Returns filename from path given in str
 		*
 		* Gets filename from given path. If path ends with '/' then empty string will be returned
 		*
@@ -937,7 +937,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Returns filename from path given in str
+		 * \~English @brief Returns filename from path given in str
 		 *
 		 * Gets filename from given path. If path ends with '/' then empty string will be returned
 		 *
@@ -946,7 +946,7 @@ namespace engine
 		 */
 		static ustring_t basename_string(const ustring_t & str);
 		/**
-		 * @brief Returns filename from path given in str
+		 * \~English @brief Returns filename from path given in str
 		 *
 		 * Gets filename from given path. If path ends with '/' then empty string will be returned
 		 *
@@ -961,7 +961,7 @@ namespace engine
 			return basename_string(from_ascii(str));
 		}
 		/**
-		 * @brief Returns filename from path given in str
+		 * \~English @brief Returns filename from path given in str
 		 *
 		 * Gets filename from given path. If path ends with '/' then empty string will be returned
 		 *
@@ -976,7 +976,7 @@ namespace engine
 			return basename_string(from_utf8(str));
 		}
 		/**
-		 * @brief Returns filename from path given in str
+		 * \~English @brief Returns filename from path given in str
 		 *
 		 * Gets filename from given path. If path ends with '/' then empty string will be returned
 		 *
@@ -994,13 +994,13 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		 * @brief Initialize emtpy string
+		 * \~English @brief Initialize emtpy string
 		 *
 		 * Pretty fast method, should allocate no memory. Constructs empty UTF-8 string
 		 */
 		ustring_t();
 		/**
-		 * @brief Makes copy of string
+		 * \~English @brief Makes copy of string
 		 *
 		 * Makes full copy of @c other string into this instance of ustring_t (no string pooling!)
 		 *
@@ -1008,7 +1008,7 @@ namespace engine
 		 */
 		ustring_t(const ustring_t & other);
 		/**
-		* @brief Moves string
+		* \~English @brief Moves string
 		*
 		* Moves @c other string into this instance of ustring_t (no string pooling!)
 		*
@@ -1016,7 +1016,7 @@ namespace engine
 		*/
 		ustring_t(ustring_t && other) noexcept;
 		/**
-		 * @brief Makes copy of string
+		 * \~English @brief Makes copy of string
 		 *
 		 * Makes full copy of @c other string into this instance of ustring_t (no string pooling!)
 		 *
@@ -1024,7 +1024,7 @@ namespace engine
 		 */
 		ustring_t & operator= (const ustring_t & other);
 		/**
-		* @brief Moves string
+		* \~English @brief Moves string
 		*
 		* Moves @c other string into this instance of ustring_t (no string pooling!)
 		*
@@ -1032,7 +1032,7 @@ namespace engine
 		*/
 		ustring_t & operator= (ustring_t && other);
 		/**
-		 * @brief Frees internal data
+		 * \~English @brief Frees internal data
 		 *
 		 * @note Any pointer obtained via ustring_t::get_cstring will not be valid after this!
 		 */
@@ -1041,14 +1041,14 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		 * @brief Return length of ustring_t
+		 * \~English @brief Return length of ustring_t
 		 *
 		 * @return Length of ustring_t (in glyphs)
 		 * @see is_empty
 		 */
 		uint_fast64_t len() const;
 		/**
-		 * @brief Check if ustring_t is empty
+		 * \~English @brief Check if ustring_t is empty
 		 *
 		 * @note This is usually faster then checking ustring_t::len()
 		 *
@@ -1059,7 +1059,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Return first index of given usymbol_t in ustring_t
+		* \~English @brief Return first index of given usymbol_t in ustring_t
 		*
 		* Return first index of given usymbol_t in ustring_t, or -1 if is not found. Optional argument @c first tells how many chars from beginning have to be skipped
 		*
@@ -1071,7 +1071,7 @@ namespace engine
 		int_fast32_t index_of(usymbol_t symbol, int_fast32_t first = 0) const;
 
 		/**
-		* @brief Return first index of given usymbol_t in ustring_t
+		* \~English @brief Return first index of given usymbol_t in ustring_t
 		*
 		* Return first index of given usymbol_t in ustring_t, or -1 if is not found. Optional argument @c first tells how many chars from beginning have to be skipped
 		*
@@ -1086,7 +1086,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Return first index of given usymbol_t in ustring_t
+		* \~English @brief Return first index of given usymbol_t in ustring_t
 		*
 		* Return first index of given usymbol_t in ustring_t, or -1 if is not found. Optional argument @c first tells how many chars from beginning have to be skipped
 		*
@@ -1103,7 +1103,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		 * @brief Return first index of given substring in ustring_t
+		 * \~English @brief Return first index of given substring in ustring_t
 		 *
 		 * Return first index of given substring in ustring_t, or -1 if is not found. Optional argument @c first tells how many chars from beginning have to be skipped
 		 *
@@ -1114,7 +1114,7 @@ namespace engine
 		 */
 		int_fast32_t index_of(const ustring_t & str, int_fast32_t first = 0) const;
 		/**
-		 * @brief Return first index of given substring in ustring_t
+		 * \~English @brief Return first index of given substring in ustring_t
 		 *
 		 * Return first index of given substring in ustring_t, or -1 if is not found. Optional argument @c first tells how many chars from beginning have to be skipped
 		 *
@@ -1130,7 +1130,7 @@ namespace engine
 			return index_of(from_ascii(str), first);
 		}
 		/**
-		 * @brief Return first index of given substring in ustring_t
+		 * \~English @brief Return first index of given substring in ustring_t
 		 *
 		 * Return first index of given substring in ustring_t, or -1 if is not found. Optional argument @c first tells how many chars from beginning have to be skipped
 		 *
@@ -1146,7 +1146,7 @@ namespace engine
 			return index_of(from_utf8(str), first);
 		}
 		/**
-		 * @brief Return first index of given substring in ustring_t
+		 * \~English @brief Return first index of given substring in ustring_t
 		 *
 		 * Return first index of given substring in ustring_t, or -1 if is not found. Optional argument @c first tells how many chars from beginning have to be skipped
 		 *
@@ -1165,7 +1165,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Return last index of given usymbol_t in ustring_t
+		* \~English @brief Return last index of given usymbol_t in ustring_t
 		*
 		* Return last index of given usymbol_t in ustring_t, or -1 if is not found. Optional argument @c first tells how many chars from end have to be skipped
 		*
@@ -1177,7 +1177,7 @@ namespace engine
 		int_fast32_t last_index_of(usymbol_t symbol, int_fast32_t last = 0) const;
 
 		/**
-		* @brief Return first index of given usymbol_t in ustring_t
+		* \~English @brief Return first index of given usymbol_t in ustring_t
 		*
 		* Return first index of given usymbol_t in ustring_t, or -1 if is not found. Optional argument @c first tells how many chars from end have to be skipped
 		*
@@ -1192,7 +1192,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Return first index of given usymbol_t in ustring_t
+		* \~English @brief Return first index of given usymbol_t in ustring_t
 		*
 		* Return first index of given usymbol_t in ustring_t, or -1 if is not found. Optional argument @c first tells how many chars from end have to be skipped
 		*
@@ -1209,7 +1209,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		* @brief Return last character ustring_t ONLY if it is ASCII (7-bit)
+		* \~English @brief Return last character ustring_t ONLY if it is ASCII (7-bit)
 		*
 		* Return last character of ustring_t ONLY If it is ASCII (7-bit). For use in some more advance algorithms.
 		* Returns 0 if ustring_t is empty or last character is NOT ASCII.
@@ -1226,7 +1226,7 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		 * @brief Return last index of given substring in ustring_t
+		 * \~English @brief Return last index of given substring in ustring_t
 		 *
 		 * Return last index of given substring in ustring_t, or -1 if is not found. Optional argument @c last tells how many chars from end have to be skipped
 		 *
@@ -1237,7 +1237,7 @@ namespace engine
 		 */
 		int_fast32_t last_index_of(const ustring_t & str, int_fast32_t last = 0) const;
 		/**
-		 * @brief Return last index of given substring in ustring_t
+		 * \~English @brief Return last index of given substring in ustring_t
 		 *
 		 * Return last index of given substring in ustring_t, or -1 if is not found. Optional argument @c last tells how many chars from end have to be skipped
 		 *
@@ -1253,7 +1253,7 @@ namespace engine
 			return last_index_of(from_ascii(str), last);
 		}
 		/**
-		 * @brief Return last index of given substring in ustring_t
+		 * \~English @brief Return last index of given substring in ustring_t
 		 *
 		 * Return last index of given substring in ustring_t, or -1 if is not found. Optional argument @c last tells how many chars from end have to be skipped
 		 *
@@ -1269,7 +1269,7 @@ namespace engine
 			return last_index_of(from_utf8(str), last);
 		}
 		/**
-		 * @brief Return last index of given substring in ustring_t
+		 * \~English @brief Return last index of given substring in ustring_t
 		 *
 		 * Return last index of given substring in ustring_t, or -1 if is not found. Optional argument @c last tells how many chars from end have to be skipped
 		 *
@@ -1288,14 +1288,14 @@ namespace engine
 		//////////////////////////////////////////////////////////////////////////
 
 		/**
-		 * @brief Converts this ustring_t into standard @c ASCII string
+		 * \~English @brief Converts this ustring_t into standard @c ASCII string
 		 *
 		 * @return Standard @c ASCII string
 		 * @see get_cstring
 		 */
 		std::string to_ascii() const;
 		/**
-		 * @brief Converts this ustring_t into standard @c UTF-8 string
+		 * \~English @brief Converts this ustring_t into standard @c UTF-8 string
 		 *
 		 * @note Keep in mind that it will be stored in standard @c string container, so many operations on this object won't be reliable, ie @c string::len will give false results!
 		 *
@@ -1304,7 +1304,7 @@ namespace engine
 		 */
 		std::string to_utf8() const;
 		/**
-		 * @brief Converts this ustring_t into standard @c Wide string
+		 * \~English @brief Converts this ustring_t into standard @c Wide string
 		 *
 		 * @note This is heavily platform depedent and generally shouldn't be use in production! Android for example defines @c wchar_t as 4 bytes...
 		 *
@@ -1313,7 +1313,7 @@ namespace engine
 		 */
 		std::wstring to_wide() const;
 		/**
-		 * @brief Returns C-like string containing UTF-8 internal string
+		 * \~English @brief Returns C-like string containing UTF-8 internal string
 		 *
 		 * @note THIS RETURNS NULL-TERMINATED UTF-8 STRING! Be advise that most (if not all) of standard library function won't be reliable. You canot use this for @c sprintf or @c strlen , or anything like this...
 		 *
@@ -1364,7 +1364,7 @@ namespace engine
 	};
 
 	/**
-	 * @brief Compares two ustring_t
+	 * \~English @brief Compares two ustring_t
 	 *
 	 * Compares two Ustring for equality
 	 *
@@ -1374,7 +1374,7 @@ namespace engine
 	 */
 	inline bool operator==(const ustring_t & left, const ustring_t & right) { return (left._str == right._str); }
 	/**
-	 * @brief Compares two ustring_t
+	 * \~English @brief Compares two ustring_t
 	 *
 	 * Compares two Ustring for equality
 	 *
@@ -1384,7 +1384,7 @@ namespace engine
 	 */
 	inline bool operator!=(const ustring_t & left, const ustring_t & right) { return !operator==(left, right); }
 	/**
-	 * @brief Compares two ustring_t
+	 * \~English @brief Compares two ustring_t
 	 *
 	 * Compares two Ustring for sorting.
 	 * @note This is NOT aware of UTF-8 content, and it can (and will!) return wrong answers for national characters!
@@ -1395,7 +1395,7 @@ namespace engine
 	 */
 	inline bool operator< (const ustring_t & left, const ustring_t & right) { return (left._str < right._str); }
 	/**
-	 * @brief Compares two ustring_t
+	 * \~English @brief Compares two ustring_t
 	 *
 	 * Compares two Ustring for sorting.
 	 * @note This is NOT aware of UTF-8 content, and it can (and will!) return wrong answers for national characters!
@@ -1406,7 +1406,7 @@ namespace engine
 	 */
 	inline bool operator> (const ustring_t & left, const ustring_t & right) { return  operator< (right, left); }
 	/**
-	 * @brief Compares two ustring_t
+	 * \~English @brief Compares two ustring_t
 	 *
 	 * Compares two Ustring for sorting.
 	 * @note This is NOT aware of UTF-8 content, and it can (and will!) return wrong answers for national characters!
@@ -1417,7 +1417,7 @@ namespace engine
 	 */
 	inline bool operator<=(const ustring_t & left, const ustring_t & right) { return !operator> (left, right); }
 	/**
-	 * @brief Compares two ustring_t
+	 * \~English @brief Compares two ustring_t
 	 *
 	 * Compares two Ustring for sorting.
 	 * @note This is NOT aware of UTF-8 content, and it can (and will!) return wrong answers for national characters!
@@ -1431,7 +1431,7 @@ namespace engine
 	typedef std::vector<ustring_t> ustring_collection_t;
 
 	/**
-	* @brief Converts generic object into ustring_t
+	* \~English @brief Converts generic object into ustring_t
 	*
 	* @note This function is deliberary not defined,
 	* @note so it won't compile unless generic object
@@ -1445,7 +1445,7 @@ namespace engine
 	template <class T> inline ustring_t to_string(const T & item, const ustring_t & format);
 
 	/**
-	* @brief Converts generic object into ustring_t
+	* \~English @brief Converts generic object into ustring_t
 	*
 	* @param[in] item Generic Object
 	* @return Converted `ustring_t`
@@ -1457,7 +1457,7 @@ namespace engine
 	}
 
 	/**
-	* @brief Converts ustring_t into generic object
+	* \~English @brief Converts ustring_t into generic object
 	*
 	* @note This function is deliberary not defined,
 	* @note so it won't compile unless generic object
@@ -1861,7 +1861,7 @@ namespace engine
 	}
 
 	/**
-	* @brief Serilizes ustring_collection_t
+	* \~English @brief Serilizes ustring_collection_t
 	*
 	* This function is used by cereal serializer
 	*
@@ -1878,7 +1878,7 @@ namespace engine
 	}
 
 	/**
-	* @brief Deserialize string into ustring_collection_t
+	* \~English @brief Deserialize string into ustring_collection_t
 	*
 	* This function is used by cereal deserializer
 	*
@@ -1894,7 +1894,7 @@ namespace engine
 	}
 
 	/**
-	 * @brief Compare two ustring_t::iterator_t for equality
+	 * \~English @brief Compare two ustring_t::iterator_t for equality
 	 * 
 	 * @param[in] lhs First iterator_t
 	 * @param[in] rhs Second iterator_t
@@ -1906,7 +1906,7 @@ namespace engine
 	}
 
 	/**
-	 * @brief Compare two ustring_t::iterator_t for equality
+	 * \~English @brief Compare two ustring_t::iterator_t for equality
 	 * 
 	 * @param[in] lhs First iterator_t
 	 * @param[in] rhs Second iterator_t
@@ -1922,7 +1922,7 @@ namespace std
 {
 
 	/**
-	* @brief Hash functor to be used for std collections
+	* \~English @brief Hash functor to be used for std collections
 	*
 	* This is a helper object for std collection.
 	* You should never use it directly
@@ -1941,7 +1941,7 @@ namespace std
 
 
 	/**
-	 * @brief Swaps two string iterators
+	 * \~English @brief Swaps two string iterators
 	 * 
 	 * @param[in] lhs First iterator_t
 	 * @param[in] rhs Second iterator_t

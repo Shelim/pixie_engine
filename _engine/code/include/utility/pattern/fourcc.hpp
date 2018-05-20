@@ -9,7 +9,7 @@ namespace engine
 {
 
 	/**
-	 * @brief A (very) lightweight unique resource identifier
+	 * \~English @brief A (very) lightweight unique resource identifier
 	 * 
 	 * This class is 4-bytes long identifier directly convertable to ustring_t (4 ASCII characters).
 	 * 
@@ -38,7 +38,7 @@ namespace engine
 		typedef uint32_t underlying_type;
 
 		/**
-		 * @brief Constructs id_t from uint32_t. This is implicit operation
+		 * \~English @brief Constructs id_t from uint32_t. This is implicit operation
 		 * 
 		 * @param[in] value Source value
 		 */
@@ -48,7 +48,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Copy-construct id_t from other id_t
+		 * \~English @brief Copy-construct id_t from other id_t
 		 * 
 		 * @param[in] other Source id_t
 		 */
@@ -58,14 +58,14 @@ namespace engine
 		}
 
 		/**
-		 * @brief Converts id_t to uint32_t. This is implicit operation
+		 * \~English @brief Converts id_t to uint32_t. This is implicit operation
 		 * 
 		 * @return value of this id_t
 		 */
 		operator underlying_type() const { return value; }
 
 		/**
-		 * @brief Copy-assigns other id_t to this id_t
+		 * \~English @brief Copy-assigns other id_t to this id_t
 		 * 
 		 * @param[in] other id_t
 		 * @return this (for chaining)
@@ -76,7 +76,7 @@ namespace engine
 			return (*this);
 		}
 		/**
-		 * @brief Move-assigns other id_t to this id_t
+		 * \~English @brief Move-assigns other id_t to this id_t
 		 * 
 		 * @param[in] other id_t
 		 * @return this (for chaining)
@@ -94,7 +94,7 @@ namespace engine
 	};
 
 	/**
-	 * @brief Creates id_t compatible uint32_t (id_t is directly and implicitly constructable from uint32_t)
+	 * \~English @brief Creates id_t compatible uint32_t (id_t is directly and implicitly constructable from uint32_t)
 	 * 
 	 * @note This function is preferable to literal trick `'abcd'`, because they the latter does not give strong guarantee of endianess
 	 * 

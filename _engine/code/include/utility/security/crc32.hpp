@@ -9,7 +9,7 @@
 namespace engine
 {
 	/**
-	* @brief Helper class for @c CRC32 calculations
+	* \~English @brief Helper class for @c CRC32 calculations
 	*/
 	class crc32_t final
 	{
@@ -17,7 +17,7 @@ namespace engine
 	public:
 
 		/**
-		* @brief Calculates @c CRC32 of given buffer
+		* \~English @brief Calculates @c CRC32 of given buffer
 		*
 		* @note This is the only place where we use raw pointer-to-void and length to indicate buffer. This is nasty, I know it, but sometimes you need to use right tool for the job.
 		*
@@ -29,7 +29,7 @@ namespace engine
 		uint32_t calculate(void * buffer, std::size_t length);
 
 		/**
-		* @brief Calculates @c CRC32 of given @c UTF-8 or @c ASCII string
+		* \~English @brief Calculates @c CRC32 of given @c UTF-8 or @c ASCII string
 		*
 		* @param[in] str @c UTF-8 or @c ASCII string
 		* @return @c CRC32 of the given string
@@ -38,7 +38,7 @@ namespace engine
 		uint32_t calculate_from_string(const char * str);
 	
 		/**
-		* @brief Calculates @c CRC32 of given ustring_t
+		* \~English @brief Calculates @c CRC32 of given ustring_t
 		*
 		* @param[in] str ustring_t for calculation
 		* @return @c CRC32 of the given string

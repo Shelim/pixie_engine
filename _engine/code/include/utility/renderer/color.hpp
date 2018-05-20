@@ -7,7 +7,7 @@
 namespace engine
 {
 	/**
-	* @brief Class for handling @c RGBA colors
+	* \~English @brief Class for handling @c RGBA colors
 	*
 	* @note Order of bytes is ALWAYS @c RGBA 
 	* @note Each channel is occupying exactly 1 byte
@@ -18,7 +18,7 @@ namespace engine
 	public:
 
 		/**
-		* @brief Creates new @c RGBA color
+		* \~English @brief Creates new @c RGBA color
 		*
 		* @param[in] r Red component
 		* @param[in] g Green component
@@ -34,7 +34,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Creates new @c RGBA color
+		* \~English @brief Creates new @c RGBA color
 		*
 		* @param[in] col Basic color. RGBA format
 		*/
@@ -44,7 +44,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Returns @c red component of color
+		* \~English @brief Returns @c red component of color
 		*
 		* @return Red component
         * @see set_r, get, set
@@ -55,7 +55,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Returns @c green component of color
+		* \~English @brief Returns @c green component of color
 		*
 		* @return Green component
         * @see set_g, get, set
@@ -66,7 +66,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Returns @c blue component of color
+		* \~English @brief Returns @c blue component of color
 		*
 		* @return Blue component
         * @see set_b, get, set
@@ -77,7 +77,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Returns @c alpha component of color
+		* \~English @brief Returns @c alpha component of color
 		*
 		* @note Value of 255 means fully opaque
 		* @note While value 0 means fully transparent
@@ -91,8 +91,8 @@ namespace engine
 		}
 
 		/**
-		* @brief Returns full representation of color.
-		* @brief Format is @c RGBA with each color taking 1 byte for the 4 bytes total
+		* \~English @brief Returns full representation of color.
+		* \~English @brief Format is @c RGBA with each color taking 1 byte for the 4 bytes total
 		*
 		* @return Full color
         * @see set
@@ -103,7 +103,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Sets new value for @c red channel
+		* \~English @brief Sets new value for @c red channel
 		*
 		* @param[in] value New value for @c red channel
 		*
@@ -115,7 +115,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Sets new value for @c green channel
+		* \~English @brief Sets new value for @c green channel
 		*
 		* @param[in] value New value for @c green channel
 		*
@@ -127,7 +127,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Sets new value for @c blue channel
+		* \~English @brief Sets new value for @c blue channel
 		*
 		* @param[in] value New value for @c blue channel
 		*
@@ -139,7 +139,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Sets new value for @c alpha (opacity) channel
+		* \~English @brief Sets new value for @c alpha (opacity) channel
 		*
 		* @param[in] value New value for @c alpha channel
 		*
@@ -154,7 +154,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Sets new color
+		* \~English @brief Sets new color
 		*
 		* @param[in] r New value for @c red channel
 		* @param[in] g New value for @c green channel
@@ -175,7 +175,7 @@ namespace engine
 		}
 
 		/**
-		* @brief Sets new color
+		* \~English @brief Sets new color
 		*
 		* @param[in] value New value for color. Format RGBA with each channel taking 1 byte for the 4 bytes total
 		*
@@ -191,7 +191,7 @@ namespace engine
 
 
 		/**
-		* @brief Find the difference between two colors
+		* \~English @brief Find the difference between two colors
 		*
 		* This function should be use to compare colors for similiarity. The less returned value is more similiar.
 		*
@@ -221,7 +221,7 @@ namespace engine
 
 
 		/**
-		* @brief Find the difference between two colors including alpha for calculation
+		* \~English @brief Find the difference between two colors including alpha for calculation
 		*
 		* This function should be use to compare colors for similiarity. The less returned value is more similiar.
 		*

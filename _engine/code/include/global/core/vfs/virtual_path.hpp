@@ -176,7 +176,7 @@ namespace engine
 namespace engine
 {
 	/**
-	* @brief Converts `virtual_path_t` into ustring_t
+	* \~English @brief Converts `virtual_path_t` into ustring_t
 	*
 	* @param[in] item Variable to convert
 	* @return Converted `virtual_path_t`

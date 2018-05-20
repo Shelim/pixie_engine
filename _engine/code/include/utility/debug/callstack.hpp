@@ -11,7 +11,7 @@ namespace engine
 {
 
 	/**
-	 * @brief Callstack information in platform-independent way
+	 * \~English @brief Callstack information in platform-independent way
 	 * 
 	 * This class is usually a product of @ref engine::platform::dump_callstack() function execution.
 	 * You can access each frame and recieve information on file, line and function involved.
@@ -28,7 +28,7 @@ namespace engine
 	public:
 
 		/**
-		 * @brief Single function call in callstack
+		 * \~English @brief Single function call in callstack
 		 * 
 		 * @note some function calls may be omitted from callstack due to compilator optimization
 		 * @see engine::platform::dump_callstack()
@@ -39,7 +39,7 @@ namespace engine
 		public:
 			
 			/**
-			 * @brief Creates callstack item from given values
+			 * \~English @brief Creates callstack item from given values
 			 * 
 			 * If you wish to add more data later on use @ref add_debug_info
 			 * 
@@ -62,7 +62,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Adds debug info for given callstack item
+			 * \~English @brief Adds debug info for given callstack item
 			 * 
 			 * @param[in] module Module to be used in given stack item. Usually you pass here @c argv[0]
 			 * @param[in] file Filename to be used in given stack item. Usually you pass @c canonize_debug_filename(__FILE__)
@@ -94,7 +94,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Returns address of given stack item.
+			 * \~English @brief Returns address of given stack item.
 			 * 
 			 * @note You can look up more information about this stack item in linker map file, in case callstack dump is comming from build without debugging symbols
 			 * 
@@ -106,7 +106,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Returns true if module information is available
+			 * \~English @brief Returns true if module information is available
 			 * 
 			 * The information may be unavailable due to compiler not producing complete debugging symbols
 			 * 
@@ -118,7 +118,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Returns module name of given stack item.
+			 * \~English @brief Returns module name of given stack item.
 			 * 
 			 * Usually you will see here name of your executable or external shared library
 			 * 
@@ -130,7 +130,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Returns true if file information is available
+			 * \~English @brief Returns true if file information is available
 			 * 
 			 * The information may be unavailable due to compiler not producing complete debugging symbols
 			 * 
@@ -142,7 +142,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Get source file for this stack item
+			 * \~English @brief Get source file for this stack item
 			 * 
 			 * Usually this will contain output of @c canonize_debug_filename(__FILE__)
 			 * 
@@ -155,7 +155,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Returns true if line information is available
+			 * \~English @brief Returns true if line information is available
 			 * 
 			 * The information may be unavailable due to compiler not producing complete debugging symbols
 			 * 
@@ -167,7 +167,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Get source line for this stack item
+			 * \~English @brief Get source line for this stack item
 			 * 
 			 * Usually this will contain output of @c __LINE__
 			 * 
@@ -180,7 +180,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Returns true if function information is available
+			 * \~English @brief Returns true if function information is available
 			 * 
 			 * The information may be unavailable due to compiler not producing complete debugging symbols
 			 * 
@@ -192,7 +192,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Get function name for this stack item
+			 * \~English @brief Get function name for this stack item
 			 * 
 			 * Usually this will contain output of @c __FUNCTION__
 			 * 
@@ -228,7 +228,7 @@ namespace engine
 		typedef std::vector<item_t> items_t;
 
 		/**
-		 * @brief Create new callstack instance by moving items_t collection
+		 * \~English @brief Create new callstack instance by moving items_t collection
 		 * 
 		 * @param[in] items to populate callstack
 		 * @see callstack_t::item_t
@@ -239,7 +239,7 @@ namespace engine
 		}
 		
 		/**
-		 * @brief Gets the collection of callstack items
+		 * \~English @brief Gets the collection of callstack items
 		 * 
 		 * @return collection of callstack items
 		 * @see callstack_t::item_t
@@ -250,7 +250,7 @@ namespace engine
 		}
 		
 		/**
-		 * @brief Returns begin of collection of callstack items
+		 * \~English @brief Returns begin of collection of callstack items
 		 * 
 		 * This function is provided, so you can write: C++ 11 `for(auto item : callstack)`
 		 * 
@@ -263,7 +263,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Returns end of collection of callstack items
+		 * \~English @brief Returns end of collection of callstack items
 		 * 
 		 * This function is provided, so you can write: C++ 11 `for(auto item : callstack)`
 		 * 

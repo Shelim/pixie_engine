@@ -13,7 +13,7 @@ namespace engine
 	{
 
 		/**
-		 * @brief Gets fullname of current Operating System
+		 * \~English @brief Gets fullname of current Operating System
 		 * 
 		 * @note This function is intended for logging and debugging purposes
 		 * 
@@ -22,21 +22,21 @@ namespace engine
 		ustring_t get_os_version();
 
 		/**
-		 * @brief Get cache line size for given platform
+		 * \~English @brief Get cache line size for given platform
 		 * 
 		 * @return Cache-line size 
 		 */
 		uint32_t get_cache_line_size();
 
 		/**
-		 * @brief Get total RAM size in megabytes
+		 * \~English @brief Get total RAM size in megabytes
 		 * 
 		 * @return Total RAM size in megabytes
 		 */
 		uint32_t get_total_ram_in_mb();
 
 		/**
-		 * @brief List CPU features
+		 * \~English @brief List CPU features
 		 * 
 		 * @return Platform-specifc CPU features
 		 */

@@ -10,7 +10,7 @@ namespace engine
 {
 
 	/**
-	 * @brief Converts any strongly-typed enum value into its underlying type
+	 * \~English @brief Converts any strongly-typed enum value into its underlying type
 	 * 
 	 * @tparam enum_t Enum type
 	 * @param[in] val Enum value

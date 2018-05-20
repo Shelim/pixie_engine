@@ -9,7 +9,7 @@ namespace engine
 {
 
 	/**
-	 * @brief Generic class for writing messages into stream (for example @ref core_console "console")
+	 * \~English @brief Generic class for writing messages into stream (for example @ref core_console "console")
 	 * 
 	 * This class is overriden by various streaming API for writing
 	 * 
@@ -26,7 +26,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Class for writing several messages in strong order without interruptions
+		 * \~English @brief Class for writing several messages in strong order without interruptions
 		 * 
 		 * This class allows uninterrupted flow of messages.
 		 * This is very useful in concurrent environment when there are more than one writers for given stream
@@ -42,7 +42,7 @@ namespace engine
 			}
 
 			/**
-			 * @brief Prepares given message for writing
+			 * \~English @brief Prepares given message for writing
 			 * 
 			 * Prepares message for writing. Entire writing will be conducted at transaction commit phase (typically end function of @ref writer_base_t )
 			 * 
@@ -71,7 +71,7 @@ namespace engine
 		};
 
 		/**
-		 * @brief Start new transaction.
+		 * \~English @brief Start new transaction.
 		 * 
 		 * Transaction gives strong guarantee for order and non-interrupted flow of messages for this stream.
 		 * This is very useful in concurrent environment when there are more than one writers for given stream
@@ -89,7 +89,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Execute transaction
+		 * \~English @brief Execute transaction
 		 * 
 		 * Write all messages stored in transaction to this stream in order and non-interrupted flow.
 		 * This is very useful in concurrent environment when there are more than one writers for given stream
@@ -110,7 +110,7 @@ namespace engine
 		}
 
 		/**
-		 * @brief Writes message to this stream
+		 * \~English @brief Writes message to this stream
 		 * 
 		 * @param[in] msg Message to be written
 		 */
