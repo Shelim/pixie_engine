@@ -1,61 +1,61 @@
 
 /**
-* \~Polish @page ustring_format UString formatting
+* \~Polish @page string_format Formatowanie tekstu
 * @tableofcontents
-* @section ustring_format_intro Introduction
-*		Pixie uses custom way to format unicode string.
-*		This way is much more flexible than original formatting.
-*		It can be extended in next versions, but will be always kept
-*		backward compatible.
+* @section string_format_intro Wprowadzenie
+* Pixie używa własnego, unikalnego sposobu formatowania tekstów unikodowych. Metoda ta jest znacznie
+* bardziej adaptacyjna niż zwykłe, C++ formatowanie `printf`. Możliwe jest rozszerzenie formatera
+* w przyszłości o nowe funkcje, ale sposób formatowania pozostanie zawsze zgodny wstecz.
+* 
+* Najważniejszą przewagą nad `printf` jest możliwość zmiany kolejności argumentów (np. jest inna
+* kolejność wyrażeń w angielskim i niemieckim), pominięcia bądź powtórzenia danego argumentu oraz
+* pełne wsparcie dla unikoda. Typy argumentów nie mają znaczenia (jak długo posiadają przeładowaną
+* funkcję @ref engine::to_string() ), podobnie jak ich liczba (wspierana jest każda ilość). System
+* formatowania wspiera także przekazywanie dodatkowej informacji do wspomnianej metody `to_string`
+* Przykład:
+* @code{.cpp}
+*    engine::format_string("Witaj mój #2# #1# świecie!"_u, "miły"_u, "naprawdę"_u);
+*    // Tworzy: "Witaj mój naprawdę miły świecie!"
 *
-*		The most important change done to standard C-like `printf` is
-*		the ability to reorder arguments, as needed for translations.
-*		Other changes includes full unicode support and ability to repeat
-*		arguments more then once.
-* @section ustring_format_tutorial How to use it? (Quick Start)
-*		@code{.cpp}
-*			engine::format_string("Hello my #2# #1# world!"_u, "nice"_u, "really"_u);
-*			// Outputs: "Hello my really nice world!"
+*    engine::format_string("W tagach mogą się znaleźć #1@co może być w tagach?#!"_u, "także komentarze"_u);
+*    // Tworzy: "W tagach mogą się znaleźć także komentarze"
 *
-*			engine::format_string("You can have #1:what?# in tags too!"_u, "comments"_u);
-*			// Outputs: "You can have comments in tags too!"
+*    engine::format_string("Typy argumentów są wykryte w czasie kompilacji: #1# (#3#)"_u, true, 1.0F, "Jak widać, można także pominąć wartości!"_u);
+*    // Tworzy: "Typy argumentów są wykryte w czasie kompilacji: True (Jak widać, można także pominąć wartości!)"
 *
-*			engine::format_string("Argument type is detected on compile time: #1# (#3#)"_u, true, 1.0F, "As you can see you can skip the numbers!"_u);
-*			// Outputs: "Argument type is detected on compile time: True (As you can see you can skip the numbers!)"
+*    engine::format_string("Przeskocz do #1# #0:= 32:#kolumny!"_u, "zadanej"_u);
+*    // Tworzy: "Przeskocz do zadanej                kolumny!"
 *
-*			engine::format_string("Jump to #1# #>32#column!"_u, "given"_u);
-*			// Outputs: "Jump to given                  column!"
-*
-*			engine::format_string("Draw #>10:-#> #1#"_u, "arrow!"_u);
-*			// Outputs: "Draw -----> arrow!"
-*		@endcode
-* @section ustring_format_reference Reference
-*		@subsection ustring_format_reference_structure Structure
+*    engine::format_string("Rysuje #0:>-10:#> #1#"_u, "strzałkę!"_u);
+*    // Tworzy: "Rysuje ---------> strzałkę!"
+* @endcode
+* @section string_format_reference Referencja
+*		@subsection string_format_reference_structure Podstawowa struktura
 *			@code
-*				#order#
-*				#order:comment#
-*				#>column#
-*				#>column:character#
+*				#numer#
+*				#numer:formatowanie#
+*				#numer@komentarz#
+*				#numer:formatowanie@komentarz#
 *			@endcode
-*		@subsection ustring_format_reference_order Order
-*			Order is a positive number starting from `1`. There is no upper limit for this value.
-*			Tag with given order can be repeated (ie the same argument used more than once)
-*			@warning There must be no spaces between # and order!
-*		@subsection ustring_format_reference_comment Comment
-*			Comment starts with `:` then span till ending `#` is reached. It will be completely
-*			ignored by parser, but can give hint to the translators what will be substituted
-*			during formatting pass. Can contain any unicode characters
-*		@subsection ustring_format_reference_column Column
-*			Jump current cursor position to given column (right jump only), padding with characters
-*          (if no character is specified it will pad with spaces).
-*          @warning If string contains @ref terminal_format "terminal formatting" tags (like $error$), they will be *IGNORED* for character count (this way, you can mix terminal and ustring formatting and still get reasonable results in terminal).
-*          So: if you write `"$error$ #>4:-#>"` you will get: `"$error$ --->"`.
-*          @warning Terminal tags will be removed only by terminal formatter! If you try to use them in other places, they *will* be printed as plain text.
-*		@subsection ustring_format_reference_escape Escape hash
-*			You can use ## every time you wish to escape given hash (## will be replaced by single # and ignored by parser)
-*		@subsection ustring_format_reference_error Error handling
-*			Formatting is safe for arguments having incorect values
-*			In such case the formatting code will be safely substituted for empty string
+*		@subsection string_format_reference_number Numer
+*           Numer to naturalna liczba określająca argument, bądź 0 określające brak argumentu (pusty tekst).
+*           Wartości 0 można użyć żeby wymusić podanie formatowania. Nie ma górnej wartości numeru.
+*           Argument o danym numerze może się powtarzać
+*			@warning Nie może być spacji między # a numerem!
+*		@subsection string_format_reference_format Formatowanie
+*           Formatowanie, które zostanie przekazane jako drugi argument funkcji @ref engine::to_string()
+*           W przypadku argumentu 0 zostanie przekazane do funkcji przeładowanej dla @ref engine::ustring_t
+*           i przyjmującej pusty argument.
+*		@subsection string_format_reference_format Komentarz
+*           Każdy komentarz zaczyna się znakiem małpy `@` i trwa aż do kończącego znaku `#`.
+*           Komentarz zostanie zignorowany przez parser, ale może służyć jako podpowiedź dla tłumacza
+*           jakiego rodzaju tekst zostanie podstawiony podczas formatowania. Komentarz może zawierać
+*           dowolne znaki unikoda
+*		@subsection string_format_reference_escape Sekwencja ucieczki
+*			Jeżeli potrzeba wstawić symbol `#` należy użyć go podwójnie, tzn. wpisać `##`.
+*		@subsection string_format_reference_error Obsługa błędów
+*			Próba użycia zbyt dużego numeru (w stosunku do liczby argumentów) spowoduje substytucję
+*           pustym tekstem. Podobnie niepoprawnie zakończony tag zostanie potraktowany jako zwykły tekst.
 *
 * @see engine::ustring_t, engine::terminal_writer_t, engine::format_string
 */
