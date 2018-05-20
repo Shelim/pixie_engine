@@ -1,6 +1,6 @@
 
 /**
-* \~English @page terminal_format Terminal output tagging
+* \~Polish @page terminal_format Terminal output tagging
 * @tableofcontents
 * @section terminal_format_intro Introduction
 *       Many of end platform system consoles have a way of

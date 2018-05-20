@@ -1,6 +1,6 @@
 
 /**
-* \~English @page ustring_format UString formatting
+* \~Polish @page ustring_format UString formatting
 * @tableofcontents
 * @section ustring_format_intro Introduction
 *		Pixie uses custom way to format unicode string.
