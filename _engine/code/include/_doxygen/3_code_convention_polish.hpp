@@ -21,12 +21,12 @@
  *      - `container` - Zwykle standardowy kontener Biblioteki Szablonów C++ lub dodatkowy zdefiniowany bezpośrednio przez Pixie Engine
  *      - `content` - Zbiór wszystkich `asset`
  *      - `data` - Fragment informacji silnika. Wspólny termin na `assets`, pliki `config`, profile użytkownika, zapisane stany gry, itd.
- *      - `debug` - Konfiguracja wyjściowa która powinna być uruchamiana tylko na maszynie developera. Także każdy kawałek kodu który ma być wykorzystywany tylko do odpluskwiania. Zobacz @ref build_configuration "rodzaje konfiguracji wyjściowych"
+ *      - `debug` - Konfiguracja wyjściowa która powinna być uruchamiana tylko na maszynie developera. Także każdy kawałek kodu który ma być wykorzystywany tylko do odpluskwiania.
  *      - `def` - Makra kontrolujące różne definicje wewnątrz całego silnika. Zwykle umożliwiają rozszerzanie cech silnika przez programistę gry bez potrzeby manipulowania we wnętrzu samego silnika. Ich konstrukcja jest silnie zoptymalizowana (makra są rozwijane na etapie kompilacji).
  *      - `dependency` - Cudzy (zewnętrzny) kawałek kodu lub program wykorzystany wewnątrz Pixie Engine
  *      - `environment` - Specyfikacja maszyny na której uruchomiony jest Pixie Engine (najczęściej urządzenie gracza)
- *      - `final` - Konfiguracja wyjściowa przeznaczona do wypuszczenia gry. Poza kompilacją aplikacji zbuduje także informacje automatycznej aktualizacji i przygotuje pliki do wgrania do publicznego repozytorium. Zobacz @ref build_configuration "rodzaje konfiguracji wyjściowych"
- *      - `hybrid` - Konfiguracja wyjściowa przeznaczona dla testerów. Jest szybsza niż `debug` i nie zawiera symboli odpluskwiacza. Może być używana do publicznej bety gry. Zobacz @ref build_configuration "rodzaje konfiguracji wyjściowych"
+ *      - `final` - Konfiguracja wyjściowa przeznaczona do wypuszczenia gry. Poza kompilacją aplikacji zbuduje także informacje automatycznej aktualizacji i przygotuje pliki do wgrania do publicznego repozytorium.
+ *      - `hybrid` - Konfiguracja wyjściowa przeznaczona dla testerów. Jest szybsza niż `debug` i nie zawiera symboli odpluskwiacza. Może być używana do publicznej bety gry.
  *      - `logger` - Sposób zrzucania informacji (zwykle do pliku tekstowego) w celu sprawdzania błędów na urządzeniach klienckich
  *      - `manifest` - metadane danego elementu Pixie Engine
  *      - `module` - Duża, logicznie powiązana paczka `asset`. Każda uruchomiona gra składa się z jednego lub więcej `module`. Przykłady: duży rozdział gry, konwersja pełnej modyfikacji. Zobacz `submodule`

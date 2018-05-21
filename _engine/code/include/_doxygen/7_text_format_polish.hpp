@@ -46,7 +46,7 @@
 *           Formatowanie, które zostanie przekazane jako drugi argument funkcji @ref engine::to_string()
 *           W przypadku argumentu 0 zostanie przekazane do funkcji przeładowanej dla @ref engine::ustring_t
 *           i przyjmującej pusty argument.
-*		@subsection string_format_reference_format Komentarz
+*		@subsection string_format_reference_comment Komentarz
 *           Każdy komentarz zaczyna się znakiem małpy `@` i trwa aż do kończącego znaku `#`.
 *           Komentarz zostanie zignorowany przez parser, ale może służyć jako podpowiedź dla tłumacza
 *           jakiego rodzaju tekst zostanie podstawiony podczas formatowania. Komentarz może zawierać

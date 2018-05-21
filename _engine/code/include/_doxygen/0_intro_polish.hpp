@@ -30,10 +30,10 @@
 *       Silnik jest przeznaczony do tworzenia gier 2D (choć nie jest wykluczone dodanie renderera 3D),
 *       szczególnie takich których stworzenie jest trudne bądź niemożliwe używając innych silników i narzędzi
 *       (zobacz sekcję @ref pixie_why "Dlaczego kolejny silnik?"). Ze wzlędu na ogromny zakres tematyki i ograniczenia
-*       czasowe, nie wszystkie elementy silnika zostały w tej pracy w pełni zaimplementowane (zobacz sekcję @ref pixie_missing "Brakujące elementy")
+*       czasowe, nie wszystkie elementy silnika zostały w tej pracy w pełni zaimplementowane (zobacz sekcję @ref engine_future "Spojrzenie w przyszłość")
 *
 *       Przedsięwzięcie Pixie Engine jest aktywnie rozwjane od 2016 w ramach działalności Kosek.com (jednoosobowej działalności gospodarczej, założonej
-*       przez autora niniejszej pracy), a obecna implementacja liczy sobie ponad 25 000 linii kodu w ponad 300 plikach źródłowych.
+*       przez autora niniejszej pracy), a obecna implementacja liczy sobie ponad 25 000 linii kodu w prawie 300 plikach źródłowych.
 *       Poprzednia wersja silnika została wykorzystana w wydanej na Steam przez Kosek.com grze Magician's Apprentice.
 *
 * @section pixie_platforms Wspierane platformy
@@ -130,7 +130,7 @@
 * (w celu osiągnięcia maksymalnej wydajności gdy tylko jest to możliwe), wsparcie dla skryptowych języków zarządzanych
 * (krótkie kody które korzystają z zalet automatycznej odśmieciarki), wsparcie dla różnych menadżerów sceny
 * (uwzględniający przewidywanie martwych pakietów, interpolację czasową i temporalne wygładzenie) oraz dostępu do
-* natywnych narzędzi gdy tylko jest to możliwe. Dokładny opis tych elementów znajduje się w rodziale @ref pixie_features "cechy".
+* natywnych narzędzi gdy tylko jest to możliwe.
 *
 * @subsection pixie_why_limitations Ograniczenia silnika
 * Oczywiście w sytuacji rywalizujących zasobów niemożliwe jest zawarcie wszystkich możliwych cech w jednym rozwiązaniu.

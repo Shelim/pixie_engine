@@ -142,7 +142,6 @@
 * Zbiór narzędzi do wykorzystania w parserze Spirit (część biblioteki @ref dependency_boost "boost")
 * @subsubsection engine_architecture_utilities_text_ustring Łańcuch znaków
 * Własna implementacja łańcucha znaków wspierająca w pełni kodowanie UTF-8 (natywne rozwiązanie C++ nie jest dostępne na wielu platformach).
-* Zobacz dokumentację @ref engine::ustring_t
 * 
 * @section engine_architecture_core Rdzeń
 * Oczywiście nie całą funkcjonalność można zamknąć w komponentach które mogą być włączone bądź wyłączone. Istnieje pewna część kodu która należy
@@ -242,7 +241,7 @@
 * gra dostaje dostęp do wszystkich globalnych komponentów)
 *
 * @subsubsection engine_architecture_core_global_thread Wątki
-* Wątki to baza dla modułu @ref engine_architecture_core_global_process procesów. Ten fragment rdzenia odpowiada za tworzenie i zliczanie istniejących wątków z uwzględnieniem statystyk
+* Wątki to baza dla modułu @ref engine_architecture_core_global_process "procesów". Ten fragment rdzenia odpowiada za tworzenie i zliczanie istniejących wątków z uwzględnieniem statystyk
 * ich wykonania. Standardowo stosuje się do tego bibliotekę standardową C++ 11 (z opcją rozszerzenia o dodatkowe informacje dostarczane przez platformę)
 * 
 * @subsubsection engine_architecture_core_global_vfs Wirtualny System Plików

@@ -177,8 +177,7 @@
 * lub testów. Dzięki zastosowaniu DebugBreak programista może zobaczyć wykryty problem (np. nadpisanie pamięci) w chwili jest wystąpienia.
 *
 * DebugBreak *nie* jest włączony do finałowej kompilacji (ze względu na brak dołączanych symbol odpluskwiacza, jego obecność nie miałaby sensu),
-* dlatego w przypadku zawieszenia aplikacji na komputerze klienckim stosowane są inne mechanizmy zbierania i raportowania błędów. Więcej informacji
-* na ich temat znajduje się w rozdziale @ref debug "odpluskwianie".
+* dlatego w przypadku zawieszenia aplikacji na komputerze klienckim stosowane są inne mechanizmy zbierania i raportowania błędów.
 *
 * @section dependency_dia dia
 * dia (uwaga - nazwa pisana jest z małej litery) to framework niezbędny do poprawnego działania @ref dependency_llvm "LLVM/Clang". Poza zastosowaniem
@@ -239,7 +238,7 @@
 * Dodatkowym problemem z gitem jest ilość binarnych plików (np. 4,7 gb zależności) jakie naturalnie pojawiają się w projektach gier. Git rozwiązuje problem
 * częściowo za pomocą rozszerzenia Magazyn Dużych Plików (Large File Storage - LFS), jednak jego wsparcie w środowisku produkcyjnym nie jest w pełni
 * stabilne (np. wspomniany github dopuszcza jedynie 1 gb plików binarnych). Z tego powodu zależności muszą być utrzymywane osobno; obecnie są przechowywane
-* *poza* systemem wersjonowania na serwerze Kosek.com; Więcej informacji znajduje się w rozdziale @ref engine_architecture_dependency "polityka zależności".
+* *poza* systemem wersjonowania na serwerze Kosek.com
 *
 * Oczywiście utrzymywanie plików źródłowych git w projekcie nie miałoby sensu - Pixie Engine używa jedynie binarnej wersji gita.
 *
@@ -260,22 +259,16 @@
 * magazynu ustawień. Możemy wywołać metodę zapamiętania ustawień na faktycznej implementacji menadżera ustawień przy jednoczesnym wstrzyknięciu makiety magazynu.
 * Oczywiście makieta powinna odnotować prośbę o zapis - brak takiej prośby powinien być zgłoszony jako błąd.
 *
-* Więcej informacji na temat sposobów testowania znajduje się w rozdziale @ref tests "testy"
-*
 * @section dependency_googletest Google Test
 * Google Test to rozbudowane narzędzie Google do tworzenia testów jednostkowych. O ile Google Test i opisany powyżej Google Mock zaczęły jako osobne projekty, obecnie
 * są wykorzystywane niemal zawsze wspólnie. Google Test pozwala na tworzenie przypadków testowych, ewaluowania środowiska testowego i sprawdzanie warunków korzystając
 * z bogatej biblioteki asercji. Testy wykonywane są jeden po drugim na wyczyszczonym środowisku testowym, co pozwala na ewaluacje i późniejszą agregację danych z wielu
 * przebiegów testowych
 *
-* Więcej informacji na temat sposobów testowania znajduje się w rozdziale @ref tests "testy"
-*
 * @section dependency_gtest_runner Google Test runner
 * Google Test runner to niewielkie narzędzie wbrew nazwie *nie* tworzone przez Google ani powiązane podmioty; Narzędzie to pozwala na uruchamianie testów
 * stworzonych za pomocą Google Test i generowanie na podstawie przebiegów raportów w formacie XML. Pixie Engine wykorzystuje jedynie wariant z linii komend, ale oczywiście
-* nic nie uniemożliwia uruchomienia tego narzędzia ręcznie w trybie graficznym.
-*
-* Więcej informacji na temat sposobów testowania znajduje się w rozdziale @ref tests "testy"
+* nic nie uniemożliwia uruchomienia tego narzędzia ręcznie w trybie graficznym
 *
 * @section dependency_html_help_workshop HTML Help Workshop
 * HTML Help Workshop to bezpłatne narzędzie Microsoftu zdolne przygotować skompilowany plik pomocy (chm) z zadanych źródeł przygotowanych w formie 
