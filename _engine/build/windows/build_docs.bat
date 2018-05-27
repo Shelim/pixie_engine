@@ -75,8 +75,17 @@ IF EXIST doxygen_%language% rmdir "doxygen_%language%" /s /q
 rem * ... and create anew (should be empty folder after this point)
 mkdir doxygen_%language%
 
-rem * Jump '\_engine\!build' -> '\_engine'
-cd ..
+rem * Jump '\_engine\!build' -> '\_engine\!build\doxygen_%language%'
+cd doxygen_%language%
+
+rem * If PDF make latex output
+if "%format%"=="pdf" mkdir latex
+
+rem * If PDF copy manifest here
+if "%format%"=="pdf" xcopy /s "..\..\manifest\doxygen" "latex\"
+
+rem * Jump '\_engine\!build\doxygen_%language%' -> '\_engine'
+cd ..\..
 
 rem * If docs directory does not exists, create it
 IF NOT EXIST "!docs" mkdir "!docs"
