@@ -1,5 +1,101 @@
 
 /**
+* \~Polish @page engine_tests Testy
+* @section engine_tests_intro Wprowadzenie
+* Kluczowym elementem utrzymania jakości kodu we współczesnych aplikacjach są oczywiście testy, w tym testy automatyczne. 
+* Jedną z głównych przesłanek przyjęcia takiej, a nie innej architektury Pixie Engine było wsparcie dla możliwie wysokiego pokrycia kodu
+* przypadkami testowymi i zintegrowanie ich z repozytorium git. W ten sposób w przypadku modyfikacji któregokolwiek z fragmentów silnika
+* programista zostałby powiadomiony o potencjalnym problemie regresji w momencie jej wprowadzenia, co znacznie skróciłoby czas jej poprawienia.
+* 
+* Pixie Engine zawiera trzy poziomy testów automatycznych:
+*  - Testy jednostkowe biblioteki narzędzi. Te testy obejmują sprawdzanie funkcji i klas znajdujących się w najniższej warstwie implementacji silnika. Ich konstrukcja jest silnie modularna, pozbawiona wzajemnych odwołań. Testy narzędzi są najprostsze do implementacji gdyż opierają się na zasadzie: wykonaj funkcję, sprawdź rezultat. Rzadko kiedy istnieje realna potrzeba testowania więcej niż jednego elementu narzędzi w jednym przypadku testowym
+*  - Testy globalne. Te testy obejmują wszystkie globalne komponenty i pliki rdzenia, ale przyjmuje się że podczas ich przeprowadzania silnik nie uruchamia żadnej aplikacji klienckiej (zobacz @ref engine_architecture). Na potrzeby testu przyjmuje się że każdy przypadek testowy to osobna funkcja main, która tworzy rozrusznik, uruchamia silnik, tworzy drzewko referencji, wykonuje test, niszczy silnik i przechodzi do kolejnego testu. Z powodu zastosowania klasy `program_t` testy globalne nie mogą być uruchamiane równolegle
+*  - Testy aplikacji. Ostatnia kategoria obejmuje wszystkie lokalne komponenty, lokalne pliki rdzenia i samą aplikację kliencką. Są to najbardziej skomplikowane testy, jako iż poza rozrusznikiem musi zostać skonfigurowany i uruchomiony bootstrapper który standardowo przekazałby sterowanie do funkcji main danej gry. Funkcjonalność ta jest oczywiście zawieszona na moment testu, a po uruchomieniu modułu gry test wykonywany jest na klasach lokalnych gry
+* @section engine_tests_example Przykłady testów
+* @subsection engine_tests_example_unit Testy jednostkowe biblioteki narzędzi
+* Poniższy test sprawdza poprawność weryfikacji białych znaków Ascii za pomocą funkcji biblioteki `is_whitespace_ascii`.
+* Należy zwrócić uwagę na użyte makra `EXPECT_TRUE` i `EXPECT_FALSE`.
+* @code{.cpp}
+* TEST(UtilityTextUstringSymbol, IsWhitespaceAscii)
+* {
+*     EXPECT_TRUE(engine::is_whitespace_ascii(' '));
+*     EXPECT_TRUE(engine::is_whitespace_ascii('\t'));
+*     EXPECT_TRUE(engine::is_whitespace_ascii('\n'));
+*     EXPECT_TRUE(engine::is_whitespace_ascii('\r'));
+*     EXPECT_FALSE(engine::is_whitespace_ascii('a'));
+*     EXPECT_FALSE(engine::is_whitespace_ascii(';'));
+*     EXPECT_FALSE(engine::is_whitespace_ascii('='));
+*     EXPECT_FALSE(engine::is_whitespace_ascii(u'\u20AC'));
+* }
+* @endcode
+* @subsection engine_tests_example_global Testy globalne
+* Poniższy test sprawdza poprawność działania modułu ustawień gry. Pierwsze linijki opisują rozrusznik,
+* którego najważniejszą częścią jest wyłączenie wszystkich globalnych komponentów z wyjątkiem `config_storage`
+* i stworzenie obiektu typu `progam_t`. Następnie zachowujemy w ustawieniach wartość test typu `true` i oczekujemy
+* że po wczytaniu wciąż będzie `true` - drugi argument funkcji `retrieve` to wartość domyślna, ustawiona gdyby
+* danej wartości nie dało sie odczytać, i w tym przypadku przerwałaby test.
+* @code{.cpp}
+* TEST(GlobalExample, Sample)
+* {
+*     BEGIN_PLATFORM_CONFIGURATION(test)
+*     USE_STANDARD_POLICIES()
+*     ALL_GLOBAL_COMPONENTS_BY_DEFAULT_ARE(disabled)
+*     ENABLE_GLOBAL_COMPONENT(config_storage)
+*     USE_STANDARD_GLOBAL_PROVIDERS()
+*     USE_STANDARD_GLOBAL_SETTINGS()
+*     END_PLATFORM_CONFIGURATION()
+* 
+*     std::shared_ptr<engine::program_t> program = test.ignite_for_tests();
+*     
+*     ASSERT_TRUE(program);
+* 
+*     program->get_config_storage()->store("test"_u, true);
+*     EXPECT_TRUE(program->get_config_storage()->retrieve("test"_u, false));
+* 
+* }
+* @endcode
+* @subsection engine_tests_example_local Testy lokalne
+* Poniższy test sprawdza możliwość dostania się do komponentu `terminal_t`. Jego początek jest analogiczny do testu globalnego.
+* Następnie tworzy on obiekt kontekstu (zwykle tworzony przez instancer aplikacji) i rozpoczyna tworzenie bootstrappera, traktując
+* resztę ciała funkcji jako `main` danej aplikacji. Oczywiście ponownie wyłączamy wszystkie lokalne komponenty poza terminalem
+* i w końcowej części zawierającej test właściwy próbujemy go utworzyć.
+* @code{.cpp}
+* TEST(LocalExample, Sample)
+* {
+*     BEGIN_PLATFORM_CONFIGURATION(test)
+*     USE_STANDARD_POLICIES()
+*     ALL_GLOBAL_COMPONENTS_BY_DEFAULT_ARE(disabled)
+*     USE_STANDARD_GLOBAL_PROVIDERS()
+*     USE_STANDARD_GLOBAL_SETTINGS()
+*     END_PLATFORM_CONFIGURATION()
+* 
+*     std::shared_ptr<engine::program_t> program = test.ignite_for_tests();
+*     
+*     ASSERT_TRUE(program);
+* 
+*     std::unique_ptr<engine::app_context_t> context = std::make_unique<engine::app_context_t>(program.get(), engine::args_t(""));
+* 
+*     BEGIN_BOOTSTRAPPER(test_app, context.get())
+*     ALL_COMPONENTS_BY_DEFAULT_ARE(disabled)
+*     ENABLE_COMPONENT(terminal)
+*     USE_STANDARD_LOCAL_PROVIDERS()
+*     USE_STANDARD_LOCAL_SETTINGS()
+*     APP(game)
+*     END_BOOTSTRAPPER()
+* 
+*     auto terminal = test_app.get_terminal();
+* 
+*     ASSERT_TRUE(terminal);
+* 
+* }
+* @endcode
+* @section engine_tests_coverage Pokrycie testami
+* W chwili obecnej zaimplementowane jest 8 testów sprawdzających 30% kodu źródłowego (1040 z 3437 dróg). Istnieje możliwość dokładnego sprawdzenia
+* w edytorze VS Code które linie są już pokryte testami, co obrazuje poniższy obrazek. Oczywiście tylko linie zawierające aktywny
+* kod są uwzględnione w tym zestawieniu.
+* @image html tests_coverage.jpg "Ilustracja pokrycia testami kodu"
+* @image latex tests_coverage.jpg "Ilustracja pokrycia testami kodu" height=9cm
+*
 * \~Polish @page engine_problems_di Problem z wstrzykiwaniem zależności Boost
 *
 * Poza problemami opisywanymi na bieżąco w poprzednich rozdziałach, problem z wstrzykiwaniem zależności Boost był najpoważniejszym
@@ -152,5 +248,6 @@
 *  - Ukończonego renderera; Zaimplementowana jest tylko wersja testowa oparta o SDL
 *  - Obsługi dźwięków za pomocą OpenAL
 *  - Komponentów wykonania. Ich obecna liczba (~30 sztuk) zostanie prawdopodobnie zwiększona czterokrotnie w wersji ostatecznej
+*  - Zwiększenia pokrycia przypadkami testowymi do poziomu 90%
 *  - Wsparcia dla dodatkowych platform: Linuxa i OS X.
 */
