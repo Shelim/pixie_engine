@@ -102,18 +102,18 @@
 * @endcode
 * Problem został opisany pod adresem https://github.com/boost-experimental/di/issues/240
 * 
-* Przyczyną okazało się użycie statycznej własności wewnątrz fabryki i przesuwanie wstrzykiwacza na potrzeby
+* Przyczyną okazało się użycie statycznej własności wewnątrz fabryki i przesuwanie zarządcy wstrzykiwania na potrzeby
 * tworzenia list argumentów bez przesuwania go z powrotem.
 * 
 * Rozwiązanie drugiego problemu było trywialne, wymagało dodania jednej linijki kodu. Natomiast problem
 * statycznej zmiennej był dużo poważniejszy. W C++ statyczna własność w klasie szablonowej istnieje raz
-* dla każdego wariantu szablonu. W tym przypadku fabryka wykorzystywała jako szablon podstawę samego wstrzykiwacza.
-* Oznaczało to, między innymi, iż zmiana wstrzykiwacza - nawet niewielka - generowała nową instancję obiektu (co widać
+* dla każdego wariantu szablonu. W tym przypadku fabryka wykorzystywała jako szablon podstawę samego zarządcy wstrzykiwania.
+* Oznaczało to, między innymi, iż zmiana zarządcy wstrzykiwania - nawet niewielka - generowała nową instancję obiektu (co widać
 * po poprzednim przykładzie). Zmianą taką było na przykład przypięcie dodatkowych argumentów do konstruktora obiektu
 * fabrykowanego. Z tego powodu ta funkcjonalność musiała zostać usunięta.
 * 
-* Po jej usunięciu pojawił się inny problem: wszystkie instancje obiektu singletona tworzone przez dany wstrzykiwacz
-* dzieliły ten sam wskaźnik, nawet jeżeli były wyraźnie zadeklarowane jako osobne obiekty. Stało się oczywiste że
+* Po jej usunięciu pojawił się inny problem: wszystkie instancje obiektu singleton tworzone przez danego zarządcę wstrzykiwania
+* dzieliły ten sam wskaźnik, nawet jeżeli były wyraźnie zadeklarowane jako osobne obiekty. Stało się oczywiste, że
 * statyczne pole musiało zostać usunięte. Wciąż jednak potrzebne było sprawdzenie obiektu po typie szablonowym
 * na test istnienia. Pierwotnie rozważano formę mapy-czasu-kompilacji, ale wkrótce okazało się że było to rozwiązanie
 * niemożliwe do zaimplementowania z przyczyn logicznych; W szczególności obiekty mogły być tworzone dynamicznie już po
@@ -147,19 +147,10 @@
 * @endcode
 * \~Polish @page engine_future Spojrzenie w przyszłość
 * Projekt w stanie obecnym oczywiście nie wyczerpuje oczywiście pełnej możliwej implementacji silnika gier 2D.
-* Doprowadzenie go do zdolności produkcyjnej to wyzwanie autora na nadchodzące miesiące i lata - i prawdopodobnie pracę magisterską.
+* Doprowadzenie go do zdolności produkcyjnej to wyzwanie autora na nadchodzące miesiące i lata i prawdopodobnie pracę magisterską.
 * W chwili obecnej szczególnie brakuje:
 *  - Ukończonego renderera; Zaimplementowana jest tylko wersja testowa oparta o SDL
 *  - Obsługi dźwięków za pomocą OpenAL
-*  - Komponentów wykonania. Ich obecna liczba (~30 sztuk) zostanie prawdopodobnie zwiększona czterokrotnie w finałowej wersji
-* 
-* W pracy wykorzystano materiały pochodzące z książek Perełki Programowania Silników Gier (tomy 1 - 3) pod redakcją dr Erica Leyngela.
-* Wykorzystano także Perełki Programowania Gier (tomy 1 - 2) oraz książki Wprowadzenie do Programowania OpenGL oraz
-* Triki Najlepszych Programistów Gier 3D wydawnictwa Helion.
-* 
-* Praca powstała pod opieką dr Krzysztofa Podlaskiego. Autor chciałby także podziękować Ghassanowi Al-Mashareqa za cenne dyskusje
-* (zwłaszcza w kontekście problemu z wstrzykiwaniem zależności Boost).
-* 
-*  - Całkowita ilość linii kodu: ~25 000 w 295 plikach źródłowych
-*  - Adres projektu: https://github.com/Shelim/pixie_engine
+*  - Komponentów wykonania. Ich obecna liczba (~30 sztuk) zostanie prawdopodobnie zwiększona czterokrotnie w wersji ostatecznej
+*  - Wsparcia dla dodatkowych platform: Linuxa i OS X.
 */

@@ -114,8 +114,14 @@ if %ERRORLEVEL% == 0 goto ok1
 rem * Ok, we did not fail!
 :ok1
 
-rem * Jump '\_engine\build\windows' -> '\_engine'
-cd ..\..
+rem * Jump '\_engine\build\windows' -> '\_engine\!build\doxygen_%language%\latex'
+cd ..\..\!build\doxygen_%language%\latex
+
+rem * Replace links in pdf
+if "%format%"=="pdf" for /r %%v in (*.tex) do sed -i -E "s/doxyref\{[^}]+\}\{str\.\}(\{[^}]+\})/ref\1/gi" "%%v"
+
+rem * Jump '\_engine\!build\doxygen_%language%\latex' -> '\_engine'
+cd ..\..\..\
 
 rem * Build actual PDF
 if "%format%"=="pdf" call !build\doxygen_%language%\latex\make.bat

@@ -15,6 +15,7 @@
 \usepackage{textcomp}
 \usepackage[nointegrals]{wasysym}
 \usepackage[table]{xcolor}
+\usepackage{longtable}
 
 % NLS support packages
 \usepackage{polski}
@@ -35,7 +36,7 @@
   \fontseries{bc}\selectfont%
   \color{darkgray}%
 }
-\newcommand{\+}{\discretionary{\mbox{\scriptsize$\hookleftarrow$}}{}{}}
+\newcommand{\+}{\discretionary{\mbox{\scriptsize$$}}{}{}}
 
 % Page & text layout
 \usepackage{geometry}
@@ -76,8 +77,8 @@
 \fancyhead[RO]{\fancyplain{}{\bfseries\thepage}}
 \fancyfoot[LE]{\fancyplain{}{}}
 \fancyfoot[CE]{\fancyplain{}{}}
-\fancyfoot[RE]{\fancyplain{}{\bfseries\scriptsize Copyright \textcopyright{} 2016-2018 Kosek.com }}
-\fancyfoot[LO]{\fancyplain{}{\bfseries\scriptsize Copyright \textcopyright{} 2016-2018 Kosek.com }}
+\fancyfoot[RE]{\fancyplain{}{\bfseries\scriptsize}}
+\fancyfoot[LO]{\fancyplain{}{\bfseries\scriptsize}}
 \fancyfoot[CO]{\fancyplain{}{}}
 \fancyfoot[RO]{\fancyplain{}{}}
 \renewcommand{\footrulewidth}{0.4pt}

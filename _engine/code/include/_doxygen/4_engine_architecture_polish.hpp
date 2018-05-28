@@ -16,7 +16,7 @@
 * Takie rozwiązanie ma jednak podstawowe wady:
 *  - Jest bardzo trudno sprawdzić mechanicznie zarządcę bez znajomości jego wnętrza (złamanie (1)).
 *  - Ukrywa powiązania między zarządcami (nie jest oczywiste czy np. zarządca grafiki wymaga dostępu do zarządcy zasobów)
-*  - Bardzo trudno się zrównolegla (złamanie (3)).
+*  - Problematyczne w programowaniu wielowątkowym (złamanie (3)).
 *  - Zmiany logiki zarządcy wymagają wiedzy o całym zarządcy (złamanie (2))
 * 
 * Rozwiązanie to zostało odrzucone na bardzo wczesnym etapie.
@@ -52,7 +52,7 @@
 * W ten sposób istniała tylko jedna instancja silnika a wszystkie aplikacje uruchomione były po prostu w osobnych wątkach. W ten sposób komunikacja
 * między aplikacyjna stała się trywialna, zasoby były odczytywane tylko raz - niezależnie od ilości uruchomionych aplikacji - a rozszerzenia eksploratora
 * Windows działały bez zarzutu. Takie podejście wymusiło też wprowadzenie ostrego podziału na program i aplikację. Program stanowił po prostu kontener
-* podczas gdy aplikacja to konkretna instancja wątku, posiadająca własnego niezależnego `main` i uruchomiona wewnątrz programu.
+* podczas gdy aplikacja to konkretna instancja wątku, posiadająca własną niezależną funkcję `main` i uruchomiona wewnątrz programu.
 * 
 * Oczywiście kolejne uruchomienie programu (w znaczeniu kontenera) sprawdza systemową blokadą wykluczającą czy inna instancja kontenera już działa,
 * a jeżeli tak to przesyłała do niej informację (za pomocą nazwanego strumienia) o konieczności uruchomienia nowej aplikacji, po czym kończyła wykonanie.
@@ -74,8 +74,8 @@
 * To proste narzędzie blokujące wykonanie danego wątku w sposób nie obciążający procesora do nadejścia sygnału zwolnienia blokady z innego wątku.
 * @subsection engine_architecture_utilities_container Kontener
 * @subsubsection engine_architecture_utilities_container_compile_time_map Słownik czasu kompilacji
-* Jest to implementacja prostego słownika par klucz-wartość dowolnych typów (z ograniczeniami, patrz niżej) oparta całkowicie o szablony
-* i rozwiązująca pytania o elementy w czasie kompilacji. Z powodu zaawansowanego meta-programowania słownik czasu kompilacji NIE może posiadać
+* Jest to implementacja prostego słownika par klucz-wartość dowolnych typów oparta całkowicie o szablony
+* i rozwiązująca pytania o elementy w czasie kompilacji. Z powodu zaawansowanego meta-programowania słownik czasu kompilacji nie może posiadać
 * klucza opartego o wartość tekstową; Jest to bezpośrednie ograniczenie możliwości szablonów w C++.
 * @subsubsection engine_architecture_utilities_container_concurrent_queue Równoległa kolejka
 * Jest to prosta implementacja równoległej kolejki w modelu producent-konsument. Kolejka blokuje wykonanie wątku konsumenta (w sposób nie obciążający procesora)
@@ -83,9 +83,9 @@
 * przerywającego oczekiwanie (zwyczajowo można po prostu wysłać pusty wskaźnik bądź specjalnie oznaczony obiekt jeżeli potrzebne jest przerwanie)
 * @subsubsection engine_architecture_utilities_container_sync Synchroniczna kolejka i synchroniczna mapa
 * To kolejka i mapa ze standardowej biblioteki C++ opakowana w blokady równoległe do używania w silnie wielowątkowym środowisku.
-* @subsection engine_architecture_utilities_debug Odpluskwiacz
+* @subsection engine_architecture_utilities_debug Debugger
 * @subsubsection engine_architecture_utilities_debug_callstack Stos wywołań
-* To prosty kontener przechowujący informacje o stosie wywołań w sposób wieloplatformowy. Wspiera możliwość uzupełnienia kolekcji o informacje odpluskwiacza,
+* To prosty kontener przechowujący informacje o stosie wywołań w sposób wieloplatformowy. Wspiera możliwość uzupełnienia kolekcji o informacje debuggera,
 * także na etapie post-mortem.
 * @subsubsection engine_architecture_utilities_debug_remotery Remotery
 * Otoczka C++ do biblioteki @ref dependency_remotery "remotery"
@@ -108,14 +108,14 @@
 * identyfikator jako `constexpr` (co oznacza że może być np. wykorzystywany jako etykieta `case` w instrukcji `switch`).
 * @subsubsection engine_architecture_utilities_pattern_provider Dostawca
 * Zbiór podstawowych metod do tworzenia dostawców komponentów (zobacz poniżej).
-* @subsubsection engine_architecture_utilities_pattern_writer Zapisywacz
+* @subsubsection engine_architecture_utilities_pattern_writer Writer
 * Klasa umożliwiająca transakcyjne operacje ("Wszystko albo żaden" oraz "Nie rozdzielaj w trakcie") na dowolnym strumieniu zdolnym do zapisywania sekwencji obiektów
 * @subsection engine_architecture_utilities_platform Platformowe
 * @subsubsection engine_architecture_utilities_platform_args Linia komend
 * Klasa reprezentująca wieloplatformowy stan linii komend. Pozwala określić jakie przełączniki i argumenty są aktualnie ustawione,
 * potrafi stworzyć swoją instancję z pojedynczego tekstu jak i argumentów `argc` i `argv` funkcji `main`. Pozwala także na manipulację tymi argumentami.
-* @subsubsection engine_architecture_utilities_platform_debug Odpluskwiacze
-* To zbiór (obecnie) trzech pomocniczych funkcji odpluskwiacza posiadających osobne implementacje na każdej platformie i wymagających globalnego dostępu
+* @subsubsection engine_architecture_utilities_platform_debug Debug
+* To zbiór (obecnie) trzech pomocniczych funkcji debuggera posiadających osobne implementacje na każdej platformie i wymagających globalnego dostępu
 * (dlatego nie tworzą obiektów):
 *  - engine::platform::trigger_breakpoint()
 *  - engine::platform::canonize_debug_filename()
@@ -136,8 +136,7 @@
 * @subsubsection engine_architecture_utilities_text_difference Różnica
 * Oblicza @ref dependency_levenshtein "odległość Levenshteina" dwóch silnikowych @ref ustring_t "łańcuchów znaków"
 * @subsubsection engine_architecture_utilities_text_expand Rozwinięcie
-* Konwertuje serię dowolnych argumnetów w tablicę silnikowych @ref engine::ustring_t "łańcuchów znaków". Wykorzystywane m.in. do formatowania tekstu
-* (jako generator argumentów)
+* Konwertuje serię dowolnych argumentów w tablicę łańcuchów znaków typu `ustring_t`. Wykorzystywane m.in. do formatowania tekstu.
 * @subsubsection engine_architecture_utilities_text_parser Parser
 * Zbiór narzędzi do wykorzystania w parserze Spirit (część biblioteki @ref dependency_boost "boost")
 * @subsubsection engine_architecture_utilities_text_ustring Łańcuch znaków
@@ -164,11 +163,11 @@
 * @subsubsection engine_architecture_core_global_app Aplikacje
 * Ten element rdzenia odpowiada za stworzenie nowych instancji aplikacji, uruchomienie wątków i obsługę głównej funkcji (`main`) każdej z aplikacji.
 * O ile oryginalnie nie wchodziło to w skład tego elementu, dodano do niego także - inspirowany systemem operacyjnym Unix - system przerwań (odpowiednik sygnałów).
-* Przerwanie aplikacji to np. informacja o tym że użytkownik poprosił aplikację o wyłączenie, albo nowa instancja właśnie próbuje być uruchomiona
-* (niektóre aplikacje mogą nie chcieć wspierać więcej niż jednej instancji, aczkolwiek ten prosty scenariusz może być obsłużony w inny sposób - te bardziej
-* rozbudowane wymagają przerwania). Ten element rdzenia zawiera także bootstrappera odpowiedzialnego za rozruch danej aplikacji
+* Przerwanie aplikacji to np. informacja o tym że użytkownik poprosił aplikację o wyłączenie, albo nowa instancja właśnie próbuje być uruchomiona.
+* Niektóre aplikacje mogą nie chcieć wspierać więcej niż jednej instancji, aczkolwiek ten prosty scenariusz może być obsłużony w inny sposób - te bardziej
+* rozbudowane wymagają przerwania. Ten element rdzenia zawiera także bootstrappera odpowiedzialnego za rozruch danej aplikacji
 * (zobacz niżej @ref engine_startup_app "Bootstrapper")
-* w aktualnej chwili programu.
+* w danej chwili programu.
 * 
 * @subsubsection engine_architecture_core_global_console Konsola
 * Jednym z najstarszych konceptów silnika gier jest pojęcie konsoli, zaproponowane jeszcze w latach 80 i będące standardem branży od lat 90.
@@ -196,12 +195,12 @@
 * Jednym z największych wyzwań stojących przed budową komponentową (w znaczeniu rozproszoną) była konieczność synchronizacji transferu informacji między
 * poszczególnymi komponentami. W pierwszej fazie implementacji rozważano po prostu przekazywanie wskaźników na komponenty do konstruktorów
 * (za pomocą wstrzykiwania zależności) co wygenerowało bardzo poważny problem: cykliczne zależności. Takie grafy obiektów były niemożliwe do
-* stworzenia i generowały zawieszenie się aplikacji podczas startu - do tego były to zawieszenia bardzo trudne do złapania odpluskwiaczem
+* stworzenia i generowały zawieszenie się aplikacji podczas startu - do tego były to zawieszenia bardzo trudne do analizy
 * (długie szablonowe stosy wywołań). Jedynym rozwiązaniem było znalezienie sposobu na rozdzielenie komunikacji od faktycznych komponentów.
 * Wzorzec komunikatora jest tutaj idealnym rozwiązaniem.
 *
 * Komunikator jest w tym wypadku szablonową klasą opartą o @ref engine_architecture_utilities_container_concurrent_queue "kolejkę wielu-producentów jeden-konsument" i posiada cztery warianty implementacji
-* (synchroniczne i asynchroniczne wysyłanie i odbieranie komunikatów). Warianty synchroniczne generują najmniejsze opóźnienia ale nie są przeznaczone
+* (synchroniczne albo asynchroniczne wysyłanie i odbieranie komunikatów). Warianty synchroniczne generują najmniejsze opóźnienia ale nie są przeznaczone
 * do przesyłania dużych ilości wiadomości (gdyż sam akt wysyłania generuje blokadę wątkową). Implementacja danego typu wiadomości może zdecydować
 * który wariant kolejki zostanie do niej przypisany (za pomocą wyrażeń typu `constexpr`).
 *
@@ -226,14 +225,14 @@
 * po prostu współbieżność w oparciu o wątki, ale takie podejście bardzo utrudniało rzeczywiste zastosowanie, np. w ładowaniu zasobów. Proces
 * ładowania wymaga koordynacji między wątkami i przeskakiwania między wątkiem czytającym z dysku a wątkiem renderera. Sytuację rozwiązało skupienie
 * się na zadaniach i gońcach. Zadanie, to pojedyncze wyzwanie przed systemem współbieżnym. Istnieje podział na zadania proste (jak np. wspomniane
-* wczytanie zasobu) jak i zadania długotrwałe (nazwane właśnie procesami). Goniec to aktywny wykonywacz zadania. Każde zadanie składa się z elementów
-* z których każdy wykonywany jest na jednym gońcu. Elementy można kolejkować i uzależniać od siebie (np. wysłanie obrazu do karty graficznej nastąpi
+* wczytanie zasobu) jak i zadania długotrwałe (nazwane właśnie procesami). Goniec to aktywny element wykonujący zadania. Każde zadanie składa się z elementów
+* z których każdy wykonywany jest w ramach jednego gońca. Elementy można kolejkować i uzależniać od siebie (np. wysłanie obrazu do karty graficznej nastąpi
 * po jego wczytaniu z dysku). W chwili obecnej istnieją cztery typy gońców:
 *  - Główny wątek; W tym momencie jedynie renderer. Zadania przydzielone temu gońcowi zostaną zakolejkowane na zadanym wątku (kolejką priorytetową)
 *  - Wątek oddzielony; Każde zadanie dostanie nowy, dedykowany wątek który zostanie zniszczony po jego wykonaniu. Nie jest to zalecane dla zadań które 
 *    często się powtarzają (koszt stworzenia wątku jest dość znaczący)
 *  - Synchroniczny; Zadanie zostanie wykonane w wątku wywołującym, bez zrównoleglania
-*  - Baza wątków (ang. thread pool); Określona ilość wątków (domyślnie tyle ile rdzeni w komputerze) kolejkujące zadania i wykonujące je na pierwszym wolnym wątku.
+*  - Pula wątków (ang. thread pool); Określona ilość wątków (domyślnie tyle ile rdzeni w komputerze) kolejkujące zadania i wykonujące je na pierwszym wolnym wątku.
 * 
 * @subsubsection engine_architecture_core_global_program Program (kontener)
 * Program to zestaw trzech narzędzi: @ref engine_startup_platform rozrusznik, odpowiedzialny za start całej aplikacji, uruchamiacz testów stanowiący rodzaj rozrusznika,
@@ -279,7 +278,7 @@
 *
 * @section engine_architecture_provider Dostawcy
 * Ostatnim elementem architektury silnika jest koncept dostawcy. Ponieważ wiele komponentów posiada osobne warianty implementacji
-* bądź może produkować (lub zdobywać) zasoby na kilka sposobów pojawił się problem kombinatoryczny rosnącej wykładniczo ich liczby.
+* bądź może produkować (zdobywać) zasoby na kilka sposobów pojawił się problem kombinatoryczny rosnącej wykładniczo ich liczby.
 * Aby ominąć tę pułapkę wprowadzono ideę dostawców kodu.
 * 
 * Dostawca to niesamodzielny element kodu dostarczający funkcjonalność komponentowi. Przykładem dostawcy jest dostawca wyjścia

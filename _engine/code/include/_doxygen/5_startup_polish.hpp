@@ -6,7 +6,7 @@
 * Sekwencja rozruchowa to pierwszy etap uruchamiania silnika Pixie Engine. Jednym z najważniejszych problemów który wystąpił
 * na tym etapie to niejednolitość sposobów uruchamiania na różnych docelowych platformach. O ile na komputerach osobistych możemy
 * założyć istnienie funkcji `main` (aczkolwiek już na Windows mamy `WinMain`), to platformy mobilne nie muszą wcale mieć jej odpowiednika.
-* Dla przykładu wczesne wersje Androida nie pozwalały linkowania pliku wykonywalnego; apka natywna mogła być uruchamiana tylko
+* Dla przykładu wczesne wersje Androida nie pozwalały linkowania pliku wykonywalnego; aplikacja natywna mogła być uruchamiana tylko
 * jako wywołanie zwrotne do współdzielonej biblioteki. Takie wywołania zwrotne cechowała podstawowa cecha: musiało się zakończyć
 * możliwie szybko, jako że blokowało główny wątek aplikacji. Na platformie Android istnieje także jeszcze jeden poważny problem:
 * system operacyjny nie gwarantuje zniszczenia biblioteki między uruchomieniami programu co oznacza że potencjalnie wszystkie
@@ -15,7 +15,7 @@
 * 
 * @section engine_startup_platform Konfiguracja platformy
 * Pierwszym etapem tworzenia instancji programu jest konfiguracja ustawień danej platformy (oczywiście mówimy tu o standardowym
-* uruchomieniu, uruchomienie testowe wygląda inaczej - o nim poniżej) Odpowiadają za to specjalne makra preprocesora które generują
+* uruchomieniu) Odpowiadają za to specjalne makra preprocesora które generują
 * obiekt rozrusznika. Przykład takiej konfiguracji znajduje się poniżej:
 * @code{.cpp}
 * BEGIN_PLATFORM_CONFIGURATION(windows)
@@ -68,7 +68,7 @@
 * a zamiast `wait_till_completed` używane byłoby zapytanie zwrotne `has_completed`
 * 
 * @section engine_startup_app Uruchomienie aplikacji
-* Pierwsza aplikacja jest zwykle uruchamiana przez program na podstawie argumentów linii komend (wyjątek: testy).
+* Pierwsza aplikacja jest zwykle uruchamiana przez program na podstawie argumentów linii komend.
 * Każda aplikacja ma własną funkcję `main_XXX` która zwykle jest uruchamiana w osobnym wątku. Funkcja ta przyjmuje
 * zawsze jeden argument: `app_context_t` czyli kontekst wykonania. Kontekst zawiera informacje o instancji,
 * jak również referencję na program. Zwykle następnym krokiem jest uruchomienie bootrappera. Przykład funkcji

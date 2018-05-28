@@ -23,16 +23,16 @@
 * @endverbatim
 *
 * @section pixie_intro Wprowadzenie
-*     	Niniejsza praca (dokumentacja, implementacja oraz przykładowa aplikacja) przedstawia czwartą już iterację silnika Pixie Engine;
+*     	Niniejsza praca przedstawia czwartą już iterację silnika Pixie Engine;
 *       Projektu stworzonego we współczesnym C++, wykorzystującym najnowsze standardy i przestrzegającym wszystkich
 *       obecnie stosowanych w praktyce wzorców projektowych.
 *
-*       Silnik jest przeznaczony do tworzenia gier 2D (choć nie jest wykluczone dodanie renderera 3D),
+*       Silnik jest przeznaczony do tworzenia gier 2D,
 *       szczególnie takich których stworzenie jest trudne bądź niemożliwe używając innych silników i narzędzi
-*       (zobacz sekcję @ref pixie_why "Dlaczego kolejny silnik?"). Ze wzlędu na ogromny zakres tematyki i ograniczenia
-*       czasowe, nie wszystkie elementy silnika zostały w tej pracy w pełni zaimplementowane (zobacz sekcję @ref engine_future "Spojrzenie w przyszłość")
+*       (zobacz sekcję @ref pixie_why). Ze względu na ogromny zakres tematyki i ograniczenia
+*       czasowe, nie wszystkie elementy silnika zostały w tej pracy w pełni zaimplementowane (zobacz sekcję @ref engine_future)
 *
-*       Przedsięwzięcie Pixie Engine jest aktywnie rozwjane od 2016 w ramach działalności Kosek.com (jednoosobowej działalności gospodarczej, założonej
+*       Przedsięwzięcie Pixie Engine jest aktywnie rozwijane od 2016 w ramach działalności Kosek.com (jednoosobowej działalności gospodarczej, założonej
 *       przez autora niniejszej pracy), a obecna implementacja liczy sobie ponad 25 000 linii kodu w prawie 300 plikach źródłowych.
 *       Poprzednia wersja silnika została wykorzystana w wydanej na Steam przez Kosek.com grze Magician's Apprentice.
 *
@@ -40,18 +40,14 @@
 * @subsection pixie_platforms_win Windows Vista/7/8/8.1/10
 *    - 64-bitowa architektura AMD
 *    - Renderer OpenGL oraz DirectX 11.0
-*    - Wsparcie dla zrzucania informacji z symboli odpluskwiacza (na potrzeby odpluskwiania post-mortem)
+*    - Wsparcie dla zrzucania informacji z symboli debugera (na potrzeby debuggowania post-mortem)
 *    - Dwie drogi implementacji dostawców: rodzajowa i dedykowana platformie
 *    - Wsparcie dla jednoczesnego wyświetlania wielu okienek terminalowych
-* @subsection pixie_platforms_lin Linux
-*    (Spodziewana, jeszcze nie zaimplementowana)
-* @subsection pixie_platforms_osx OS X
-*    (Spodziewana, jeszcze nie zaimplementowana)
 *
 * @section pixie_why Dlaczego kolejny silnik?
 *      Obecnie na rynku znajduje się wiele bardzo dobrych, komercyjnie-gotowych silników gier,
-*      także takich o otwartych źródłach bądź też zamkniętych lecz posiadających permisywne licencje.
-*      Ogromna większość z tych narzędzi jest jednak nastawiona na gry akcji, gry zręcznościowe
+*      także takich o otwartych źródłach bądź też zamkniętych lecz posiadających permisywne@footnote{Permisywna licencja oznacza tutaj możliwość przynajmniej częściowego wykorzystania w produktach komercyjnych przy rozsądnej dla twórców niezależnych stawce cenowej} licencje.
+*      Ogromna większość z tych narzędzi jest jednak nastawiona na gry akcji, zręcznościowe
 *      bądź zręcznościowo-sieciowe.
 *      Motywacją za powstaniem Pixie Engine był brak dedykowanej technologii do gier strategicznych,
 *      fabularnych bądź wielkoskalowych.
@@ -74,7 +70,7 @@
 *      Jeżeli rozpatrujemy grę wielkoskalową (duży graf obiektów, który wymaga strumieniowania danych z dysku twardego),
 *      takie rozwiązanie jest całkowicie nieakceptowalne.
 *
-*      Wywiad środowiska i ograniczenia istniejących silników zostały zebrane poniżej:
+*      Ocena istniejących rozwiązań oraz ich ograniczenia zostały zebrane poniżej:
 *
 * @subsection pixie_why_example Problemy z istniejącymi rozwiązaniami
 * @subsubsection pixie_why_example_unity Unity
@@ -86,7 +82,7 @@
 * Problemy z obecną wersją Unity obejmują przede wszystkim:
 *    - Bardzo słaby serializator (jak wspomniano wyżej)
 *    - Brak wsparcia dla fanowskich modyfikacji, czyli możliwości tworzenia dodatkowej zawartości przez fanów
-*    - Z powodu wykorzystana języka zarządzanego: opóźnienia związane z odśmieciarką (zwłaszcza dla skomplikowanych grafów obiektów)
+*    - Z powodu wykorzystana języka zarządzanego: opóźnienia związane z automatycznym oczyszczaniem pamięci (Garbage Collector - zwłaszcza dla skomplikowanych grafów obiektów)
 *    - Duże problemy z grą sieciową czasu rzeczywistego (brak przewidywania martwych pakietów, brak interpolacji czasowej)
 * 
 * @subsubsection pixie_why_example_unrealengine Unreal Engine
@@ -107,7 +103,7 @@
 * 
 * Problemy z obecną wersją LibGDX obejmują przede wszystkim:
 *    - Brak wsparcia dla fanowskich modyfikacji
-*    - Z powodu wykorzystana języka zarządzanego: opóźnienia związane z odśmieciarką (zwłaszcza dla skomplikowanych grafów obiektów)
+*    - Z powodu wykorzystana języka zarządzanego: opóźnienia związane z automatycznym oczyszczaniem pamięci (Garbage Collector - zwłaszcza dla skomplikowanych grafów obiektów)
 *    - Duże problemy z budowaniem i wykonywaniem projektu na komputerach osobistych
 *    - Bardzo proste i zarazem ograniczone API; Wymaga często 'surowych' komend OpenGLa
 * 
@@ -128,20 +124,46 @@
 * Pixie Engine wychodzi naprzeciw opisanym problemom dostarczając zarówno pełne wsparcie dla grup modyfikujących
 * (uwzględniając @ref assets_hotreload "przeładowanie zasobów na gorąco"), maksymalne wykorzystanie języka natywnego
 * (w celu osiągnięcia maksymalnej wydajności gdy tylko jest to możliwe), wsparcie dla skryptowych języków zarządzanych
-* (krótkie kody które korzystają z zalet automatycznej odśmieciarki), wsparcie dla różnych menadżerów sceny
+* (krótkie kody które korzystają z zalet automatycznego oczyszczania pamięci), wsparcie dla różnych menadżerów sceny
 * (uwzględniający przewidywanie martwych pakietów, interpolację czasową i temporalne wygładzenie) oraz dostępu do
 * natywnych narzędzi gdy tylko jest to możliwe.
 *
 * @subsection pixie_why_limitations Ograniczenia silnika
 * Oczywiście w sytuacji rywalizujących zasobów niemożliwe jest zawarcie wszystkich możliwych cech w jednym rozwiązaniu.
 * Z tego powodu z góry przyjęto ograniczenia, jakie wprowadzono do Pixie Engine:
-*    - Akceptowalne czasy kompilacji; W chwili obecnej około 15 minut pracy jednego rdzenia (np. ~3 minuty 45 sekund przy 4 rdzeniach)
+*    - Akceptowalne czasy kompilacji; W chwili obecnej około 15 minut pracy jednego rdzenia@footnote{Domyślnie kompilator wykorzystuje wszystkie dostępne w komputerze rdzenie} (np. ~3 minuty 45 sekund przy 4 rdzeniach)
 *    - Preferuj kod natywny nad zarządzanym (ograniczenia modyfikacji w zamian za zwiększenie wydajności)
 *    - Wykorzystuj inteligentne wskaźniki (niewielki narzut na wykonanie w zamian za stabilność implementacji)
 *    - Preferuj ustalenia czasu kompilacji nad ustawieniami czasu wykonania (przyspiesza wykonanie poprzed eliminację zbędnego kodu na etapie kompilacji kosztem utraty modyfikowalności niektórych ustawień)
 *    - Akceptuj narzut na uruchomienie związany z wstrzykiwaniem zależności
 *    - Korzystaj z wstrzykiwania zależności i warstw pośrednich, nawet jeżeli zależności między modułami stają się bardziej widoczne (efektywnie zwiększa znacząco współczynnik utrzymywalności rozwiązania, kosztem niewielkiego narzutu)
 *
-* @section pixe_copyrights Prawa autorskie
+* @section pixie_license Licencja
+*
+* Licencja MIT
+*
+* Copyright &copy; 2016 - 2018 Piotr Kosek
+*
+* Niniejszym gwarantuje się, bez opłat, że każda osoba która wejdzie w posiadanie kopii tego
+* oprogramowania i związanych z nim plików dokumentacji (dalej „Oprogramowanie”) może
+* wprowadzać do obrotu Oprogramowanie bez żadnych ograniczeń, w tym bez ograniczeń
+* prawa do użytkowania, kopiowania, modyfikowania, łączenia, publikowania,
+* dystrybuowania, sublicencjonowania i/lub sprzedaży kopii Oprogramowania a także
+* zezwalania osobie, której Oprogramowanie zostało dostarczone czynienia tego samego, z
+* zastrzeżeniem następujących warunków:
+*
+* Powyższa nota zastrzegająca prawa autorskie oraz niniejsza nota zezwalająca muszą zostać
+* włączone do wszystkich kopii lub istotnych części Oprogramowania.
+*
+* OPROGRAMOWANIE JEST DOSTARCZONE TAKIM, JAKIE JEST, BEZ JAKIEJKOLWIEK GWARANCJI,
+* WYRAŹNEJ LUB DOROZUMIANEJ, NIE WYŁĄCZAJĄC GWARANCJI PRZYDATNOŚCI HANDLOWEJ LUB
+* PRZYDATNOŚCI DO OKREŚLONYCH CELÓW A TAKŻE BRAKU WAD PRAWNYCH. W ŻADNYM
+* PRZYPADKU TWÓRCA LUB POSIADACZ PRAW AUTORSKICH NIE MOŻE PONOSIĆ
+* ODPOWIEDZIALNOŚCI Z TYTUŁU ROSZCZEŃ LUB WYRZĄDZONEJ SZKODY A TAKŻE ŻADNEJ INNEJ
+* ODPOWIEDZIALNOŚCI CZY TO WYNIKAJĄCEJ Z UMOWY, DELIKTU, CZY JAKIEJKOLWIEK INNEJ
+* PODSTAWY POWSTAŁEJ W ZWIĄZKU Z OPROGRAMOWANIEM LUB UŻYTKOWANIEM GO LUB
+* WPROWADZANIEM GO DO OBROTU. 
+*
+* @section pixie_copyrights Prawa autorskie
 *    Ten silnik jest napisany i utrzymywany przez Kosek.com i jest dystrybuowany na otwartej licencji MIT/X11. Najnowsza wersja jest dostępna zawsze pod adresem https://github.com/Shelim/pixie_engine
 */

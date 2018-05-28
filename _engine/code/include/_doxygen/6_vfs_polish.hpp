@@ -7,7 +7,7 @@
 * systemem plików. Niniejszy rozdział opisuje wszystkie cechy VFS zaimplementowanego w tym silniku.
 * 
 * VFS Pixie Engine opiera się nie tylko na wczytywaniu danych, ale pozwala na swobodne modyfikowanie zasobów
-* na przykład do wykorzystania przez edytor. Zasoby są przeładowywane dynamicznie w trakcie wykonania silnika
+* na przykład do wykorzystania przez edytor. Zasoby są przeładowywane dynamicznie w trakcie działania silnika
 * i mogą zostać zaktualizowane przez dowolną aplikację Pixie Engine bądź fizycznie przez użytkownika poza silnikiem.
 *
 * @section vfs_vpath Wirtualna ścieżka
@@ -21,10 +21,9 @@
 * i zapisywalność. Jeżeli żaden plik nie spełnia warunku zapisywalności (np. istnieje tylko jedna kopia ulokowana
 * na płycie CD), przy próbie tworzenia akcesora pliku zostanie stworzony nowy zasób w lokacji określonej przez platformę.
 * 
-* Spostrzegawczy użytkownik zauważy że dane czytane i zapisywane mogą lądować w dwóch różnych plikach fizycznych.
-* W praktyce jednak po zapisie zaktualizowana zostanie data ostatniej modyfikacji, i tym samym ten plik przeskoczy
+* Spostrzegawczy użytkownik zauważy, że dane czytane i zapisywane mogą lądować w dwóch różnych plikach fizycznych.
+* W praktyce jednak po zapisie zaktualizowana zostanie data ostatniej modyfikacji i tym samym ten plik przeskoczy
 * na początek kolejki czytania (stąd wymóg czytalności od takiego pliku)
-* @see engine::virtual_path_t
 *
 * @section vfs_input_output Wprowadzenie/Wyprowadzenie
 * Wprowadzene i wyprowadzenie to rodzina klas dostarczająca rodzajowy sposób czytania lub zapisywania danych.
@@ -40,19 +39,16 @@
 * @ref engine::data::input_streambuf_t dla wprowadzania i @ref engine::data::output_streambuf_t
 *  dla wyprowadzenia. Obie bazują na std::streambuf i pozwalają na tworzenie własnych strumieni C++
 * 
-* Istnieje także opcja stworzenia 'częściowego' wprowadzania. Jeżeli wiadomo że źródłowy plik zawiera
-* więcej niż jeden zasób (np. kilka różnych poziomów detali tekstury), można rozkazać wprowadzaczowi
-* żeby przeczytał dane o określonej długości do bufora, a następnie użył go do stworzenia nowego wprowadzacza.
-* Źródłowy strumień pozostanie nie zmodyfikowany, a tak stworzony wprowadzacz operuje na kopii, więc może
-* przeżyć oryginalnego wprowadzacza. Utworzony wprowadzacz ma dostęp tylko do tej porcji danych która była
-* zażądana przy jego tworzeniu. Zobacz metodę @ref engine::data::input_t::spawn_partial.
-* @see engine::data::input_t, engine::data::output_t
+* Istnieje także opcja stworzenia 'częściowego' wprowadzania. Jeżeli wiadomo, że źródłowy plik zawiera
+* więcej niż jeden zasób (np. kilka różnych poziomów detali tekstury), można rozkazać obiektowi wprowadzającemu
+* żeby przeczytał dane o określonej długości do bufora, a następnie użył go do stworzenia nowy obiekt wprowadzający.
+* Źródłowy strumień pozostanie nie zmodyfikowany, a tak stworzony obiekt wprowadzający operuje na kopii, więc może
+* przeżyć oryginalny obiekt wprowadzający. Utworzony obiekt ma dostęp tylko do tej porcji danych która była
+* zażądana przy jego tworzeniu.
 *
 * @section vfs_providers Dostawcy
-* Dostawca to klasa opisująca sposób tworzenia wprowadzacza/wyprowadzacza dla danego zasobu. Zwyczajowy dostawcy
+* Dostawca to klasa opisująca sposób tworzenia obiektów wprowadzających/wyprowadzających dla danego zasobu. Zwyczajowy dostawcy
 * są zbierani i używani przez wewnętrzne komponenty silnika i nie ma powodu manipulacja przy nich z poziomu aplikacji. 
-* @warning Wprowadzacz i Wyprowadzacz mogą, w niektórych przypadkach, wskazywać na różne lokacje, nawet jeżeli vpath obu lokacji jest taki sam!
-* Dla przykładu można czytać dane z pliku CD i zapisywć do Lokalnych Danych Aplikacji.
 * 
 * Standardowo każdy dostawca właściwy posiada możliwość podania ostatniej daty modyfikacji zasobu.
 * Ostatecznie klasa zbiorcza dostawy zawsze wybierze najnowszego dostawcę (do zapisu dostawca musi
@@ -70,17 +66,15 @@
 * jest udostępniona jako ustawienia @ref engine_startup_platform "Rozrusznika" i zwykle zawiera kilka
 * @ref engine::data::scanner_directory_t "skanerów katalogów" ze ścieżkami w jakich można się spodziewać zasobów.
 *
-* @see engine::data::scanner_t, engine::data::scanners_t
-*
 * @section vfs_extension Rozszerzenia
 * Skanery (opisane w poprzednim akapicie) posiadają także możliwość zarejestrowania wywołania zwrotnego po każdym znalezionym pliku.
 * W obecnej wersji Pixie Engine istnieje jedno takie zaimplementowane rozszerzenie: skaner archiwum. Jeżeli skaner wykryje plik
 * archiwum (np. zip) uruchomi kolejny skaner, operujący całkowicie na archiwum i czytający pliki w środku. Oczywiście jest to
 * wciąż normalny skaner - w znaczeniu wciąż wykonujący zapytania zwrotne - i z tego powodu rekurencyjne archiwa (archiwum w archiwum) są jak najbardziej
 * wspierane (ale niezalecane, jako że aby skaner mógł dostać się do wewnętrznego archiwum, musi je odpakować do pamięci).
-* Skaner archiwum wygeneruje dostawców w formie archiwalnym które są w stanie stworzyć wprowadzacza i wyprowadzacza archiwalnego.
+* Skaner archiwum wygeneruje dostawców w formie archiwalnym które są w stanie stworzyć obiekt wprowadzania/wyprowadzania archiwalnego.
 * 
-* W formacie ZIP istnieje pewna pułapka którą trzeba było uwzględnić w implementacji; O ile prawie wszyscy dostawcy korzystają z daty
+* W formacie ZIP istnieje pewne zagrożenie które trzeba było uwzględnić w implementacji; O ile prawie wszyscy dostawcy korzystają z daty
 * modyfikacji z dokładnością do jednej sekundy, archiwum zipa operuje na dacie modyfikacji pliku z dokładnością do dwóch sekund.
 * Założeniem twórcy było dwukrotne zwiększenie zakresu czasowego 32-bitowej liczby bez znaku (patrz: problem roku 2038),
 * niestety w efekcie wpływa to na stabilność dostawcy i jego kolejki priorytetowej uwzględniającej datę zapisu. Dla pewności
@@ -95,7 +89,7 @@
 * 4. Uruchomiona w między czasie gra wykrywa istnienie nowego skryptu o nowszej dacie niż zapamiętana. Przeładowuje więc skrypt i aktualizuje referencje do niego bez przerywania rozgrywki
 * 
 * @section vfs_hotreload_problems Problemy z przeładowaniem zasobów na gorąco
-* Jak widać po powyższym przykładzie pomimo zalet takiego rozwiązania (natychmiastowa informacja zwrotna dla twórców modyfikacji)
+* Jak widać po powyższym przykładzie pomimo zalet takiego rozwiązania, natychmiastowej informacji zwrotnej dla twórców modyfikacji,
 * istnieje poważny problem z przeładowaniem zasobów na gorąco: gracz może podmienić dowolny zasób w trakcie działania programu.
 * W szczególności może to wygenerować następujące problemy:
 * 
@@ -130,9 +124,9 @@
 * 
 * @subsection vfs_assets_manifest Manifest
 * Każda z modyfikacji zawiera manifest (w formacie XML) opisujący w jakich warunkach może być włączona. W ten sposób twórca jest
-* w stanie łatwo dodać informację o niekompatybilnych dodatkach bezpośrednio do modyfikacji (i użytkownik zostanie o tym problemie
+* w stanie łatwo dodać informację o niekompatybilnych dodatkach bezpośrednio do modyfikacji (użytkownik zostanie o tym problemie
 * ostrzeżony w trakcie uruchamiania bądź ściągania modyfikacji). Zmiana układu modyfikacji nie wymaga restartu gry. Jeżeli problem 
-* podczas uruchamiania modyfikacji jest możliwy do rozwiązania przez silnik użytkownik zostanie o nim poinformowany,
+* podczas uruchamiania modyfikacji jest możliwy do rozwiązania przez silnik, użytkownik zostanie o nim poinformowany,
 * a następnie - po jego zgodzie - zostanie podjęta próba naprawienia. Przykład: podmodyfikacja "Wątek smoka na bagnach"
 * wymaga modyfikacji "Bagna północne", która nie jest w danej chwili włączona; Gra automatycznie zaproponuje jej włączenie.
 */
