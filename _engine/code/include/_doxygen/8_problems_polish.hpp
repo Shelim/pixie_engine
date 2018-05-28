@@ -241,13 +241,4 @@
 *         std::unordered_map<std::type_index, std::shared_ptr<ifactory_base> > data_map;
 *     };
 * @endcode
-* \~Polish @page engine_future Spojrzenie w przyszłość
-* Projekt w stanie obecnym oczywiście nie wyczerpuje oczywiście pełnej możliwej implementacji silnika gier 2D.
-* Doprowadzenie go do zdolności produkcyjnej to wyzwanie autora na nadchodzące miesiące i lata i prawdopodobnie pracę magisterską.
-* W chwili obecnej szczególnie brakuje:
-*  - Ukończonego renderera; Zaimplementowana jest tylko wersja testowa oparta o SDL
-*  - Obsługi dźwięków za pomocą OpenAL
-*  - Komponentów wykonania. Ich obecna liczba (~30 sztuk) zostanie prawdopodobnie zwiększona czterokrotnie w wersji ostatecznej
-*  - Zwiększenia pokrycia przypadkami testowymi do poziomu 90%
-*  - Wsparcia dla dodatkowych platform: Linuxa i OS X.
 */
