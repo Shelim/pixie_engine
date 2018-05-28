@@ -315,4 +315,48 @@
  *     flags_t<flag_t> flags;
  * };
  * @endcode
+ * 
+ * @section code_convention_folders Układ katalogów
+ * W Pixie Engine przyjęto następujące założenia co do nazw katalogów:
+ *     - Katalogi których nazwy zaczynają się od `!` zawierają pliki tymczasowe systemu kompilacji i poza kompilacją mogą być bezpiecznie usunięte
+ *     - Katalogi których nazwy zaczynają się od `_` zawierają pliki wewnętrzne silnika i nie powinny być modyfikowane przez twórcę gry
+ *     - Katalogi których nazwy zaczynają się od `.` zawierają ustawienia lokalne edytora i jako takie nie powinny być wersjonowane w systemie Git
+ * 
+ * Katalog główny Pixie Engine po wykonaniu komendy `git clone` zawiera następujące foldery:
+ *     - `_command` zawierający skrypty danej platformy do wydawania poleceń silnikowi (np. stworzenie nowego projektu, ściągnięcie zależności)
+ *     - `_engine` zawierający pełen kod źródłowy i wszystkie zależności silnika
+ * 
+ * W katalogu `_command/windows` znajdują się polecenia w formie plików skryptowych Windows Batch. Aby uruchomić polecenie należy kliknąć dwukrotnie na pliku. Wszystkie niezbędne parametry będą wprowadzane interaktywnie podczas działania skryptu. Parametry będą weryfikowane na poprawność a w przypadku wykrycia problemu, pytanie o dany parametr zostanie powtórzone
+ *     - `download_dependencies.bat` to polecenie ściągnięcia zależności. Ponieważ zależności liczą sobie 4,5 gb nie są przechowywane bezpośrednio w repozytorium Git. To polecenie należy wykonać dokładnie raz po wykonaniu komendy `git clone`. Dopóki zależności nie zostaną ściągnięte, pozostałe polecenia nie zadziałają i powiadomią o konieczności wykonania tego polecania
+ *     - `execute_tests.bat` to polecenie wykonania testów. Stworzy on testowy projekt, skompiluje go, wykona testy, zapisze ich rezultaty i usunie projekt. Rezultat testów znajdzie się w katalogu `!test_results` w głównym folderze silnika, a raport w pliku `test_result.html` w tym samym folderze
+ *     - `new_project.bat` to polecenie stworzenia nowej gry w oparciu o Pixie Engine. Po wprowadzeniu podstawowych parametrów takich jak np. nazwa projektu, przygotuje on nowy katalog w folderze głównym Pixie Engine o nazwie równej identyfikatorowi gry. Wszelka praca nad daną grą powinna być prowadzona w tym katalogu. Pixie Engine dopuszcza równoległe tworzenie kilku gier w oparciu o jeden katalogi główny
+ *     - `view_documentation.bat` to polecenie przygotowuje i wyświetla dokumentację doxygen Pixie Engine
+ *
+ * Katalog `_engine` zawiera następujące podkatalogi:
+ *     - `!build` zawierający tymczasowe pliki kompilacji
+ *     - `!docs` zawierający wygenerowaną dokumentację. Skasowanie tego katalogu wymusi ponowne wygenerowanie dokumentacji
+ *     - `.vscode` zawierający ustawienia VS Code projektu
+ *     - `build` zawierający skrypty kompilacji Pixie Engine na zadaną platformę. Katalog ten zawiera też skrypty doxygen i Apache Ant
+ *     - `code` zawiera pełen kod źródłowy silnika
+ *     - `content` zawiera pliki danych silnika które muszą być dołączone do końcowej wersji programu. Pliki te są automatycznie kopiowane do folderu wyjścia kompilacji
+ *     - `content_prepare` zawiera pliki źródłowe z których przygotowana została zawartość katalogu `content`
+ *     - `dependency` zawiera wszystkie zależności silnika
+ *     - `manifest` zawiera manifest silnika - pliki meta kompilacji takie jak logo dokumentacji, logo silnia, pliki nagłówków doxygen
+ *     - `private` to folder zwykle nie wersjonowany na systemie git który zawiera pliki wewnętrzne używane przez danego programistę
+ * 
+ * Katalog projektu ma natomiast następujące podkatalogi:
+ *     - `!build` zawierający tymczasowe pliki kompilacji
+ *     - `!output` zawierający rezultat ostatniej kompilacji podzielonej wg typu
+ *     - `.vscode` zawierający ustawienia VS Code projektu
+ *     - `.vscode-user` zawierający ustawienia użytkownika VS Code
+ *     - `_changelog` to folder zawierający pliki historii samej gry takie jak plik zawierający numer kompilacji oraz listy zmian od poprzedniej kompilacji.
+ *     - `_command` to folder analogiczny do folderu z katalogu głównego, ale którego komendy dotyczą konkretnej gry. Znajdują się tam skrypty wydające rozkaz kompilacji, testowania, budowania instalatora, etc. Można je wywoływać nie uruchamiając edytora VS Code (np. mogą zostać podłączone do zewnętrznego systemu). Większość z tych komend jest nieinteraktywna
+ *     - `_ready` to folder przechowujący finałowe kompilacje projektu oraz ewentualne mapy linkera wypuszczonych wersji
+ *     - `code` zawierający kod źródłowy danej gry i wszystkich aplikacji z nią związanych (jak np. edytora, albo startera)
+ *     - `content` zawierający wszystkie pliki danych gry takie jak grafika, dźwięki, etc. Cała jego zawartość jest automatycznie kopiowana do folderu wyjścia kompilacji
+ *     - `content_prepare` zawiera pliki źródłowe z których artysta przygotowuje zawartość katalogu `content`
+ *     - `docs` początkowo pusty, ten folder zawiera wewnętrzną dokumentację danego projektu gry
+ *     - `manifest` zawierający manifest gry - pliki meta kompilacji takie jak logo i ikonka gry, licencja wyświetlana podczas instalacji, pliki xml opisujące informacje o grze uwzględniające nazwę, domyślną ścieżkę instalacji, etc.
+ *     - `press` również początkowo pusty, folder ten zawiera wszystkie materiały promocyjne które zostały bądź zostaną opublikowane dla danej gry
+ *     - `private` to folder zwykle nie wersjonowany na systemie git który zawiera pliki wewnętrzne używane przez danego programistę
  */
