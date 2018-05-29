@@ -12,7 +12,7 @@
 *
 * @section vfs_vpath Wirtualna ścieżka
 * Wirtualna ścieżka (vpath) reprezentuje nazwę zasobu wewnątrz VFS. Vpath składa się z dwóch elementów:
-* @ref engine::virtual_path_t::type_t "typu" i adresu. Typ reprezentuje miejsce poszukiwania fizycznego pliku,
+* typu i adresu. Typ reprezentuje miejsce poszukiwania fizycznego pliku,
 * podczas gdy adres przybliża nazwę tego pliku.
 * 
 * W praktyce vpath może opisywać więcej niż jeden fizyczny plik, lub nawet brak pliku. Jeżeli vpath odpowiada więcej
@@ -36,8 +36,8 @@
 * być w stanie zanotować błędy krytyczne związane z samym systemem wyprowadzania danych.
 * 
 * Silnik dostarcza także opakowanie dla strumieni - klasy 
-* @ref engine::data::input_streambuf_t dla wprowadzania i @ref engine::data::output_streambuf_t
-*  dla wyprowadzenia. Obie bazują na std::streambuf i pozwalają na tworzenie własnych strumieni C++
+* @c engine::data::input_streambuf_t dla wprowadzania i @c engine::data::output_streambuf_t
+*  dla wyprowadzenia. Obie bazują na `std::streambuf` i pozwalają na tworzenie własnych strumieni C++
 * 
 * Istnieje także opcja stworzenia 'częściowego' wprowadzania. Jeżeli wiadomo, że źródłowy plik zawiera
 * więcej niż jeden zasób (np. kilka różnych poziomów detali tekstury), można rozkazać obiektowi wprowadzającemu
@@ -54,17 +54,16 @@
 * Ostatecznie klasa zbiorcza dostawy zawsze wybierze najnowszego dostawcę (do zapisu dostawca musi
 * wskazywać na zasób zdolny do zarówno zapisu jak i odczytu).
 * 
-* Jeżeli żaden dostawca nie spełnia takiego warunku, nowy zostanie stworzony za pomocą funkcji @ref engine::platform::create_new
+* Jeżeli żaden dostawca nie spełnia takiego warunku, nowy zostanie stworzony za pomocą funkcji @c engine::platform::create_new
 * 
-* Jeżeli dany zasób jest niemożliwy do zapisania, można zwrócić obiekt @ref engine::data::output_void_t który symuluje zapis,
+* Jeżeli dany zasób jest niemożliwy do zapisania, można zwrócić obiekt @c engine::data::output_void_t który symuluje zapis,
 * wysyłając dane w nicość (analogicznie do Linuxowego pliku `/dev/null`)
-* @see engine::data::provider_t, engine::data::provider_actual_t
 *
 * @section vfs_scanners Skanery
 * Skaner to niewielka klasa przeglądająca zasoby w regularnych odstępach czasowych (rzędu setek milisekund) aby sprawdzić
 * ich datę modyfikacji. Zmiany zostają odnotowane i zaktualizowane w formie nowych dostawców. Lista dostępnych skanerów
-* jest udostępniona jako ustawienia @ref engine_startup_platform "Rozrusznika" i zwykle zawiera kilka
-* @ref engine::data::scanner_directory_t "skanerów katalogów" ze ścieżkami w jakich można się spodziewać zasobów.
+* jest udostępniona jako ustawienia rozrusznika i zwykle zawiera kilka
+* skanerów katalogów ze ścieżkami w jakich można się spodziewać zasobów.
 *
 * @section vfs_extension Rozszerzenia
 * Skanery (opisane w poprzednim akapicie) posiadają także możliwość zarejestrowania wywołania zwrotnego po każdym znalezionym pliku.

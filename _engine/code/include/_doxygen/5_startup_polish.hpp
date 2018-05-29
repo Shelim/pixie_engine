@@ -28,7 +28,7 @@
 * #endif
 * END_PLATFORM_CONFIGURATION()
 * @endcode
-* Taka konfiguracja wygeneruje nowy obiekt o nazwie windows i nieokreślonym typie szablonowym. Jedną z jego metod jest `ignite_from_main`
+* Taka konfiguracja wygeneruje nowy obiekt o nazwie `windows` i nieokreślonym typie szablonowym. Jedną z jego metod jest `ignite_from_main`
 * która bierze jako argumenty wartości linii komend i generuje obiekt programu. Jeżeli obiekt jest pusty, to znaczy że silnik z jakiegoś
 * powodu nie może wystartować (np. inna instancja jest już uruchomiona).
 * 

@@ -10,7 +10,7 @@
 * Najważniejszą przewagą nad `printf` jest możliwość zmiany kolejności argumentów (np. jest inna
 * kolejność wyrażeń w angielskim i niemieckim), pominięcia bądź powtórzenia danego argumentu oraz
 * pełne wsparcie dla systemu unicode. Typy argumentów nie mają znaczenia (jak długo posiadają przeładowaną
-* funkcję @ref engine::to_string() ), podobnie jak ich liczba (wspierana jest każda ilość). System
+* funkcję @c engine::to_string() ), podobnie jak ich liczba (wspierana jest każda ilość). System
 * formatowania wspiera także przekazywanie dodatkowej informacji do wspomnianej metody `to_string`
 * Przykład:
 * @code{.cpp}
@@ -42,8 +42,8 @@
 *           Wartości 0 można użyć żeby wymusić podanie formatowania. Nie ma górnej wartości numeru.
 *           Argument o danym numerze może się powtarzać. Nie można umieścić spacji między # a numerem.
 *		@subsection string_format_reference_format Formatowanie
-*           Formatowanie, które zostanie przekazane jako drugi argument funkcji @ref engine::to_string()
-*           W przypadku argumentu 0 zostanie przekazane do funkcji przeładowanej dla @ref engine::ustring_t
+*           Formatowanie, które zostanie przekazane jako drugi argument funkcji @c engine::to_string()
+*           W przypadku argumentu 0 zostanie przekazane do funkcji przeładowanej dla @c engine::ustring_t
 *           i przyjmującej pusty argument.
 *		@subsection string_format_reference_comment Komentarz
 *           Każdy komentarz zaczyna się znakiem `@` i trwa aż do kończącego znaku `#`.

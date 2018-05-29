@@ -91,7 +91,7 @@
 * @endcode
 * @section engine_tests_coverage Pokrycie testami
 * W chwili obecnej zaimplementowane jest 8 testów sprawdzających 30% kodu źródłowego (1040 z 3437 dróg). Istnieje możliwość dokładnego sprawdzenia
-* w edytorze VS Code które linie są już pokryte testami, co obrazuje poniższy obrazek. Oczywiście tylko linie zawierające aktywny
+* w edytorze VS Code które linie są już pokryte testami, co obrazuje poniższy zrzut ekranu. Oczywiście tylko linie zawierające aktywny
 * kod są uwzględnione w tym zestawieniu.
 * @image html tests_coverage.jpg "Ilustracja pokrycia testami kodu"
 * @image latex tests_coverage.jpg "Ilustracja pokrycia testami kodu" height=9cm
@@ -211,7 +211,7 @@
 * Po jej usunięciu pojawił się inny problem: wszystkie instancje obiektu singleton tworzone przez danego zarządcę wstrzykiwania
 * dzieliły ten sam wskaźnik, nawet jeżeli były wyraźnie zadeklarowane jako osobne obiekty. Stało się oczywiste, że
 * statyczne pole musiało zostać usunięte. Wciąż jednak potrzebne było sprawdzenie obiektu po typie szablonowym
-* na test istnienia. Pierwotnie rozważano formę mapy-czasu-kompilacji@ref compileTimeKeyValueStore, ale wkrótce okazało się że było to rozwiązanie
+* na test istnienia. Pierwotnie rozważano formę mapy-czasu-kompilacji@cite compileTimeKeyValueStore, ale wkrótce okazało się że było to rozwiązanie
 * niemożliwe do zaimplementowania z przyczyn logicznych; W szczególności obiekty mogły być tworzone dynamicznie już po
 * kompilacji (np. w formie wtyczki dll). W związku z tym jednym rozwiązaniem stała się zwykła mapa (a dokładniej niesortowana
 * mapa - z przyczyn wydajnościowych) której kluczem musiała być informacja o typie szablonowym. Szczęśliwie C++ dopuszcza
