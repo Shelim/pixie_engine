@@ -211,7 +211,7 @@
 * Po jej usunięciu pojawił się inny problem: wszystkie instancje obiektu singleton tworzone przez danego zarządcę wstrzykiwania
 * dzieliły ten sam wskaźnik, nawet jeżeli były wyraźnie zadeklarowane jako osobne obiekty. Stało się oczywiste, że
 * statyczne pole musiało zostać usunięte. Wciąż jednak potrzebne było sprawdzenie obiektu po typie szablonowym
-* na test istnienia. Pierwotnie rozważano formę mapy-czasu-kompilacji, ale wkrótce okazało się że było to rozwiązanie
+* na test istnienia. Pierwotnie rozważano formę mapy-czasu-kompilacji@ref compileTimeKeyValueStore, ale wkrótce okazało się że było to rozwiązanie
 * niemożliwe do zaimplementowania z przyczyn logicznych; W szczególności obiekty mogły być tworzone dynamicznie już po
 * kompilacji (np. w formie wtyczki dll). W związku z tym jednym rozwiązaniem stała się zwykła mapa (a dokładniej niesortowana
 * mapa - z przyczyn wydajnościowych) której kluczem musiała być informacja o typie szablonowym. Szczęśliwie C++ dopuszcza

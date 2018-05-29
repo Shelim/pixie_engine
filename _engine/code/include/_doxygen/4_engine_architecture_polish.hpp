@@ -13,7 +13,7 @@
 * Zarządca posiada autorytarną kontrolę własnego modułu i odpowiada za jego działanie. Przykładem jest zarządca dźwięku który sprawuje wyłączną kontrolę
 * nad kartą dźwiękową i który umożliwia kolejkowanie próbek do odtworzenia.
 * 
-* Takie rozwiązanie ma jednak podstawowe wady:
+* Takie rozwiązanie ma jednak podstawowe wady:@cite managerBad1 @cite managerBad2
 *  - Jest bardzo trudno sprawdzić mechanicznie zarządcę bez znajomości jego wnętrza (złamanie (1)).
 *  - Ukrywa powiązania między zarządcami (nie jest oczywiste czy np. zarządca grafiki wymaga dostępu do zarządcy zasobów)
 *  - Problematyczne w programowaniu wielowątkowym (złamanie (3)).
@@ -21,7 +21,7 @@
 * 
 * Rozwiązanie to zostało odrzucone na bardzo wczesnym etapie.
 * 
-* Kolejnym rozważanym modelem było odwrócenie kontroli (tzw. pryncypał Hollywood @a "Nie dzwoń do nas - to my zadzwonimy do ciebie") i wstrzykiwanie zależności.
+* Kolejnym rozważanym modelem było odwrócenie kontroli@cite ioc (tzw. pryncypał Hollywood @a "Nie dzwoń do nas - to my zadzwonimy do ciebie"@cite ioc2) i wstrzykiwanie zależności.@cite di
 * Ten model posiada wiele autonomicznych wariantów, na początek rozważano model komponentowy:
 * 
 * Komponent to autonomiczna jednostka kodu realizująca pojedynczą funkcjonalność silnika. Np. komponentem jest odtwarzacz konkretnej próbki dźwięku,
@@ -31,7 +31,7 @@
 * W takim podejściu pojawia się jednak pewien problem - co oznacza pojedyncza funkcjonalność? Czy przyjęcie komunikatu dziennika i jego wyświetlenie to
 * jedna czy dwie funkcjonalności? Co robić z komponentami które mogą posiadać kilka wariantów działania?
 * 
-* W ten sposób narodziła się idea dostawców: niewielkich klas dostarczających dane bądź implementacje komponentom które mogły do tej pory posiadać kilka wariantów.
+* W ten sposób narodziła się idea dostawców@cite designPattern : niewielkich klas dostarczających dane bądź implementacje komponentom które mogły do tej pory posiadać kilka wariantów.
 * Dla przykładu komponent dziennik przyjmujący komunikaty posiada dostawców wyjścia: plik, konsola, standardowy strumień wyjścia. Wybór aktywnych
 * dostawców (niekiedy może być więcej niż jeden dostawca aktywny, w innej sytuacji może nie mieć to sensu) należy do implementacji danej platformy.
 * Na przykład komponent system plików posiada obecnie dwóch dostawców: rodzajowy (używający wyłącznie biblioteki standardowej) i Windows
@@ -59,9 +59,6 @@
 * W ten sposób natywne dla Windowsa dwukliknięcie na program w eksploratorze Windows uruchamiało nową aplikację w obecnej instancji,
 * zamiast generować nową instancję.
 * 
-* Jako ciekawostkę można dodać że takie podejście zostało spopularyzowane przez przeglądarkę internetową Firefox około roku 2009-2010,
-* a jego jedyną wadą jest fakt że w przypadku zawieszenia się jednej instancji aplikacji, awarii ulega cały kontener.
-* 
 * @section engine_architecture_utilities Narzędzia pomocnicze
 * Poza systemem komponentów znajduje się seria tzw. narzędzi pomocniczych. Jest to zbiór funkcji i klas które nie wchodzą do głównej części silnika
 * i stanowią raczej bazę i bibliotekę standardową z której korzystają wszystkie wyższe elementy Pixie Engine. W szczególności narzędzia pomocnicze 
@@ -78,7 +75,7 @@
 * i rozwiązująca pytania o elementy w czasie kompilacji. Z powodu zaawansowanego meta-programowania słownik czasu kompilacji nie może posiadać
 * klucza opartego o wartość tekstową; Jest to bezpośrednie ograniczenie możliwości szablonów w C++.
 * @subsubsection engine_architecture_utilities_container_concurrent_queue Równoległa kolejka
-* Jest to prosta implementacja równoległej kolejki w modelu producent-konsument. Kolejka blokuje wykonanie wątku konsumenta (w sposób nie obciążający procesora)
+* Jest to prosta implementacja równoległej kolejki w modelu producent-konsument@cite producerconsumer. Kolejka blokuje wykonanie wątku konsumenta (w sposób nie obciążający procesora)
 * aż do momentu nadejścia nowego obiektu w wątku producenta. Kolejka realizuje model jeden-konsument wielu-producentów i nie wspiera dodatkowego mechanizmu
 * przerywającego oczekiwanie (zwyczajowo można po prostu wysłać pusty wskaźnik bądź specjalnie oznaczony obiekt jeżeli potrzebne jest przerwanie)
 * @subsubsection engine_architecture_utilities_container_sync Synchroniczna kolejka i synchroniczna mapa
@@ -97,13 +94,13 @@
 * Proste makro do tworzenia własnych silnie typowanych enumeracji które automatycznie przeciążają funkcje engine::to_string() i engine::from_string()
 * dla własnego typu.
 * @subsubsection engine_architecture_utilities_pattern_factory Fabryka
-* Poprawiona implementacja fabryki abstrakcyjnej z @ref dependency_di "Boost Dependency Injection". Zobacz rozdział
+* Poprawiona implementacja fabryki abstrakcyjnej@cite designpatterns z @ref dependency_di "Boost Dependency Injection". Zobacz rozdział
 * @ref engine_problems_di "problem z wstrzykiwaniem zależności Boost"
 * @subsubsection engine_architecture_utilities_pattern_flags Flagi
 * Szablonowa klasa (podstawą szablonu jest silnie typowana enumeracja) tworząca flagi ustawień (tj. serię przełączników mogących być w danej chwili
 * włączonych bądź wyłączonych). Flagi są zoptymalizowane przestrzennie i zawierają podstawowy zestaw metod ustawiających je i zdejmujących.
 * @subsubsection engine_architecture_utilities_pattern_fourcc Identyfikator
-* To implementacja idei czteroliterowych (32 bit) identyfikatorów używanych np. w koderach-dekoderach plików wideo.
+* To implementacja idei czteroliterowych (32 bit) identyfikatorów@cite FourCCWikipedia używanych np. w koderach-dekoderach plików wideo.@cite FourCC
 * Implementacja Pixie Engine oparta jest o szablony i uwzględnia kodowanie, różną kolejność bajtów na różnych platformach oraz potrafi wygenerować
 * identyfikator jako `constexpr` (co oznacza że może być np. wykorzystywany jako etykieta `case` w instrukcji `switch`).
 * @subsubsection engine_architecture_utilities_pattern_provider Dostawca
@@ -179,7 +176,7 @@
 * dane w zależności od potrzeb, lub uzyskać dodatkowe informacje na temat każdej linijki.
 * 
 * Jeżeli chodzi o parsowanie wejścia, wykorzystana jest biblioteka @ref ustring_format_spirit "Boost Spirit" z autorską implementacją systemu na wzór intellisense
-* poprawiającą błędy wejścia i posiadająca funkcjonalność autouzupełniania poleceń (zobacz https://stackoverflow.com/a/47383910/151150 )
+* poprawiającą błędy wejścia i posiadająca funkcjonalność autouzupełniania poleceń@cite spirit
 * 
 * @subsubsection engine_architecture_core_global_data Dane
 * To zbiór klas stanowiący bazę @ref vfs "wirtualnego systemu plików". W tej chwili w skład rdzenia należą: strumienie wejścia/wyjścia,
@@ -197,7 +194,7 @@
 * (za pomocą wstrzykiwania zależności) co wygenerowało bardzo poważny problem: cykliczne zależności. Takie grafy obiektów były niemożliwe do
 * stworzenia i generowały zawieszenie się aplikacji podczas startu - do tego były to zawieszenia bardzo trudne do analizy
 * (długie szablonowe stosy wywołań). Jedynym rozwiązaniem było znalezienie sposobu na rozdzielenie komunikacji od faktycznych komponentów.
-* Wzorzec komunikatora jest tutaj idealnym rozwiązaniem.
+* Wzorzec komunikatora@cite messagingPattern jest tutaj idealnym rozwiązaniem.
 *
 * Komunikator jest w tym wypadku szablonową klasą opartą o @ref engine_architecture_utilities_container_concurrent_queue "kolejkę wielu-producentów jeden-konsument" i posiada cztery warianty implementacji
 * (synchroniczne albo asynchroniczne wysyłanie i odbieranie komunikatów). Warianty synchroniczne generują najmniejsze opóźnienia ale nie są przeznaczone
@@ -272,7 +269,7 @@
 * To mniejsze komponenty pracujące w wydzielonych wątkach, których celem jest dokonywanie aktywnych obliczeń. Najlepszym przykładem jest
 * tu na przykład usługa profilera (w tym celu wykorzystane jest @ref dependency_remotery "remotery")
 * @subsubsection engine_architecture_component_kind_facade Fasady
-* To komponenty przyjmujące polecenia z reszty silnika za pomocą komunikatorów i dystrybuujące je do innych komponentów w ramach tego samego obszaru.
+* Nie mylić ze wzorcem projektowym fasady. Fasady w Pixie Engine to komponenty przyjmujące polecenia z reszty silnika za pomocą komunikatorów i dystrybuujące je do innych komponentów w ramach tego samego obszaru.
 * @subsubsection engine_architecture_component_kind_standard Standardy
 * Czyli najbardziej typowe komponenty posiadające jasno zadeklarowaną funkcjonalność i publiczne API w formie metod wirtualnych.
 *

@@ -76,7 +76,7 @@
 * 
 * W formacie ZIP istnieje pewne zagrożenie które trzeba było uwzględnić w implementacji; O ile prawie wszyscy dostawcy korzystają z daty
 * modyfikacji z dokładnością do jednej sekundy, archiwum zipa operuje na dacie modyfikacji pliku z dokładnością do dwóch sekund.
-* Założeniem twórcy było dwukrotne zwiększenie zakresu czasowego 32-bitowej liczby bez znaku (patrz: problem roku 2038),
+* Założeniem twórcy było dwukrotne zwiększenie zakresu czasowego 32-bitowej liczby bez znaku (patrz: problem roku 2038@cite year2038Problem),
 * niestety w efekcie wpływa to na stabilność dostawcy i jego kolejki priorytetowej uwzględniającej datę zapisu. Dla pewności
 * wszystkie operacje czasowe na zip są zaokrąglane w górę (co wymusza położenie archiwum z przodu kolejki, dla jednoczesnego zapisu z i bez archiwum)
 * 

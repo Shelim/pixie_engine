@@ -36,7 +36,7 @@
 * Obiekt programu musi bezwzględnie "żyć" całą długość działania programu. Na platformach na których nie istnieje funkcja `main`
 * zdolna utrzymać instancję, należy umieścić obiekt programu w zmiennej globalnej (jest to jedyny przypadek w którym używa sie zmiennych
 * globalnych w Pixie Engine). Uwaga: nie można tego zrobić w zmiennej statycznej, patrz wprowadzenie do tego rozdziału.
-* Obiekt programu jest z definicji singletonem.
+* Obiekt programu jest z definicji singletonem@cite designPattern.
 * 
 * Obiekt programu zawiera jako własności akcesory wszystkich globalnych komponentów. Jeżeli potrzeba dostać się do obiektu programu
 * z poziomu aplikacji istnieje specjalny element rdzenia o nazwie `program_reference_t` który trzyma referencję na obiekt programu.
