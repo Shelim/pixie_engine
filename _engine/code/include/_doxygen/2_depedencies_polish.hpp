@@ -62,7 +62,7 @@
 * </table></center>
 *
 * @section dependency_angelcode AngelCode
-* Angelscript (albo Biblioteka Skryptowa AngelCode) to dojrzały, aktywnie rozwijany język skryptowy o składni opartej częściowo
+* Angelscript@cite AngelScript (albo Biblioteka Skryptowa AngelCode) to dojrzały, aktywnie rozwijany język skryptowy o składni opartej częściowo
 * o C++ udostępniany na wolnej licencji zlib.
 * 
 * Wybór konkretnego języka skryptowego nie jest łatwy w dzisiejszych czasach z racji obecności na rynku wielu
@@ -81,10 +81,10 @@
 * </table>źródło: https://github.com/r-lyeh-archived/scriptorium</center>
 *
 * @section dependency_anttweakbar AntTweakBar
-* AntTweakBar to niewielka, łatwa do wykorzystania biblioteka która pozwala programistom i twórcom zawartości dodać prosty interfejs użytkownika
+* AntTweakBar@cite AntTweakBar to niewielka, łatwa do wykorzystania biblioteka która pozwala programistom i twórcom zawartości dodać prosty interfejs użytkownika
 * na potrzeby interaktywnego dobierania parametrów. Biblioteka pozwala podpiąć dowolną zmienną C/C++ i umożliwia mechanizmy prostej modyfikacji
 * wartości, na podstawie rozpoznanego typu (liczba, test, wektor, kolor, macierz, kwaternion). Biblioteka ta wspiera wszystkie współczesne stosowane
-* renderery (OpenGL, DirectX, SDL)
+* renderery (OpenGL, DirectX, SDL)@cite howtoAntTweakBar
 * 
 * @image html dependency_anttweakbar_image.jpg "Przykładowy zrzut ekranu AntTweakBar"
 * @image latex dependency_anttweakbar_image.jpg "Przykładowy zrzut ekranu AntTweakBar" height=5cm
@@ -93,7 +93,7 @@
 * przy tworzeniu fanowski modyfikacji) bez opuszczania gry.
 *
 * @section dependency_apacheant Apache Ant
-* Apache Ant to system budujący oparty o język XML zaimplementowany w Javie z wykorzystaniem komend języka skryptowego JavaScript. Posiada rozbudowaną
+* Apache Ant@cite ApacheAnt to system budujący oparty o język XML zaimplementowany w Javie z wykorzystaniem komend języka skryptowego JavaScript. Posiada rozbudowaną
 * bazę zadań (np. "wykonaj komendę na pliku", "skopiuj plik", "wgraj plik na serwer FTP", etc.), które można parametryzować z wykorzystaniem zmiennych.
 *
 * Istnieje na rynku wiele komercyjnie-gotowych systemów budujących, poczynając od makefile i cmake - bardzo dojrzałych narzędzi operujących na skryptach
@@ -105,7 +105,7 @@
 * W Pixie Engine jest włączona jedynie binarna dystrybucja Apache Ant.  
 *
 * @section dependency_blowfish Blowfish
-* System szyfrujący Blowfish jest uznanym algorytmem blokowym operującym na 8-bajtowych blokach danych (64 bity).
+* System szyfrujący Blowfish@cite Blowfishcipher jest uznanym algorytmem blokowym operującym na 8-bajtowych blokach danych (64 bity).
 * Algorytm opiera się o dwa przebiegi: rozwijanie klucza i szyfrowanie danych. Klucz może zawierać od 1 do 56 znaków i jest rozwijany do 4168 bajtów.
 * Blowfish opiera się na 16 rundach kryptograficznych, a siła algorytmu bierze się z zastosowania nieliniowej operacji S-Block
 *
@@ -115,7 +115,7 @@
 *
 * @section dependency_boost Boost - rozszerzone biblioteki C++
 * Jako iż standardowa biblioteka C++, nawet rozszerzona o funkcje C++11 i C++14 zawiera relatywnie ograniczony zestaw narzędzi, Pixie Engine wymaga
-* rozszerzonej nieoficjalnej biblioteki Boost. Boost jest dojrzałą, aktywnie rozwijaną i recenzowaną przez specjalistów biblioteką - lub raczej zbiorem bibliotek
+* rozszerzonej nieoficjalnej biblioteki Boost@cite BoostCLibraries. Boost jest dojrzałą, aktywnie rozwijaną i recenzowaną przez specjalistów biblioteką - lub raczej zbiorem bibliotek
 * umożliwiającą - i optymalizującą - wiele typowych operacji jakie można spotkać podczas tworzenia oprogramowania w C++.
 * Pełna lista komponentów Boost jest dostępna tutaj: https://www.boost.org/doc/libs/
 *
@@ -123,7 +123,7 @@
 * Kolejne komponenty będą integrowane w miarę potrzeb.
 *
 * @section dependency_di Boost Dependency Injection
-* Biblioteka wstrzykiwania zależności jest propozycją rozszerzenia Boost (obecnie oczekującą na recenzenta), ale do tej pory nie została włączona w zestaw bibliotek Boost
+* Biblioteka wstrzykiwania zależności@cite BoostDI jest propozycją rozszerzenia Boost (obecnie oczekującą na recenzenta), ale do tej pory nie została włączona w zestaw bibliotek Boost
 * i pozostaje niezależnym produktem. Jest to relatywnie młoda biblioteka, wciąż aktywnie rozwijana przez twórców. Więcej informacji na temat wykorzystania
 * wstrzkiwania zależności i wykorzystania wzorca odwrócenia odpowiedzialności w Pixie Engine znajduje się w rozdziale @ref engine_architecture "architektura silnika".
 *
@@ -131,7 +131,7 @@
 * zaimplementowane przez twórcę Pixie Engine znajduje się w rozdziale @ref engine_problems_di "problem z wstrzykiwaniem zależności Boost".
 *
 * @section dependency_cereal cereal
-* cereal (oficjalnie nazwa pisana z małej litery) to biblioteka łatwej serializacji danych C++ czyli zamiany drzewka referencji na strumień binarny bądź tekstowy
+* cereal@cite cereal (oficjalnie nazwa pisana z małej litery) to biblioteka łatwej serializacji danych C++ czyli zamiany drzewka referencji na strumień binarny bądź tekstowy
 * i vice versa. Cereal zostało wybrane ze względu na nieinwazyjną składnię, rozpoznawanie polimorfizmu (dzięki mechanizmom RTTI - rozpoznawania typów w trakcie
 * wykonania), relatywnie proste API, dużą wydajność oraz łatwość implementacji nowych strumieni wyjściowych. Jego największym ograniczeniem jest problem
 * z tworzeniem paska postępu zapisywania/wczytywania danych - istnieje tylko jeden przebieg i niewielkie możliwości podczepiania zdarzenia
@@ -139,7 +139,7 @@
 * dwukrotnie (pierwszy przebieg jałowy, bez strumieniowania danych tylko po to by policzyć liczbę obiektów w grafie, i drugi - faktycznie serializujący)
 *
 * @section dependency_cg cg
-* cg (oficjalnie nazwa pisana z małej litery) to autorska biblioteka firmy nVidia, nierozwijana i nieutrzymywana od kwietnia 2012, ale dostatecznie
+* cg@cite CgprogramminglanguageWikipedia (oficjalnie nazwa pisana z małej litery) to autorska biblioteka firmy nVidia, nierozwijana i nieutrzymywana od kwietnia 2012, ale dostatecznie
 * dojrzała i stabilna by zyskać szerokie zastosowania. cg to abstrakcyjny język jednostki cieniującej, umożliwiający transkompilację do kodu GLSL oraz HLSL
 * z wykorzystaniem konkretnych list cech danej wersji języka. W ten sposób programy jednostki cieniującej mogą zostać stworzone przez grafika jednorazowo
 * i być od razu dostępne na wszystkich wspieranych rendererach. Uzyskuje się w ten sposób warstwę niezależności zasobów nad konkretną implementacją.
@@ -157,7 +157,7 @@
 * Osobną gałąź stanowią testy statyczne, oparte wyłącznie na maszynowej analizie kodu źródłowego z pominięciem fazy kompilacji i uruchomienia programu.
 * Testy statyczne mogą być oparte o ręczną analizę, ale powstały narzędzia zdolne przeprowadzić taką analizę w sposób całkowicie nienadzorowany.
 *
-* Najważniejszym narzędziem tego typu jest C++ Check, statyczny analizator kodu źródłowego który wyłuskuje potencjalne błędy (np. niezainicjowane zmienne,
+* Najważniejszym narzędziem tego typu jest C++ Check@cite CppcheckAtoolforstaticCCcodeanalysis, statyczny analizator kodu źródłowego który wyłuskuje potencjalne błędy (np. niezainicjowane zmienne,
 * niezwolnioną pamięć, niezłapane wyjątki), posługując się wyłącznie oryginalnymi kodami źródłowymi z pominięciem budowania pliku wykonywalnego.
 * C++ Check jest z powodzeniem wykorzystywany w produkcyjnych aplikacjach (między innymi wykrył 27 błędów w jądrze Linuxa w wersji 2.6) i jest
 * uznany za dojrzałe, dodatkowe narzędzie weryfikujące kod. Minusem rozwiązania jest czas analizy - 6 rdzeni sprawdzało 34 pliki *.cpp Pixie w ciągu
@@ -166,10 +166,10 @@
 * W przyszłości Pixie Engine może automatycznie uruchamiać C++ Check przy każdej prośbie o dołączenie kodu. W ten sposób jakość kodu
 * może zostać utrzymana przez analizę potencjalnych braków.
 * 
-* Więcej informacji na temat sposobów testowania Pixie Engine znajduje się w rozdziale @ref tests "testy".
+* Więcej informacji na temat sposobów testowania Pixie Engine znajduje się w rozdziale @ref engine_tests "testy".
 *
 * @section dependency_debugbreak DebugBreak
-* DebugBreak to niewielka - jednonagłówkowa - biblioteka zdolna przełączyć punkt zatrzymania za pomocą wstawki assembly (zwykle zaimplementowanej jako
+* DebugBreak@cite DebugBreak to niewielka - jednonagłówkowa - biblioteka zdolna przełączyć punkt zatrzymania za pomocą wstawki assembly (zwykle zaimplementowanej jako
 * pułapka bądź przerwanie procesora) na wszystkich wspieranych platformach. W projekcie jest wykorzystana głównie na etapie tworzenia oprogramowania
 * lub testów. Dzięki zastosowaniu DebugBreak programista może zobaczyć wykryty problem (np. nadpisanie pamięci) w chwili jest wystąpienia.
 *
@@ -177,15 +177,15 @@
 * dlatego w przypadku zawieszenia aplikacji na komputerze klienckim stosowane są inne mechanizmy zbierania i raportowania błędów.
 *
 * @section dependency_dia dia
-* dia (oficjalnie nazwa pisana z małej litery) to framework niezbędny do poprawnego działania @ref dependency_llvm "LLVM/Clang". Poza zastosowaniem
+* dia@cite DebugInterfaceAccessSDK (oficjalnie nazwa pisana z małej litery) to framework niezbędny do poprawnego działania @ref dependency_llvm "LLVM/Clang". Poza zastosowaniem
 * w kompilatorze nie jest wykorzystywany bezpośrednio w projekcie.
 *
 * @section dependency_dot dot
-* dot (oficjalnie nazwa pisana z małej litery) to niewielkie narzędzie do generowania graficznych diagramów używane wewnętrznie przez
+* dot@cite GraphvizGraphVisualizationSoftware (oficjalnie nazwa pisana z małej litery) to niewielkie narzędzie do generowania graficznych diagramów używane wewnętrznie przez
 * @ref dependency_doxygen "doxygen". Poza wykorzystaniem przy tworzeniu dokumentacji nie jest wykorzystywane bezpośrednio w projekcie.
 *
 * @section dependency_doxygen doxygen
-* doxygen (oficjalnie nazwa pisana z małej litery) stanowi dojrzały, stabilny system generowania dokumentacji bezpośrednio z kodu źródłowego.
+* doxygen@cite DoxygenMainPage (oficjalnie nazwa pisana z małej litery) stanowi dojrzały, stabilny system generowania dokumentacji bezpośrednio z kodu źródłowego.
 * doxygen wyłuskuje otagowane specjalnymi komentarzami komendy i tworzy z nich opis programu wraz z informacjami wyciągniętymi bezpośrednio
 * z kodu źródłowego. Narzędzie jest w stanie wygenerować graf obiektów (także graficzny, z wykorzystaniem @ref dependency_dot "narzędzia dot"),
 * oraz odczytać podstawowe informacje z nagłówków klas, funkcji i metod. doxygen jest udostępniany na licencji GNU GPL, ale w projekcie jest uwzględniona
@@ -203,7 +203,7 @@
 * sposób dokonywania szybkich, iteracyjnych kompilacji testowych, pozostawiając jednocześnie mechanizm pełnej rekompilacji do tworzenia finałowych
 * wersji plików wykonywalnych.
 *
-* Rozważano kilka rozwiązań spośród których wybrano właśnie narzędzie FastBuild. FastBuild to relatywnie młody, zaawansowany system budujący
+* Rozważano kilka rozwiązań spośród których wybrano właśnie narzędzie FastBuild@cite FASTBuildHighPerformanceBuildSystem. FastBuild to relatywnie młody, zaawansowany system budujący
 * oparty o proces iteracyjny z zachowaniem maksymalnej ilości danych między kompilacjami w pamięci podręcznej. W przeciwieństwie do innych rozważanych
 * rozwiązań jest niezależny od wybranego kompilatora i potrafi się dobrze
 * integrować z istniejącymi systemami budowania. Fastbuild potrafi rozłożyć kompilację na wiele rdzeni, sprawdzić różnice plików na poziomie makr preprocesora
@@ -222,11 +222,11 @@
 * kontrybuowania kodów źródłowych z zewnątrz zespołu. W takiej sytuacji oczywistym rozwiązaniem jest użycie systemu kontroli wersji, systemu który
 * zapewnia możliwość tworzenia kontrolowalnego repozytorium zdolnego do zapamiętania (i odwrócenia) dowolnej zmiany w produkcie. W owych czasach
 * na rynku znajdowało się kilka produktów tej klasy, jednak żaden nie spełniał wymagań twórców Linuxa. Stojąc przed oczywistą blokadą, twórcy Linuxa podjęli
-* decyzję o stworzeniu autorskiego, własnego rozwiązania które nazwali właśnie gitem. Tak powstał obecnie najpopularniejszy - i wykorzystywany także w Pixie Engine -
+* decyzję o stworzeniu autorskiego, własnego rozwiązania które nazwali właśnie gitem.@cite GitWikipedia Tak powstał obecnie najpopularniejszy - i wykorzystywany także w Pixie Engine -
 * zdecentralizowany system kontroli wersji, zdolny do łatwego scalania zmian pochodzących z różnych gałęzi i umożliwiający ocenę i akceptację kodu pochodzącego
 * z zewnątrz projektu (w formie tzw. próśb o ściągnięcie).
 *
-* Analogicznym rozwiązaniem do systemu kontroli git jest Mercurial (hg), posiadający bardzo podobny zestaw cech, ale w przeciwieństwie do git operujący na
+* Analogicznym rozwiązaniem do systemu kontroli git jest Mercurial@cite MercurialSCM (hg), posiadający bardzo podobny zestaw cech, ale w przeciwieństwie do git operujący na
 * zmianach (ang. changes) a nie stanach (ang. snapshots). Autor niniejszej pracy preferował by system Mercurial jednak najpopularniejszy
 * serwis oprogramowania otwartych-źródeł, github który przechowuje repozytoria kodu źródłowego projektu, nie dopuszczał repozytoriów hg (w momencie rozpoczynania projektu). Migracja z git do hg nie została do dziś
 * przeprowadzona
@@ -240,15 +240,15 @@
 *
 * @section dependency_glew glew
 * OpenGL, jeden z dwóch rendererów wspieranych przez Pixie Engine do niedawna był niemal całkowicie zamrożony w produkcji - konsorcjum twórców OpenGL
-* nie dopuszczało zmian standardu, poza tworzeniem (np. przez producentów kart graficznych) autorskich rozszerzeń. O ile sytuacja ta zmieniła się niedawno,
+* nie dopuszczało zmian standardu, poza tworzeniem (np. przez producentów kart graficznych) autorskich rozszerzeń.@cite OpenGLWikipedia O ile sytuacja ta zmieniła się niedawno,
 * o tyle wciąż ogromna część elementów OpenGL jest zaimplementowana właśnie jako wspomniane rozszerzenia (z których cześć stała się de facto elementami
 * standardu). Sprawdzanie dostępności rozszerzeń na danej architekturze i weryfikowanie możliwości kart graficznych stało się dość niewdzięcznym zadaniem - 
 * zwłaszcza iż ta sama funkcjonalność potrafiła być zawarta w różnych rozszerzeniach zależenie od producenta danej karty graficznej (a czasem różnić
-* się w detalach implementacyjnych!). GLEW (OpenGL Extension Wrangler Library), to zestaw nagłówków i bibliotek które uproszczają proces sprawdzania i uruchamiania
+* się w detalach implementacyjnych!). GLEW@cite GLEW (OpenGL Extension Wrangler Library), to zestaw nagłówków i bibliotek które uproszczają proces sprawdzania i uruchamiania
 * opisanych rozszerzeń.
 * 
 * @section dependency_googlemock Google Mock
-* Google Mock to zaawansowana biblioteka do tworzenia makiet (ang. mockups) kodu na potrzeby testowania modułów. Makiety, to niewielkie "wydmuszkowe" klasy
+* Google Mock@cite GoogleTestMock to zaawansowana biblioteka do tworzenia makiet (ang. mockups) kodu na potrzeby testowania modułów. Makiety, to niewielkie "wydmuszkowe" klasy
 * które nie posiadają faktycznej implementacji, a są zdolne do odnotowania aktu wywołania dowolnej z własnych metod, lub dostępu do akcesorów.
 *
 * Przykładem zastosowania Google Mock może być następująca sytuacja: rozważmy moduł ustawień. Akt zapamiętania ustawienia powinien wywołać funkcję zapisu
@@ -256,7 +256,7 @@
 * Oczywiście makieta powinna odnotować prośbę o zapis - brak takiej prośby powinien być zgłoszony jako błąd.
 *
 * @section dependency_googletest Google Test
-* Google Test to rozbudowane narzędzie Google do tworzenia testów jednostkowych. O ile Google Test i opisany powyżej Google Mock zaczęły jako osobne projekty, obecnie
+* Google Test@cite GoogleTestMock to rozbudowane narzędzie Google do tworzenia testów jednostkowych. O ile Google Test i opisany powyżej Google Mock zaczęły jako osobne projekty, obecnie
 * są wykorzystywane niemal zawsze wspólnie. Google Test pozwala na tworzenie przypadków testowych, ewaluowania środowiska testowego i sprawdzanie warunków korzystając
 * z bogatej biblioteki asercji. Testy wykonywane są jeden po drugim na wyczyszczonym środowisku testowym, co pozwala na ewaluacje i późniejszą agregację danych z wielu
 * przebiegów testowych
@@ -267,7 +267,7 @@
 * nic nie uniemożliwia uruchomienia tego narzędzia ręcznie w trybie graficznym
 *
 * @section dependency_html_help_workshop HTML Help Workshop
-* HTML Help Workshop to bezpłatne narzędzie Microsoftu zdolne przygotować skompilowany plik pomocy (chm) z zadanych źródeł przygotowanych w formie 
+* HTML Help Workshop to bezpłatne narzędzie Microsoftu zdolne przygotować skompilowany plik pomocy (chm@cite MicrosoftCompiledHTMLHelpWikipedia ) z zadanych źródeł przygotowanych w formie 
 * strony internetowej (html). HTML Help Workshop jest wykorzystywany w Pixie Engine jedynie jako narzędzie z wiersza polecenia przez @ref dependency_doxygen "doxygena"
 * na potrzeby generowania dokumentacji na platformie Windows.
 * 
@@ -275,7 +275,7 @@
 * 
 * @section dependency_levenshtein Kalkulator odległości Levenshteina
 * Odległość Levenshteina między dwoma ciągami danych to minimalna ilość operacji jednostkowych (dodania, zmiany, bądź usunięcia) na dowolnym ciągu
-* potrzebnych by oba ciągi stały się identyczne.
+* potrzebnych by oba ciągi stały się identyczne.@cite LevenshteindistanceWikipedia
 * 
 * Przykład, dla danych ciągów:
 *  - abcb
@@ -286,46 +286,46 @@
 * Kalkulator odległości Levenshteina to prosta biblioteka o otwartych źródłach która oblicza wartość odległości dla dowolnych ciągów o porównywalnych elementach.
 * 
 * @section dependency_jdk JDK 1.8
-* Java Development Kit (JDK) to pełne SDK i platforma uruchomieniowa Javy, współczesnego języka zarządzanego. W projekcie jest używana wyłącznie wersja
+* Java Development Kit (JDK)@cite JavaSE to pełne SDK i platforma uruchomieniowa Javy, współczesnego języka zarządzanego. W projekcie jest używana wyłącznie wersja
 * prekompilowana w formie binarnej przenośnej - jest to zależność niezbędna do działania @ref dependency_apacheant "Apache Ant" i poza nim nie jest wykorzystywana.
 *
 * @section dependency_llvm LLVM
 * Kompilator języka C++ to jeden z najbardziej skomplikowanych programów jaki można współcześnie napisać. Na rynku, do niedawna, istniały tylko trzy
 * produkcyjne implementacje: GCC, MSVC i Intel C++ Compiler, spośród których tylko GCC był darmowy i posiadał otwarte źródła. Jedną z najbardziej problematycznych
 * cech GCC był styl jego wewnętrznej implementacji. Kompilator był tworzony bez żadnego planu i posiadał bardzo chaotycznie rozrzucony kod źródłowy, pełen
-* haków i skrótów utrudniających modyfikacje. 
+* haków i skrótów utrudniających modyfikacje.@cite Comparingclangtootheropensourcecompilers
 *
-* W 2000 roku na uniwersytecie Illinois założono nowy projekt LLVM (początkowo skrót rozwijał się do Low-Level Virtual Machine); Celem było sprawdzenie
+* W 2000 roku na uniwersytecie Illinois założono nowy projekt LLVM (początkowo skrót rozwijał się do Low-Level Virtual Machine)@cite TheLLVMCompilerInfrastructureProject; Celem było sprawdzenie
 * metod optymalizacji kodu pośredniego przed etapem asemblacji. Wkrótce okazało się że ze względu na "czystą" implementację projekt posiada znacznie szerszą
-* gamę zastosowań. Pięć lat później powstała fasada CLang, kompilująca C++ do postaci pośredniej na potrzeby LLVM. W ten sposób oba projekty stworzyły podwalny
+* gamę zastosowań.@cite LLVMWikipedia Pięć lat później powstała fasada CLang, kompilująca C++ do postaci pośredniej na potrzeby LLVM. W ten sposób oba projekty stworzyły podwalny
 * środowiska pod nową rodzinę kompilatorów. Obecnie LLVM to ponad 20 projektów (wliczając preprocesor, kompilator, konsolidator, linker, debugger, assembler,
 * analizator, etc.) i jest produkcyjnie gotowy do kompilowania projektów na wszystkich wspieranych przez Pixie Engine platformach. Zastosowanie jednego kompilatora
 * znacząco upraszcza fazę debuggowania i testowania (nie ma np. problemów z miskompilacją generowaną przez różne narzędzia).
 * 
-* Jako ciekawostkę można zauważyć że od 2017 linker LLVM jest w stanie wygenerować symbole debuggera systemu Window (.pdb), tym samym można wykorzystać wszystkie
+* Jako ciekawostkę można zauważyć że od 2017 linker LLVM jest w stanie wygenerować symbole debuggera systemu Window (.pdb)@cite ThePDBFileFormatLLVM7documentation, tym samym można wykorzystać wszystkie
 * istniejące narzędzia debuggowania / testowania które nie są zgodne z symbolami stosowanymi w GCC. To pozwoliło m.in. na zastosowanie
 * @ref dependency_open_cpp_coverage "Open C++ Coverage" oraz zrzucania informacji o kodzie w przypadku niezłapanego wyjątku.
 *
-* @section dependency_mathjax mathjax
-* mathjax (oficjalnie nazwa pisana z małej litery) to zaawansowany parser wyrażeń matematycznych w przeglądarce. W Pixie Engine jest wykorzystywany jako narzędzie
+* @section dependency_mathjax MathJax
+* MathJax@cite MathJax to zaawansowany parser wyrażeń matematycznych w przeglądarce. W Pixie Engine jest wykorzystywany jako narzędzie
 * pomocnicze do generowania wzorów matematycznych w niniejszej dokumentacji. Tylko binarna wersja jest dołączona.
 *
 * @section dependency_vlc libVLC
-* VLC to wieloplatformowe środowisko odtwarzacza multimediów, zdolne do wyświetlania filmów w różnych formatach, konwersji i rekompresji strumieni.
+* VLC@cite VLCFeaturesVideoLAN to wieloplatformowe środowisko odtwarzacza multimediów, zdolne do wyświetlania filmów w różnych formatach, konwersji i rekompresji strumieni.
 * Jedną z najważniejszych cech VLC jest brak założeń co do systemu w którym odtwarzacz jest uruchamiany - podstawa kodowa zawiera wszystkie realnie liczące się
 * kompresory i dekompresory (tzw. kodeki), filtry oraz zasoby generujące strumienie wyjściowe.
 *
-* libVLC to biblioteka C++ na bazie której odtwarzacz VLC jest skonstruowany. Pixie Engine wykorzystuje libVLC do odtwarzania filmów bezpośrednio w grze
+* libVLC@cite libVLCVideoLANWiki to biblioteka C++ na bazie której odtwarzacz VLC jest skonstruowany. Pixie Engine wykorzystuje libVLC do odtwarzania filmów bezpośrednio w grze
 * (np. logo producenta, przerywniki filmowe). libVLC wspiera zarówno wyświetlanie filmu bezpośrednio na ekranie jak i strumieniowanie do tekstury (DirectX i OpenGL).
 * libVLC pozwala też na zrzucanie filmu bezpośrednio z ekranu (przechwytywanie wideo) i tworzenie zrzutów ekranów.
 * 
 * @section dependency_minizip miniZip
 * Wczytywanie wielu plików z dysku (twardego, DVD, etc.) wiąże się z narzutem potrzebnym systemowi plików na odszukanie ścieżki na urządzeniu, otwarcie
 * deskryptora zabezpieczeń i wreszcie otwarcie uchwytu do samego pliku. Z tego powodu łatwo zauważyć że jeden plik o rozmiarze 100 mb będzie kopiowany bądź
-* czytany znacznie szybciej niż sto plików o rozmiarze 1 mb każdy. Ponieważ - jak już zauważono - gra to setki tysięcy zasobów - aby przyspieszyć czas wczytywania
+* czytany znacznie szybciej niż sto plików o rozmiarze 1 mb każdy.@cite Archive1 @cite Archive2 Ponieważ - jak już zauważono - gra to setki tysięcy zasobów - aby przyspieszyć czas wczytywania
 * danych, powiązane zasoby najlepiej jest spakować w jedno (bądź kilka) archiwum. Dla @ref vfs "wirtualnego systemu plików" Pixie Engine archiwum staje się transparentne
 * i dostęp do danych w środku jest równie łatwy jak w przypadku niezależnych plików. Badania wykazały że wczytując dane z archiwum można skrócić czasy ładowania
-* o około 10%-15%.
+* o około 50%-60% dla 250+ plików przy założeniu że archiwum jest nieskompresowane.@cite Archive3
 *
 * Oczywiście kwestią otwartą pozostaje sam format archiwum. W początkowej fazie rozważano archiwum tar, jako najprostszy format zdolny przechować połączone pliki.
 * Wiele gier korzysta z własnych formatów opracowanych przez ich twórców, czasem jednak stosuje się popularne formaty maskując je innym rozszerzeniem.
@@ -339,13 +339,13 @@
 * - wsparcie dla szyfrowania
 * - szerokie wsparcie narzędzi
 *
-* miniZip to otwarta biblioteka umożliwiająca zapisywanie i czytanie archiwum zip (także z wykorzystaniem funkcji zwrotnych).
+* miniZip@cite miniZip to otwarta biblioteka umożliwiająca zapisywanie i czytanie archiwum zip (także z wykorzystaniem funkcji zwrotnych).
 *
 * @section dependency_mingw MinGW
 * Opisany powyżej @ref dependency_llvm "LLVM" ma jedno zasadnicze ograniczenie na platformie Windows - nie posiada natywnego kompilatora zasobów
-* (pików rc), niezbędnych by dołączyć dodatkowe informacje do plików wykonywalnych na tej platformie. Potrzebny był zewnętrzny program 
+* (pików rc)@cite LLVMrc, niezbędnych by dołączyć dodatkowe informacje do plików wykonywalnych na tej platformie. Potrzebny był zewnętrzny program 
 * posiadający taką funkcjonalność. W chwili obecnej na rynku znajdują się tylko dwa kompilatory zasobów: MSVC (komercyjny) i program wchodzący
-* w skład MinGW (Minimalistyczne Gnu dla Windows). Z oczywistych względów - licencji i przenośności - do Pixie Engine włączono ten drugi.
+* w skład MinGW (Minimalistyczne Gnu dla Windows)@cite MinGW. Z oczywistych względów - licencji i przenośności - do Pixie Engine włączono ten drugi.
 * 
 * Poza kompilatorem zasobów, MinGW *nie* jest wykorzystywane w projekcie - w szczególności nie jest wykorzystywany kompilator GCC który wchodzi w jego skład.
 *
@@ -355,26 +355,26 @@
 * Ponieważ raporty @ref dependency_gtest_runner "Google Test runner" są tworzone w formacie XML, istniała potrzeba konwersji do formatu bardziej czytelnego
 * dla użytkownika nietechnicznego. Najprostszą opcją jest zastosowanie transformaty XSLT która generuje dokument HTML, czytelne przez każdą przeglądarkę stron
 * internetowych na każdej wspieranej platformie. XSLT mógł zostać uruchomiony bezpośrednio w przeglądarce, ale testy wykazały że przeglądarki posiadają
-* spore ograniczenia (np. MSIE nie pozwoli na uruchomienie transformaty na dokumencie lokalnym). Jedynym sensownym rozwiązaniem było zastosowanie osobnego
-* programu który wykona pełen przebieg transformacji. Na platformie Windows wybrano do tego celu msxml (Microsoft XML), darmowy program uruchamiany z linii
+* spore ograniczenia @cite xsltBrowserSupport (np. MSIE nie pozwoli na uruchomienie transformaty na dokumencie lokalnym). Jedynym sensownym rozwiązaniem było zastosowanie osobnego
+* programu który wykona pełen przebieg transformacji. Na platformie Windows wybrano do tego celu msxml (Microsoft XML)@cite msxml, darmowy program uruchamiany z linii
 * komend. Jest on obecnie podpięty do systemu @ref tests "testów" i uruchamiany automatycznie po każdym przebiegu testowym.
 *
 * @section dependency_multiconsoles Multiple Consoles
 * Standardowo na platformie Windows nie ma możliwości alokowania więcej niż jednej konsoli dla programu. Istnieje także szereg ograniczeń, których nie da
 * się łatwo ominąć, np. po wciśnięciu kombinacji klawiszy ctrl + break w konsoli system Windows zabije aplikację w ciągu 5 sekund, jeżeli ona sama nie
-* wyłączy się wcześniej (tego mechanizmu nie da się w żaden sposób obejść ani wyłączyć).
+* wyłączy się wcześniej @cite ctrlbreakWinApi (tego mechanizmu nie da się w żaden sposób obejść ani wyłączyć @cite whyctrlbreakWinApi ).
 *
 * Jedynym sposobem na rozwiązanie tych problemów jest stworzenie zewnętrznej aplikacji (pliku wykonywalnego) która otwierałaby własną konsolę i przyjmowałaby
 * polecenia wydruku informacji (np. poprzez gniazdo lub strumień komunikacyjny). Oczywiście taką aplikację można by uruchamiać kilkukrotnie aby
 * uzyskać efekt wielu konsoli. Zamknięcie tej aplikacji nie wpływałoby też na zamknięcie głównego programu.
 *
 * Oczywiście jak przystało na środowisko otwartych źródeł, ktoś zrealizował już taką bibliotekę przed Pixie Engine. Tym samym zamiast tworzyć ponowną
-* implementację, po prostu włączono taką bibliotekę - w tym wypadku jest ona autorstwa Zvika Ferentza i udostępniana na wolnej licencji.
+* implementację, po prostu włączono taką bibliotekę - w tym wypadku jest ona autorstwa Zvika Ferentza i udostępniana na wolnej licencji.@cite Multipleconsolesforasingleapplication
 *
 * @section dependency_nsis NSIS
 * Pierwszą rzeczą jaką zobaczy użytkownik danej gry jest jej program instalacyjny. Oczywiście na każdej platformie istnieją już gotowe wzorce
 * których użytkownik się spodziewa gdy instaluje nowy program - na platformie Windows takich wzorcowych implementacji jest kilka, poczynając od
-* InstallShield (komercyjny), idąc przez InstallMaker, a kończąc właśnie na otwarto źródłowym NSIS.
+* InstallShield (komercyjny), idąc przez InstallMaker, a kończąc właśnie na otwarto źródłowym NSIS@cite NSIS .
 *
 * Wybrano NSIS ze względu na dużą zdolność konfigurowalności, liberalną licencję, stabilny i dojrzały kod oraz dużą ilość materiałów dostępnych
 * w Internecie. Instalator NSIS opiera się o skrypty NSIS i jest zdolny do wykonania wszystkich poleceń potrzebnych do instalacji gry
@@ -390,7 +390,7 @@
 *
 * Ponieważ interfejs programistyczny OpenAL był w miarę sensownie ułożony i ustandaryzowany, pojawiła się otwarta implementacja oparta całkowicie o
 * standardowy procesor (CPU), nie korzystająca ze wsparcia sprzętowego (m.in. SoundBlaster). W ten sposób projekt przetrwał do dnia dzisiejszego a
-* biblioteka OpenAL Software posiada pełną funkcjonalność droższych kart dźwiękowych i jest w stanie realizować je całkowicie programowo.
+* biblioteka OpenAL Software posiada pełną funkcjonalność droższych kart dźwiękowych i jest w stanie realizować je całkowicie programowo.@ref OpenAL
 *
 * OpenAL został włączony do projektu jako zaplecze rendera dźwięku. Jego przewagą nad konkurencyjnymi rozwiązaniami jest jego pełna przenośność na 
 * wszystkich wspieranych przez Pixie Engine platfomrach.
@@ -401,7 +401,7 @@
 *
 * W językach wyposażonych w refleksję (jak np. C# lub Java) taki test jest wyjątkowo łatwy do przeprowadzenia; W C++ potrzeba dodatkowych informacji
 * debuggera by móc ustalić dokładną lokalizację wykonywanej linijki. Na szczęście wykorzystywany do kompilacji Pixie Engine LLVM jest w stanie stworzyć
-* takie symbole, a program Open C++ Coverage jest w stanie pobrać z nich informacje o pokryciu w formacie XML (bezpośrednio integrującym się z
+* takie symbole, a program Open C++ Coverage@cite OpenCppCoverage jest w stanie pobrać z nich informacje o pokryciu w formacie XML (bezpośrednio integrującym się z
 * @ref dependency_vscode "Visual Studio Code"); Istnieje także możliwość przygotowania raportu HTML z wylistowaniem dokładnie które linijki były testowane
 * a które nie.
 *
@@ -411,16 +411,16 @@
 * @section dependency_pugixml pugixml
 * Wybranym metaformatem danych w Pixie Engine jest język XML. Istnieje duża ilość narzędzi i parserów do tego języka, poszukiwania skupiały się więc na
 * rozwiązaniu wydajnym i bezpiecznym. Obecnie istnieje ponad 20 parserów, z których najszybszym jest rapidxml. Drugie miejsce w rankingu zajmuje
-* pugixml, który w przeciwieństwie do rapidxml jest parserem dużo bezpieczniejszym (np. nie używa pustych wskaźników jako brakujących pól, co znacząco
+* pugixml@cite pugixml, który w przeciwieństwie do rapidxml jest parserem dużo bezpieczniejszym (np. nie używa pustych wskaźników jako brakujących pól, co znacząco
 * upraszcza kod sprawdzający potencjalne błędy bądź uszkodzone pliki). Oczywiście szybkość parsera wynika z jego podstawowego ogracznienia: jest to parser
 * destruktywny in-situ, który znakuje oryginalne dane zerowymi bajtami i tworzy drzewko odniesień do oryginalnego łańcucha znaków. Dzięki takiemu podejściu
-* pugixml jest zaledwie 3-4x wolniejszy niż użycie funkcji @c strlen() na tych samych danych.
+* pugixml jest zaledwie 3-4x wolniejszy niż użycie funkcji @c strlen() na tych samych danych.@cite pugixmlBenchmark
 *
 * @section dependency_python Python 3.5
-* Python w wersji 3.5 jest używany wewnętrznie przez debugger LLVM. Poza tym nie jest wykorzystywany bezpośrednio w projekcie.
+* Python w wersji 3.5@cite python jest używany wewnętrznie przez debugger LLVM. Poza tym nie jest wykorzystywany bezpośrednio w projekcie.
 *
 * @section dependency_remotery Remotery
-* Remotery to współczesny profiler gier oparty o gniazda sieciowe. Jako biblioteka integruje się z aplikacją i wystawia na gnieździe TCP informacje o
+* Remotery@cite remotery to współczesny profiler gier oparty o gniazda sieciowe. Jako biblioteka integruje się z aplikacją i wystawia na gnieździe TCP informacje o
 * czasach wykonania i próbkach renderera, a także informacje z dziennika i debuggera. Drugą częścią aplikacji jest strona www, która łączy się z portem
 * TCP za pomocą websocket, odbiera dane od aplikacji i przedstawia je w graficznej formie.
 *
@@ -431,13 +431,13 @@
 * @image latex dependency_remotery_image.jpg "Interfejs przeglądarkowy Remotery" height=7.5cm
 *
 * @section dependency_sdl SDL 2.0
-* SDL to dojrzała, wieloplatformowa biblioteka podstawowa do tworzenia gier. Posiada standardowy zestaw funkcji zaimplementowany na każdej ze wspieranych
+* SDL@cite sdl to dojrzała, wieloplatformowa biblioteka podstawowa do tworzenia gier. Posiada standardowy zestaw funkcji zaimplementowany na każdej ze wspieranych
 * przez Pixie Engine platform, takich jak obsługa okien, sterowników sprzętowych, uruchamianie rendera, sprawdzanie platformy, obsługa klawiatury, myszy i 
 * kontrolerów gier, etc. SDL zostało wybrane ze względu na otwarte źródła, dużą ilość dostępnych materiałów, dojrzałość kodu i stabilność implementacji.
 *
 * 
 * @section dependency_sdl_net SDL NET 2.0
-* SDL NET to wtyczka do SDL umożliwiająca programowanie wieloplatformowe gniazd sieciowych (TCP/UDP). W Pixie Engine SDL NET jest wybraną platformą do
+* SDL NET@cite sdl to wtyczka do SDL umożliwiająca programowanie wieloplatformowe gniazd sieciowych (TCP/UDP). W Pixie Engine SDL NET jest wybraną platformą do
 * programowania gier siecowych i odpytywania serwera HTTP w celu sprawdzenia dostępności aktualizacji. SDL NET dostarcza warstwę abstrakcji nad
 * surowe gniazda sieciowe na danej platformie. Biblioteka jest niskopoziomowa i pozwala na bezpośrednie wysyłanie i odbieranie ramek/pakietów oraz tworzenie
 * i przywiązywanie gniazd sieciowych.
@@ -464,11 +464,11 @@
 * </table>źródło: https://github.com/nothings/stb#stb_libs</center>
 *
 * @section dependency_texlive texLIVE
-* texLIVE to darmowa, prosta wersja LaTeXa na platformę Windows służąca do generowania dokumentacji pdf bezpośrednio z kodu źródłowego.
+* texLIVE@cite texlive to darmowa, prosta wersja LaTeXa na platformę Windows służąca do generowania dokumentacji pdf bezpośrednio z kodu źródłowego.
 * Poza włączeniem w system budowania dokumentacji nie jest używana w projekcie.
 *
 * @section dependency_thttpd thttpd
-* thttpd (oficjalnie nazwa pisana z małej litery) to bardzo prostu serwer HTTP używany w projekcie wyłącznie do testowania funkcjonalności aktualizacji.
+* thttpd@cite thttpd (oficjalnie nazwa pisana z małej litery) to bardzo prostu serwer HTTP używany w projekcie wyłącznie do testowania funkcjonalności aktualizacji.
 * W wersji finałowej aplikacja odpytuje serwer twórcy danej gry szukając potencjalnych aktualizacji; Na potrzeby testów zapytania zewnętrzne byłyby kłopotliwe
 * (np. trudno jest symulować awarię zdalnego serwera), dlatego na potrzeby testów adres serwera jest przepięty na adres thttpd, uruchamianego
 * lokalnie. Dzięki takiemu podejściu można kontrolować i debuggować oba końce połączenia.
@@ -480,7 +480,7 @@
 * Ponieważ pliki binarne Pixie Engine potrafią osiągnąć spore rozmiary (w tej chwili ponad 55 mb głównego pliku exe) aby przyspieszyć ich ładowanie do
 * pamięci i ułatwić proces łatkowania potrzebne było narzędzie które skompresuje je dynamicznie.
 * 
-* W chwili obecnej na rynku znajduje się tylko jeden system pakujący pliki wykonywalne - właśnie UPX (Universal Packer for eXecutables), zdolny pakować
+* W chwili obecnej na rynku znajduje się tylko jeden system pakujący pliki wykonywalne - właśnie UPX@cite upx (Universal Packer for eXecutables), zdolny pakować
 * pliki wykonywalne wszystkich wspieranych przez Pixie Engine platform. UPX jest uruchomiony na ostatnim etapie budowania wersji końcowych gry
 * i w wariancie BRUTAL zmniejszył rozmiar wspomnianego pliku exe prawie dziesięciokrotnie (do 6 mb).
 *
@@ -490,11 +490,11 @@
 * UPX powoduje też że próby wstecznej inżynierii kodu są nieco trudniejsze niż przy zastosowaniu "czystych" plików wykonywalnych.
 *
 * @section dependency_vscode Visual Studio Code
-* Poprzednie wersje Pixie Engine powstały w Visual Studio Community Edition (MSVC). Z takim podejściem wiązało się sporo problemów: po pierwsze MSVC jest dostępny
+* Poprzednie wersje Pixie Engine powstały w Visual Studio Community Edition@cite msvc (MSVC). Z takim podejściem wiązało się sporo problemów: po pierwsze MSVC jest dostępny
 * jedynie na platformę Windows, po drugie jest nieprzenośny (w znaczeniu: wymaga instalacji), a po trzecie ma bardzo wysokie wymagania sprzętowe, szczególnie
-* jeżeli chodzi o ilość zajmowanego miejsca (pełna instalacja MSVC zabiera 133 gb).
+* jeżeli chodzi o ilość zajmowanego miejsca (pełna instalacja MSVC zabiera 130 gb@cite msvcdrivespace ).
 * 
-* Z chwilą upowszechnienia się wersji stabilnej VS Code pojawił się pomysł zmiany środowiska; Za VS Code przemawiało przede wszystkim możliwość
+* Z chwilą upowszechnienia się wersji stabilnej VS Code@cite vscode pojawił się pomysł zmiany środowiska; Za VS Code przemawiało przede wszystkim możliwość
 * stworzenia wersji przenośnej dołączonej bezpośrednio do projektu, ogromną bazę darmowych wtyczek, otwarte źródła i wsparcie jednej z największych firm sektora IT,
 * czyli Microsoft. Zmiana środowiska nastąpiła pod koniec 2017 roku i okazała się strzałem w dziesiątkę. W tej chwili VS Code stanowi podstawowy edytor
 * kodu na wszystkich wspieranych przez Pixie Engine platformach (sam edytor jest w pełni wieloplatformowy).
@@ -505,7 +505,7 @@
 * W chwili obecnej na rynku znajdują się dwie podstawowe biblioteki GUI: wxWidgets i qt. Porównanie obu znajduje się poniżej:
 * 
 * <center><table>
-* <caption id="dependency_wxwidgets_table">Analiza porównawcza wxWidgets i qt metodą wag (-10/+10)</caption>
+* <caption id="dependency_wxwidgets_table">Analiza porównawcza wxWidgets@cite wxwidgets i qt@cite qt metodą wag (-10/+10)</caption>
 * <tr><th>wxWidgets<th>qt
 * <tr><td>
 * - Bardzo dobra jakość aplikacji końcowej (+9)
@@ -526,7 +526,7 @@
 * wxWidgets jest zintegrowany bezpośrednio z głównym modułem gry (więcej informacji znajduje się w rozdziale @ref engine_architecture "architektura silnika")
 *
 * @section dependency_windbg WinDBG (Debugging Tools for Windows)
-* WinDBG to prosty, darmowy debugger C++ integrujący się z VS Code. Poza debuggowaniem na platformie Windows nie jest używany w projekcie.
+* WinDBG@cite winDBG to prosty, darmowy debugger C++ integrujący się z VS Code. Poza debuggowaniem na platformie Windows nie jest używany w projekcie.
 *
 * WinDBG został wybrany ponad LLDB (debuggerem LLVM) ze względu na brakującą implementację tego drugiego; W chwili obecnej LLDB nie jest w stanie
 * realnie pracować nad aplikacją Windowsa skompilowaną w architekturze x64. Twórcy LLVM znają ten problem od Marca 2017
