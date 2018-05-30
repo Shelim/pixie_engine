@@ -119,6 +119,7 @@ cd ..\..\!build\doxygen_%language%\latex
 
 rem * Replace links in pdf
 if "%format%"=="pdf" for /r %%v in (*.tex) do sed -i -E "s/doxyref\{[^}]+\}\{str\.\}(\{[^}]+\})/ref\1/gi" "%%v"
+rem if "%format%"=="pdf" for /r %%v in (*.tex) do sed -i -E "s/([a-zA-Z0-9.\-]).\+([A-Z0-9])/\1\2/g" "%%v"
 
 rem * Jump '\_engine\!build\doxygen_%language%\latex' -> '\_engine'
 cd ..\..\..\
