@@ -64,7 +64,7 @@
 *     Foo f3 = null;
 * }
 * Foo f = new Foo();
-* // Serializuj i natychmiastnatychmiast deserializuj f
+* // Serializuj i natychmiast deserializuj f
 * @endcode
 *      Wygeneruje dokładnie 243 (= \f$3^5\f$) alokacje klasy Foo.
 *      Jeżeli rozpatrujemy grę wielkoskalową (duży graf obiektów, który wymaga strumieniowania danych z&nbsp;dysku twardego),

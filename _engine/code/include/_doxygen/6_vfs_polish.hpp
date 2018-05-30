@@ -41,7 +41,7 @@
 * 
 * Istnieje także opcja stworzenia 'częściowego' wprowadzania. Jeżeli wiadomo, że&nbsp;źródłowy plik zawiera
 * więcej niż jeden zasób (np. kilka różnych poziomów detali tekstury), można rozkazać obiektowi wprowadzającemu
-* żeby przeczytał dane o&nbsp;określonej długości do&nbsp;bufora, a&nbsp;następnie użył go do&nbsp;stworzenia nowy obiekt wprowadzający.
+* żeby przeczytał dane o&nbsp;określonej długości do&nbsp;bufora, a&nbsp;następnie użył go do&nbsp;stworzenia nowego obiektu wprowadzającego.
 * Źródłowy strumień pozostanie nie zmodyfikowany, a&nbsp;tak stworzony obiekt wprowadzający operuje na&nbsp;kopii, więc może
 * przeżyć oryginalny obiekt wprowadzający. Utworzony obiekt ma dostęp tylko do&nbsp;tej porcji danych która była
 * zażądana przy jego tworzeniu.
@@ -54,9 +54,9 @@
 * Ostatecznie klasa zbiorcza dostawy zawsze wybierze najnowszego dostawcę (do zapisu dostawca musi
 * wskazywać na&nbsp;zasób zdolny do&nbsp;zarówno zapisu jak i&nbsp;odczytu).
 * 
-* Jeżeli żaden dostawca nie spełnia takiego warunku, nowy zostanie stworzony za&nbsp;pomocą funkcji @c engine::platform::create_new
+* Jeżeli żaden dostawca nie spełnia takiego warunku, nowy zostanie stworzony za&nbsp;pomocą funkcji<br>`engine::platform::create_new`
 * 
-* Jeżeli dany zasób jest niemożliwy do&nbsp;zapisania, można zwrócić obiekt @c engine::data::output_void_t który symuluje zapis,
+* Jeżeli dany zasób jest niemożliwy do&nbsp;zapisania, można zwrócić obiekt `engine::data::output_void_t` który symuluje zapis,
 * wysyłając dane w&nbsp;nicość (analogicznie do&nbsp;Linuxowego pliku `/dev/null`)
 *
 * @section vfs_scanners Skanery

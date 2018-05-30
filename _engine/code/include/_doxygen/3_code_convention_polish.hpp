@@ -42,7 +42,7 @@
  *      - `platform` - Docelowa maszyna na&nbsp;której uruchomiony jest Pixie Engine. Także kod przeznaczony do&nbsp;uruchomienia na&nbsp;konkretnym typie takiej maszyny.
  *      - `private` - Rzecz do&nbsp;wykorzystania tylko przez programistę i&nbsp;nie mająca być dołączona ani do&nbsp;repozytorium ani do&nbsp;konfiguracji wyjściowej.
  *      - `provider` - Prosta klasa dostarczająca niewielką ilość informacji lub logiki innej klasie (najczęściej `component`). Przykład: dostawca ścieżek systemowych, dostawca wyjścia dziennika
- *      - `release` - Wspólna nazwa dla konfiguracji wyjścia `hybrid` i&nbsp;`final`. Zobacz @ref build_configuration "rodzaje konfiguracji wyjściowych"
+ *      - `release` - Wspólna nazwa dla konfiguracji wyjścia `hybrid` i&nbsp;`final`
  *      - `settings` - Ustawienia czasu kompilacji. Są zamrożone w&nbsp;aplikacji i&nbsp;muszą być dostępne dla `bootstrappera` na&nbsp;etapie kompilacji programu
  *      - `submodule` - Mniejsza, logicznie powiązana paczka `asset`. Każda uruchomiona gra może mieć dowolną ilość aktywnych podmodułów. Przykłady: DLC lub mini-modyfikacje fanowskie; Zobacz: `module`
  *      - `terminal` - Zwykle konsola na&nbsp;docelowej platformie, chyba że&nbsp;platforma nie posiada konsoli

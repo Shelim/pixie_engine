@@ -132,7 +132,7 @@
 *
 * @section dependency_cereal cereal
 * cereal@cite cereal (oficjalnie nazwa pisana z&nbsp;małej litery) to biblioteka łatwej serializacji danych C++ czyli zamiany drzewka referencji na&nbsp;strumień binarny bądź tekstowy
-* i&nbsp;vice versa. Cereal zostało wybrane ze&nbsp;względu na&nbsp;nieinwazyjną składnię, rozpoznawanie polimorfizmu (dzięki mechanizmom RTTI - rozpoznawania typów w&nbsp;trakcie
+* i&nbsp;vice versa. cereal zostało wybrane ze&nbsp;względu na&nbsp;nieinwazyjną składnię, rozpoznawanie polimorfizmu (dzięki mechanizmom RTTI - rozpoznawania typów w&nbsp;trakcie
 * wykonania), relatywnie proste API, dużą wydajność oraz łatwość implementacji nowych strumieni wyjściowych. Jego największym ograniczeniem jest problem
 * z&nbsp;tworzeniem paska postępu zapisywania/wczytywania danych - istnieje tylko jeden przebieg i&nbsp;niewielkie możliwości podczepiania zdarzenia
 * pod wykrycie nowego obiektu (bez opcji detekcji liczby obiektów). Z&nbsp;tego powodu w&nbsp;praktycznym zastosowaniu cereal musi być uruchamiany
